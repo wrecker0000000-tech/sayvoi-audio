@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veyra — محوّل الصوت المجاني | Free Audio Converter</title>
+<meta name="description" content="حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A مجاناً، وغيّر معدل العينة (48 / 24 / 16 kHz)، دفعة واحدة وداخل المتصفح بدون رفع الملفات. Free in-browser audio converter with batch conversion and sample-rate change.">
+<style>
+  :root{
+    --bg:#0f1720; --card:#16212d; --ink:#f2f5f8; --muted:#9fb0c0;
+    --accent:#f5b83d; --accent-ink:#1a1300; --line:#25364a; --ok:#4cc38a; --err:#ff6b6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#1d3550 0,transparent 60%),var(--bg);
+    color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.7}
+  html[lang="en"] body{font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:780px;margin:0 auto;padding:20px 16px 56px}
+  .top{display:flex;justify-content:flex-end}
+  .lang{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+    padding:6px 14px;cursor:pointer;font:inherit;font-size:14px}
+  .lang:hover{color:var(--ink);border-color:var(--muted)}
+  header{text-align:center;padding:24px 0 14px}
+  h1{margin:0;font-size:clamp(26px,6vw,40px)}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--muted);margin:10px auto 0;max-width:600px}
+  .drop{margin-top:20px;border:2px dashed var(--line);border-radius:16px;background:var(--card);
+    padding:30px 16px;text-align:center;cursor:pointer;transition:.15s}
+  .drop.over,.drop:hover{border-color:var(--accent);background:#1a2837}
+  .drop b{display:block;font-size:18px}
+  .drop small{color:var(--muted);display:block}
+  .how{margin:14px 0 0;color:var(--muted);font-size:14px;text-align:center}
+  .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+  .opts label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+  select{width:100%;background:#0f1923;color:var(--ink);border:1px solid var(--line);border-radius:10px;
+    padding:10px;font:inherit}
+  select:disabled{opacity:.5}
+  .hint{margin:12px 0 0;color:var(--muted);font-size:13px}
+  .btn{display:inline-block;text-decoration:none;font:inherit;font-weight:700;border-radius:12px;padding:12px 22px;
+    cursor:pointer;border:0;background:var(--accent);color:var(--accent-ink)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.small{padding:6px 14px;font-size:14px;border-radius:10px}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .sum{color:var(--muted);font-size:14px;margin-inline-start:auto}
+  ul{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px}
+  li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .nm{flex:1 1 180px;min-width:0;word-break:break-all;direction:ltr;unicode-bidi:plaintext;font-weight:600}
+  .st{font-size:14px;color:var(--muted)}
+  .st.ok{color:var(--ok)} .st.err{color:var(--err)}
+  .rm{background:transparent;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
+  .rm:hover{color:var(--err)}
+  .meta{flex:1 1 100%;font-size:13px;color:var(--muted);display:flex;gap:4px 10px;flex-wrap:wrap;align-items:center}
+  .meta span{unicode-bidi:plaintext}
+  .arrow{display:inline-block;color:var(--accent);font-weight:700}
+  html[dir="rtl"] .arrow{transform:scaleX(-1)}
+  .bar{flex:1 1 100%;height:5px;background:#0f1923;border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
+  .quota{margin:12px 0 0;color:var(--muted);font-size:14px;text-align:center}
+  .upgrade{margin-top:14px;border:1px solid rgba(245,184,61,.45);background:rgba(245,184,61,.08);border-radius:12px;padding:12px 14px}
+  .upgrade p{margin:0 0 8px}
+  .upgrade a:not(.btn){color:var(--accent)}
+  .priv{margin-top:26px;text-align:center;color:var(--muted);font-size:14px}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  footer a{color:var(--muted)}
+  [lang-block]{display:none}
+  html[lang="ar"] [lang-block="ar"], html[lang="en"] [lang-block="en"]{display:revert}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><button class="lang" id="langBtn" type="button">English</button></div>
+
+  <header>
+    <h1>Veyra <span lang-block="ar">محوّل الصوت</span><span lang-block="en">Audio Converter</span></h1>
+    <p class="sub" lang-block="ar">حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A، وغيّر معدل العينة (48 / 24 / 16 kHz وغيرها) والقنوات، لعدة ملفات دفعة واحدة. كل شيء يتم داخل متصفحك.</p>
+    <p class="sub" lang-block="en">Convert audio to MP3, WAV, OGG, FLAC or M4A, change the sample rate (48 / 24 / 16 kHz and more) and channels, for many files at once. Everything happens inside your browser.</p>
+  </header>
+
+  <div class="drop" id="drop" tabindex="0" role="button">
+    <b lang-block="ar">اسحب الملفات هنا أو اضغط للاختيار (يمكنك اختيار أكثر من ملف)</b>
+    <b lang-block="en">Drag files here or click to choose (you can select many)</b>
+    <small lang-block="ar">MP3 · WAV · M4A · OGG · FLAC · AAC (حسب دعم متصفحك)</small>
+    <small lang-block="en">MP3 · WAV · M4A · OGG · FLAC · AAC (depends on your browser)</small>
+    <input id="file" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac,.aac,.opus,.webm" multiple hidden>
+  </div>
+
+  <p class="how" lang-block="ar">1) اختر الملفات &nbsp;2) اضبط «تحويل إلى» والمعدل &nbsp;3) اضغط «حوّل الكل». سيظهر لكل ملف: من ← إلى.</p>
+  <p class="how" lang-block="en">1) Add files &nbsp;2) Set “Convert to” and the rate &nbsp;3) Press “Convert all”. Each file shows: from → to.</p>
+
+  <div class="opts">
+    <div>
+      <label for="fmt"><span lang-block="ar">تحويل إلى (الصيغة)</span><span lang-block="en">Convert to (format)</span></label>
+      <select id="fmt">
+        <option value="mp3">MP3</option><option value="wav">WAV</option>
+        <option value="ogg">OGG (Vorbis)</option><option value="flac">FLAC</option><option value="m4a">M4A (AAC)</option>
+      </select>
+    </div>
+    <div>
+      <label for="br"><span lang-block="ar">الجودة (kbps)</span><span lang-block="en">Quality (kbps)</span></label>
+      <select id="br">
+        <option>64</option><option>96</option><option selected>128</option>
+        <option>192</option><option>256</option><option>320</option>
+      </select>
+    </div>
+    <div>
+      <label for="sr"><span lang-block="ar">معدل العينة (إلى)</span><span lang-block="en">Sample rate (to)</span></label>
+      <select id="sr">
+        <option value="orig" data-ar="الأصلي (بدون تغيير)" data-en="Original (no change)">الأصلي (بدون تغيير)</option>
+        <option value="48000">48 kHz</option>
+        <option value="44100">44.1 kHz</option>
+        <option value="32000">32 kHz</option>
+        <option value="24000">24 kHz</option>
+        <option value="22050">22.05 kHz</option>
+        <option value="16000">16 kHz</option>
+        <option value="12000">12 kHz</option>
+        <option value="11025">11.025 kHz</option>
+        <option value="8000">8 kHz</option>
+      </select>
+    </div>
+    <div>
+      <label for="ch"><span lang-block="ar">القنوات (إلى)</span><span lang-block="en">Channels (to)</span></label>
+      <select id="ch">
+        <option value="orig" data-ar="الأصلي" data-en="Original">الأصلي</option>
+        <option value="1" data-ar="مونو (1)" data-en="Mono (1)">مونو (1)</option>
+        <option value="2" data-ar="ستيريو (2)" data-en="Stereo (2)">ستيريو (2)</option>
+      </select>
+    </div>
+  </div>
+
+  <p class="hint" id="hint" hidden>
+    <span lang-block="ar">عند أول استخدام لـ OGG أو FLAC أو M4A سيتم تحميل مكوّن إضافي (حوالي 30 ميجابايت) مرة واحدة.</span>
+    <span lang-block="en">The first time you use OGG, FLAC or M4A, a one-time add-on (about 30 MB) is downloaded.</span>
+  </p>
+
+  <p class="quota" id="quota" hidden></p>
+
+  <div class="actions">
+    <button class="btn" id="go" type="button" disabled>
+      <span lang-block="ar">حوّل الكل</span><span lang-block="en">Convert all</span>
+    </button>
+    <button class="btn ghost" id="zipBtn" type="button" disabled>
+      <span lang-block="ar">تنزيل الكل (ZIP)</span><span lang-block="en">Download all (ZIP)</span>
+    </button>
+    <button class="btn ghost" id="clear" type="button">
+      <span lang-block="ar">مسح القائمة</span><span lang-block="en">Clear list</span>
+    </button>
+    <span class="sum" id="sum"></span>
+  </div>
+
+  <div class="upgrade" id="upgrade" hidden>
+    <p lang-block="ar">وصلت للحد المجاني اليومي. للحصول على حد أعلى أو للاستخدام الكثيف، تواصل معنا على <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. يتجدد الحد غداً.</p>
+    <p lang-block="en">You've reached today's free limit. For a higher limit or heavy use, contact us at <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. The limit resets tomorrow.</p>
+    <a class="btn small" id="upgradeBtn" href="#" target="_blank" rel="noopener" hidden>
+      <span lang-block="ar">ترقية</span><span lang-block="en">Upgrade</span>
+    </a>
+  </div>
+
+  <ul id="list"></ul>
+
+  <p class="priv" lang-block="ar">🔒 الملفات لا تُرفع إلى أي سيرفر، وتُعالج بالكامل على جهازك. يُنصح بملفات أقل من 100 ميجابايت للملف الواحد.</p>
+  <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
+
+  <footer>
+    <p lang-block="ar">تواصل: <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
+    <p lang-block="en">Contact: <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
+  </footer>
+</div>
+
+<script src="vendor/lame.min.js"></script>
+<script src="vendor/jszip.min.js"></script>
+<script>
+(function(){
+  var T = {
+    ar:{wait:"في الانتظار", dec:"جارٍ فك التشفير…", res:"جارٍ تغيير المعدل…", enc:"جارٍ الترميز…",
+        done:"تم", dl:"تنزيل", ffload:"جارٍ تحميل المكوّن الإضافي…",
+        fail:"تعذّر التحويل: الصيغة غير مدعومة في هذا المتصفح أو الملف تالف.",
+        nolib:"تعذّر تحميل مكتبة MP3. أعد تحميل الصفحة وحاول مجدداً.",
+        noff:"تعذّر تحميل مكوّن التحويل. تحقق من الاتصال وأعد المحاولة.",
+        big:"الملف كبير جداً (أكثر من 200 ميجابايت).",
+        limit:"تجاوزت الحد المجاني اليومي.",
+        orig:"الأصلي", mono:"مونو", stereo:"ستيريو", from:"من", to:"إلى", zipping:"جارٍ تجهيز ملف ZIP…",
+        quota:function(l,r){ return "الحد المجاني: " + l + " ملفات يومياً · المتبقي اليوم: " + r; },
+        sum:function(a,b){ return "تم تحويل " + a + " من " + b + " ملف"; }},
+    en:{wait:"Waiting", dec:"Decoding…", res:"Resampling…", enc:"Encoding…",
+        done:"Done", dl:"Download", ffload:"Loading add-on…",
+        fail:"Conversion failed: unsupported format in this browser, or a corrupted file.",
+        nolib:"Could not load the MP3 library. Reload the page and try again.",
+        noff:"Could not load the converter add-on. Check your connection and retry.",
+        big:"File is too large (over 200 MB).",
+        limit:"Daily free limit reached.",
+        orig:"Original", mono:"Mono", stereo:"Stereo", from:"From", to:"To", zipping:"Preparing ZIP…",
+        quota:function(l,r){ return "Free limit: " + l + " files per day · Left today: " + r; },
+        sum:function(a,b){ return "Converted " + a + " of " + b + " file" + (b === 1 ? "" : "s"); }}
+  };
+  /* ===== Free plan settings (edit these two lines) ===== */
+  var FREE_DAILY_LIMIT = 5;   // files converted per day for free; set 0 for unlimited
+  var UPGRADE_URL = "";       // later: link to your payment/pricing page (shows an "Upgrade" button)
+  /* ======================================================= */
+  var MP3_RATES = [8000,11025,12000,16000,22050,24000,32000,44100,48000];
+  var html = document.documentElement, langBtn = document.getElementById("langBtn");
+  var drop = document.getElementById("drop"), fileIn = document.getElementById("file");
+  var list = document.getElementById("list"), go = document.getElementById("go"), zipBtn = document.getElementById("zipBtn");
+  var fmt = document.getElementById("fmt"), br = document.getElementById("br");
+  var srSel = document.getElementById("sr"), chSel = document.getElementById("ch");
+  var sumEl = document.getElementById("sum"), hint = document.getElementById("hint");
+  var jobs = [], busy = false;
+
+  function lang(){ return html.lang === "en" ? "en" : "ar"; }
+  function t(k){ return T[lang()][k]; }
+  function usesBr(f){ return f === "mp3" || f === "ogg" || f === "m4a"; }
+  function viaFFmpeg(f){ return f === "ogg" || f === "flac" || f === "m4a"; }
+
+  /* ---------- free daily limit (soft: stored in this browser only) ---------- */
+  var memUsage = {d:"", n:0};
+  function today(){ var d = new Date(); return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate(); }
+  function getUsed(){
+    var t0 = today(), n = memUsage.d === t0 ? memUsage.n : 0;
+    try{ var v = JSON.parse(localStorage.getItem("veyra_usage") || "null"); if (v && v.d === t0) n = Math.max(n, v.n|0); }catch(e){}
+    return n;
+  }
+  function addUsed(){
+    var t0 = today(), n = getUsed() + 1;
+    memUsage = {d:t0, n:n};
+    try{ localStorage.setItem("veyra_usage", JSON.stringify({d:t0, n:n})); }catch(e){}
+  }
+  function remaining(){ return FREE_DAILY_LIMIT > 0 ? Math.max(0, FREE_DAILY_LIMIT - getUsed()) : Infinity; }
+
+  /* ---------- settings ---------- */
+  function settings(){ return {f: fmt.value, kbps: parseInt(br.value,10), sr: srSel.value, ch: chSel.value}; }
+  function sigOf(s){ return [s.f, usesBr(s.f) ? s.kbps : 0, s.sr, s.ch].join("|"); }
+  function targetSr(src, s){
+    var v = s.sr === "orig" ? src : parseInt(s.sr,10);
+    if (s.f === "mp3" && MP3_RATES.indexOf(v) < 0) v = 44100;
+    return v;
+  }
+  function targetCh(src, s){ return s.ch === "orig" ? Math.min(src,2) : parseInt(s.ch,10); }
+
+  /* ---------- labels ---------- */
+  function srLabel(n){ return (Math.round(n) / 1000) + " kHz"; }
+  function chLabel(n){ return n === 1 ? t("mono") : t("stereo"); }
+  function srcExt(file){ var m = /\.([^.]+)$/.exec(file.name); return m ? m[1].toUpperCase() : "?"; }
+  function dur(sec){ var m = Math.floor(sec/60), s = Math.round(sec%60); if (s === 60){ m++; s = 0; } return m + ":" + (s < 10 ? "0" : "") + s; }
+
+  function fromText(j){
+    var p = [srcExt(j.file)];
+    if (j.src){ p.push(srLabel(j.src.sr)); p.push(chLabel(j.src.ch)); p.push(dur(j.src.dur)); }
+    return t("from") + ": " + p.join(" · ");
+  }
+  function toText(j){
+    var s = j.used || settings();
+    var p = [s.f.toUpperCase()];
+    p.push(s.sr === "orig" && !j.src ? t("orig") : srLabel(targetSr(j.src ? j.src.sr : 0, s)));
+    p.push(s.ch === "orig" && !j.src ? t("orig") : chLabel(targetCh(j.src ? j.src.ch : 1, s)));
+    if (usesBr(s.f)) p.push(s.kbps + " kbps");
+    return t("to") + ": " + p.join(" · ");
+  }
+  function refreshMeta(j){
+    var m = j.li.querySelector(".meta");
+    m.querySelector(".from").textContent = fromText(j);
+    m.querySelector(".to").textContent = toText(j);
+  }
+  function refreshStatus(j){
+    var st = j.li.querySelector(".st"); st.textContent = t(j.key); st.className = "st " + j.cls;
+    var a = j.li.querySelector(".act a"); if (a) a.textContent = t("dl");
+  }
+  function setStatus(j, key, cls){ j.key = key; j.cls = cls || ""; refreshStatus(j); }
+  function progress(j, p){ j.li.querySelector(".bar i").style.width = Math.round(p*100) + "%"; }
+
+  function needsRun(j){ return !j.done || j.sig !== sigOf(settings()); }
+
+  function updateUI(){
+    var nDone = jobs.filter(function(j){ return j.blob; }).length;
+    var rem = remaining(), limited = FREE_DAILY_LIMIT > 0 && rem <= 0;
+    go.disabled = busy || limited || !jobs.some(needsRun);
+    var quotaEl = document.getElementById("quota"), upEl = document.getElementById("upgrade"), upBtn = document.getElementById("upgradeBtn");
+    quotaEl.hidden = !(FREE_DAILY_LIMIT > 0);
+    if (FREE_DAILY_LIMIT > 0) quotaEl.textContent = t("quota")(FREE_DAILY_LIMIT, rem);
+    upEl.hidden = !limited;
+    if (UPGRADE_URL){ upBtn.href = UPGRADE_URL; upBtn.hidden = false; } else { upBtn.hidden = true; }
+    zipBtn.disabled = busy || nDone < 2;
+    fmt.disabled = srSel.disabled = chSel.disabled = busy;
+    br.disabled = busy || !usesBr(fmt.value);
+    hint.hidden = !viaFFmpeg(fmt.value);
+    sumEl.textContent = jobs.length ? t("sum")(nDone, jobs.length) : "";
+  }
+
+  /* ---------- language ---------- */
+  function setLang(l){
+    html.lang = l; html.dir = l === "ar" ? "rtl" : "ltr";
+    langBtn.textContent = l === "ar" ? "English" : "العربية";
+    var opts = document.querySelectorAll("option[data-ar]");
+    for (var i=0;i<opts.length;i++) opts[i].textContent = opts[i].getAttribute("data-" + l);
+    jobs.forEach(function(j){ refreshStatus(j); refreshMeta(j); });
+    updateUI();
+    try{ localStorage.setItem("lang", l); }catch(e){}
+  }
+  langBtn.addEventListener("click", function(){ setLang(lang() === "ar" ? "en" : "ar"); });
+
+  /* ---------- settings change ---------- */
+  [fmt, br, srSel, chSel].forEach(function(el){
+    el.addEventListener("change", function(){ jobs.forEach(refreshMeta); updateUI(); });
+  });
+
+  /* ---------- adding files ---------- */
+  drop.addEventListener("click", function(){ fileIn.click(); });
+  drop.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); fileIn.click(); }});
+  ["dragenter","dragover"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave","drop"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function(e){ addFiles(e.dataTransfer.files); });
+  fileIn.addEventListener("change", function(){ addFiles(fileIn.files); fileIn.value = ""; });
+
+  function addFiles(files){
+    for (var i=0;i<files.length;i++){
+      var f = files[i], li = document.createElement("li");
+      li.innerHTML = '<span class="nm"></span><span class="st"></span><span class="act"></span>' +
+        '<button class="rm" type="button" aria-label="remove">×</button>' +
+        '<div class="meta"><span class="from"></span><span class="arrow">→</span><span class="to"></span></div>' +
+        '<div class="bar"><i></i></div>';
+      li.querySelector(".nm").textContent = f.name;
+      list.appendChild(li);
+      var job = {file:f, li:li, key:"wait", cls:"", done:false, failed:false, src:null, used:null, sig:null, blob:null, url:null, outName:null};
+      (function(j){ j.li.querySelector(".rm").addEventListener("click", function(){ removeJob(j); }); })(job);
+      jobs.push(job); refreshStatus(job); refreshMeta(job);
+    }
+    updateUI();
+  }
+  function removeJob(j){
+    if (busy) return;
+    if (j.url) URL.revokeObjectURL(j.url);
+    j.li.parentNode && j.li.parentNode.removeChild(j.li);
+    jobs = jobs.filter(function(x){ return x !== j; });
+    updateUI();
+  }
+  document.getElementById("clear").addEventListener("click", function(){
+    if (busy) return;
+    jobs.forEach(function(j){ if (j.url) URL.revokeObjectURL(j.url); });
+    jobs = []; list.innerHTML = ""; updateUI();
+  });
+
+  /* ---------- convert all ---------- */
+  go.addEventListener("click", async function(){
+    if (busy) return;
+    var s = settings(), todo = jobs.filter(needsRun);
+    if (!todo.length) return;
+    busy = true; updateUI();
+    for (var i=0;i<todo.length;i++){
+      if (remaining() <= 0){ fail(todo[i], "limit"); continue; }
+      await run(todo[i], s);
+      if (todo[i].done) addUsed();
+      updateUI();
+    }
+    busy = false; updateUI();
+  });
+
+  function tick(){ return new Promise(function(r){ setTimeout(r,0); }); }
+
+  async function run(j, s){
+    j.failed = false; j.done = false; j.used = s;
+    if (j.url){ URL.revokeObjectURL(j.url); j.url = null; }
+    j.blob = null; j.sig = null;
+    var oldA = j.li.querySelector(".act a"); if (oldA) oldA.parentNode.removeChild(oldA);
+    try{
+      if (j.file.size > 200*1024*1024){ fail(j,"big"); return; }
+      var f = s.f, wantMp3 = f === "mp3", viaFF = viaFFmpeg(f);
+      if (wantMp3 && !window.lamejs){ fail(j,"nolib"); return; }
+
+      setStatus(j,"dec"); progress(j,.05); await tick();
+      var arr = await j.file.arrayBuffer();
+      var AC = window.AudioContext || window.webkitAudioContext;
+      var ctx = new AC(), buf;
+      try{ buf = await ctx.decodeAudioData(arr); } finally { try{ ctx.close(); }catch(e){} }
+      j.src = {sr: Math.round(buf.sampleRate), ch: buf.numberOfChannels, dur: buf.duration};
+      refreshMeta(j);
+
+      setStatus(j,"res"); progress(j,.3); await tick();
+      var outSR = targetSr(j.src.sr, s), outCh = targetCh(j.src.ch, s);
+      var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      var off = new OAC(outCh, Math.max(1, Math.ceil(buf.duration*outSR)), outSR);
+      var src = off.createBufferSource(); src.buffer = buf; src.connect(off.destination); src.start(0);
+      var rendered = await off.startRendering();
+
+      setStatus(j,"enc"); progress(j,.5); await tick();
+      var blob;
+      if (wantMp3) blob = await encodeMp3(rendered, s.kbps, j);
+      else if (viaFF) blob = await encodeFF(rendered, f, s.kbps, j);
+      else blob = encodeWav(rendered);
+
+      var base = j.file.name.replace(/\.[^.]+$/,"");
+      var sfx = s.sr === "orig" ? "" : "_" + (outSR/1000) + "k";
+      j.outName = base + sfx + "." + f;
+      j.blob = blob; j.url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.className = "btn small"; a.href = j.url; a.download = j.outName;
+      j.li.querySelector(".act").appendChild(a);
+      j.sig = sigOf(s); j.done = true;
+      progress(j,1); setStatus(j,"done","ok"); refreshMeta(j);
+    }catch(e){
+      console.error(e);
+      fail(j, (e && e.code === "noff") ? "noff" : "fail");
+    }
+  }
+  function fail(j, key){ j.failed = true; j.done = false; j.used = null; setStatus(j, key, "err"); refreshMeta(j); }
+
+  /* ---------- download all as ZIP ---------- */
+  zipBtn.addEventListener("click", async function(){
+    var ready = jobs.filter(function(j){ return j.blob; });
+    if (!ready.length || !window.JSZip) return;
+    zipBtn.disabled = true; sumEl.textContent = t("zipping");
+    try{
+      var zip = new JSZip(), used = {};
+      ready.forEach(function(j){
+        var n = j.outName, k = n, i = 2;
+        while (used[k.toLowerCase()]){ k = n.replace(/(\.[^.]+)$/, " (" + i + ")$1"); i++; }
+        used[k.toLowerCase()] = 1; zip.file(k, j.blob);
+      });
+      var out = await zip.generateAsync({type:"blob", compression:"STORE"});
+      var a = document.createElement("a"), url = URL.createObjectURL(out);
+      a.href = url; a.download = "veyra-converted.zip";
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+    }catch(e){ console.error(e); }
+    updateUI();
+  });
+
+  /* ---------- encoders ---------- */
+  var ffPromise = null;
+  function loadScript(src){
+    return new Promise(function(res, rej){
+      var el = document.createElement("script");
+      el.src = src; el.onload = res; el.onerror = function(){ rej(new Error("script load failed: " + src)); };
+      document.head.appendChild(el);
+    });
+  }
+  async function blobFrom(urls, type){
+    var parts = [];
+    for (var i=0;i<urls.length;i++){
+      var r = await fetch(urls[i]);
+      if (!r.ok) throw new Error("HTTP " + r.status + " " + urls[i]);
+      parts.push(await r.arrayBuffer());
+    }
+    return URL.createObjectURL(new Blob(parts, {type: type}));
+  }
+  function getFF(){
+    if (!ffPromise){
+      ffPromise = (async function(){
+        await loadScript("vendor/ffmpeg/ffmpeg.js");
+        var coreURL = await blobFrom(["vendor/ffmpeg/ffmpeg-core.js"], "text/javascript");
+        var wasmURL = await blobFrom(["vendor/ffmpeg/core-a.bin", "vendor/ffmpeg/core-b.bin"], "application/wasm");
+        var ff = new FFmpegWASM.FFmpeg();
+        await ff.load({coreURL: coreURL, wasmURL: wasmURL});
+        return ff;
+      })();
+      ffPromise.catch(function(){ ffPromise = null; });
+    }
+    return ffPromise;
+  }
+
+  async function encodeFF(buf, f, kbps, j){
+    var sr = buf.sampleRate;
+    if (f === "m4a"){
+      if (sr < 32000) kbps = Math.min(kbps,128);
+      if (sr <= 12000) kbps = Math.min(kbps,64);
+    }
+    var ff;
+    setStatus(j,"ffload"); progress(j,.55);
+    try{ ff = await getFF(); }catch(e){ console.error(e); throw Object.assign(new Error("noff"), {code:"noff"}); }
+    setStatus(j,"enc");
+    var wavBlob = encodeWav(buf);
+    var inName = "in.wav", outName = "out." + f;
+    await ff.writeFile(inName, new Uint8Array(await wavBlob.arrayBuffer()));
+    var args = ["-i", inName, "-vn"];
+    if (f === "ogg"){
+      var q = {64:0, 96:2, 128:4, 192:6, 256:8, 320:9}[kbps];
+      args = args.concat(["-c:a","libvorbis","-q:a",String(q === undefined ? 4 : q)]);
+    }
+    else if (f === "m4a") args = args.concat(["-c:a","aac","-b:a",kbps+"k","-movflags","+faststart"]);
+    else args = args.concat(["-c:a","flac"]);
+    args.push(outName);
+    var onProg = function(e){ if (e && typeof e.progress === "number") progress(j, .6 + .4*Math.max(0, Math.min(1, e.progress))); };
+    ff.on("progress", onProg);
+    var code;
+    try{ code = await ff.exec(args); } finally { ff.off("progress", onProg); }
+    if (code !== 0) throw new Error("ffmpeg exit " + code);
+    var data = await ff.readFile(outName);
+    try{ await ff.deleteFile(inName); await ff.deleteFile(outName); }catch(e){}
+    var mime = f === "ogg" ? "audio/ogg" : f === "flac" ? "audio/flac" : "audio/mp4";
+    return new Blob([data], {type: mime});
+  }
+
+  function toInt16(f32){
+    var out = new Int16Array(f32.length);
+    for (var i=0;i<f32.length;i++){
+      var v = Math.max(-1, Math.min(1, f32[i]));
+      out[i] = v < 0 ? v*0x8000 : v*0x7FFF;
+    }
+    return out;
+  }
+
+  async function encodeMp3(buf, kbps, j){
+    var ch = buf.numberOfChannels, sr = buf.sampleRate;
+    if (sr < 32000) kbps = Math.min(kbps,128);
+    if (sr <= 12000) kbps = Math.min(kbps,64);
+    var enc = new lamejs.Mp3Encoder(ch, sr, kbps);
+    var l = toInt16(buf.getChannelData(0));
+    var r = ch > 1 ? toInt16(buf.getChannelData(1)) : null;
+    var out = [], block = 1152, n = 0, total = Math.ceil(l.length/block);
+    for (var i=0;i<l.length;i+=block){
+      var lc = l.subarray(i,i+block), chunk;
+      chunk = r ? enc.encodeBuffer(lc, r.subarray(i,i+block)) : enc.encodeBuffer(lc);
+      if (chunk.length) out.push(new Uint8Array(chunk));
+      if (++n % 300 === 0){ progress(j, .5 + .5*(n/total)); await tick(); }
+    }
+    var end = enc.flush(); if (end.length) out.push(new Uint8Array(end));
+    return new Blob(out, {type:"audio/mpeg"});
+  }
+
+  function encodeWav(buf){
+    var ch = buf.numberOfChannels, sr = buf.sampleRate, len = buf.length;
+    var bytes = len*ch*2, ab = new ArrayBuffer(44+bytes), v = new DataView(ab);
+    function w(o,s){ for (var i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); }
+    w(0,"RIFF"); v.setUint32(4,36+bytes,true); w(8,"WAVE"); w(12,"fmt ");
+    v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,ch,true);
+    v.setUint32(24,sr,true); v.setUint32(28,sr*ch*2,true); v.setUint16(32,ch*2,true);
+    v.setUint16(34,16,true); w(36,"data"); v.setUint32(40,bytes,true);
+    var data = [], c, o = 44, i;
+    for (c=0;c<ch;c++) data.push(buf.getChannelData(c));
+    for (i=0;i<len;i++){
+      for (c=0;c<ch;c++){
+        var x = Math.max(-1, Math.min(1, data[c][i]));
+        v.setInt16(o, x < 0 ? x*0x8000 : x*0x7FFF, true); o += 2;
+      }
+    }
+    return new Blob([ab], {type:"audio/wav"});
+  }
+
+  /* ---------- init ---------- */
+  (function(){
+    var s = null; try{ s = localStorage.getItem("lang"); }catch(e){}
+    if (!s) s = (navigator.language || "ar").toLowerCase().indexOf("ar") === 0 ? "ar" : "en";
+    setLang(s);
+  })();
+})();
+</script>
+</body>
+</html>
