@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist | Sayvoi</title>
+<meta name="description" content="Common requirements for voice-recording and speech-data projects: format, sample rate, mono or stereo, silence, levels and file naming, with a delivery checklist.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/voice-data-recording-specs.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/voice-data-recording-specs.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/voice-data-recording-specs.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist">
+<meta property="og:description" content="Common requirements for voice-recording and speech-data projects: format, sample rate, mono or stereo, silence, levels and file naming, with a delivery checklist.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/voice-data-recording-specs.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist", "description": "Common requirements for voice-recording and speech-data projects: format, sample rate, mono or stereo, silence, levels and file naming, with a delivery checklist.", "datePublished": "2026-10-23", "dateModified": "2026-10-23", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/voice-data-recording-specs.html"}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/articles/">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist</h1>
+<p class="meta">Last updated: October 23, 2026</p>
+
+<p>Companies that collect speech data for voice assistants, speech recognition or wake-word training are strict about how recordings are delivered. A recording that sounds fine to a person may still be rejected because of its format, level or length. This guide covers the requirements you meet most often.</p>
+
+<p><strong>Important:</strong> every project has its own specification. Treat the values below as typical examples, and always follow the document you receive from the client.</p>
+
+<h2>Typical technical requirements</h2>
+<ul>
+<li><strong>Format:</strong> WAV (uncompressed PCM), usually 16-bit.</li>
+<li><strong>Sample rate:</strong> 16 kHz is very common for speech; some projects ask for 24, 44.1 or 48 kHz.</li>
+<li><strong>Channels:</strong> mono in most speech projects.</li>
+<li><strong>Duration:</strong> one sentence or phrase per file, sometimes with a maximum length.</li>
+<li><strong>Silence:</strong> a short, clean silence at the beginning and end of each file, often about half a second to one second.</li>
+</ul>
+
+<h2>Recording quality</h2>
+<ul>
+<li><strong>A quiet room</strong> without echo. Soft furniture and curtains help a lot.</li>
+<li><strong>A steady distance</strong> from the microphone for the whole session.</li>
+<li><strong>No clipping.</strong> Peaks should stay clearly below 0 dBFS (digital full scale). Many projects ask for peaks somewhere between -6 and -1 dBFS, so check your specification.</li>
+<li><strong>No heavy processing.</strong> Avoid aggressive noise reduction, compression or effects unless the project allows it.</li>
+<li><strong>A consistent level</strong> across files from the same speaker.</li>
+</ul>
+
+<h2>Record high, convert once</h2>
+<p>If your device records at 44.1 or 48 kHz and the project needs 16 kHz mono, convert each file once from the original. Do not convert files several times, and keep the originals until the client accepts the delivery. You can do the conversion in bulk with <a href="/">Sayvoi Audio Converter</a>: choose WAV, 16 kHz and Mono, and add all your files. More about the choice of rate in <a href="sample-rate-16-24-48-khz.html">our sample-rate guide</a>.</p>
+
+<h2>File size to expect</h2>
+<p>A 16 kHz, 16-bit, mono WAV takes about 32 KB per second, roughly 1.9 MB per minute. A 3-second sentence is therefore about 96 KB.</p>
+
+<h2>Delivery checklist</h2>
+<ol>
+<li>Format, sample rate and channels match the specification.</li>
+<li>Every file is within the allowed duration.</li>
+<li>Silence at the start and end is present and consistent.</li>
+<li>No clipping, no clicks, no background noise.</li>
+<li>No duplicated or missing sentences.</li>
+<li>File names follow the required naming pattern, without spaces or unexpected characters.</li>
+<li>Files are grouped by speaker, in the structure the client asked for.</li>
+</ol>
+<p>Checking these points before delivery saves rounds of corrections and rejected files.</p>
+
+<div class="cta"><p>Convert your audio files for free in your browser, without uploading them to any server.</p><a class="btn" href="/">Open the converter</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="sample-rate-16-24-48-khz.html"><b>What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained</b><span>Sample rate explained in plain language: what 16, 24, 44.1 and 48 kHz mean, which one to choose for speech, music or video, and what happens when you convert.</span></a><a class="card" href="batch-convert-audio-zip.html"><b>How to Batch Convert Many Audio Files at Once and Download Them as a ZIP</b><span>Convert dozens of audio files in one go: apply the same format, bitrate and sample rate to all of them, then download everything in a single ZIP file.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>

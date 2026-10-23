@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained | Sayvoi</title>
+<meta name="description" content="Sample rate explained in plain language: what 16, 24, 44.1 and 48 kHz mean, which one to choose for speech, music or video, and what happens when you convert.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/sample-rate-16-24-48-khz.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/sample-rate-16-24-48-khz.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/sample-rate-16-24-48-khz.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained">
+<meta property="og:description" content="Sample rate explained in plain language: what 16, 24, 44.1 and 48 kHz mean, which one to choose for speech, music or video, and what happens when you convert.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/sample-rate-16-24-48-khz.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained", "description": "Sample rate explained in plain language: what 16, 24, 44.1 and 48 kHz mean, which one to choose for speech, music or video, and what happens when you convert.", "datePublished": "2026-10-23", "dateModified": "2026-10-23", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/sample-rate-16-24-48-khz.html"}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/articles/">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained</h1>
+<p class="meta">Last updated: October 23, 2026</p>
+
+<p>The sample rate tells you how many times per second a digital recording measures the sound. It is written in hertz (Hz) or kilohertz (kHz): 16 kHz means 16,000 measurements every second. Choosing the right sample rate affects quality, file size and compatibility with other software.</p>
+
+<h2>The key idea: half the sample rate</h2>
+<p>A digital recording can only capture frequencies up to <strong>half</strong> its sample rate. This is known as the Nyquist limit. A 16 kHz recording captures up to 8 kHz, a 44.1 kHz recording captures up to 22.05 kHz, and a 48 kHz recording captures up to 24 kHz. Human hearing reaches roughly 20 kHz at best, which is why 44.1 and 48 kHz became the standards for music and video.</p>
+
+<h2>Common sample rates and where they are used</h2>
+<table>
+<thead><tr><th>Sample rate</th><th>Highest frequency captured</th><th>Typical use</th></tr></thead>
+<tbody>
+<tr><td>8 kHz</td><td>4 kHz</td><td>Traditional telephone calls</td></tr>
+<tr><td>16 kHz</td><td>8 kHz</td><td>Speech recognition, voice assistants, many speech datasets</td></tr>
+<tr><td>22.05 / 24 kHz</td><td>11 to 12 kHz</td><td>Lower-bandwidth voice, some speech synthesis work</td></tr>
+<tr><td>44.1 kHz</td><td>22.05 kHz</td><td>Audio CDs and most music</td></tr>
+<tr><td>48 kHz</td><td>24 kHz</td><td>Video, broadcast and professional audio</td></tr>
+</tbody>
+</table>
+
+<h2>Which one should you choose?</h2>
+<ul>
+<li><strong>Speech for recognition or data collection:</strong> 16 kHz is very common, but always follow the specification you were given.</li>
+<li><strong>Music:</strong> 44.1 kHz.</li>
+<li><strong>Anything that goes into a video:</strong> 48 kHz, to match the video workflow.</li>
+<li><strong>Not sure:</strong> keep the original sample rate. You can always convert later.</li>
+</ul>
+
+<h2>What happens when you change the sample rate</h2>
+<p><strong>Lowering</strong> the sample rate (for example 48 kHz to 16 kHz) removes the high frequencies above the new limit and makes the file smaller. <strong>Raising</strong> it (16 kHz to 48 kHz) does not bring back detail that was never recorded: the file only becomes larger. So record at the rate you need or higher, and convert downward once, from the original.</p>
+
+<h2>How much space does it take?</h2>
+<p>For uncompressed 16-bit mono WAV, the size is the sample rate multiplied by 2 bytes. At 16 kHz that is 32,000 bytes per second, about 1.9 MB per minute. At 48 kHz it is about 5.8 MB per minute. Stereo doubles these numbers.</p>
+
+<h2>Changing the sample rate in Sayvoi</h2>
+<p>Open the <a href="/">converter</a>, add your files, and choose the target value in the <strong>Sample rate</strong> list (from 8 kHz up to 48 kHz). The output file name gets a suffix such as <code>_16k</code>, so you can tell converted files from the originals. Related reading: <a href="wav-vs-mp3-vs-flac.html">WAV vs MP3 vs FLAC</a>.</p>
+
+<div class="cta"><p>Convert your audio files for free in your browser, without uploading them to any server.</p><a class="btn" href="/">Open the converter</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="voice-data-recording-specs.html"><b>Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist</b><span>Common requirements for voice-recording and speech-data projects: format, sample rate, mono or stereo, silence, levels and file naming, with a delivery checklist.</span></a><a class="card" href="wav-vs-mp3-vs-flac.html"><b>WAV vs MP3 vs FLAC vs OGG vs M4A: Which Audio Format Should You Choose?</b><span>A practical comparison of the most common audio formats: file size, quality, compatibility and the best choice for recording, editing, sharing and archiving.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>
