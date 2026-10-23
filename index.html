@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Veyra — محوّل الصوت المجاني | Free Audio Converter</title>
+<title>Sayvoi — محوّل الصوت المجاني | Free Audio Converter</title>
 <meta name="description" content="حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A مجاناً، وغيّر معدل العينة (48 / 24 / 16 kHz)، دفعة واحدة وداخل المتصفح بدون رفع الملفات. Free in-browser audio converter with batch conversion and sample-rate change.">
 <style>
   :root{
@@ -72,7 +72,7 @@
   <div class="top"><button class="lang" id="langBtn" type="button">English</button></div>
 
   <header>
-    <h1>Veyra <span lang-block="ar">محوّل الصوت</span><span lang-block="en">Audio Converter</span></h1>
+    <h1>Sayvoi <span lang-block="ar">محوّل الصوت</span><span lang-block="en">Audio Converter</span></h1>
     <p class="sub" lang-block="ar">حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A، وغيّر معدل العينة (48 / 24 / 16 kHz وغيرها) والقنوات، لعدة ملفات دفعة واحدة. كل شيء يتم داخل متصفحك.</p>
     <p class="sub" lang-block="en">Convert audio to MP3, WAV, OGG, FLAC or M4A, change the sample rate (48 / 24 / 16 kHz and more) and channels, for many files at once. Everything happens inside your browser.</p>
   </header>
@@ -149,8 +149,8 @@
   </div>
 
   <div class="upgrade" id="upgrade" hidden>
-    <p lang-block="ar">وصلت للحد المجاني اليومي. للحصول على حد أعلى أو للاستخدام الكثيف، تواصل معنا على <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. يتجدد الحد غداً.</p>
-    <p lang-block="en">You've reached today's free limit. For a higher limit or heavy use, contact us at <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. The limit resets tomorrow.</p>
+    <p lang-block="ar">وصلت للحد المجاني اليومي. للحصول على حد أعلى أو للاستخدام الكثيف، تواصل معنا على <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. يتجدد الحد غداً.</p>
+    <p lang-block="en">You've reached today's free limit. For a higher limit or heavy use, contact us at <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. The limit resets tomorrow.</p>
     <a class="btn small" id="upgradeBtn" href="#" target="_blank" rel="noopener" hidden>
       <span lang-block="ar">ترقية</span><span lang-block="en">Upgrade</span>
     </a>
@@ -162,8 +162,8 @@
   <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
 
   <footer>
-    <p lang-block="ar">تواصل: <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
-    <p lang-block="en">Contact: <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
+    <p lang-block="ar">تواصل: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
+    <p lang-block="en">Contact: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
   </footer>
 </div>
 
@@ -194,7 +194,7 @@
         sum:function(a,b){ return "Converted " + a + " of " + b + " file" + (b === 1 ? "" : "s"); }}
   };
   /* ===== Free plan settings (edit these two lines) ===== */
-  var FREE_DAILY_LIMIT = 10;   // files converted per day for free; set 0 for unlimited
+  var FREE_DAILY_LIMIT = 10;  // files converted per day for free; set 0 for unlimited
   var UPGRADE_URL = "";       // later: link to your payment/pricing page (shows an "Upgrade" button)
   /* ======================================================= */
   var MP3_RATES = [8000,11025,12000,16000,22050,24000,32000,44100,48000];
@@ -216,13 +216,13 @@
   function today(){ var d = new Date(); return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate(); }
   function getUsed(){
     var t0 = today(), n = memUsage.d === t0 ? memUsage.n : 0;
-    try{ var v = JSON.parse(localStorage.getItem("veyra_usage") || "null"); if (v && v.d === t0) n = Math.max(n, v.n|0); }catch(e){}
+    try{ var v = JSON.parse(localStorage.getItem("sayvoi_usage") || "null"); if (v && v.d === t0) n = Math.max(n, v.n|0); }catch(e){}
     return n;
   }
   function addUsed(){
     var t0 = today(), n = getUsed() + 1;
     memUsage = {d:t0, n:n};
-    try{ localStorage.setItem("veyra_usage", JSON.stringify({d:t0, n:n})); }catch(e){}
+    try{ localStorage.setItem("sayvoi_usage", JSON.stringify({d:t0, n:n})); }catch(e){}
   }
   function remaining(){ return FREE_DAILY_LIMIT > 0 ? Math.max(0, FREE_DAILY_LIMIT - getUsed()) : Infinity; }
 
@@ -416,7 +416,7 @@
       });
       var out = await zip.generateAsync({type:"blob", compression:"STORE"});
       var a = document.createElement("a"), url = URL.createObjectURL(out);
-      a.href = url; a.download = "veyra-converted.zip";
+      a.href = url; a.download = "sayvoi-converted.zip";
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
       setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
     }catch(e){ console.error(e); }
