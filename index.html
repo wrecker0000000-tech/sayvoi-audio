@@ -38,6 +38,7 @@
   .btn{display:inline-block;text-decoration:none;font:inherit;font-weight:700;border-radius:12px;padding:12px 22px;
     cursor:pointer;border:0;background:var(--accent);color:var(--accent-ink)}
   .btn:disabled{opacity:.45;cursor:not-allowed}
+  [hidden]{display:none!important}
   .btn.small{padding:6px 14px;font-size:14px;border-radius:10px}
   .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
   .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -146,6 +147,9 @@
       <span lang-block="ar">مسح القائمة</span><span lang-block="en">Clear list</span>
     </button>
     <span class="sum" id="sum"></span>
+    <a class="btn small" id="zipLink" href="#" download="sayvoi-converted.zip" hidden>
+      <span lang-block="ar">إن لم يبدأ التنزيل اضغط هنا (ZIP)</span><span lang-block="en">Download didn't start? Tap here (ZIP)</span>
+    </a>
   </div>
 
   <div class="upgrade" id="upgrade" hidden>
@@ -179,8 +183,7 @@
         noff:"تعذّر تحميل مكوّن التحويل. تحقق من الاتصال وأعد المحاولة.",
         big:"الملف كبير جداً (أكثر من 200 ميجابايت).",
         limit:"تجاوزت الحد المجاني اليومي.",
-        orig:"الأصلي", mono:"مونو", stereo:"ستيريو", from:"من", to:"إلى", zipping:"جارٍ تجهيز ملف ZIP…",
-        quota:function(l,r){ return "الحد المجاني: " + l + " ملفات يومياً · المتبقي اليوم: " + r; },
+        orig:"الأصلي", mono:"مونو", stereo:"ستيريو", from:"من", to:"إلى", zipping:"جارٍ تجهيز ملف ZIP…", zipfail:"تعذّر تجهيز ملف ZIP. حمّل الملفات واحدًا واحدًا، أو أعد تحميل الصفحة وحاول مجددًا.",        quota:function(l,r){ return "الحد المجاني: " + l + " ملفات يومياً · المتبقي اليوم: " + r; },
         sum:function(a,b){ return "تم تحويل " + a + " من " + b + " ملف"; }},
     en:{wait:"Waiting", dec:"Decoding…", res:"Resampling…", enc:"Encoding…",
         done:"Done", dl:"Download", ffload:"Loading add-on…",
@@ -189,12 +192,11 @@
         noff:"Could not load the converter add-on. Check your connection and retry.",
         big:"File is too large (over 200 MB).",
         limit:"Daily free limit reached.",
-        orig:"Original", mono:"Mono", stereo:"Stereo", from:"From", to:"To", zipping:"Preparing ZIP…",
-        quota:function(l,r){ return "Free limit: " + l + " files per day · Left today: " + r; },
+        orig:"Original", mono:"Mono", stereo:"Stereo", from:"From", to:"To", zipping:"Preparing ZIP…", zipfail:"Could not prepare the ZIP. Download the files one by one, or reload the page and try again.",        quota:function(l,r){ return "Free limit: " + l + " files per day · Left today: " + r; },
         sum:function(a,b){ return "Converted " + a + " of " + b + " file" + (b === 1 ? "" : "s"); }}
   };
   /* ===== Free plan settings (edit these two lines) ===== */
-  var FREE_DAILY_LIMIT = 10;  // files converted per day for free; set 0 for unlimited
+  var FREE_DAILY_LIMIT = 15;  // files converted per day for free; set 0 for unlimited
   var UPGRADE_URL = "";       // later: link to your payment/pricing page (shows an "Upgrade" button)
   /* ======================================================= */
   var MP3_RATES = [8000,11025,12000,16000,22050,24000,32000,44100,48000];
@@ -335,7 +337,7 @@
   document.getElementById("clear").addEventListener("click", function(){
     if (busy) return;
     jobs.forEach(function(j){ if (j.url) URL.revokeObjectURL(j.url); });
-    jobs = []; list.innerHTML = ""; updateUI();
+    jobs = []; list.innerHTML = ""; zipLink.hidden = true; updateUI();
   });
 
   /* ---------- convert all ---------- */
@@ -403,10 +405,12 @@
   function fail(j, key){ j.failed = true; j.done = false; j.used = null; setStatus(j, key, "err"); refreshMeta(j); }
 
   /* ---------- download all as ZIP ---------- */
+  var zipUrl = null, zipLink = document.getElementById("zipLink");
   zipBtn.addEventListener("click", async function(){
     var ready = jobs.filter(function(j){ return j.blob; });
-    if (!ready.length || !window.JSZip) return;
-    zipBtn.disabled = true; sumEl.textContent = t("zipping");
+    if (!ready.length) return;
+    if (!window.JSZip){ sumEl.textContent = t("zipfail"); return; }
+    zipBtn.disabled = true; zipLink.hidden = true; sumEl.textContent = t("zipping");
     try{
       var zip = new JSZip(), used = {};
       ready.forEach(function(j){
@@ -415,11 +419,15 @@
         used[k.toLowerCase()] = 1; zip.file(k, j.blob);
       });
       var out = await zip.generateAsync({type:"blob", compression:"STORE"});
-      var a = document.createElement("a"), url = URL.createObjectURL(out);
-      a.href = url; a.download = "sayvoi-converted.zip";
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
-    }catch(e){ console.error(e); }
+      if (zipUrl) URL.revokeObjectURL(zipUrl);
+      zipUrl = URL.createObjectURL(out);
+      zipLink.href = zipUrl; zipLink.hidden = false;
+      zipLink.click();
+    }catch(e){
+      console.error(e);
+      updateUI(); sumEl.textContent = t("zipfail");
+      return;
+    }
     updateUI();
   });
 
