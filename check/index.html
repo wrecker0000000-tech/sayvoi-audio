@@ -68,7 +68,7 @@
 <body>
 <div class="wrap">
 <nav class="top"><a class="brand" href="/">Sayvoi</a>
-  <a href="/" data-t="nav_conv"></a><a href="/check/" class="on" data-t="nav_check"></a><a href="/articles/" data-t="nav_art"></a><a href="/about.html" data-t="nav_about"></a>
+  <a href="/" data-t="nav_conv"></a><a href="/check/" class="on" data-t="nav_check"></a><a href="/video-to-audio/" data-t="nav_vid"></a><a href="/articles/" data-t="nav_art"></a><a href="/about.html" data-t="nav_about"></a>
   <button class="btn sec" id="langBtn" type="button" style="padding:4px 12px">EN</button></nav>
 
 <h1 data-t="h1"></h1>
@@ -136,7 +136,7 @@
   "use strict";
   var T = {
     ar: {
-      nav_conv:"المحوّل", nav_check:"فاحص الجودة", nav_art:"المقالات", nav_about:"عن الموقع", f_priv:"الخصوصية", f_contact:"اتصل بنا",
+      nav_conv:"المحوّل", nav_check:"فاحص الجودة", nav_art:"المقالات", nav_vid:"فيديو إلى صوت", nav_about:"عن الموقع", f_priv:"الخصوصية", f_contact:"اتصل بنا",
       h1:"فاحص جودة التسجيلات الصوتية", sub:"افحص عشرات التسجيلات دفعة واحدة: معدل العينة، القنوات، التشويه (clipping)، الضوضاء، الصمت، والتكرار. كل شيء داخل متصفحك.",
       drop1:"اسحب الملفات هنا أو اضغط للاختيار", drop2:"WAV · MP3 · FLAC · OGG · M4A — حتى 200 ميجابايت للملف",
       specs:"مواصفات المشروع (اختياري)", specsHint:"اترك الحقل على «أي» أو فارغًا لتجاهله. أي ملف يخالف مواصفة تحددها يُعتبر «مرفوضًا».",
@@ -155,7 +155,7 @@
       i_silent:"الملف صامت تقريبًا", i_fake:"ستيريو لكن القناتان متطابقتان", i_dc:"إزاحة DC ملحوظة", i_dup:"مكرر: نفس محتوى %a", i_short:"ملف قصير جدًا (أقل من 0.3 ث)", i_nospeech:"لا يوجد جزء مسموع واضح فوق الضوضاء"
     },
     en: {
-      nav_conv:"Converter", nav_check:"Quality checker", nav_art:"Articles", nav_about:"About", f_priv:"Privacy", f_contact:"Contact",
+      nav_conv:"Converter", nav_check:"Quality checker", nav_art:"Articles", nav_vid:"Video to audio", nav_about:"About", f_priv:"Privacy", f_contact:"Contact",
       h1:"Recording Quality Checker", sub:"Check dozens of recordings at once: sample rate, channels, clipping, noise, silence and duplicates. Everything runs in your browser.",
       drop1:"Drop files here or click to choose", drop2:"WAV · MP3 · FLAC · OGG · M4A — up to 200 MB per file",
       specs:"Project specs (optional)", specsHint:"Leave a field on “Any” or empty to ignore it. A file that breaks a spec you set is marked as failed.",
@@ -228,6 +228,18 @@
         }
       } else if (n > 4 && u[0] === 0x1A && u[1] === 0x45 && u[2] === 0xDF && u[3] === 0xA3){
         r = 48000;
+        var tk = -1, okr = [8000,11025,12000,16000,22050,24000,32000,44100,48000,88200,96000];
+        for (i = 0; i < Math.min(n - 8, 200000); i++){
+          if (u[i] === 0x16 && u[i+1] === 0x54 && u[i+2] === 0xAE && u[i+3] === 0x6B){ tk = i; break; }
+        }
+        if (tk >= 0){
+          for (i = tk; i < Math.min(n - 10, tk + 4000); i++){
+            if (u[i] === 0xB5 && (u[i+1] === 0x84 || u[i+1] === 0x88)){
+              var fv = Math.round(u[i+1] === 0x84 ? v.getFloat32(i+2) : v.getFloat64(i+2));
+              if (okr.indexOf(fv) >= 0){ r = fv; break; }
+            }
+          }
+        }
       } else {
         var o = 0;
         if (s4(0).slice(0,3) === "ID3" && n > 10){

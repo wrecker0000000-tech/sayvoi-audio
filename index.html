@@ -102,6 +102,7 @@
   <nav class="top"><a class="brand" href="/">Sayvoi</a>
     <a class="nl" lang-block="ar" href="/">المحوّل</a><a class="nl" lang-block="en" href="/">Converter</a>
     <a class="nl on" lang-block="ar" href="/check/">فاحص الجودة</a><a class="nl on" lang-block="en" href="/check/">Quality checker</a>
+    <a class="nl" lang-block="ar" href="/video-to-audio/">فيديو إلى صوت</a><a class="nl" lang-block="en" href="/video-to-audio/">Video to audio</a>
     <a class="nl" lang-block="ar" href="/articles/">المقالات</a><a class="nl" lang-block="en" href="/articles/">Articles</a>
     <a class="nl" lang-block="ar" href="/about.html">عن الموقع</a><a class="nl" lang-block="en" href="/about.html">About</a>
     <button class="lang" id="langBtn" type="button">English</button></nav>
@@ -468,23 +469,53 @@
           if (s4(i) === "Opus" && s4(i+4) === "Head"){ r = 48000; break; }
         }
       } else if (n > 12 && s4(4) === "ftyp"){
-        var q = 0;
-        while (q + 8 <= n){
-          var bs = v.getUint32(q), bt = s4(q+4), hdr = 8;
-          if (bs === 1){ bs = v.getUint32(q+12); hdr = 16; }
-          if (bs === 0) bs = n - q;
-          if (bt === "moov"){
-            var e = Math.min(n - 20, q + bs);
-            for (i = q + hdr; i < e; i++){
-              if (s4(i) === "mdhd"){ r = u[i+4] === 1 ? v.getUint32(i+24) : v.getUint32(i+16); break; }
+        // walk moov > trak > mdia and take the timescale of the audio ("soun") track
+        var walk = function(start, end, depth){
+          var q = start;
+          while (q + 8 <= end){
+            var bs = v.getUint32(q), bt = s4(q+4), hdr = 8;
+            if (bs === 1){ bs = v.getUint32(q+12); hdr = 16; }
+            if (bs === 0) bs = end - q;
+            if (bs < 8 || q + bs > end + 1) break;
+            if (bt === "moov" || bt === "mdia"){ var f = walk(q + hdr, q + bs, depth + 1); if (f) return f; }
+            else if (bt === "trak"){
+              var ts = 0, soun = false, z = q + hdr, ze = q + bs;
+              var mdiaStart = 0, mdiaEnd = 0;
+              while (z + 8 <= ze){
+                var zs = v.getUint32(z), zt = s4(z+4);
+                if (zs < 8) break;
+                if (zt === "mdia"){ mdiaStart = z + 8; mdiaEnd = Math.min(ze, z + zs); }
+                z += zs;
+              }
+              var y = mdiaStart;
+              while (y + 8 <= mdiaEnd){
+                var ys = v.getUint32(y), yt = s4(y+4);
+                if (ys < 8) break;
+                if (yt === "mdhd") ts = u[y+8] === 1 ? v.getUint32(y+28) : v.getUint32(y+20);
+                if (yt === "hdlr") soun = s4(y+16) === "soun";
+                y += ys;
+              }
+              if (soun && ts) return ts;
             }
-            break;
+            q += bs;
           }
-          if (bs < 8) break;
-          q += bs;
-        }
+          return 0;
+        };
+        r = walk(0, n, 0);
       } else if (n > 4 && u[0] === 0x1A && u[1] === 0x45 && u[2] === 0xDF && u[3] === 0xA3){
         r = 48000;
+        var tk = -1, okr = [8000,11025,12000,16000,22050,24000,32000,44100,48000,88200,96000];
+        for (i = 0; i < Math.min(n - 8, 200000); i++){
+          if (u[i] === 0x16 && u[i+1] === 0x54 && u[i+2] === 0xAE && u[i+3] === 0x6B){ tk = i; break; }
+        }
+        if (tk >= 0){
+          for (i = tk; i < Math.min(n - 10, tk + 4000); i++){
+            if (u[i] === 0xB5 && (u[i+1] === 0x84 || u[i+1] === 0x88)){
+              var fv = Math.round(u[i+1] === 0x84 ? v.getFloat32(i+2) : v.getFloat64(i+2));
+              if (okr.indexOf(fv) >= 0){ r = fv; break; }
+            }
+          }
+        }
       } else {
         var o = 0;
         if (s4(0).slice(0,3) === "ID3" && n > 10){
