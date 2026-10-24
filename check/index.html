@@ -175,7 +175,7 @@
     }
   };
   var lang = (navigator.language || "ar").toLowerCase().indexOf("ar") === 0 ? "ar" : "en";
-  try{ var sv = localStorage.getItem("sayvoi_lang"); if (sv === "ar" || sv === "en") lang = sv; }catch(e){}
+  try{ var sv = localStorage.getItem("lang"); if (sv === "ar" || sv === "en") lang = sv; }catch(e){}
   function t(k){ return T[lang][k] || k; }
   function fmtMsg(k, a, b){ return t(k).replace("%a", a).replace("%b", b).replace("%%", "%"); }
   function $(id){ return document.getElementById(id); }
@@ -475,7 +475,7 @@
   $("go").addEventListener("click", runAll);
   $("csv").addEventListener("click", exportCsv);
   $("clear").addEventListener("click", function(){ jobs = []; $("bar").hidden = true; renderAll(); });
-  $("langBtn").addEventListener("click", function(){ lang = lang === "ar" ? "en" : "ar"; try{ localStorage.setItem("sayvoi_lang", lang); }catch(e){} applyLang(); });
+  $("langBtn").addEventListener("click", function(){ lang = lang === "ar" ? "en" : "ar"; try{ localStorage.setItem("lang", lang); }catch(e){} applyLang(); });
   Array.prototype.forEach.call(document.querySelectorAll("input,select"), function(el){
     el.addEventListener("change", function(){ if (el.id !== "file"){ evaluateAll(); renderAll(); } });
   });

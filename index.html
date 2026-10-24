@@ -25,7 +25,13 @@
     color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.7}
   html[lang="en"] body{font-family:"Segoe UI",Roboto,Arial,sans-serif}
   .wrap{max-width:780px;margin:0 auto;padding:20px 16px 56px}
-  .top{display:flex;justify-content:flex-end}
+  .top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:6px 0 14px;border-bottom:1px solid var(--line)}
+  .top .brand{font-weight:900;font-size:24px;letter-spacing:-.5px;text-decoration:none;margin-inline-end:auto;background:var(--wm);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .top a.nl{text-decoration:none;color:var(--muted);font-size:15px}
+  .top a.nl:hover{color:var(--accent)}
+  .top a.nl.on{background:var(--grad);color:#fff;font-weight:700;padding:3px 14px;border-radius:99px}
+  .top .nl[lang-block]{display:none}
+  html[lang="ar"] .top .nl[lang-block="ar"], html[lang="en"] .top .nl[lang-block="en"]{display:inline}
   .lang{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;
     padding:6px 14px;cursor:pointer;font:inherit;font-size:14px}
   .lang:hover{color:var(--ink);border-color:var(--muted)}
@@ -93,7 +99,12 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><button class="lang" id="langBtn" type="button">English</button></div>
+  <nav class="top"><a class="brand" href="/">Sayvoi</a>
+    <a class="nl" lang-block="ar" href="/">المحوّل</a><a class="nl" lang-block="en" href="/">Converter</a>
+    <a class="nl on" lang-block="ar" href="/check/">فاحص الجودة</a><a class="nl on" lang-block="en" href="/check/">Quality checker</a>
+    <a class="nl" lang-block="ar" href="/articles/">المقالات</a><a class="nl" lang-block="en" href="/articles/">Articles</a>
+    <a class="nl" lang-block="ar" href="/about.html">عن الموقع</a><a class="nl" lang-block="en" href="/about.html">About</a>
+    <button class="lang" id="langBtn" type="button">English</button></nav>
 
   <a class="promo" href="/check/">
     <span class="pi" aria-hidden="true">🎧</span>
@@ -197,8 +208,8 @@
   <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
 
   <footer>
-    <p lang-block="ar"><a href="/check/">فاحص جودة التسجيلات</a> · <a href="/articles/">المقالات</a> · <a href="/about.html">عن الموقع</a> · <a href="/privacy.html">الخصوصية</a> · <a href="/contact.html">اتصل بنا</a></p>
-    <p lang-block="en"><a href="/check/">Recording quality checker</a> · <a href="/articles/">Articles</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p>
+    <p lang-block="ar"><a href="/check/">فاحص جودة التسجيلات</a> · <a href="/articles/">المقالات</a> · <a href="/about.html">عن الموقع</a> · <a href="/faq.html">الأسئلة الشائعة</a> · <a href="/privacy.html">الخصوصية</a> · <a href="/terms.html">الشروط</a> · <a href="/contact.html">اتصل بنا</a></p>
+    <p lang-block="en"><a href="/check/">Recording quality checker</a> · <a href="/articles/">Articles</a> · <a href="/about.html">About</a> · <a href="/faq.html">FAQ</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/contact.html">Contact</a></p>
     <p lang-block="ar">تواصل: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
     <p lang-block="en">Contact: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
   </footer>
