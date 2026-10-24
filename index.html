@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sayvoi — محوّل الصوت المجاني | Free Audio Converter</title>
 <meta name="description" content="حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A مجاناً، وغيّر معدل العينة (48 / 24 / 16 kHz)، دفعة واحدة وداخل المتصفح بدون رفع الملفات. Free in-browser audio converter with batch conversion and sample-rate change.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
 <link rel="canonical" href="https://convert.sayvoi.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sayvoi">
@@ -15,11 +16,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <style>
   :root{
-    --bg:#0f1720; --card:#16212d; --ink:#f2f5f8; --muted:#9fb0c0;
-    --accent:#f5b83d; --accent-ink:#1a1300; --line:#25364a; --ok:#4cc38a; --err:#ff6b6b;
+    --bg:#f6f7fc; --card:#ffffff; --ink:#1b2240; --muted:#5b6482;
+    --accent:#6a3df0; --accent-ink:#ffffff; --line:#dfe3f0; --ok:#12875a; --err:#d64545;
+    --grad:linear-gradient(135deg,#7c4dff,#2f80ed); --wm:linear-gradient(90deg,#7c4dff,#2f80ed 55%,#ff8a3d);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#1d3550 0,transparent 60%),var(--bg);
+  body{margin:0;background:radial-gradient(900px 500px at 90% -10%,rgba(124,77,255,.16),transparent 60%),radial-gradient(800px 500px at 0% 0%,rgba(255,138,61,.14),transparent 55%),radial-gradient(900px 600px at 50% 110%,rgba(47,128,237,.12),transparent 60%),var(--bg);
     color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.7}
   html[lang="en"] body{font-family:"Segoe UI",Roboto,Arial,sans-serif}
   .wrap{max-width:780px;margin:0 auto;padding:20px 16px 56px}
@@ -30,21 +32,23 @@
   header{text-align:center;padding:24px 0 14px}
   h1{margin:0;font-size:clamp(26px,6vw,40px)}
   h1 span{color:var(--accent)}
+  .wm{background:var(--wm);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:900;letter-spacing:-.5px;font-family:"Segoe UI",Roboto,Arial,sans-serif}
   .sub{color:var(--muted);margin:10px auto 0;max-width:600px}
   .drop{margin-top:20px;border:2px dashed var(--line);border-radius:16px;background:var(--card);
     padding:30px 16px;text-align:center;cursor:pointer;transition:.15s}
-  .drop.over,.drop:hover{border-color:var(--accent);background:#1a2837}
+  .drop.over,.drop:hover{border-color:var(--accent);background:#f0ecff}
   .drop b{display:block;font-size:18px}
   .drop small{color:var(--muted);display:block}
   .how{margin:14px 0 0;color:var(--muted);font-size:14px;text-align:center}
   .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
   .opts label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
-  select{width:100%;background:#0f1923;color:var(--ink);border:1px solid var(--line);border-radius:10px;
+  select{width:100%;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:10px;
     padding:10px;font:inherit}
   select:disabled{opacity:.5}
   .hint{margin:12px 0 0;color:var(--muted);font-size:13px}
   .btn{display:inline-block;text-decoration:none;font:inherit;font-weight:700;border-radius:12px;padding:12px 22px;
-    cursor:pointer;border:0;background:var(--accent);color:var(--accent-ink)}
+    cursor:pointer;border:0;background:var(--grad);color:var(--accent-ink);box-shadow:0 4px 14px rgba(106,61,240,.25)}
+  .btn:not(:disabled):hover{filter:brightness(1.07)}
   .btn:disabled{opacity:.45;cursor:not-allowed}
   [hidden]{display:none!important}
   .btn.small{padding:6px 14px;font-size:14px;border-radius:10px}
@@ -63,15 +67,26 @@
   .meta span{unicode-bidi:plaintext}
   .arrow{display:inline-block;color:var(--accent);font-weight:700}
   html[dir="rtl"] .arrow{transform:scaleX(-1)}
-  .bar{flex:1 1 100%;height:5px;background:#0f1923;border-radius:999px;overflow:hidden}
-  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
+  .bar{flex:1 1 100%;height:5px;background:#e8ebf5;border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .15s}
   .quota{margin:12px 0 0;color:var(--muted);font-size:14px;text-align:center}
-  .upgrade{margin-top:14px;border:1px solid rgba(245,184,61,.45);background:rgba(245,184,61,.08);border-radius:12px;padding:12px 14px}
+  .upgrade{margin-top:14px;border:1px solid rgba(255,138,61,.5);background:rgba(255,138,61,.09);border-radius:12px;padding:12px 14px}
   .upgrade p{margin:0 0 8px}
   .upgrade a:not(.btn){color:var(--accent)}
   .priv{margin-top:26px;text-align:center;color:var(--muted);font-size:14px}
   footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
   footer a{color:var(--muted)}
+  .promo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:10px 0 0;padding:14px 18px;border-radius:16px;text-decoration:none;color:#fff;
+    background:linear-gradient(120deg,#7c4dff,#2f80ed 60%,#ff8a3d);box-shadow:0 8px 22px rgba(106,61,240,.28)}
+  .promo:hover{filter:brightness(1.06)}
+  .promo .pi{font-size:26px;line-height:1}
+  .promo .pt{flex:1 1 220px}
+  .promo b{display:block;font-size:17px}
+  .promo small{display:block;opacity:.92;font-size:13.5px;line-height:1.5}
+  .promo .pg{background:#fff;color:#4a2bd0;font-weight:800;border-radius:10px;padding:7px 16px;font-size:14px;white-space:nowrap}
+  .promo [lang-block]{display:none}
+  html[lang="ar"] .promo [lang-block="ar"], html[lang="en"] .promo [lang-block="en"]{display:block}
+  html[lang="ar"] .promo .pg[lang-block="ar"], html[lang="en"] .promo .pg[lang-block="en"]{display:inline-block}
   [lang-block]{display:none}
   html[lang="ar"] [lang-block="ar"], html[lang="en"] [lang-block="en"]{display:revert}
 </style>
@@ -80,8 +95,16 @@
 <div class="wrap">
   <div class="top"><button class="lang" id="langBtn" type="button">English</button></div>
 
+  <a class="promo" href="/check/">
+    <span class="pi" aria-hidden="true">🎧</span>
+    <span class="pt"><b lang-block="ar">جديد: فاحص جودة التسجيلات</b><b lang-block="en">New: Recording Quality Checker</b>
+    <small lang-block="ar">افحص التشويه والضوضاء ومعدل العينة والصمت والتكرار لعشرات الملفات دفعة واحدة، مجانًا وداخل متصفحك.</small>
+    <small lang-block="en">Check clipping, noise, sample rate, silence and duplicates for dozens of files at once. Free, in your browser.</small></span>
+    <span class="pg" lang-block="ar">جرّب الفاحص</span><span class="pg" lang-block="en">Try the checker</span>
+  </a>
+
   <header>
-    <h1>Sayvoi <span lang-block="ar">محوّل الصوت</span><span lang-block="en">Audio Converter</span></h1>
+    <h1><b class="wm">Sayvoi</b> <span lang-block="ar">محوّل الصوت</span><span lang-block="en">Audio Converter</span></h1>
     <p class="sub" lang-block="ar">حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A، وغيّر معدل العينة (48 / 24 / 16 kHz وغيرها) والقنوات، لعدة ملفات دفعة واحدة. كل شيء يتم داخل متصفحك.</p>
     <p class="sub" lang-block="en">Convert audio to MP3, WAV, OGG, FLAC or M4A, change the sample rate (48 / 24 / 16 kHz and more) and channels, for many files at once. Everything happens inside your browser.</p>
   </header>
