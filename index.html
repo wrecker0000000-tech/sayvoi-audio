@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -650,7 +650,7 @@
   /* ---------- init ---------- */
   (function(){
     var s = null; try{ s = localStorage.getItem("lang"); }catch(e){}
-    if (!s) s = (navigator.language || "ar").toLowerCase().indexOf("ar") === 0 ? "ar" : "en";
+    if (!s) s = "en";
     setLang(s);
   })();
 })();

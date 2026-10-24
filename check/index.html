@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -174,7 +174,7 @@
       i_silent:"File is practically silent", i_fake:"Stereo but both channels are identical", i_dc:"Noticeable DC offset", i_dup:"Duplicate: same content as %a", i_short:"Very short file (under 0.3 s)", i_nospeech:"No clear audible part above the noise"
     }
   };
-  var lang = (navigator.language || "ar").toLowerCase().indexOf("ar") === 0 ? "ar" : "en";
+  var lang = "en";
   try{ var sv = localStorage.getItem("lang"); if (sv === "ar" || sv === "en") lang = sv; }catch(e){}
   function t(k){ return T[lang][k] || k; }
   function fmtMsg(k, a, b){ return t(k).replace("%a", a).replace("%b", b).replace("%%", "%"); }
