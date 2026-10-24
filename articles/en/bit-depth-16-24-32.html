@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bit Depth Explained: 16-bit vs 24-bit vs 32-bit Float | Sayvoi</title>
+<meta name="description" content="What bit depth really changes in a recording, how much file size it adds, and which one to choose for speech, music and project delivery.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/bit-depth-16-24-32.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/bit-depth-16-24-32.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/bit-depth-16-24-32.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Bit Depth Explained: 16-bit vs 24-bit vs 32-bit Float">
+<meta property="og:description" content="What bit depth really changes in a recording, how much file size it adds, and which one to choose for speech, music and project delivery.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/bit-depth-16-24-32.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Bit Depth Explained: 16-bit vs 24-bit vs 32-bit Float", "description": "What bit depth really changes in a recording, how much file size it adds, and which one to choose for speech, music and project delivery.", "datePublished": "2026-10-24", "dateModified": "2026-10-24", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/bit-depth-16-24-32.html"}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/articles/">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>Bit Depth Explained: 16-bit vs 24-bit vs 32-bit Float</h1>
+<p class="meta">Last updated: October 24, 2026</p>
+
+<p>Sample rate tells you how many times per second the sound is measured. <strong>Bit depth</strong> tells you how finely each measurement is stored. More bits means a finer scale between the quietest and loudest value.</p>
+
+<h2>What each bit depth gives you</h2>
+<table>
+<tr><th>Bit depth</th><th>Theoretical dynamic range</th><th>Typical use</th></tr>
+<tr><td>8-bit</td><td>about 48 dB</td><td>Old or very low-quality audio. Audible hiss.</td></tr>
+<tr><td>16-bit</td><td>about 96 dB</td><td>CDs, most speech datasets, general delivery.</td></tr>
+<tr><td>24-bit</td><td>about 144 dB</td><td>Recording and editing. Lots of headroom.</td></tr>
+<tr><td>32-bit float</td><td>very large (floating point)</td><td>Internal processing and some recorders. Can hold levels above 0 dBFS inside the file.</td></tr>
+</table>
+<p>In practice, no microphone or room is quiet enough to use all 144 dB of a 24-bit file. The benefit of 24-bit is not that it sounds better when played back. It is that you can record at a safer, lower level without losing quality, because the noise from the quantization is far below the noise of the room.</p>
+
+<h2>File size</h2>
+<p>Uncompressed size is easy to calculate: sample rate × bytes per sample × channels × seconds.</p>
+<ul>
+<li>16 kHz, mono, 16-bit: 32,000 bytes per second, about 1.9 MB per minute.</li>
+<li>48 kHz, mono, 24-bit: 144,000 bytes per second, about 8.6 MB per minute.</li>
+<li>44.1 kHz, stereo, 16-bit: 176,400 bytes per second, about 10.6 MB per minute.</li>
+</ul>
+
+<h2>Which to choose</h2>
+<ul>
+<li><strong>Delivering speech data:</strong> follow the project specification. 16-bit is the most common requirement, and it is plenty for speech.</li>
+<li><strong>Recording:</strong> use 24-bit if your device offers it, then convert to the required depth at the end.</li>
+<li><strong>32-bit float:</strong> useful if you cannot control levels, because the recording will not clip inside the file. Convert it to 16 or 24-bit for delivery and check the level first.</li>
+</ul>
+
+<h2>A note on conversion</h2>
+<p>Reducing bit depth, for example from 24 to 16, throws away the finest detail. Professional tools add a tiny amount of noise called <em>dither</em> to hide the rounding error. Raising bit depth, from 16 to 24, only changes the container: it does not bring back detail that was never recorded. The WAV files that the <a href="/">Sayvoi converter</a> writes are 16-bit, which suits most speech delivery requirements. If a project requires 24-bit, convert with a desktop tool instead.</p>
+
+<h2>Check the bit depth of your files</h2>
+<p>The <a href="/check/">quality checker</a> reads the bit depth of WAV and FLAC files from their headers, and flags any file that does not match the depth you require.</p>
+
+<div class="cta"><p>Convert your audio files for free in your browser, without uploading them to any server.</p><a class="btn" href="/">Open the converter</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="sample-rate-16-24-48-khz.html"><b>What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained</b><span>Sample rate explained in plain language: what 16, 24, 44.1 and 48 kHz mean, which one to choose for speech, music or video, and what happens when you convert.</span></a><a class="card" href="mono-vs-stereo-recording.html"><b>Mono vs Stereo: Which Should You Use for Voice Recordings?</b><span>Mono or stereo? For single-voice recordings, mono is usually the right choice. Here is what each means, what it does to file size, and how to convert safely.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>

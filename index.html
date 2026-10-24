@@ -174,8 +174,8 @@
   <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
 
   <footer>
-    <p lang-block="ar"><a href="/articles/">المقالات</a> · <a href="/about.html">عن الموقع</a> · <a href="/privacy.html">الخصوصية</a> · <a href="/contact.html">اتصل بنا</a></p>
-    <p lang-block="en"><a href="/articles/">Articles</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p>
+    <p lang-block="ar"><a href="/check/">فاحص جودة التسجيلات</a> · <a href="/articles/">المقالات</a> · <a href="/about.html">عن الموقع</a> · <a href="/privacy.html">الخصوصية</a> · <a href="/contact.html">اتصل بنا</a></p>
+    <p lang-block="en"><a href="/check/">Recording quality checker</a> · <a href="/articles/">Articles</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a> · <a href="/contact.html">Contact</a></p>
     <p lang-block="ar">تواصل: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
     <p lang-block="en">Contact: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
   </footer>
@@ -380,9 +380,11 @@
       setStatus(j,"dec"); progress(j,.05); await tick();
       var arr = await j.file.arrayBuffer();
       var AC = window.AudioContext || window.webkitAudioContext;
-      var ctx = new AC(), buf;
+      /* decode at the file's own sample rate, otherwise the browser silently resamples to its default (e.g. 44.1 kHz) */
+      var nat = probeRate(arr), ctx, buf;
+      try{ ctx = nat ? new AC({sampleRate: nat}) : new AC(); }catch(e){ ctx = new AC(); }
       try{ buf = await ctx.decodeAudioData(arr); } finally { try{ ctx.close(); }catch(e){} }
-      j.src = {sr: Math.round(buf.sampleRate), ch: buf.numberOfChannels, dur: buf.duration};
+      j.src = {sr: nat || Math.round(buf.sampleRate), ch: buf.numberOfChannels, dur: buf.duration};
       refreshMeta(j);
 
       setStatus(j,"res"); progress(j,.3); await tick();
@@ -411,6 +413,65 @@
       console.error(e);
       fail(j, (e && e.code === "noff") ? "noff" : "fail");
     }
+  }
+  /* read the real sample rate from the file header (WAV, FLAC, OGG, MP3, M4A/MP4, AAC, WebM); 0 = unknown */
+  function probeRate(ab){
+    try{
+      var u = new Uint8Array(ab), n = u.length, v = new DataView(ab), i, r = 0;
+      function s4(o){ return String.fromCharCode(u[o],u[o+1],u[o+2],u[o+3]); }
+      if (n > 44 && s4(0) === "RIFF" && s4(8) === "WAVE"){
+        var p = 12;
+        while (p + 8 <= n){
+          var id = s4(p), sz = v.getUint32(p+4,true);
+          if (id === "fmt "){ r = v.getUint32(p+12,true); break; }
+          p += 8 + sz + (sz & 1);
+        }
+      } else if (n > 22 && s4(0) === "fLaC"){
+        r = (u[18] << 12) | (u[19] << 4) | (u[20] >> 4);
+      } else if (n > 40 && s4(0) === "OggS"){
+        for (i = 0; i < Math.min(n - 20, 600); i++){
+          if (u[i] === 1 && s4(i+1) === "vorb" && u[i+5] === 0x69 && u[i+6] === 0x73){ r = v.getUint32(i+12,true); break; }
+          if (s4(i) === "Opus" && s4(i+4) === "Head"){ r = 48000; break; }
+        }
+      } else if (n > 12 && s4(4) === "ftyp"){
+        var q = 0;
+        while (q + 8 <= n){
+          var bs = v.getUint32(q), bt = s4(q+4), hdr = 8;
+          if (bs === 1){ bs = v.getUint32(q+12); hdr = 16; }
+          if (bs === 0) bs = n - q;
+          if (bt === "moov"){
+            var e = Math.min(n - 20, q + bs);
+            for (i = q + hdr; i < e; i++){
+              if (s4(i) === "mdhd"){ r = u[i+4] === 1 ? v.getUint32(i+24) : v.getUint32(i+16); break; }
+            }
+            break;
+          }
+          if (bs < 8) break;
+          q += bs;
+        }
+      } else if (n > 4 && u[0] === 0x1A && u[1] === 0x45 && u[2] === 0xDF && u[3] === 0xA3){
+        r = 48000;
+      } else {
+        var o = 0;
+        if (s4(0).slice(0,3) === "ID3" && n > 10){
+          o = 10 + ((u[6] & 127) << 21 | (u[7] & 127) << 14 | (u[8] & 127) << 7 | (u[9] & 127));
+        }
+        for (i = o; i < Math.min(n - 4, o + 4096); i++){
+          if (u[i] === 0xFF && (u[i+1] & 0xE0) === 0xE0){
+            var ver = (u[i+1] >> 3) & 3, lay = (u[i+1] >> 1) & 3, si = (u[i+2] >> 2) & 3;
+            if (ver !== 1 && lay !== 0 && si !== 3){
+              r = (ver === 3 ? [44100,48000,32000] : ver === 2 ? [22050,24000,16000] : [11025,12000,8000])[si];
+              break;
+            }
+            if (lay === 0 && (u[i+1] & 0xF6) === 0xF0){
+              r = [96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350][(u[i+2] >> 2) & 15] || 0;
+              break;
+            }
+          }
+        }
+      }
+      return (r >= 3000 && r <= 768000) ? r : 0;
+    }catch(e){ return 0; }
   }
   function fail(j, key){ j.failed = true; j.done = false; j.used = null; setStatus(j, key, "err"); refreshMeta(j); }
 

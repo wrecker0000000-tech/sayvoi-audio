@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Checklist to Verify Recording Quality Before You Deliver | Sayvoi</title>
+<meta name="description" content="A practical pre-delivery checklist for voice recordings: format, sample rate, channels, level, noise, silence, clipping and duplicates, plus how to check them in bulk.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/check-recording-quality-before-delivery.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/check-recording-quality-before-delivery.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/check-recording-quality-before-delivery.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="A Checklist to Verify Recording Quality Before You Deliver">
+<meta property="og:description" content="A practical pre-delivery checklist for voice recordings: format, sample rate, channels, level, noise, silence, clipping and duplicates, plus how to check them in bulk.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/check-recording-quality-before-delivery.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "A Checklist to Verify Recording Quality Before You Deliver", "description": "A practical pre-delivery checklist for voice recordings: format, sample rate, channels, level, noise, silence, clipping and duplicates, plus how to check them in bulk.", "datePublished": "2026-10-24", "dateModified": "2026-10-24", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/check-recording-quality-before-delivery.html"}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/articles/">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>A Checklist to Verify Recording Quality Before You Deliver</h1>
+<p class="meta">Last updated: October 24, 2026</p>
+
+<p>In voice-data and transcription projects, a batch is often accepted or rejected on the basis of a handful of technical points. Checking them yourself before you deliver saves a round of rejections. Here is the checklist, in the order that wastes the least time.</p>
+
+<h2>1. Format and container</h2>
+<p>Is it the format the project asked for (usually WAV), and does it open without errors? A file renamed from <code>.m4a</code> to <code>.wav</code> is still an M4A file inside. Check the real format, not the extension.</p>
+
+<h2>2. Sample rate</h2>
+<p>Common requirements are 16 kHz, 24 kHz or 48 kHz. Remember that many tools silently resample, so verify the final file and not the setting you picked. See our guide to <a href="sample-rate-16-24-48-khz.html">sample rates</a>.</p>
+
+<h2>3. Channels and bit depth</h2>
+<p>Mono or stereo, 16 or 24 bit. A stereo file whose two channels are identical is a sign of a wrong export. See <a href="mono-vs-stereo-recording.html">mono vs stereo</a> and <a href="bit-depth-16-24-32.html">bit depth</a>.</p>
+
+<h2>4. Level</h2>
+<p>The peak should usually be below -1 dBFS and not far below -12 dBFS. A very low level means more noise after amplification. A level at 0 dBFS suggests clipping.</p>
+
+<h2>5. Clipping</h2>
+<p>Any visible or audible clipping is usually a reason to reject a take. See <a href="audio-clipping-distortion.html">what clipping is</a>.</p>
+
+<h2>6. Background noise</h2>
+<p>Measure the noise floor in the pauses: the quieter, the better. Steady hum, air-conditioner noise and fans are the usual offenders. A signal-to-noise ratio under about 25 dB is difficult to work with.</p>
+
+<h2>7. Silence at the start and end</h2>
+<p>Many specs ask for a fixed margin, such as 0.3 to 0.5 seconds before the first word and after the last. Too little means cut-off words; too much wastes storage and annotation time.</p>
+
+<h2>8. Length</h2>
+<p>Check that each file fits the minimum and maximum duration of the project. Very short files are often accidental recordings.</p>
+
+<h2>9. Duplicates</h2>
+<p>The same file delivered twice under two names is a common mistake when folders are merged. Compare content, not just names.</p>
+
+<h2>10. Listen to a sample</h2>
+<p>Numbers cannot catch everything: wrong text read, mumbling, background speech or a second speaker. Always listen to a random sample of each batch.</p>
+
+<h2>Check them all at once</h2>
+<p>Doing this by hand for hundreds of files is slow. The <a href="/check/">Sayvoi Recording Quality Checker</a> measures points 1 to 9 for every file in a batch, lets you enter your project's specification, marks each file as passed, warning or rejected with the reason, finds duplicate files, and exports a CSV report. The audio never leaves your device. If some files only need their format or sample rate corrected, fix them in the <a href="/">converter</a> and check again.</p>
+
+<div class="cta"><p>Convert your audio files for free in your browser, without uploading them to any server.</p><a class="btn" href="/">Open the converter</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="audio-clipping-distortion.html"><b>What Is Audio Clipping, and How to Avoid It in Your Recordings</b><span>Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.</span></a><a class="card" href="voice-data-recording-specs.html"><b>Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist</b><span>Common requirements for voice-recording and speech-data projects: format, sample rate, mono or stereo, silence, levels and file naming, with a delivery checklist.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>

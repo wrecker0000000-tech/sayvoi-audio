@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>فاحص جودة التسجيلات الصوتية المجاني | Free Recording Quality Checker | Sayvoi</title>
+<meta name="description" content="افحص تسجيلاتك الصوتية: معدل العينة، القنوات، التشويه (clipping)، الضوضاء، الصمت، التكرار، داخل متصفحك دون رفع الملفات. Check sample rate, clipping, noise, silence and duplicates in your browser.">
+<link rel="canonical" href="https://convert.sayvoi.com/check/">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/check/">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/check/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Sayvoi — فاحص جودة التسجيلات | Recording Quality Checker">
+<meta property="og:description" content="Check sample rate, clipping, noise, silence and duplicates of many recordings at once, in your browser. افحص جودة التسجيلات دفعة واحدة.">
+<meta property="og:url" content="https://convert.sayvoi.com/check/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{--bg:#0f1720;--card:#16212d;--ink:#f2f5f8;--muted:#9fb0c0;--accent:#f5b83d;--accent-ink:#1a1300;--line:#25364a;--ok:#4cc38a;--warn:#f5b83d;--err:#ff6b6b}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:radial-gradient(1200px 600px at 80% -10%,#1d3550 0,transparent 60%),var(--bg);color:var(--ink);
+    font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.7;font-size:16px}
+  .wrap{max-width:980px;margin:0 auto;padding:20px 16px 56px}
+  nav.top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:6px 0 18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+  nav.top .brand{font-weight:800;font-size:20px;color:var(--ink);text-decoration:none;margin-inline-end:auto}
+  nav.top a{text-decoration:none;color:var(--muted);font-size:15px}
+  nav.top a:hover,nav.top a.on{color:var(--accent)}
+  a{color:var(--accent)}
+  h1{font-size:28px;line-height:1.35;margin:0 0 6px}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--muted);margin:0 0 18px}
+  .drop{border:2px dashed var(--line);border-radius:16px;padding:28px 16px;text-align:center;background:var(--card);cursor:pointer}
+  .drop.over,.drop:hover{border-color:var(--accent);background:#1a2837}
+  .drop b{display:block;font-size:18px;margin-bottom:4px}
+  .drop small{color:var(--muted)}
+  .btn{font:inherit;font-weight:700;border:0;border-radius:12px;padding:10px 20px;cursor:pointer;background:var(--accent);color:var(--accent-ink)}
+  .btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:14px 0}
+  summary{cursor:pointer;font-weight:700}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}
+  label.f{display:block;font-size:14px;color:var(--muted)}
+  label.f input,label.f select{display:block;width:100%;margin-top:4px;font:inherit;color:var(--ink);background:#0f1923;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+  .hint{color:var(--muted);font-size:13px;margin:10px 0 0}
+  .sum{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+  .pill{padding:6px 14px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-weight:700}
+  .pill.ok{color:var(--ok)}.pill.warn{color:var(--warn)}.pill.fail{color:var(--err)}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:860px}
+  th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top;white-space:nowrap}
+  td.issues{white-space:normal;min-width:240px}
+  th{background:var(--card);position:sticky;top:0}
+  td.name{max-width:220px;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:left}
+  .st{font-weight:800}
+  .st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.fail{color:var(--err)}
+  .num{direction:ltr;unicode-bidi:embed}
+  .bar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin:10px 0}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .15s}
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center}
+  footer a{color:var(--muted);margin:0 8px}
+  .lg{display:inline-block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a>
+  <a href="/" data-t="nav_conv"></a><a href="/check/" class="on" data-t="nav_check"></a><a href="/articles/" data-t="nav_art"></a><a href="/about.html" data-t="nav_about"></a>
+  <button class="btn sec" id="langBtn" type="button" style="padding:4px 12px">EN</button></nav>
+
+<h1 data-t="h1"></h1>
+<p class="sub" data-t="sub"></p>
+
+<div class="drop" id="drop" tabindex="0" role="button">
+  <b data-t="drop1"></b><small data-t="drop2"></small>
+  <input type="file" id="file" multiple accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.webm" hidden>
+</div>
+
+<details open>
+  <summary data-t="specs"></summary>
+  <p class="hint" data-t="specsHint"></p>
+  <div class="grid">
+    <label class="f"><span data-t="s_sr"></span><select id="sSr"><option value="0" data-t="any"></option><option>8000</option><option>16000</option><option>22050</option><option>24000</option><option>32000</option><option>44100</option><option>48000</option></select></label>
+    <label class="f"><span data-t="s_ch"></span><select id="sCh"><option value="0" data-t="any"></option><option value="1" data-t="mono"></option><option value="2" data-t="stereo"></option></select></label>
+    <label class="f"><span data-t="s_fmt"></span><select id="sFmt"><option value="" data-t="any"></option><option>wav</option><option>mp3</option><option>flac</option><option>ogg</option><option>m4a</option></select></label>
+    <label class="f"><span data-t="s_bit"></span><select id="sBit"><option value="0" data-t="any"></option><option>16</option><option>24</option><option>32</option></select></label>
+    <label class="f"><span data-t="s_min"></span><input id="sMin" type="number" min="0" step="0.1" placeholder="—"></label>
+    <label class="f"><span data-t="s_max"></span><input id="sMax" type="number" min="0" step="0.1" placeholder="—"></label>
+    <label class="f"><span data-t="s_lead"></span><input id="sLead" type="number" min="0" step="0.1" placeholder="—"></label>
+    <label class="f"><span data-t="s_trail"></span><input id="sTrail" type="number" min="0" step="0.1" placeholder="—"></label>
+  </div>
+</details>
+
+<details>
+  <summary data-t="thr"></summary>
+  <div class="grid">
+    <label class="f"><span data-t="t_clip"></span><input id="tClip" type="number" min="0" step="0.01" value="0.05"></label>
+    <label class="f"><span data-t="t_peak"></span><input id="tPeak" type="number" max="0" step="1" value="-12"></label>
+    <label class="f"><span data-t="t_noise"></span><input id="tNoise" type="number" max="0" step="1" value="-50"></label>
+    <label class="f"><span data-t="t_snr"></span><input id="tSnr" type="number" min="0" step="1" value="25"></label>
+  </div>
+  <p class="hint" data-t="thrHint"></p>
+</details>
+
+<div class="row">
+  <button class="btn" id="go" disabled data-t="check"></button>
+  <button class="btn sec" id="csv" disabled data-t="csv"></button>
+  <button class="btn sec" id="clear" disabled data-t="clear"></button>
+  <span id="count" class="hint" style="margin:0"></span>
+</div>
+<div class="bar" id="bar" hidden><i></i></div>
+<div class="sum" id="sum" hidden></div>
+<div class="tw" id="tw" hidden>
+<table>
+  <thead><tr>
+    <th data-t="c_status"></th><th data-t="c_name"></th><th data-t="c_fmt"></th><th data-t="c_sr"></th><th data-t="c_ch"></th><th data-t="c_dur"></th>
+    <th data-t="c_peak"></th><th data-t="c_rms"></th><th data-t="c_clip"></th><th data-t="c_noise"></th><th data-t="c_snr"></th><th data-t="c_lead"></th><th data-t="c_trail"></th><th data-t="c_issues"></th>
+  </tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+</div>
+<p class="hint" data-t="privacy"></p>
+
+<footer>
+  <p><a href="/articles/" data-t="nav_art"></a> · <a href="/about.html" data-t="nav_about"></a> · <a href="/privacy.html" data-t="f_priv"></a> · <a href="/contact.html" data-t="f_contact"></a></p>
+  <p>support@sayvoi.com · hafezseo@gmail.com</p>
+  <p>© 2026 Sayvoi</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var T = {
+    ar: {
+      nav_conv:"المحوّل", nav_check:"فاحص الجودة", nav_art:"المقالات", nav_about:"عن الموقع", f_priv:"الخصوصية", f_contact:"اتصل بنا",
+      h1:"فاحص جودة التسجيلات الصوتية", sub:"افحص عشرات التسجيلات دفعة واحدة: معدل العينة، القنوات، التشويه (clipping)، الضوضاء، الصمت، والتكرار. كل شيء داخل متصفحك.",
+      drop1:"اسحب الملفات هنا أو اضغط للاختيار", drop2:"WAV · MP3 · FLAC · OGG · M4A — حتى 200 ميجابايت للملف",
+      specs:"مواصفات المشروع (اختياري)", specsHint:"اترك الحقل على «أي» أو فارغًا لتجاهله. أي ملف يخالف مواصفة تحددها يُعتبر «مرفوضًا».",
+      any:"أي", mono:"مونو (1)", stereo:"ستيريو (2)",
+      s_sr:"معدل العينة المطلوب (Hz)", s_ch:"القنوات", s_fmt:"الصيغة", s_bit:"عمق البت (WAV/FLAC فقط)", s_min:"أقل مدة (ثانية)", s_max:"أطول مدة (ثانية)", s_lead:"أقل صمت في البداية (ثانية)", s_trail:"أقل صمت في النهاية (ثانية)",
+      thr:"حدود التنبيه (متقدم)", t_clip:"أقصى نسبة تشويه مسموحة (%)", t_peak:"أضعف ذروة مقبولة (dBFS)", t_noise:"أعلى ضوضاء خلفية مقبولة (dBFS)", t_snr:"أقل نسبة إشارة/ضوضاء (dB)",
+      thrHint:"تُحسب الضوضاء من أهدأ 10% من أجزاء الملف. فوق ضعف الحد ينقلب التنبيه إلى رفض.",
+      check:"افحص", csv:"تصدير CSV", clear:"مسح", files:"ملف", busy:"جارٍ الفحص…", done:"اكتمل الفحص",
+      ok:"سليم", warn:"تنبيه", fail:"مرفوض",
+      c_status:"الحالة", c_name:"الملف", c_fmt:"الصيغة", c_sr:"معدل العينة", c_ch:"القنوات", c_dur:"المدة", c_peak:"الذروة dBFS", c_rms:"RMS dBFS", c_clip:"تشويه %", c_noise:"ضوضاء dBFS", c_snr:"SNR dB", c_lead:"صمت البداية", c_trail:"صمت النهاية", c_issues:"الملاحظات",
+      privacy:"لا تُرفع ملفاتك إلى أي خادم. الفحص يجري على جهازك. النتائج تقديرية وتساعد على الفرز السريع، ولا تغني عن الاستماع للتسجيلات الحساسة.",
+      none:"لا ملاحظات", decodefail:"تعذّر قراءة الملف (صيغة غير مدعومة أو ملف تالف)", toobig:"الملف أكبر من 200 ميجابايت",
+      i_sr:"معدل العينة %a بدل %b", i_ch:"القنوات %a بدل %b", i_fmt:"الصيغة %a بدل %b", i_bit:"عمق البت %a بدل %b", i_min:"أقصر من %a ث", i_max:"أطول من %a ث",
+      i_lead:"صمت البداية %a ث (المطلوب %b ث)", i_trail:"صمت النهاية %a ث (المطلوب %b ث)",
+      i_clip:"تشويه (clipping) %a%%", i_peak:"مستوى منخفض (ذروة %a dBFS)", i_noise:"ضوضاء خلفية عالية (%a dBFS)", i_snr:"نسبة إشارة/ضوضاء ضعيفة (%a dB)",
+      i_silent:"الملف صامت تقريبًا", i_fake:"ستيريو لكن القناتان متطابقتان", i_dc:"إزاحة DC ملحوظة", i_dup:"مكرر: نفس محتوى %a", i_short:"ملف قصير جدًا (أقل من 0.3 ث)", i_nospeech:"لا يوجد جزء مسموع واضح فوق الضوضاء"
+    },
+    en: {
+      nav_conv:"Converter", nav_check:"Quality checker", nav_art:"Articles", nav_about:"About", f_priv:"Privacy", f_contact:"Contact",
+      h1:"Recording Quality Checker", sub:"Check dozens of recordings at once: sample rate, channels, clipping, noise, silence and duplicates. Everything runs in your browser.",
+      drop1:"Drop files here or click to choose", drop2:"WAV · MP3 · FLAC · OGG · M4A — up to 200 MB per file",
+      specs:"Project specs (optional)", specsHint:"Leave a field on “Any” or empty to ignore it. A file that breaks a spec you set is marked as failed.",
+      any:"Any", mono:"Mono (1)", stereo:"Stereo (2)",
+      s_sr:"Required sample rate (Hz)", s_ch:"Channels", s_fmt:"Format", s_bit:"Bit depth (WAV/FLAC only)", s_min:"Minimum length (s)", s_max:"Maximum length (s)", s_lead:"Minimum leading silence (s)", s_trail:"Minimum trailing silence (s)",
+      thr:"Warning thresholds (advanced)", t_clip:"Max clipped samples allowed (%)", t_peak:"Weakest acceptable peak (dBFS)", t_noise:"Highest acceptable noise floor (dBFS)", t_snr:"Minimum signal-to-noise ratio (dB)",
+      thrHint:"The noise floor is measured from the quietest 10% of the file. Beyond twice the limit a warning becomes a failure.",
+      check:"Check", csv:"Export CSV", clear:"Clear", files:"files", busy:"Checking…", done:"Check complete",
+      ok:"OK", warn:"Warning", fail:"Failed",
+      c_status:"Status", c_name:"File", c_fmt:"Format", c_sr:"Sample rate", c_ch:"Channels", c_dur:"Length", c_peak:"Peak dBFS", c_rms:"RMS dBFS", c_clip:"Clipped %", c_noise:"Noise dBFS", c_snr:"SNR dB", c_lead:"Lead silence", c_trail:"Trail silence", c_issues:"Notes",
+      privacy:"Your files are never uploaded. The check runs on your device. Results are estimates for fast triage; they do not replace listening to sensitive recordings.",
+      none:"No issues", decodefail:"Could not read the file (unsupported format or corrupted)", toobig:"File is larger than 200 MB",
+      i_sr:"Sample rate %a instead of %b", i_ch:"Channels %a instead of %b", i_fmt:"Format %a instead of %b", i_bit:"Bit depth %a instead of %b", i_min:"Shorter than %a s", i_max:"Longer than %a s",
+      i_lead:"Leading silence %a s (required %b s)", i_trail:"Trailing silence %a s (required %b s)",
+      i_clip:"Clipping %a%%", i_peak:"Low level (peak %a dBFS)", i_noise:"High background noise (%a dBFS)", i_snr:"Poor signal-to-noise ratio (%a dB)",
+      i_silent:"File is practically silent", i_fake:"Stereo but both channels are identical", i_dc:"Noticeable DC offset", i_dup:"Duplicate: same content as %a", i_short:"Very short file (under 0.3 s)", i_nospeech:"No clear audible part above the noise"
+    }
+  };
+  var lang = (navigator.language || "ar").toLowerCase().indexOf("ar") === 0 ? "ar" : "en";
+  try{ var sv = localStorage.getItem("sayvoi_lang"); if (sv === "ar" || sv === "en") lang = sv; }catch(e){}
+  function t(k){ return T[lang][k] || k; }
+  function fmtMsg(k, a, b){ return t(k).replace("%a", a).replace("%b", b).replace("%%", "%"); }
+  function $(id){ return document.getElementById(id); }
+
+  var jobs = [];          // {file, res}
+  var running = false;
+
+  function applyLang(){
+    document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.title = lang === "ar" ? "فاحص جودة التسجيلات الصوتية المجاني | Sayvoi" : "Free Recording Quality Checker | Sayvoi";
+    $("langBtn").textContent = lang === "ar" ? "EN" : "عربي";
+    Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function(el){ el.textContent = t(el.getAttribute("data-t")); });
+    renderAll();
+  }
+
+  /* ---------- header probing ---------- */
+  function probeRate(ab){
+    try{
+      var u = new Uint8Array(ab), n = u.length, v = new DataView(ab), i, r = 0;
+      function s4(o){ return String.fromCharCode(u[o],u[o+1],u[o+2],u[o+3]); }
+      if (n > 44 && s4(0) === "RIFF" && s4(8) === "WAVE"){
+        var p = 12;
+        while (p + 8 <= n){
+          var id = s4(p), sz = v.getUint32(p+4,true);
+          if (id === "fmt "){ r = v.getUint32(p+12,true); break; }
+          p += 8 + sz + (sz & 1);
+        }
+      } else if (n > 22 && s4(0) === "fLaC"){
+        r = (u[18] << 12) | (u[19] << 4) | (u[20] >> 4);
+      } else if (n > 40 && s4(0) === "OggS"){
+        for (i = 0; i < Math.min(n - 20, 600); i++){
+          if (u[i] === 1 && s4(i+1) === "vorb" && u[i+5] === 0x69 && u[i+6] === 0x73){ r = v.getUint32(i+12,true); break; }
+          if (s4(i) === "Opus" && s4(i+4) === "Head"){ r = 48000; break; }
+        }
+      } else if (n > 12 && s4(4) === "ftyp"){
+        var q = 0;
+        while (q + 8 <= n){
+          var bs = v.getUint32(q), bt = s4(q+4), hdr = 8;
+          if (bs === 1){ bs = v.getUint32(q+12); hdr = 16; }
+          if (bs === 0) bs = n - q;
+          if (bt === "moov"){
+            var e = Math.min(n - 20, q + bs);
+            for (i = q + hdr; i < e; i++){
+              if (s4(i) === "mdhd"){ r = u[i+4] === 1 ? v.getUint32(i+24) : v.getUint32(i+16); break; }
+            }
+            break;
+          }
+          if (bs < 8) break;
+          q += bs;
+        }
+      } else if (n > 4 && u[0] === 0x1A && u[1] === 0x45 && u[2] === 0xDF && u[3] === 0xA3){
+        r = 48000;
+      } else {
+        var o = 0;
+        if (s4(0).slice(0,3) === "ID3" && n > 10){
+          o = 10 + ((u[6] & 127) << 21 | (u[7] & 127) << 14 | (u[8] & 127) << 7 | (u[9] & 127));
+        }
+        for (i = o; i < Math.min(n - 4, o + 4096); i++){
+          if (u[i] === 0xFF && (u[i+1] & 0xE0) === 0xE0){
+            var ver = (u[i+1] >> 3) & 3, lay = (u[i+1] >> 1) & 3, si = (u[i+2] >> 2) & 3;
+            if (ver !== 1 && lay !== 0 && si !== 3){
+              r = (ver === 3 ? [44100,48000,32000] : ver === 2 ? [22050,24000,16000] : [11025,12000,8000])[si];
+              break;
+            }
+            if (lay === 0 && (u[i+1] & 0xF6) === 0xF0){
+              r = [96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350][(u[i+2] >> 2) & 15] || 0;
+              break;
+            }
+          }
+        }
+      }
+      return (r >= 3000 && r <= 768000) ? r : 0;
+    }catch(e){ return 0; }
+  }
+  function detectFormat(ab, name){
+    var u = new Uint8Array(ab), n = u.length;
+    function s4(o){ return String.fromCharCode(u[o],u[o+1],u[o+2],u[o+3]); }
+    if (n > 12 && s4(0) === "RIFF" && s4(8) === "WAVE") return "wav";
+    if (n > 4 && s4(0) === "fLaC") return "flac";
+    if (n > 4 && s4(0) === "OggS") return "ogg";
+    if (n > 12 && s4(4) === "ftyp") return "m4a";
+    if (n > 4 && u[0] === 0x1A && u[1] === 0x45 && u[2] === 0xDF && u[3] === 0xA3) return "webm";
+    if (n > 3 && (s4(0).slice(0,3) === "ID3" || (u[0] === 0xFF && (u[1] & 0xE0) === 0xE0))) return "mp3";
+    var m = /\.([a-z0-9]+)$/i.exec(name || ""); return m ? m[1].toLowerCase() : "?";
+  }
+  // WAV/FLAC bit depth from header (0 if unknown)
+  function probeBits(ab, fmt){
+    try{
+      var u = new Uint8Array(ab), v = new DataView(ab), n = u.length;
+      function s4(o){ return String.fromCharCode(u[o],u[o+1],u[o+2],u[o+3]); }
+      if (fmt === "wav"){
+        var p = 12;
+        while (p + 8 <= n){
+          var id = s4(p), sz = v.getUint32(p+4,true);
+          if (id === "fmt "){ return v.getUint16(p+22,true); }
+          p += 8 + sz + (sz & 1);
+        }
+      } else if (fmt === "flac" && n > 22){
+        return (((u[20] & 1) << 4) | (u[21] >> 4)) + 1;
+      }
+    }catch(e){}
+    return 0;
+  }
+
+  /* ---------- analysis ---------- */
+  function toDb(x){ return x > 1e-9 ? 20 * Math.log10(x) : -120; }
+  function round(x, d){ var p = Math.pow(10, d); return Math.round(x * p) / p; }
+
+  async function sha(ab){
+    try{
+      var h = await crypto.subtle.digest("SHA-256", ab), a = new Uint8Array(h), s = "";
+      for (var i = 0; i < a.length; i++) s += (a[i] < 16 ? "0" : "") + a[i].toString(16);
+      return s;
+    }catch(e){ return ""; }
+  }
+
+  async function analyze(file){
+    var r = {name: file.name, size: file.size};
+    if (file.size > 200 * 1024 * 1024){ r.error = "toobig"; return r; }
+    var ab = await file.arrayBuffer();
+    r.hash = await sha(ab);
+    r.fmt = detectFormat(ab, file.name);
+    r.bits = probeBits(ab, r.fmt);
+    var AC = window.AudioContext || window.webkitAudioContext;
+    var nat = probeRate(ab), ctx, buf;
+    try{ ctx = nat ? new AC({sampleRate: nat}) : new AC(); }catch(e){ ctx = new AC(); }
+    try{ buf = await ctx.decodeAudioData(ab); }
+    catch(e){ r.error = "decodefail"; return r; }
+    finally{ try{ ctx.close(); }catch(e){} }
+    r.sr = nat || Math.round(buf.sampleRate);
+    r.ch = buf.numberOfChannels;
+    r.dur = buf.duration;
+    var N = buf.length, C = buf.numberOfChannels, d = [];
+    for (var c = 0; c < C; c++) d.push(buf.getChannelData(c));
+    var peak = 0, clipped = 0, run = 0, sumAll = 0, dcSum = 0, ident = (C === 2);
+    var fl = Math.max(1, Math.round(buf.sampleRate * 0.02)), nf = Math.floor(N / fl), fr = new Float64Array(nf), fi = 0, fs = 0, fc = 0;
+    var d0 = d[0], d1 = C > 1 ? d[1] : null;
+    for (var i = 0; i < N; i++){
+      var s = d0[i];
+      if (C > 1){ s = 0; for (var k = 0; k < C; k++) s += d[k][i]; s /= C; }
+      var a = Math.abs(s);
+      // peak across real channels
+      var ap = 0;
+      for (var q = 0; q < C; q++){ var v = Math.abs(d[q][i]); if (v > ap) ap = v; }
+      if (ap > peak) peak = ap;
+      if (ap >= 0.999){ run++; if (run === 3) clipped += 3; else if (run > 3) clipped++; } else run = 0;
+      if (ident && d1[i] !== d0[i]) ident = false;
+      dcSum += s; sumAll += s * s;
+      fs += s * s; fc++;
+      if (fc === fl && fi < nf){ fr[fi++] = Math.sqrt(fs / fc); fs = 0; fc = 0; }
+    }
+    r.peak = toDb(peak);
+    r.rms = toDb(Math.sqrt(sumAll / Math.max(1, N)));
+    r.clipPct = N ? clipped / N * 100 : 0;
+    r.dc = Math.abs(dcSum / Math.max(1, N));
+    r.fake = (C === 2 && ident && peak > 0);
+    // frame statistics
+    if (nf >= 5){
+      var dbs = Array.prototype.map.call(fr, toDb), sorted = dbs.slice().sort(function(x, y){ return x - y; });
+      var noise = sorted[Math.floor(nf * 0.1)];
+      r.noise = noise;
+      var thr = Math.max(noise + 12, -55), first = -1, last = -1, actSum = 0, actN = 0;
+      for (var f = 0; f < nf; f++){
+        if (dbs[f] > thr){
+          if (first < 0) first = f;
+          last = f; actSum += fr[f] * fr[f]; actN++;
+        }
+      }
+      if (first < 0){ r.nospeech = true; r.snr = null; r.lead = null; r.trail = null; }
+      else {
+        r.lead = first * 0.02; r.trail = (nf - 1 - last) * 0.02;
+        r.snr = toDb(Math.sqrt(actSum / actN)) - noise;
+      }
+    } else { r.noise = r.peak; r.nospeech = true; r.snr = null; r.lead = null; r.trail = null; }
+    return r;
+  }
+
+  /* ---------- evaluation ---------- */
+  function num(id){ var v = parseFloat($(id).value); return isNaN(v) ? null : v; }
+  function evaluate(r, dupOf){
+    var iss = [], level = 0; // 0 ok 1 warn 2 fail
+    function add(lv, msg){ iss.push({lv: lv, msg: msg}); if (lv > level) level = lv; }
+    if (r.error){ r.status = "fail"; r.issues = [{lv: 2, msg: t(r.error)}]; return; }
+    var sSr = parseInt($("sSr").value, 10) || 0, sCh = parseInt($("sCh").value, 10) || 0, sFmt = $("sFmt").value, sBit = parseInt($("sBit").value, 10) || 0;
+    var sMin = num("sMin"), sMax = num("sMax"), sLead = num("sLead"), sTrail = num("sTrail");
+    var tClip = num("tClip"), tPeak = num("tPeak"), tNoise = num("tNoise"), tSnr = num("tSnr");
+    if (tClip === null) tClip = 0.05; if (tPeak === null) tPeak = -12; if (tNoise === null) tNoise = -50; if (tSnr === null) tSnr = 25;
+    if (sSr && r.sr !== sSr) add(2, fmtMsg("i_sr", r.sr, sSr));
+    if (sCh && r.ch !== sCh) add(2, fmtMsg("i_ch", r.ch, sCh));
+    if (sFmt && r.fmt !== sFmt) add(2, fmtMsg("i_fmt", r.fmt, sFmt));
+    if (sBit && r.bits && r.bits !== sBit) add(2, fmtMsg("i_bit", r.bits, sBit));
+    if (sMin !== null && r.dur < sMin) add(2, fmtMsg("i_min", sMin, ""));
+    if (sMax !== null && r.dur > sMax) add(2, fmtMsg("i_max", sMax, ""));
+    if (r.dur < 0.3) add(2, t("i_short"));
+    if (r.peak < -60){ add(2, t("i_silent")); }
+    else {
+      if (r.clipPct > tClip) add(r.clipPct > tClip * 10 ? 2 : 1, fmtMsg("i_clip", round(r.clipPct, 2), ""));
+      if (r.peak < tPeak) add(r.peak < tPeak - 18 ? 2 : 1, fmtMsg("i_peak", round(r.peak, 1), ""));
+      if (r.nospeech) add(1, t("i_nospeech"));
+      else {
+        if (r.noise > tNoise) add(r.noise > tNoise + Math.abs(tNoise) * 0.2 ? 2 : 1, fmtMsg("i_noise", round(r.noise, 1), ""));
+        if (r.snr !== null && r.snr < tSnr) add(r.snr < tSnr / 2 ? 2 : 1, fmtMsg("i_snr", round(r.snr, 1), ""));
+        if (sLead !== null && r.lead < sLead) add(2, fmtMsg("i_lead", round(r.lead, 2), sLead));
+        if (sTrail !== null && r.trail < sTrail) add(2, fmtMsg("i_trail", round(r.trail, 2), sTrail));
+      }
+    }
+    if (r.fake) add(sCh === 2 ? 1 : 1, t("i_fake"));
+    if (r.dc > 0.02) add(1, t("i_dc"));
+    if (dupOf) add(1, fmtMsg("i_dup", dupOf, ""));
+    r.issues = iss; r.status = level === 2 ? "fail" : level === 1 ? "warn" : "ok";
+  }
+  function evaluateAll(){
+    var seen = {};
+    jobs.forEach(function(j){
+      if (!j.res) return;
+      var dup = null;
+      if (j.res.hash){ if (seen[j.res.hash]) dup = seen[j.res.hash]; else seen[j.res.hash] = j.res.name; }
+      evaluate(j.res, dup);
+    });
+  }
+
+  /* ---------- UI ---------- */
+  function esc(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function mmss(x){ if (x == null) return "—"; return x < 60 ? round(x, 2) + "s" : Math.floor(x / 60) + ":" + ("0" + Math.floor(x % 60)).slice(-2); }
+  function renderAll(){
+    var rows = $("rows"), html = "", cnt = {ok: 0, warn: 0, fail: 0}, done = 0;
+    jobs.forEach(function(j){
+      var r = j.res;
+      if (!r){ html += '<tr><td colspan="14">' + esc(j.file.name) + " …</td></tr>"; return; }
+      done++; cnt[r.status]++;
+      var isi = r.issues.length ? r.issues.map(function(x){ return (x.lv === 2 ? "✖ " : "⚠ ") + esc(x.msg); }).join("<br>") : esc(t("none"));
+      var n = function(x, d, u){ return x == null || x === undefined ? "—" : '<span class="num">' + round(x, d) + (u || "") + "</span>"; };
+      html += "<tr><td class=\"st " + r.status + "\">" + t(r.status) + "</td><td class=\"name\" title=\"" + esc(r.name) + "\">" + esc(r.name) + "</td>" +
+        "<td>" + (r.error ? "—" : esc(r.fmt.toUpperCase()) + (r.bits ? " " + r.bits + "b" : "")) + "</td>" +
+        "<td>" + (r.sr ? '<span class="num">' + r.sr + "</span>" : "—") + "</td><td>" + (r.ch || "—") + "</td><td>" + (r.dur != null ? mmss(r.dur) : "—") + "</td>" +
+        "<td>" + n(r.peak, 1) + "</td><td>" + n(r.rms, 1) + "</td><td>" + n(r.clipPct, 2) + "</td><td>" + n(r.noise, 1) + "</td><td>" + n(r.snr, 1) + "</td>" +
+        "<td>" + n(r.lead, 2, "s") + "</td><td>" + n(r.trail, 2, "s") + "</td><td class=\"issues\">" + isi + "</td></tr>";
+    });
+    rows.innerHTML = html;
+    $("tw").hidden = !jobs.length;
+    var sum = $("sum");
+    if (done){
+      sum.hidden = false;
+      sum.innerHTML = '<span class="pill ok">' + t("ok") + ": " + cnt.ok + '</span><span class="pill warn">' + t("warn") + ": " + cnt.warn + '</span><span class="pill fail">' + t("fail") + ": " + cnt.fail + "</span>";
+    } else sum.hidden = true;
+    $("count").textContent = jobs.length ? jobs.length + " " + t("files") : "";
+    $("go").disabled = !jobs.length || running;
+    $("csv").disabled = !done;
+    $("clear").disabled = !jobs.length || running;
+  }
+
+  function addFiles(list){
+    Array.prototype.forEach.call(list, function(f){ jobs.push({file: f, res: null}); });
+    renderAll();
+  }
+  async function runAll(){
+    if (running) return;
+    running = true; $("go").disabled = true; $("clear").disabled = true;
+    var bar = $("bar"), fill = bar.firstElementChild; bar.hidden = false; fill.style.width = "0";
+    $("count").textContent = t("busy");
+    for (var i = 0; i < jobs.length; i++){
+      var j = jobs[i];
+      if (!j.res){
+        try{ j.res = await analyze(j.file); }
+        catch(e){ console.error(e); j.res = {name: j.file.name, error: "decodefail"}; }
+        evaluateAll(); renderAll();
+      }
+      fill.style.width = Math.round((i + 1) / jobs.length * 100) + "%";
+      await new Promise(function(r){ setTimeout(r, 0); });
+    }
+    running = false; bar.hidden = true;
+    evaluateAll(); renderAll();
+    $("count").textContent = t("done") + " · " + jobs.length + " " + t("files");
+  }
+  function csvCell(s){ s = String(s == null ? "" : s); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function exportCsv(){
+    var head = ["status","file","format","bits","sample_rate","channels","duration_s","peak_dbfs","rms_dbfs","clipped_pct","noise_dbfs","snr_db","lead_silence_s","trail_silence_s","sha256","notes"];
+    var out = [head.join(",")];
+    jobs.forEach(function(j){
+      var r = j.res; if (!r) return;
+      var m = function(x, d){ return x == null ? "" : round(x, d); };
+      out.push([r.status, r.name, r.fmt || "", r.bits || "", r.sr || "", r.ch || "", m(r.dur, 2), m(r.peak, 1), m(r.rms, 1), m(r.clipPct, 3), m(r.noise, 1), m(r.snr, 1), m(r.lead, 2), m(r.trail, 2), r.hash || "",
+        r.issues.map(function(x){ return x.msg; }).join(" | ")].map(csvCell).join(","));
+    });
+    var blob = new Blob(["﻿" + out.join("\r\n")], {type: "text/csv;charset=utf-8"});
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "sayvoi-quality-report.csv";
+    document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
+  var drop = $("drop"), inp = $("file");
+  drop.addEventListener("click", function(){ inp.click(); });
+  drop.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); inp.click(); } });
+  ["dragenter","dragover"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave","drop"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function(e){ if (e.dataTransfer && e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+  inp.addEventListener("change", function(){ if (inp.files.length) addFiles(inp.files); inp.value = ""; });
+  $("go").addEventListener("click", runAll);
+  $("csv").addEventListener("click", exportCsv);
+  $("clear").addEventListener("click", function(){ jobs = []; $("bar").hidden = true; renderAll(); });
+  $("langBtn").addEventListener("click", function(){ lang = lang === "ar" ? "en" : "ar"; try{ localStorage.setItem("sayvoi_lang", lang); }catch(e){} applyLang(); });
+  Array.prototype.forEach.call(document.querySelectorAll("input,select"), function(el){
+    el.addEventListener("change", function(){ if (el.id !== "file"){ evaluateAll(); renderAll(); } });
+  });
+  applyLang();
+})();
+</script>
+</body>
+</html>

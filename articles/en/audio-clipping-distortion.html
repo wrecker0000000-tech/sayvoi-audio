@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is Audio Clipping, and How to Avoid It in Your Recordings | Sayvoi</title>
+<meta name="description" content="Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/audio-clipping-distortion.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/audio-clipping-distortion.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/audio-clipping-distortion.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="What Is Audio Clipping, and How to Avoid It in Your Recordings">
+<meta property="og:description" content="Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/audio-clipping-distortion.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "What Is Audio Clipping, and How to Avoid It in Your Recordings", "description": "Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.", "datePublished": "2026-10-24", "dateModified": "2026-10-24", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/audio-clipping-distortion.html"}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/articles/">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>What Is Audio Clipping, and How to Avoid It in Your Recordings</h1>
+<p class="meta">Last updated: October 24, 2026</p>
+
+<p>Clipping is one of the most common reasons a recording gets rejected, and one of the few problems you cannot fix afterwards. It happens when the signal is louder than the recording system can represent, so the tops of the waveform are cut off flat.</p>
+
+<h2>What clipping is</h2>
+<p>A digital recording can only store values up to a fixed maximum, called <strong>0 dBFS</strong> (decibels relative to full scale). If the microphone signal is stronger than that, every sample above the limit is stored as the maximum value. The rounded peaks of the waveform become flat tops, and the sound turns harsh, crackly or "fuzzy", especially on loud syllables and plosives such as "p" and "b".</p>
+
+<h2>How to recognize it</h2>
+<ul>
+<li><strong>By eye:</strong> open the file in an audio editor and zoom in on the loudest parts. Flat, squared-off peaks that touch the top or bottom limit are clipping.</li>
+<li><strong>By ear:</strong> a crunchy distortion on loud words that is not part of the speaker's voice.</li>
+<li><strong>By numbers:</strong> a peak level of 0 dBFS (or very close, such as -0.1 dBFS) combined with several consecutive samples at that same level. One isolated peak at 0 dBFS is not necessarily clipping; a run of identical maximum samples is.</li>
+</ul>
+
+<h2>Why it cannot be repaired</h2>
+<p>Once the peak is flattened, the original shape is gone. "Declipping" tools can guess and redraw the missing peaks, and they can reduce the harshness of light clipping, but they never restore the original sound. Heavy clipping is effectively permanent. The only reliable fix is to record again at a lower level.</p>
+
+<h2>The usual causes</h2>
+<ul>
+<li>Input gain set too high on the phone, interface or recorder.</li>
+<li>The speaker is too close to the microphone, or suddenly speaks louder or shouts.</li>
+<li>Automatic gain control that raises the level during quiet moments and overshoots when the voice returns.</li>
+<li>Normalizing or amplifying a file after recording without checking the result.</li>
+</ul>
+
+<h2>How to set safe levels</h2>
+<ol>
+<li>Do a test take of the loudest thing the speaker will say, not the average.</li>
+<li>Adjust the gain so the loudest peaks land around <strong>-12 to -6 dBFS</strong>. That leaves headroom for surprises.</li>
+<li>Keep a steady distance of about a hand-span (15 to 20 cm) from the microphone, slightly off to the side to reduce plosives.</li>
+<li>Prefer 24-bit recording when your device allows it. The extra resolution means a lower level still leaves plenty of detail, so you do not need to record "hot".</li>
+<li>Listen to the first take with headphones before recording the rest.</li>
+</ol>
+<p>Do not worry that -12 dBFS sounds quiet. Quiet but clean is easy to fix; loud but clipped is not.</p>
+
+<h2>Checking many files quickly</h2>
+<p>If you collect many recordings, you can check them all at once. The <a href="/check/">Sayvoi Recording Quality Checker</a> reports the percentage of clipped samples in each file, together with its peak level, noise level and sample rate, without uploading anything. For a complete delivery checklist, read <a href="check-recording-quality-before-delivery.html">how to check recording quality before delivery</a>.</p>
+
+<div class="cta"><p>Convert your audio files for free in your browser, without uploading them to any server.</p><a class="btn" href="/">Open the converter</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="record-clean-audio-phone.html"><b>How to Record Clean Audio With Your Phone: A Practical Guide</b><span>Seven simple habits that make phone recordings clear and usable: location, distance, settings, handling noise and a quick test before you start.</span></a><a class="card" href="check-recording-quality-before-delivery.html"><b>A Checklist to Verify Recording Quality Before You Deliver</b><span>A practical pre-delivery checklist for voice recordings: format, sample rate, channels, level, noise, silence, clipping and duplicates, plus how to check them in bulk.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/privacy.html">Privacy</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>
