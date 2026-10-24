@@ -9,8 +9,8 @@ nav.top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:6px 0 18
 nav.top .brand{font-weight:900;font-size:24px;letter-spacing:-.5px;text-decoration:none;margin-inline-end:auto;background:var(--wm);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:"Segoe UI",Roboto,Arial,sans-serif}
 nav.top a{text-decoration:none;color:var(--muted);font-size:15px}
 nav.top a:hover{color:var(--accent)}
-nav.top a[href="/check/"]{background:var(--grad);color:#fff;font-weight:700;padding:3px 14px;border-radius:99px}
-nav.top a[href="/check/"]:hover{color:#fff;filter:brightness(1.08)}
+nav.top a.on{background:var(--grad);color:#fff;font-weight:700;padding:3px 14px;border-radius:99px}
+nav.top a.on:hover{color:#fff;filter:brightness(1.08)}
 h1{font-size:30px;line-height:1.35;margin:0 0 8px}
 h2{font-size:22px;margin:34px 0 8px;line-height:1.4;color:#3b2a9c}
 h2.h1like{font-size:30px;line-height:1.35;margin:0 0 8px;color:var(--ink)}
