@@ -45,6 +45,8 @@
   .drop.over,.drop:hover{border-color:var(--accent);background:#f0ecff}
   .drop b{display:block;font-size:18px}
   .drop small{color:var(--muted);display:block}
+  .drop [lang-block]{display:none}
+  html[lang="ar"] .drop [lang-block="ar"], html[lang="en"] .drop [lang-block="en"]{display:block}
   .how{margin:14px 0 0;color:var(--muted);font-size:14px;text-align:center}
   .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
   .opts label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
