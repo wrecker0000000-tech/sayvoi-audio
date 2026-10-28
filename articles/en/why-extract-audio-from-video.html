@@ -70,7 +70,7 @@ footer{margin-top:40px;color:var(--muted);font-size:14px;border-top:1px solid va
 
 <h2>How to extract the audio</h2>
 <h2>The easy way: straight from the converter</h2>
-<p>Open the <a href="https://convert.sayvoi.com/">free converter</a>, upload your <strong>MP4</strong> video, choose the output format you want (MP3, WAV, M4A and more), then press convert. The result is an audio-only file. Everything runs in your browser, so the file is never uploaded to a server. Since this re-encodes the sound, pick a sensible bitrate and avoid converting the output again and again.</p>
+<p>Open the <a href="https://convert.sayvoi.com/video-to-audio/">video-to-audio page</a> (or the <a href="https://convert.sayvoi.com/">free converter</a>), upload your <strong>MP4</strong> video, choose the output format you want (MP3, WAV, M4A and more), then press convert. The result is an audio-only file. Everything runs in your browser, so the file is never uploaded to a server. Since this re-encodes the sound, pick a sensible bitrate and avoid converting the output again and again.</p>
 <h2>The professional way: FFmpeg commands</h2>
 <p>The best-quality approach is to <strong>copy the audio track as is, without re-encoding</strong>, because re-encoding already-compressed audio adds a new round of quality loss. If your video is MP4 with AAC audio, this command copies the sound unchanged into an M4A file:</p>
 <pre><code>ffmpeg -i video.mp4 -vn -c:a copy audio.m4a</code></pre>
@@ -86,7 +86,7 @@ footer{margin-top:40px;color:var(--muted);font-size:14px;border-top:1px solid va
 <div class="cta"><strong>Try the free converter</strong><br>Convert between MP3, WAV, OGG, FLAC and M4A, change the sample rate, and batch-convert many files at once. Conversion runs in your browser.<br><a class="btn" href="https://convert.sayvoi.com/">Open the converter</a></div>
 <section>
 <h2>Related articles</h2>
-<ul><li><a href="https://convert.sayvoi.com/articles/en/audio-formats-wav-mp3-m4a-ogg-flac.html">WAV vs MP3 vs M4A vs OGG vs FLAC</a></li><li><a href="https://convert.sayvoi.com/articles/en/sample-rate-16-24-48-khz.html">Sample rate: 16, 24 and 48 kHz</a></li><li><a href="https://convert.sayvoi.com/articles/en/voice-data-recording-specs.html">Voice data recording specs</a></li></ul>
+<ul><li><a href="https://convert.sayvoi.com/articles/en/extract-audio-from-video.html">How to extract audio from video</a></li><li><a href="https://convert.sayvoi.com/articles/en/mp4-vs-mkv-vs-webm.html">MP4 vs MKV vs WebM</a></li><li><a href="https://convert.sayvoi.com/articles/en/audio-formats-wav-mp3-m4a-ogg-flac.html">WAV vs MP3 vs M4A vs OGG vs FLAC</a></li><li><a href="https://convert.sayvoi.com/articles/en/sample-rate-16-24-48-khz.html">Sample rate: 16, 24 and 48 kHz</a></li><li><a href="https://convert.sayvoi.com/articles/en/voice-data-recording-specs.html">Voice data recording specs</a></li></ul>
 <h2>Further reading (external)</h2>
 <ul><li><a href="https://ffmpeg.org/ffmpeg.html" target="_blank" rel="noopener">FFmpeg Documentation</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Containers" target="_blank" rel="noopener">MDN: Media container formats</a></li><li><a href="https://en.wikipedia.org/wiki/MP4_file_format" target="_blank" rel="noopener">Wikipedia: MP4 file format</a></li></ul>
 </section>
