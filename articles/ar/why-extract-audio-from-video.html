@@ -70,7 +70,7 @@ footer{margin-top:40px;color:var(--muted);font-size:14px;border-top:1px solid va
 
 <h2>كيف تستخرج الصوت؟</h2>
 <h2>الطريقة الأسهل: من المحوّل مباشرة</h2>
-<p>افتح <a href="https://convert.sayvoi.com/">المحوّل المجاني</a> وارفع ملف الفيديو بصيغة <strong>MP4</strong>، واختر الصيغة المطلوبة (MP3 أو WAV أو M4A أو غيرها)، ثم اضغط تحويل. الناتج ملف صوتي فقط. العملية تتم داخل متصفحك، فلا يُرفع الملف إلى أي خادم. وبما إن التحويل يعيد ترميز الصوت، اختر معدل بت مناسباً ولا تحوّل الناتج مراراً.</p>
+<p>افتح <a href="https://convert.sayvoi.com/video-to-audio/">صفحة تحويل الفيديو إلى صوت</a> (أو <a href="https://convert.sayvoi.com/">المحوّل المجاني</a>) وارفع ملف الفيديو بصيغة <strong>MP4</strong>، واختر الصيغة المطلوبة (MP3 أو WAV أو M4A أو غيرها)، ثم اضغط تحويل. الناتج ملف صوتي فقط. العملية تتم داخل متصفحك، فلا يُرفع الملف إلى أي خادم. وبما إن التحويل يعيد ترميز الصوت، اختر معدل بت مناسباً ولا تحوّل الناتج مراراً.</p>
 <h2>الطريقة الاحترافية: أوامر FFmpeg</h2>
 <p>الأسلوب الأفضل جودةً هو <strong>نسخ المسار الصوتي كما هو دون إعادة ترميز</strong>، لأن إعادة الترميز على صوت مضغوط تضيف فقداناً جديداً للجودة. لو الفيديو بصيغة MP4 وصوته AAC، فهذا الأمر ينسخ الصوت كما هو إلى ملف M4A:</p>
 <pre><code>ffmpeg -i video.mp4 -vn -c:a copy audio.m4a</code></pre>
@@ -86,7 +86,7 @@ footer{margin-top:40px;color:var(--muted);font-size:14px;border-top:1px solid va
 <div class="cta"><strong>جرّب المحوّل المجاني</strong><br>حوّل بين MP3 و WAV و OGG و FLAC و M4A، وغيّر معدل العينة، وحوّل عدة ملفات مرة واحدة. التحويل يتم داخل متصفحك.<br><a class="btn" href="https://convert.sayvoi.com/">افتح المحوّل</a></div>
 <section>
 <h2>مقالات ذات صلة</h2>
-<ul><li><a href="https://convert.sayvoi.com/articles/ar/audio-formats-wav-mp3-m4a-ogg-flac.html">الفرق بين WAV و MP3 و M4A و OGG و FLAC</a></li><li><a href="https://convert.sayvoi.com/articles/ar/sample-rate-16-24-48-khz.html">معدل العينة 16 و24 و48 كيلوهرتز</a></li><li><a href="https://convert.sayvoi.com/articles/ar/voice-data-recording-specs.html">مواصفات تسجيل البيانات الصوتية</a></li></ul>
+<ul><li><a href="https://convert.sayvoi.com/articles/ar/extract-audio-from-video.html">طريقة استخراج الصوت من الفيديو</a></li><li><a href="https://convert.sayvoi.com/articles/ar/mp4-vs-mkv-vs-webm.html">الفرق بين MP4 وMKV وWebM</a></li><li><a href="https://convert.sayvoi.com/articles/ar/audio-formats-wav-mp3-m4a-ogg-flac.html">الفرق بين WAV و MP3 و M4A و OGG و FLAC</a></li><li><a href="https://convert.sayvoi.com/articles/ar/sample-rate-16-24-48-khz.html">معدل العينة 16 و24 و48 كيلوهرتز</a></li><li><a href="https://convert.sayvoi.com/articles/ar/voice-data-recording-specs.html">مواصفات تسجيل البيانات الصوتية</a></li></ul>
 <h2>مصادر خارجية للاستزادة</h2>
 <ul><li><a href="https://ffmpeg.org/ffmpeg.html" target="_blank" rel="noopener">FFmpeg Documentation</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Containers" target="_blank" rel="noopener">MDN: Media container formats</a></li><li><a href="https://en.wikipedia.org/wiki/MP4_file_format" target="_blank" rel="noopener">Wikipedia: MP4 file format</a></li></ul>
 </section>
