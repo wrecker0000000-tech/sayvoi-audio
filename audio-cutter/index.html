@@ -1,42 +1,316 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Audio Cutter: Trim MP3 and WAV Online | Sayvoi</title>
+<meta name="description" content="Cut and trim audio files for free in your browser. Drag the handles to choose the part you want, add a fade, and save it as MP3 or WAV. Your file is never uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/audio-cutter/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Free Audio Cutter: Trim MP3 and WAV Online">
+<meta property="og:description" content="Cut and trim audio files for free in your browser, without uploading them.">
+<meta property="og:url" content="https://convert.sayvoi.com/audio-cutter/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.cut .drop{display:block;border:2px dashed rgba(128,128,128,.55);border-radius:14px;padding:26px 14px;text-align:center;cursor:pointer;font-weight:700}
+.cut .drop.over{border-color:#7c4dff;background:rgba(124,77,255,.1)}
+.cut .drop small{display:block;font-weight:400;opacity:.75;margin-top:4px}
+.cut #file{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden;pointer-events:none}
+.cut .wavebox{margin-top:14px;display:none}
+.cut canvas{width:100%;height:140px;display:block;border:1px solid rgba(128,128,128,.4);border-radius:12px;touch-action:none;cursor:ew-resize;color:inherit}
+.cut .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.cut .col{flex:1 1 150px;min-width:0}
+.cut label{display:block;font-weight:700;margin-bottom:6px}
+.cut input[type=text],.cut select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.cut select option{color:#111;background:#fff}
+.cut .b{padding:12px 22px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.cut .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.cut .b:disabled{opacity:.5;cursor:not-allowed}
+.cut .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.cut .info{margin-top:12px;font-size:.95em;opacity:.9}
+.cut .warn{margin-top:12px;padding:12px;border-radius:12px;border:1px solid #e0a030;background:rgba(224,160,48,.12);display:none}
+.cut .result{margin-top:14px;padding:12px;border-radius:12px;border:1px solid rgba(60,170,90,.6);background:rgba(60,170,90,.1);display:none}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.cut .times{display:flex;justify-content:space-between;font-size:.9em;opacity:.8;margin-top:6px;direction:ltr}
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Sayvoi Audio Cutter","url":"https://convert.sayvoi.com/audio-cutter/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"inLanguage":["en","ar"],"publisher":{"@type":"Organization","name":"Sayvoi"}}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="cut">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
 
-SayvoiConverterQuality checkerVideo to audioAudio cutterServicesArticlesAbout
-Free Audio Cutter: Trim MP3 and WAV Online
+<label class="drop" id="drop" for="file"><span data-i="drop"></span><small data-i="dropSub"></small></label>
+<input type="file" id="file" accept="audio/*,video/*,.mp3,.wav,.ogg,.flac,.m4a,.aac,.opus,.webm,.mp4,.mov">
+<div class="warn" id="warn" role="alert"></div>
+<div class="info" id="fname"></div>
 
-Cut the part you need from any audio file. Drag the two handles on the waveform, add a fade if you like, and save the result as MP3 or WAV. Everything happens in your browser and your file is never uploaded.
-Choose an audio file or drop it here
-MP3, WAV, OGG, FLAC, M4A and more. Files under 100 MB work best.
-How to cut audio online
+<div class="wavebox" id="wavebox">
+  <div dir="ltr"><canvas id="cv"></canvas></div>
+  <div class="times"><span>0:00.0</span><span id="durT"></span></div>
 
-    Choose a file or drop it on the box. The waveform appears.
-    Drag the left and right handles, or type exact start and end times.
-    Press Preview to listen to only the selected part.
-    Optionally add a fade in or fade out to avoid sudden starts and ends.
-    Choose MP3 or WAV and press Cut and download.
+  <div class="row">
+    <div class="col"><label for="tS" data-i="start"></label><input type="text" id="tS" inputmode="decimal" autocomplete="off"></div>
+    <div class="col"><label for="tE" data-i="end"></label><input type="text" id="tE" inputmode="decimal" autocomplete="off"></div>
+    <div class="col"><label data-i="len"></label><div id="lenV" style="padding:10px 0;font-weight:800;direction:ltr"></div></div>
+  </div>
 
-Tips for clean cuts
+  <div class="row">
+    <div class="col"><label for="fi" data-i="fadeIn"></label><select id="fi"><option value="0">0</option><option value="0.5">0.5 s</option><option value="1">1 s</option><option value="2">2 s</option><option value="3">3 s</option></select></div>
+    <div class="col"><label for="fo" data-i="fadeOut"></label><select id="fo"><option value="0">0</option><option value="0.5">0.5 s</option><option value="1">1 s</option><option value="2">2 s</option><option value="3">3 s</option></select></div>
+    <div class="col"><label for="fmt" data-i="format"></label><select id="fmt"><option value="mp3">MP3</option><option value="wav">WAV</option></select></div>
+    <div class="col" id="brCol"><label for="br" data-i="bitrate"></label><select id="br"><option value="96">96 kbps</option><option value="128" selected>128 kbps</option><option value="192">192 kbps</option><option value="256">256 kbps</option><option value="320">320 kbps</option></select></div>
+  </div>
 
-    Cut in quiet places. Place the handles where the sound is silent or at the end of a word, so the cut is not heard.
-    Use a short fade. A fade of 0.5 seconds removes clicks at the cut points.
-    Choose the right format. MP3 gives small files. WAV keeps full quality for editing. See WAV vs MP3 vs FLAC.
+  <div class="btns">
+    <button type="button" class="b sec" id="play"></button>
+    <button type="button" class="b" id="save"></button>
+  </div>
+  <div class="info" id="status" aria-live="polite"></div>
+  <div class="result" id="result"></div>
+</div>
 
-Common questions
-Is my file uploaded to a server?
+<h2 data-i="h2a"></h2>
+<ol>
+<li data-i="s1"></li><li data-i="s2"></li><li data-i="s3"></li><li data-i="s4"></li><li data-i="s5"></li>
+</ol>
 
-No. The file is read and cut inside your browser, so it stays on your device. We explain why this matters in why you should not upload private recordings.
-Does cutting reduce the quality?
+<h2 data-i="h2b"></h2>
+<ul>
+<li data-h="t1"></li><li data-h="t2"></li><li data-h="t3"></li>
+</ul>
 
-Cutting to WAV keeps the audio exactly as it was decoded. Saving as MP3 compresses the audio again, so choose 192 kbps or higher for music. Read MP3 bitrate explained to choose.
-Which files can I cut?
+<h2 data-i="h2c"></h2>
+<h3 data-i="q1"></h3><p data-h="a1"></p>
+<h3 data-i="q2"></h3><p data-h="a2"></p>
+<h3 data-i="q3"></h3><p data-h="a3"></p>
 
-Any file your browser can play: MP3, WAV, OGG, FLAC, M4A and many video files. To keep only the sound of a video, use Video to audio first.
+<div class="cta"><p data-i="cta"></p><a class="btn" href="/" data-i="ctaBtn"></a></div>
+<p style="margin-top:22px"><a href="/articles/" data-i="all"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var T={
+en:{dir:"ltr",btn:"العربية",title:"Free Audio Cutter: Trim MP3 and WAV Online | Sayvoi",
+h1:"Free Audio Cutter: Trim MP3 and WAV Online",
+lead:"Cut the part you need from any audio file. Drag the two handles on the waveform, add a fade if you like, and save the result as MP3 or WAV. Everything happens in your browser and your file is never uploaded.",
+drop:"Choose an audio file or drop it here",dropSub:"MP3, WAV, OGG, FLAC, M4A and more. Files under 100 MB work best.",
+start:"Start",end:"End",len:"Selected length",fadeIn:"Fade in",fadeOut:"Fade out",format:"Save as",bitrate:"MP3 quality",
+play:"▶ Preview selection",stop:"⏹ Stop",save:"Cut and download",
+loading:"Reading the file…",decodeErr:"This browser could not read the file. Try another format (MP3 or WAV), or use a recent Chrome or Edge.",
+big:"This file is large. Cutting may be slow or fail on a weak device.",
+exporting:"Cutting…",done:"Done. Your file is ready: ",mp3Err:"The MP3 encoder could not be loaded. Choose WAV, or check your connection and try again.",
+tooShort:"Choose a selection longer than 0.1 seconds.",
+h2a:"How to cut audio online",
+s1:"Choose a file or drop it on the box. The waveform appears.",
+s2:"Drag the left and right handles, or type exact start and end times.",
+s3:"Press Preview to listen to only the selected part.",
+s4:"Optionally add a fade in or fade out to avoid sudden starts and ends.",
+s5:"Choose MP3 or WAV and press Cut and download.",
+h2b:"Tips for clean cuts",
+t1:"<strong>Cut in quiet places.</strong> Place the handles where the sound is silent or at the end of a word, so the cut is not heard.",
+t2:"<strong>Use a short fade.</strong> A fade of 0.5 seconds removes clicks at the cut points.",
+t3:'<strong>Choose the right format.</strong> MP3 gives small files. WAV keeps full quality for editing. See <a href="/articles/en/wav-vs-mp3-vs-flac.html">WAV vs MP3 vs FLAC</a>.',
+h2c:"Common questions",
+q1:"Is my file uploaded to a server?",a1:'No. The file is read and cut inside your browser, so it stays on your device. We explain why this matters in <a href="/articles/en/audio-converter-privacy.html">why you should not upload private recordings</a>.',
+q2:"Does cutting reduce the quality?",a2:'Cutting to WAV keeps the audio exactly as it was decoded. Saving as MP3 compresses the audio again, so choose 192 kbps or higher for music. Read <a href="/articles/en/mp3-bitrate-cbr-vbr.html">MP3 bitrate explained</a> to choose.',
+q3:"Which files can I cut?",a3:'Any file your browser can play: MP3, WAV, OGG, FLAC, M4A and many video files. To keep only the sound of a video, use <a href="/video-to-audio/">Video to audio</a> first.',
+cta:"Need another format or sample rate? Convert your audio for free in your browser.",ctaBtn:"Open the converter",all:"All articles",
+nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/" class="on">Audio cutter</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>'},
+ar:{dir:"rtl",btn:"English",title:"قص الصوت مجانًا: قصّ MP3 وWAV أونلاين | Sayvoi",
+h1:"قص الصوت مجانًا: قصّ ملفات MP3 وWAV أونلاين",
+lead:"اقطع الجزء الذي تحتاجه من أي ملف صوتي. اسحب المقبضين على شكل الموجة، وأضف تلاشيًا إن أردت، ثم احفظ النتيجة بصيغة MP3 أو WAV. كل شيء يتم داخل متصفحك ولا يُرفع ملفك إلى أي مكان.",
+drop:"اختر ملفًا صوتيًا أو أفلته هنا",dropSub:"MP3 وWAV وOGG وFLAC وM4A وغيرها. الملفات الأقل من 100 ميجابايت أفضل.",
+start:"البداية",end:"النهاية",len:"طول المقطع المحدد",fadeIn:"تلاشٍ في البداية",fadeOut:"تلاشٍ في النهاية",format:"احفظ بصيغة",bitrate:"جودة MP3",
+play:"▶ استمع للمقطع المحدد",stop:"⏹ إيقاف",save:"قص ونزّل",
+loading:"جارٍ قراءة الملف…",decodeErr:"لم يستطع المتصفح قراءة هذا الملف. جرّب صيغة أخرى (MP3 أو WAV)، أو استخدم Chrome أو Edge حديثًا.",
+big:"الملف كبير. قد يكون القص بطيئًا أو يفشل على جهاز ضعيف.",
+exporting:"جارٍ القص…",done:"تم. ملفك جاهز: ",mp3Err:"تعذّر تحميل مشفّر MP3. اختر WAV، أو تأكد من اتصالك وأعد المحاولة.",
+tooShort:"اختر مقطعًا أطول من 0.1 ثانية.",
+h2a:"كيف تقص الصوت أونلاين",
+s1:"اختر ملفًا أو أفلته على المربع. سيظهر شكل الموجة.",
+s2:"اسحب المقبضين الأيمن والأيسر، أو اكتب وقتي البداية والنهاية بدقة.",
+s3:"اضغط «استمع» لتسمع الجزء المحدد فقط.",
+s4:"أضف تلاشيًا في البداية أو النهاية إن أردت، لتجنب البدايات والنهايات المفاجئة.",
+s5:"اختر MP3 أو WAV ثم اضغط «قص ونزّل».",
+h2b:"نصائح لقص نظيف",
+t1:"<strong>اقطع في مكان هادئ.</strong> ضع المقبضين حيث يكون الصوت صامتًا أو عند نهاية كلمة، حتى لا يُسمع القص.",
+t2:"<strong>استخدم تلاشيًا قصيرًا.</strong> تلاشٍ بمقدار نصف ثانية يزيل الطقطقة عند نقطتي القص.",
+t3:'<strong>اختر الصيغة المناسبة.</strong> MP3 يعطي ملفًا صغيرًا، وWAV يحفظ الجودة كاملة للمونتاج. اقرأ <a href="/articles/ar/wav-vs-mp3-vs-flac.html">WAV أم MP3 أم FLAC</a>.',
+h2c:"أسئلة شائعة",
+q1:"هل يُرفع ملفي إلى خادم؟",a1:'لا. يُقرأ الملف ويُقص داخل متصفحك فيبقى على جهازك. شرحنا أهمية ذلك في <a href="/articles/ar/audio-converter-privacy.html">لماذا لا ترفع تسجيلاتك الخاصة إلى مواقع التحويل</a>.',
+q2:"هل يقلل القص من الجودة؟",a2:'القص إلى WAV يحفظ الصوت كما فُك ترميزه تمامًا. أما الحفظ بصيغة MP3 فيضغط الصوت مرة أخرى، فاختر 192 kbps أو أعلى للموسيقى. اقرأ <a href="/articles/ar/mp3-bitrate-cbr-vbr.html">شرح معدل البت في MP3</a> لتختار.',
+q3:"ما الملفات التي أستطيع قصها؟",a3:'أي ملف يستطيع متصفحك تشغيله: MP3 وWAV وOGG وFLAC وM4A وكثير من ملفات الفيديو. وللاحتفاظ بصوت فيديو فقط استخدم <a href="/video-to-audio/">الفيديو إلى صوت</a> أولًا.',
+cta:"تحتاج صيغة أخرى أو معدل عينة آخر؟ حوّل ملفاتك الصوتية مجانًا داخل متصفحك.",ctaBtn:"افتح المحوّل",all:"كل المقالات",
+nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/" class="on">قص الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>'}
+};
+var $=function(i){return document.getElementById(i);};
+var L="en";
+try{ if(localStorage.getItem("sayvoi_lang")==="ar") L="ar"; }catch(e){}
+var buf=null,dur=0,st=0,en=0,actx=null,src=null,playing=false,raf=0,playT0=0,fileName="audio",drag=null,lameLoading=null;
 
-Need another format or sample rate? Convert your audio for free in your browser.
-Open the converter
+function applyLang(){
+ var t=T[L];
+ document.documentElement.lang=L; document.documentElement.dir=t.dir; document.title=t.title;
+ $("nav").innerHTML=t.nav; $("foot").innerHTML=t.foot; $("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]"); for(var i=0;i<a.length;i++) a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]"); for(var j=0;j<h.length;j++) h[j].innerHTML=t[h[j].getAttribute("data-h")];
+ $("play").textContent = playing ? t.stop : t.play; $("save").textContent=t.save;
+}
+function fmt(s){ if(!isFinite(s)||s<0) s=0; var m=Math.floor(s/60), r=s-m*60; return m+":"+(r<10?"0":"")+r.toFixed(1); }
+function parseT(v){ v=String(v).trim().replace(",","."); if(!v) return NaN; if(v.indexOf(":")>=0){ var p=v.split(":"); return (+p[0])*60+(+p[1]); } return +v; }
+function warn(msg){ var w=$("warn"); if(msg){ w.textContent=msg; w.style.display="block"; } else w.style.display="none"; }
 
-All articles
+/* ---------- waveform ---------- */
+var peaks=null,pw=0;
+function computePeaks(w){
+ var n=buf.length, nc=buf.numberOfChannels, per=n/w, out=new Float32Array(w);
+ for(var c=0;c<nc;c++){ var d=buf.getChannelData(c);
+  for(var x=0;x<w;x++){ var a=Math.floor(x*per), b=Math.min(n,Math.floor((x+1)*per)), stp=Math.max(1,Math.floor((b-a)/300)), m=out[x];
+   for(var i=a;i<b;i+=stp){ var v=d[i]<0?-d[i]:d[i]; if(v>m) m=v; } out[x]=m; } }
+ peaks=out; pw=w;
+}
+function draw(cursor){
+ var cv=$("cv"); if(!buf) return;
+ var dpr=window.devicePixelRatio||1, w=Math.max(200,Math.floor(cv.clientWidth*dpr)), h=Math.floor(140*dpr);
+ if(cv.width!==w||cv.height!==h){ cv.width=w; cv.height=h; }
+ if(!peaks||pw!==w) computePeaks(w);
+ var g=cv.getContext("2d"), col=getComputedStyle(cv).color||"#333";
+ g.clearRect(0,0,w,h);
+ var xs=st/dur*w, xe=en/dur*w;
+ g.fillStyle="rgba(124,77,255,.16)"; g.fillRect(xs,0,xe-xs,h);
+ var mid=h/2;
+ for(var x=0;x<w;x++){ var ph=peaks[x]*mid*0.92; g.fillStyle=(x>=xs&&x<=xe)?"#7c4dff":"rgba(128,128,128,.6)"; g.fillRect(x,mid-ph,1,Math.max(1,ph*2)); }
+ g.fillStyle="#ff8a3d"; var hw=Math.max(3,2*dpr);
+ g.fillRect(xs-hw/2,0,hw,h); g.fillRect(xe-hw/2,0,hw,h);
+ g.beginPath(); g.arc(xs,mid,7*dpr,0,6.3); g.fill(); g.beginPath(); g.arc(xe,mid,7*dpr,0,6.3); g.fill();
+ if(typeof cursor==="number"){ g.fillStyle=col; g.fillRect(cursor/dur*w-1,0,2*dpr,h); }
+}
+function upd(){ $("tS").value=st.toFixed(2); $("tE").value=en.toFixed(2); $("lenV").textContent=fmt(en-st); draw(); }
+function setT(which,t){
+ if(which==="s") st=Math.max(0,Math.min(t,en-0.05)); else en=Math.min(dur,Math.max(t,st+0.05));
+ if(playing) stopPlay(); upd();
+}
+var cv=$("cv");
+cv.addEventListener("pointerdown",function(e){
+ if(!buf) return; var r=cv.getBoundingClientRect(), t=(e.clientX-r.left)/r.width*dur, ds=Math.abs(t-st), de=Math.abs(t-en);
+ drag = ds<=de ? "s" : "e"; setT(drag,t); cv.setPointerCapture(e.pointerId); e.preventDefault();
+});
+cv.addEventListener("pointermove",function(e){ if(!drag) return; var r=cv.getBoundingClientRect(); setT(drag,(e.clientX-r.left)/r.width*dur); });
+function endDrag(){ drag=null; }
+cv.addEventListener("pointerup",endDrag); cv.addEventListener("pointercancel",endDrag);
+window.addEventListener("resize",function(){ if(buf) draw(); });
+$("tS").addEventListener("change",function(){ var v=parseT(this.value); if(isFinite(v)) setT("s",v); else upd(); });
+$("tE").addEventListener("change",function(){ var v=parseT(this.value); if(isFinite(v)) setT("e",v); else upd(); });
 
-AboutFAQPrivacyTermsContact
+/* ---------- load ---------- */
+function getCtx(){ if(!actx){ var C=window.AudioContext||window.webkitAudioContext; actx=new C(); } return actx; }
+function loadFile(f){
+ if(!f) return; stopPlay(); warn(""); $("result").style.display="none";
+ $("fname").textContent=T[L].loading; $("wavebox").style.display="none";
+ if(f.size>100*1024*1024) warn(T[L].big);
+ fileName=(f.name||"audio").replace(/\.[^.]+$/,"");
+ var rd=new FileReader();
+ rd.onerror=function(){ $("fname").textContent=""; warn(T[L].decodeErr); };
+ rd.onload=function(){
+  var ctx=getCtx();
+  new Promise(function(res,rej){ var p=ctx.decodeAudioData(rd.result,res,rej); if(p&&p.then) p.then(res,rej); })
+  .then(function(b){
+   buf=b; dur=b.duration; st=0; en=dur; peaks=null;
+   $("fname").textContent=f.name+" · "+fmt(dur)+" · "+b.sampleRate+" Hz · "+(b.numberOfChannels===1?"mono":"stereo");
+   $("durT").textContent=fmt(dur); $("wavebox").style.display="block"; upd();
+  }).catch(function(){ buf=null; $("fname").textContent=""; warn(T[L].decodeErr); });
+ };
+ rd.readAsArrayBuffer(f);
+}
+$("file").addEventListener("change",function(){ loadFile(this.files[0]); this.value=""; });
+var drop=$("drop");
+["dragenter","dragover"].forEach(function(n){ drop.addEventListener(n,function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+["dragleave","drop"].forEach(function(n){ drop.addEventListener(n,function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+drop.addEventListener("drop",function(e){ var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) loadFile(f); });
 
-support@sayvoi.com · hafezseo@gmail.com
+/* ---------- preview ---------- */
+function fades(len){ var fi=+$("fi").value, fo=+$("fo").value; if(fi+fo>len){ var k=len/(fi+fo); fi*=k; fo*=k; } return [fi,fo]; }
+function stopPlay(){
+ if(src){ try{ src.onended=null; src.stop(); }catch(e){} src=null; }
+ playing=false; cancelAnimationFrame(raf); $("play").textContent=T[L].play; if(buf) draw();
+}
+function startPlay(){
+ var ctx=getCtx(); if(ctx.state==="suspended") ctx.resume();
+ var len=en-st; if(len<0.1){ $("status").textContent=T[L].tooShort; return; } $("status").textContent="";
+ var s=ctx.createBufferSource(); s.buffer=buf; var gn=ctx.createGain(), f=fades(len), t0=ctx.currentTime+0.02;
+ gn.gain.setValueAtTime(f[0]>0?0:1,t0); if(f[0]>0) gn.gain.linearRampToValueAtTime(1,t0+f[0]);
+ if(f[1]>0){ gn.gain.setValueAtTime(1,t0+len-f[1]); gn.gain.linearRampToValueAtTime(0,t0+len); }
+ s.connect(gn); gn.connect(ctx.destination); s.start(t0,st,len); src=s; playing=true; playT0=t0;
+ s.onended=function(){ if(src===s){ stopPlay(); } };
+ $("play").textContent=T[L].stop;
+ (function tick(){ if(!playing) return; var p=st+Math.max(0,ctx.currentTime-playT0); draw(Math.min(p,en)); raf=requestAnimationFrame(tick); })();
+}
+$("play").addEventListener("click",function(){ if(!buf) return; if(playing) stopPlay(); else startPlay(); });
 
-© 2026 Sayvoi
+/* ---------- export ---------- */
+function render(){
+ var sr=buf.sampleRate, s0=Math.floor(st*sr), s1=Math.min(buf.length,Math.floor(en*sr)), n=s1-s0, nc=Math.min(2,buf.numberOfChannels), out=[], f=fades(n/sr);
+ var fi=Math.min(n,Math.floor(f[0]*sr)), fo=Math.min(n,Math.floor(f[1]*sr));
+ for(var c=0;c<nc;c++){ var o=new Float32Array(n); o.set(buf.getChannelData(c).subarray(s0,s1));
+  for(var i=0;i<fi;i++) o[i]*=i/fi; for(var j=0;j<fo;j++) o[n-1-j]*=j/fo; out.push(o); }
+ return {ch:out,sr:sr,n:n};
+}
+function toWav(r){
+ var nc=r.ch.length, n=r.n, bytes=44+n*nc*2, ab=new ArrayBuffer(bytes), v=new DataView(ab);
+ function ws(o,s){ for(var i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i)); }
+ ws(0,"RIFF"); v.setUint32(4,bytes-8,true); ws(8,"WAVE"); ws(12,"fmt "); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,nc,true);
+ v.setUint32(24,r.sr,true); v.setUint32(28,r.sr*nc*2,true); v.setUint16(32,nc*2,true); v.setUint16(34,16,true); ws(36,"data"); v.setUint32(40,n*nc*2,true);
+ var p=44; for(var i=0;i<n;i++) for(var c=0;c<nc;c++){ var x=Math.max(-1,Math.min(1,r.ch[c][i])); v.setInt16(p,x<0?x*32768:x*32767,true); p+=2; }
+ return new Blob([ab],{type:"audio/wav"});
+}
+function i16(a){ var o=new Int16Array(a.length); for(var i=0;i<a.length;i++){ var x=Math.max(-1,Math.min(1,a[i])); o[i]=x<0?x*32768:x*32767; } return o; }
+function loadLame(){
+ if(window.lamejs) return Promise.resolve();
+ if(lameLoading) return lameLoading;
+ lameLoading=new Promise(function(res,rej){ var s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"; s.onload=function(){ window.lamejs?res():rej(); }; s.onerror=function(){ lameLoading=null; rej(); }; document.head.appendChild(s); });
+ return lameLoading;
+}
+function toMp3(r,kbps){
+ var nc=r.ch.length, enc=new window.lamejs.Mp3Encoder(nc,r.sr,kbps), L16=i16(r.ch[0]), R16=nc>1?i16(r.ch[1]):null, parts=[], B=1152;
+ for(var i=0;i<r.n;i+=B){ var a=L16.subarray(i,i+B), d=nc>1?enc.encodeBuffer(a,R16.subarray(i,i+B)):enc.encodeBuffer(a); if(d.length) parts.push(new Uint8Array(d)); }
+ var e=enc.flush(); if(e.length) parts.push(new Uint8Array(e));
+ return new Blob(parts,{type:"audio/mpeg"});
+}
+function download(blob,ext){
+ var url=URL.createObjectURL(blob), a=document.createElement("a"), name=fileName+"-cut."+ext;
+ a.href=url; a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+ var r=$("result"); r.textContent=T[L].done+name+" ("+(blob.size/1048576).toFixed(2)+" MB)"; r.style.display="block";
+ setTimeout(function(){ URL.revokeObjectURL(url); },60000);
+}
+$("fmt").addEventListener("change",function(){ $("brCol").style.display=this.value==="mp3"?"":"none"; });
+$("save").addEventListener("click",function(){
+ if(!buf) return; if(en-st<0.1){ $("status").textContent=T[L].tooShort; return; }
+ stopPlay(); warn(""); $("status").textContent=T[L].exporting; $("result").style.display="none"; var btn=this; btn.disabled=true;
+ setTimeout(function(){
+  try{
+   var r=render();
+   if($("fmt").value==="wav"){ download(toWav(r),"wav"); $("status").textContent=""; btn.disabled=false; }
+   else loadLame().then(function(){ download(toMp3(r,+$("br").value),"mp3"); $("status").textContent=""; btn.disabled=false; })
+     .catch(function(){ $("status").textContent=""; warn(T[L].mp3Err); btn.disabled=false; });
+  }catch(e){ $("status").textContent=""; warn(T[L].decodeErr); btn.disabled=false; }
+ },30);
+});
+$("langBtn").addEventListener("click",function(){ L=L==="en"?"ar":"en"; try{ localStorage.setItem("sayvoi_lang",L); }catch(e){} applyLang(); });
+applyLang();
+})();
+</script>
+</body>
+</html>
