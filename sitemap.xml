@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-<url><loc>https://convert.sayvoi.com/</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/check/</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/video-to-audio/</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/articles/</loc><lastmod>2026-10-24</lastmod>
-</url>
+<url><loc>https://convert.sayvoi.com/</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/check/</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/video-to-audio/</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/articles/</loc><lastmod>2026-10-24</lastmod></url>
 <url><loc>https://convert.sayvoi.com/articles/ar/wav-to-mp3.html</loc><lastmod>2026-10-24</lastmod>
 <xhtml:link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/wav-to-mp3.html"/>
 <xhtml:link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/wav-to-mp3.html"/>
@@ -168,17 +164,7 @@
 <xhtml:link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/mp4-vs-mkv-vs-webm.html"/>
 <xhtml:link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/mp4-vs-mkv-vs-webm.html"/>
 </url>
-<url><loc>https://convert.sayvoi.com/about.html</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/faq.html</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/privacy.html</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/terms.html</loc><lastmod>2026-10-24</lastmod>
-</url>
-<url><loc>https://convert.sayvoi.com/contact.html</loc><lastmod>2026-10-24</lastmod>
-</url>
-  <url><loc>https://convert.sayvoi.com/articles/ar/flac-to-mp3.html</loc><lastmod>2026-10-28</lastmod>
+<url><loc>https://convert.sayvoi.com/articles/ar/flac-to-mp3.html</loc><lastmod>2026-10-28</lastmod>
 <xhtml:link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/flac-to-mp3.html"/>
 <xhtml:link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/flac-to-mp3.html"/>
 </url>
@@ -209,5 +195,12 @@
 <url><loc>https://convert.sayvoi.com/articles/en/lossless-vs-lossy-audio.html</loc><lastmod>2026-10-28</lastmod>
 <xhtml:link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/lossless-vs-lossy-audio.html"/>
 <xhtml:link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/lossless-vs-lossy-audio.html"/>
+</url>
+<url><loc>https://convert.sayvoi.com/about.html</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/faq.html</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/privacy.html</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/terms.html</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/contact.html</loc><lastmod>2026-10-24</lastmod></url>
+<url><loc>https://convert.sayvoi.com/audio-cutter/</loc><lastmod>2026-10-30</lastmod>
 </url>
 </urlset>
