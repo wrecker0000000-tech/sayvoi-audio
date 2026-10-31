@@ -1,23 +1,246 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Audio to Text (Test) | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.tr .drop{display:block;border:2px dashed rgba(128,128,128,.55);border-radius:14px;padding:26px 14px;text-align:center;cursor:pointer;font-weight:700}
+.tr .drop.over{border-color:#7c4dff;background:rgba(124,77,255,.1)}
+.tr .drop small{display:block;font-weight:400;opacity:.75;margin-top:4px}
+.tr #file{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden;pointer-events:none}
+.tr .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.tr .col{flex:1 1 200px;min-width:0}
+.tr label{display:block;font-weight:700;margin-bottom:6px}
+.tr select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.tr select option{color:#111;background:#fff}
+.tr textarea{width:100%;min-height:260px;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;line-height:1.8;background:transparent;color:inherit;box-sizing:border-box;resize:vertical}
+.tr .b{padding:12px 22px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.tr .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.tr .b:disabled{opacity:.5;cursor:not-allowed}
+.tr .btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.tr .info{margin-top:10px;font-size:.95em;opacity:.9}
+.tr .warn{margin-top:12px;padding:12px;border-radius:12px;border:1px solid #e0a030;background:rgba(224,160,48,.12);display:none}
+.tr .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.tr .bar{height:8px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;margin-top:8px;display:none}
+.tr .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c4dff,#ff8a3d);transition:width .2s}
+.tr .out{display:none;margin-top:16px}
+.tr .chk{display:flex;gap:8px;align-items:center;font-weight:600;margin:6px 0}
+.tr .chk input{width:auto}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="tr">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<div class="note" data-i="beta"></div>
 
-SayvoiConverterQuality checkerVideo to audioAudio cutterServicesArticlesAbout
-Audio to Text (private test page)
-This is a test page. It makes a draft transcript from your audio, in your browser. The audio is not uploaded. Always review and correct the text before using it.
-Choose an audio file or drop it here
-Up to 10 minutes per file. MP3, WAV, M4A, OGG, FLAC and more.
-Language of the audio
-Quality
-For Arabic, choose Accurate. The smaller models make many mistakes in Arabic.
-Notes
+<label class="drop" id="drop" for="file"><span data-i="drop"></span><small data-i="dropSub"></small></label>
+<input type="file" id="file" accept="audio/*,video/*,.mp3,.wav,.ogg,.flac,.m4a,.aac,.opus,.webm,.mp4,.mov">
+<div class="warn" id="warn" role="alert"></div>
+<div class="info" id="fname"></div>
 
-    Private: your audio is processed on your device and never uploaded. Only the model files are downloaded.
-    Limit: 10 minutes per file. For longer files, cut them first with the audio cutter.
-    Accuracy: good for clear speech in Modern Standard Arabic, English and French. Dialects, noise and overlapping speakers give weaker results.
-    Speed: depends on your device. The first run is slower because the model must download.
+<div class="row">
+  <div class="col"><label for="lang" data-i="lang"></label>
+    <select id="lang">
+      <option value="">Auto-detect</option>
+      <option value="arabic" selected>Arabic · العربية</option>
+      <option value="english">English</option>
+      <option value="french">French · Français</option>
+      <option value="spanish">Spanish · Español</option>
+      <option value="italian">Italian · Italiano</option>
+      <option value="german">German · Deutsch</option>
+      <option value="portuguese">Portuguese · Português</option>
+      <option value="turkish">Turkish · Türkçe</option>
+      <option value="russian">Russian · Русский</option>
+      <option value="persian">Persian · فارسی</option>
+      <option value="urdu">Urdu · اردو</option>
+      <option value="hindi">Hindi · हिन्दी</option>
+      <option value="indonesian">Indonesian</option>
+      <option value="dutch">Dutch · Nederlands</option>
+    </select></div>
+  <div class="col"><label for="model" data-i="model"></label>
+    <select id="model">
+      <option value="onnx-community/whisper-tiny" data-k="m1"></option>
+      <option value="onnx-community/whisper-base" data-k="m2" selected></option>
+      <option value="onnx-community/whisper-small" data-k="m3"></option>
+    </select></div>
+</div>
+<div class="info" id="hint"></div>
 
-Back to home
+<div class="btns">
+  <button type="button" class="b" id="go" disabled></button>
+  <button type="button" class="b sec" id="cancel" disabled></button>
+</div>
+<div class="bar" id="bar"><i id="barI"></i></div>
+<div class="info" id="status" aria-live="polite"></div>
 
-AboutFAQPrivacyTermsContact
+<div class="out" id="out">
+  <label class="chk"><input type="checkbox" id="ts"> <span data-i="ts"></span></label>
+  <textarea id="txt" dir="auto" spellcheck="false"></textarea>
+  <div class="btns">
+    <button type="button" class="b" id="copy"></button>
+    <button type="button" class="b sec" id="dl"></button>
+  </div>
+  <div class="info" data-i="review"></div>
+</div>
 
-support@sayvoi.com · hafezseo@gmail.com
+<h2 data-i="h2a"></h2>
+<ul><li data-h="t1"></li><li data-h="t2"></li><li data-h="t3"></li><li data-h="t4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var CDN="https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1";
+var MAX_MINUTES=10;
+var T={
+en:{dir:"ltr",btn:"العربية",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Audio to Text (private test page)",
+ beta:"This is a test page. It makes a <strong>draft</strong> transcript from your audio, in your browser. The audio is not uploaded. Always review and correct the text before using it.",
+ drop:"Choose an audio file or drop it here",dropSub:"Up to 10 minutes per file. MP3, WAV, M4A, OGG, FLAC and more.",
+ lang:"Language of the audio",model:"Quality",
+ m1:"Fast (tiny, about 40 MB)",m2:"Balanced (base, about 80 MB)",m3:"Accurate (small, about 250 MB)",
+ hintAr:"For Arabic, choose Accurate. The smaller models make many mistakes in Arabic.",hintGen:"The model is downloaded once and saved in your browser. Larger models are slower and need a modern device.",
+ go:"Transcribe",cancel:"Cancel",copy:"Copy text",dl:"Download TXT",copied:"Copied.",ts:"Show timestamps",
+ review:"This is an automatic draft. Check names, numbers and dialect words, and edit the text above as your project guidelines require.",
+ h2a:"Notes",t1:"<strong>Private:</strong> your audio is processed on your device and never uploaded. Only the model files are downloaded.",t2:"<strong>Limit:</strong> 10 minutes per file. For longer files, cut them first with the <a href=\"/audio-cutter/\">audio cutter</a>.",t3:"<strong>Accuracy:</strong> good for clear speech in Modern Standard Arabic, English and French. Dialects, noise and overlapping speakers give weaker results.",t4:"<strong>Speed:</strong> depends on your device. The first run is slower because the model must download.",back:"Back to home",
+ reading:"Reading the file…",tooLong:"This file is longer than 10 minutes. Cut it first with the audio cutter: ",decErr:"This browser could not read the file. Try another format (MP3 or WAV).",
+ loadModel:"Downloading the model… ",loadingM:"Preparing the model…",running:"Transcribing… ",done:"Done in ",secs:" seconds.",err:"Something went wrong: ",cancelled:"Cancelled.",gpuFallback:"Switching to the compatible mode…"},
+ar:{dir:"rtl",btn:"English",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"تحويل الصوت إلى نص (صفحة تجربة خاصة)",
+ beta:"هذه صفحة تجريبية. تُنتج <strong>مسودة</strong> تفريغ من صوتك داخل متصفحك، ولا يُرفع الصوت إلى أي مكان. راجع النص وصحّحه دائمًا قبل استخدامه.",
+ drop:"اختر ملفًا صوتيًا أو أفلته هنا",dropSub:"حتى 10 دقائق للملف. MP3 وWAV وM4A وOGG وFLAC وغيرها.",
+ lang:"لغة الصوت",model:"الجودة",
+ m1:"سريع (tiny، حوالي 40 ميجابايت)",m2:"متوازن (base، حوالي 80 ميجابايت)",m3:"دقيق (small، حوالي 250 ميجابايت)",
+ hintAr:"للعربية اختر «دقيق». النماذج الأصغر تخطئ كثيرًا في العربية.",hintGen:"يُحمَّل النموذج مرة واحدة ويُحفظ في متصفحك. النماذج الأكبر أبطأ وتحتاج جهازًا حديثًا.",
+ go:"فرّغ الصوت",cancel:"إلغاء",copy:"انسخ النص",dl:"حمّل TXT",copied:"تم النسخ.",ts:"أظهر الأوقات",
+ review:"هذه مسودة تلقائية. راجع الأسماء والأرقام وكلمات اللهجة، وعدّل النص أعلاه حسب إرشادات مشروعك.",
+ h2a:"ملاحظات",t1:"<strong>خصوصية:</strong> يُعالَج صوتك على جهازك ولا يُرفع. الذي يُحمَّل هو ملفات النموذج فقط.",t2:"<strong>الحد:</strong> 10 دقائق للملف. للملفات الأطول قصّها أولًا بـ<a href=\"/audio-cutter/\">قص الصوت</a>.",t3:"<strong>الدقة:</strong> جيدة للكلام الواضح بالفصحى والإنجليزية والفرنسية. اللهجات والضوضاء وتداخل المتحدثين تعطي نتائج أضعف.",t4:"<strong>السرعة:</strong> تعتمد على جهازك. أول مرة أبطأ لأن النموذج يُحمَّل.",back:"العودة للرئيسية",
+ reading:"جارٍ قراءة الملف…",tooLong:"الملف أطول من 10 دقائق. قصّه أولًا بأداة قص الصوت: ",decErr:"لم يستطع المتصفح قراءة الملف. جرّب صيغة أخرى (MP3 أو WAV).",
+ loadModel:"جارٍ تحميل النموذج… ",loadingM:"جارٍ تجهيز النموذج…",running:"جارٍ التفريغ… ",done:"تم في ",secs:" ثانية.",err:"حدث خطأ: ",cancelled:"تم الإلغاء.",gpuFallback:"جارٍ التحويل إلى الوضع المتوافق…"}
+};
+var $=function(i){return document.getElementById(i);};
+var L="en"; try{ if(localStorage.getItem("sayvoi_lang")==="ar") L="ar"; }catch(e){}
+var audio=null,loadId=0,worker=null,busy=false,t0=0,timer=0,result=null,gen=0,modelReady="";
 
-© 2026 Sayvoi
+function applyLang(){
+ var t=T[L]; document.documentElement.lang=L; document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav; $("foot").innerHTML=t.foot; $("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]"); for(var i=0;i<a.length;i++){ var k=a[i].getAttribute("data-i"); if(k==="beta") a[i].innerHTML=t[k]; else a[i].textContent=t[k]; }
+ var h=document.querySelectorAll("[data-h]"); for(var j=0;j<h.length;j++) h[j].innerHTML=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]"); for(var m=0;m<o.length;m++) o[m].textContent=t[o[m].getAttribute("data-k")];
+ $("go").textContent=t.go; $("cancel").textContent=t.cancel; $("copy").textContent=t.copy; $("dl").textContent=t.dl; updHint();
+}
+function updHint(){ var t=T[L]; $("hint").textContent=($("lang").value==="arabic"&&$("model").value.indexOf("small")<0)?t.hintAr:t.hintGen; }
+function warn(m){ var w=$("warn"); if(m){ w.innerHTML=m; w.style.display="block"; } else w.style.display="none"; }
+function fmtT(s){ s=Math.max(0,Math.floor(s)); var m=Math.floor(s/60), r=s%60; return m+":"+(r<10?"0":"")+r; }
+function setBar(p){ var b=$("bar"); if(p==null){ b.style.display="none"; return; } b.style.display="block"; $("barI").style.width=Math.max(2,Math.min(100,p))+"%"; }
+
+/* ---------- decode to 16 kHz mono ---------- */
+function loadFile(f){
+ if(!f||busy) return; var my=++loadId; warn(""); $("out").style.display="none"; audio=null; $("go").disabled=true; $("fname").textContent=T[L].reading;
+ var rd=new FileReader();
+ rd.onerror=function(){ $("fname").textContent=""; warn(T[L].decErr); };
+ rd.onload=function(){
+  var AC=window.AudioContext||window.webkitAudioContext, ctx=new AC();
+  new Promise(function(res,rej){ var p=ctx.decodeAudioData(rd.result,res,rej); if(p&&p.then) p.then(res,rej); })
+  .then(function(b){
+   try{ ctx.close(); }catch(e){}
+   if(my!==loadId) return null;
+   if(b.duration>MAX_MINUTES*60){ $("fname").textContent=""; warn(T[L].tooLong+'<a href="/audio-cutter/">/audio-cutter/</a>'); return null; }
+   var OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext, off=new OAC(1,Math.max(1,Math.ceil(b.duration*16000)),16000), s=off.createBufferSource();
+   s.buffer=b; s.connect(off.destination); s.start(0); return off.startRendering().then(function(r){ return {data:r.getChannelData(0).slice(0),dur:b.duration}; });
+  }).then(function(r){ if(!r||my!==loadId) return; audio=r; $("fname").textContent=f.name+" · "+fmtT(r.dur); $("go").disabled=false; })
+  .catch(function(){ if(my!==loadId) return; $("fname").textContent=""; warn(T[L].decErr); });
+ };
+ rd.readAsArrayBuffer(f);
+}
+$("file").addEventListener("change",function(){ loadFile(this.files[0]); this.value=""; });
+var drop=$("drop");
+["dragenter","dragover"].forEach(function(n){ drop.addEventListener(n,function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+["dragleave","drop"].forEach(function(n){ drop.addEventListener(n,function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+drop.addEventListener("drop",function(e){ var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0]; if(f) loadFile(f); });
+$("lang").addEventListener("change",updHint); $("model").addEventListener("change",updHint);
+
+/* ---------- worker ---------- */
+var WSRC='import { pipeline, env } from "'+CDN+'";\n'+
+'env.allowLocalModels=false; var asr=null,key="";\n'+
+'self.onmessage=async function(e){var m=e.data;try{\n'+
+' if(m.type==="load"){var k=m.model+"|"+m.device; if(asr&&key===k){self.postMessage({type:"ready"});return;}\n'+
+'  var o={progress_callback:function(p){self.postMessage({type:"progress",p:p});}};\n'+
+'  if(m.device==="webgpu"){o.device="webgpu";o.dtype={encoder_model:"fp32",decoder_model_merged:"q4"};}else{o.dtype="q8";}\n'+
+'  asr=await pipeline("automatic-speech-recognition",m.model,o); key=k; self.postMessage({type:"ready"});}\n'+
+' else if(m.type==="run"){var o2={chunk_length_s:30,stride_length_s:5,return_timestamps:true,task:"transcribe"}; if(m.language)o2.language=m.language;\n'+
+'  var out=await asr(m.audio,o2); self.postMessage({type:"done",out:out});}\n'+
+'}catch(err){self.postMessage({type:"error",message:String((err&&err.message)||err)});}};';
+function newWorker(){
+ var url=URL.createObjectURL(new Blob([WSRC],{type:"text/javascript"}));
+ var w=new Worker(url,{type:"module"}); return w;
+}
+function stopWorker(){ if(worker){ try{ worker.terminate(); }catch(e){} worker=null; modelReady=""; } }
+function finish(){ busy=false; clearInterval(timer); setBar(null); $("go").disabled=!audio; $("cancel").disabled=true; $("file").disabled=false; }
+
+function start(device){
+ var t=T[L], model=$("model").value, g=++gen;
+ if(!worker) worker=newWorker();
+ var w=worker;
+ w.onerror=function(ev){ if(g!==gen) return; var m=(ev&&ev.message)||"worker"; handleErr(m,device); };
+ w.onmessage=function(e){
+  if(g!==gen) return; var m=e.data;
+  if(m.type==="progress"){ var p=m.p||{}; if(p.status==="progress"&&typeof p.progress==="number"){ setBar(p.progress); $("status").textContent=t.loadModel+Math.round(p.progress)+"%"; } else if(p.status==="ready"||p.status==="done"){ $("status").textContent=t.loadingM; } }
+  else if(m.type==="ready"){
+   modelReady=model+"|"+device; setBar(null); t0=Date.now();
+   $("status").textContent=t.running+"0 s"; clearInterval(timer); timer=setInterval(function(){ $("status").textContent=t.running+Math.floor((Date.now()-t0)/1000)+" s"; },1000);
+   var copy=new Float32Array(audio.data); w.postMessage({type:"run",audio:copy,language:$("lang").value||null},[copy.buffer]);
+  }
+  else if(m.type==="done"){ var secs=Math.round((Date.now()-t0)/1000); finish(); showResult(m.out); $("status").textContent=t.done+secs+t.secs; }
+  else if(m.type==="error"){ handleErr(m.message,device); }
+ };
+ setBar(0); $("status").textContent=t.loadModel+"0%";
+ w.postMessage({type:"load",model:model,device:device});
+}
+function handleErr(msg,device){
+ if(device==="webgpu"){ stopWorker(); $("status").textContent=T[L].gpuFallback; start("wasm"); return; }
+ finish(); stopWorker(); $("status").textContent=""; warn(T[L].err+String(msg).slice(0,300));
+}
+$("go").addEventListener("click",function(){
+ if(!audio||busy) return; busy=true; warn(""); $("out").style.display="none"; $("go").disabled=true; $("cancel").disabled=false; $("file").disabled=true;
+ start(navigator.gpu?"webgpu":"wasm");
+});
+$("cancel").addEventListener("click",function(){ gen++; stopWorker(); finish(); $("status").textContent=T[L].cancelled; });
+
+/* ---------- result ---------- */
+function render(){
+ if(!result) return; var showTs=$("ts").checked, ch=result.chunks;
+ if(showTs&&ch&&ch.length){ $("txt").value=ch.map(function(c){ var s=c.timestamp&&c.timestamp[0]!=null?c.timestamp[0]:0; return "["+fmtT(s)+"] "+String(c.text||"").trim(); }).join("\n"); }
+ else $("txt").value=String(result.text||"").trim();
+}
+function showResult(out){ result=out||{text:""}; $("ts").checked=false; render(); $("out").style.display="block"; }
+$("ts").addEventListener("change",render);
+$("copy").addEventListener("click",function(){
+ var v=$("txt").value, b=this, done=function(){ var o=b.textContent; b.textContent=T[L].copied; setTimeout(function(){ b.textContent=T[L].copy; },1500); };
+ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(v).then(done,function(){ $("txt").select(); document.execCommand("copy"); done(); });
+ else { $("txt").select(); document.execCommand("copy"); done(); }
+});
+$("dl").addEventListener("click",function(){
+ var blob=new Blob(["﻿"+$("txt").value],{type:"text/plain;charset=utf-8"}), a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="transcript.txt"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
+$("langBtn").addEventListener("click",function(){ L=L==="en"?"ar":"en"; try{ localStorage.setItem("sayvoi_lang",L); }catch(e){} applyLang(); });
+applyLang();
+})();
+</script>
+</body>
+</html>
