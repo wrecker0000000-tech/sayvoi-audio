@@ -1,34 +1,324 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Say It As Spoken: Numbers to Words (Test) | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 170px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp textarea{width:100%;min-height:170px;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;line-height:1.8;background:transparent;color:inherit;box-sizing:border-box;resize:vertical}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;direction:ltr;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.sp .ex{width:100%;border-collapse:collapse;margin:8px 0}
+.sp .ex td{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.3);vertical-align:top}
+.sp .ex td:first-child{direction:ltr;white-space:nowrap}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<div class="note" data-i="beta"></div>
 
-SayvoiConverterQuality checkerVideo to audioAudio cutterServicesArticlesAbout
-Say It As Spoken: Numbers to Arabic Words (private test page)
+<div class="row">
+  <div class="col"><label for="dialect" data-i="oDialect"></label><select id="dialect"><option value="egy" data-k="dEgy"></option><option value="msa" data-k="dMsa"></option></select></div>
+  <div class="col"><label for="tstyle" data-i="oTime"></label><select id="tstyle"><option value="nat" data-k="tNat"></option><option value="exact" data-k="tExact"></option></select></div>
+  <div class="col"><label for="dorder" data-i="oDate"></label><select id="dorder"><option value="dmy">DD/MM/YYYY</option><option value="mdy">MM/DD/YYYY</option></select></div>
+  <div class="col"><label for="dpart" data-i="oDay"></label><select id="dpart"><option value="1" data-k="yes"></option><option value="0" data-k="no"></option></select></div>
+  <div class="col"><label for="longd" data-i="oLong"></label><select id="longd"><option value="digits" data-k="lDigits"></option><option value="number" data-k="lNumber"></option></select></div>
+</div>
 
-Turn numbers, dates, times, amounts, percentages and phone numbers in your Arabic text into words, the way they are actually said: Egyptian dialect or Modern Standard Arabic.
-This is a test page. The result is a draft: always read it and adjust it to your project guidelines. Everything runs in your browser and your text is not uploaded.
-Dialect
-Time style
-Numeric date order
-Day part (morning, evening…)
-Long digit strings (8+ digits)
-Your text
-Result (you can edit it)
-Review the result before using it. Some forms are a matter of project style (for example “خمستاشر” or “خمسة عشر”), and Fusha grammar is simplified.
-Examples
-3:45 PM	الساعة أربعة إلا ربع بعد الضهر
-15/03/2026	خمستاشر مارس ألفين وستة وعشرين
-1,250.50 EGP	ألف وميتين وخمسين جنيه وخمسين قرش
-15%	خمستاشر في المية
-01012345678	صفر واحد صفر واحد اتنين تلاتة أربعة خمسة ستة سبعة تمانية
-Notes
+<label for="inp" data-i="lIn"></label>
+<textarea id="inp" dir="auto" spellcheck="false"></textarea>
+<div class="btns">
+  <button type="button" class="b" id="conv"></button>
+  <button type="button" class="b sec" id="up"></button>
+  <button type="button" class="b sec" id="ex"></button>
+  <button type="button" class="b sec" id="clr"></button>
+  <input type="file" id="upf" accept=".txt,text/plain" hidden>
+</div>
 
-    Private: the conversion runs in your browser. Nothing is uploaded.
-    Amounts: EGP, SAR, AED, USD and EUR are supported, for example “1,250.50 EGP” or “$20”.
-    Known limits: in Fusha, the counted noun after large numbers follows simplified rules, and some forms need a native speaker’s review.
-    Not converted: digits attached to Latin letters (like “mp3” or “A4”) are left as they are. Use the digit finder to spot them.
+<label for="outp" data-i="lOut"></label>
+<textarea id="outp" dir="auto" spellcheck="false"></textarea>
+<div class="btns">
+  <button type="button" class="b" id="copy"></button>
+  <button type="button" class="b sec" id="dl"></button>
+  <button type="button" class="b sec" id="scanIn"></button>
+  <button type="button" class="b sec" id="scanOut"></button>
+</div>
+<div class="scan" id="scan" role="status"></div>
+<div class="info" data-i="review"></div>
 
-Back to home
+<h2 data-i="h2a"></h2>
+<table class="ex"><tbody id="exTable"></tbody></table>
 
-AboutFAQPrivacyTermsContact
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
 
-support@sayvoi.com · hafezseo@gmail.com
+<script>
+/* ===================== engine ===================== */
+window.SpokenEngine=(function(){
+ var EG_ONES=["صفر","واحد","اتنين","تلاتة","أربعة","خمسة","ستة","سبعة","تمانية","تسعة","عشرة","احداشر","اتناشر","تلتاشر","أربعتاشر","خمستاشر","ستاشر","سبعتاشر","تمنتاشر","تسعتاشر"];
+ var EG_TENS=["","","عشرين","تلاتين","أربعين","خمسين","ستين","سبعين","تمانين","تسعين"];
+ var EG_HUND=["","ميّة","ميتين","تلاتمية","أربعمية","خمسمية","ستمية","سبعمية","تمانمية","تسعمية"];
+ var EG_SHORT=["","","","تلات","أربع","خمس","ست","سبع","تمن","تسع","عشر"];
+ var MSA_ONES=["صفر","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة","عشرة","أحد عشر","اثنا عشر","ثلاثة عشر","أربعة عشر","خمسة عشر","ستة عشر","سبعة عشر","ثمانية عشر","تسعة عشر"];
+ var MSA_TENS=["","","عشرون","ثلاثون","أربعون","خمسون","ستون","سبعون","ثمانون","تسعون"];
+ var MSA_TENS_G=["","","عشرين","ثلاثين","أربعين","خمسين","ستين","سبعين","ثمانين","تسعين"];
+ var MSA_HUND=["","مئة","مئتان","ثلاثمئة","أربعمئة","خمسمئة","ستمئة","سبعمئة","ثمانمئة","تسعمئة"];
+ var SC=[null,["ألف","ألفان","ألفين","آلاف","ألفًا"],["مليون","مليونان","مليونين","ملايين","مليونًا"],["مليار","ملياران","مليارين","مليارات","مليارًا"]];
+ var EG_SC=[null,"ألف","مليون","مليار"];
+ var EG_SC2=[null,"ألفين","مليونين","مليارين"];
+ var DIG_EG=["صفر","واحد","اتنين","تلاتة","أربعة","خمسة","ستة","سبعة","تمانية","تسعة"];
+ var DIG_MSA=["صفر","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة"];
+ var FEM=["","واحدة","اثنتان","ثلاث","أربع","خمس","ست","سبع","ثماني","تسع","عشر"];
+ var FEMT=["إحدى عشرة","اثنتا عشرة","ثلاث عشرة","أربع عشرة","خمس عشرة","ست عشرة","سبع عشرة","ثماني عشرة","تسع عشرة"];
+ var MSA_HOUR=["","الأولى","الثانية","الثالثة","الرابعة","الخامسة","السادسة","السابعة","الثامنة","التاسعة","العاشرة","الحادية عشرة","الثانية عشرة"];
+ var MSA_ORD=["","الأول","الثاني","الثالث","الرابع","الخامس","السادس","السابع","الثامن","التاسع","العاشر","الحادي عشر","الثاني عشر","الثالث عشر","الرابع عشر","الخامس عشر","السادس عشر","السابع عشر","الثامن عشر","التاسع عشر","العشرون","الحادي والعشرون","الثاني والعشرون","الثالث والعشرون","الرابع والعشرون","الخامس والعشرون","السادس والعشرون","السابع والعشرون","الثامن والعشرون","التاسع والعشرون","الثلاثون","الحادي والثلاثون"];
+ var MONTHS=["","يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
 
-© 2026 Sayvoi
+ function egGroup(n){var h=Math.floor(n/100),r=n%100,p=[];if(h)p.push(EG_HUND[h]);if(r){if(r<20)p.push(EG_ONES[r]);else{var o=r%10;if(o)p.push(EG_ONES[o]);p.push(EG_TENS[Math.floor(r/10)]);}}return p.join(" و");}
+ function egScale(c,s){if(c===1)return EG_SC[s];if(c===2)return EG_SC2[s];if(s===1&&c>=3&&c<=10)return EG_SHORT[c]+" تلاف";return egGroup(c)+" "+EG_SC[s];}
+ function msaGroup(n,g){var h=Math.floor(n/100),r=n%100,p=[];
+  if(h)p.push(h===2?(g?"مئتين":"مئتان"):MSA_HUND[h]);
+  if(r){if(r<20)p.push(r===2?(g?"اثنين":"اثنان"):(r===12?(g?"اثني عشر":"اثنا عشر"):MSA_ONES[r]));
+   else{var o=r%10;if(o)p.push(o===2?(g?"اثنين":"اثنان"):MSA_ONES[o]);p.push((g?MSA_TENS_G:MSA_TENS)[Math.floor(r/10)]);}}
+  return p.join(" و");}
+ function msaScale(c,s,g){var N=SC[s],cc=c%100;if(c===1)return N[0];if(c===2)return g?N[2]:N[1];if(c<=10)return msaGroup(c,g)+" "+N[3];
+  if(c===200&&s===1)return g?"مئتي ألف":"مئتا ألف";if(cc===0)return msaGroup(c,g)+" "+N[0];if(cc>=3&&cc<=10)return msaGroup(c,g)+" "+N[3];return msaGroup(c,g)+" "+N[4];}
+ function card(n,dial,gen){if(n===0)return "صفر";var g=[],x=n;while(x>0){g.unshift(x%1000);x=Math.floor(x/1000);}
+  var parts=[],len=g.length;for(var i=0;i<len;i++){var c=g[i],s=len-1-i;if(!c)continue;
+   parts.push(s===0?(dial==="egy"?egGroup(c):msaGroup(c,gen)):(dial==="egy"?egScale(c,s):msaScale(c,s,gen)));}
+  return parts.join(" و");}
+ function digitsWords(str,dial){var d=dial==="egy"?DIG_EG:DIG_MSA,out=[];for(var i=0;i<str.length;i++){var c=str.charCodeAt(i)-48;if(c>=0&&c<=9)out.push(d[c]);}return out.join(" ");}
+ function numWords(str,dial,gen){
+  var s=str.replace(/,/g,""),parts=s.split("."),ip=parts[0],fp=parts[1];
+  if(/^0\d/.test(ip)&&fp===undefined)return digitsWords(ip,dial);
+  if(ip.length>12)return digitsWords(ip,dial);
+  var w=card(parseInt(ip,10),dial,gen);
+  if(fp!==undefined&&fp.length)w+=(dial==="egy"?" فاصل ":" فاصلة ")+digitsWords(fp,dial);
+  return w;}
+ function femCount(n,sing,dual,pl){if(n===1)return sing+" واحدة";if(n===2)return dual;if(n<=10)return FEM[n]+" "+pl;if(n<20)return FEMT[n-11]+" "+sing;
+  var o=n%10,t=Math.floor(n/10);return (o?(o===1?"إحدى":(o===2?"اثنتان":FEM[o]))+" و":"")+MSA_TENS[t]+" "+sing;}
+ function egMin(n){if(n===1)return "دقيقة";if(n===2)return "دقيقتين";if(n<=10)return EG_SHORT[n]+" دقايق";return card(n,"egy")+" دقيقة";}
+ function egSec(n){if(n===1)return "ثانية";if(n===2)return "ثانيتين";if(n<=10)return EG_SHORT[n]+" ثواني";return card(n,"egy")+" ثانية";}
+
+ function dayPart(h24,dial){
+  if(dial==="egy"){if(h24<4)return "بالليل";if(h24<6)return "الفجر";if(h24<12)return "الصبح";if(h24===12)return "الضهر";if(h24<18)return "بعد الضهر";return "بالليل";}
+  if(h24<4)return "ليلًا";if(h24<6)return "فجرًا";if(h24<12)return "صباحًا";if(h24===12)return "ظهرًا";if(h24<18)return "بعد الظهر";return "مساءً";}
+
+ function timeWords(h,mi,sec,mk,o){
+  if(h>23||mi>59||(sec!==null&&sec>59))return null;
+  var egy=o.dialect==="egy",m=mk?mk.toLowerCase().replace(/\./g,""):"",h24=h;
+  if(m&&h>=1&&h<=12){var pm=(m==="pm"||m==="م");h24=(h%12)+(pm?12:0);}
+  var withDP=o.dayPart&&(m||h24>=13||h24===0);
+  var H=h24%12||12,N=H%12+1;
+  function hw(x){return egy?(x===1?"واحدة":EG_ONES[x]):MSA_HOUR[x];}
+  var core;
+  if(mi===0)core=hw(H);
+  else if(o.timeStyle==="exact"){core=hw(H)+" و"+(egy?egMin(mi):femCount(mi,"دقيقة","دقيقتان","دقائق"));}
+  else if(egy){
+   var map={5:hw(H)+" وخمسة",10:hw(H)+" وعشرة",15:hw(H)+" وربع",20:hw(H)+" وتلت",25:hw(H)+" ونص إلا خمسة",30:hw(H)+" ونص",35:hw(H)+" ونص وخمسة",40:hw(N)+" إلا تلت",45:hw(N)+" إلا ربع",50:hw(N)+" إلا عشرة",55:hw(N)+" إلا خمسة"};
+   core=map[mi]||(hw(H)+" و"+egMin(mi));}
+  else{
+   var map2={5:hw(H)+" وخمس دقائق",10:hw(H)+" وعشر دقائق",15:hw(H)+" والربع",20:hw(H)+" والثلث",25:hw(H)+" والنصف إلا خمس دقائق",30:hw(H)+" والنصف",35:hw(H)+" والنصف وخمس دقائق",40:hw(N)+" إلا ثلثًا",45:hw(N)+" إلا ربعًا",50:hw(N)+" إلا عشر دقائق",55:hw(N)+" إلا خمس دقائق"};
+   core=map2[mi]||(hw(H)+" و"+femCount(mi,"دقيقة","دقيقتان","دقائق"));}
+  var out="الساعة "+core;
+  if(sec){out+=" و"+(egy?egSec(sec):femCount(sec,"ثانية","ثانيتان","ثوانٍ"));}
+  if(withDP)out+=" "+dayPart(h24,o.dialect);
+  return out;}
+
+ function dateWords(d,m,y,o){
+  if(m<1||m>12||d<1||d>31||y<1000||y>9999)return null;
+  if(o.dialect==="egy")return card(d,"egy")+" "+MONTHS[m]+" "+card(y,"egy");
+  return MSA_ORD[d]+" من "+MONTHS[m]+" عام "+card(y,"msa",true);}
+
+ var CUR={
+  EGP:{e:["جنيه","جنيهين"],m:["جنيه","جنيهان","جنيهات","جنيهًا"],se:["قرش","قرشين","قروش"],sm:["قرش","قرشان","قروش","قرشًا"],f:0},
+  SAR:{e:["ريال","ريالين"],m:["ريال","ريالان","ريالات","ريالًا"],se:["هللة","هللتين","هللات"],sm:["هللة","هللتان","هللات","هللةً"],f:1},
+  AED:{e:["درهم","درهمين"],m:["درهم","درهمان","دراهم","درهمًا"],se:["فلس","فلسين","فلوس"],sm:["فلس","فلسان","فلوس","فلسًا"],f:0},
+  USD:{e:["دولار","دولارين"],m:["دولار","دولاران","دولارات","دولارًا"],se:["سنت","سنتين","سنتات"],sm:["سنت","سنتان","سنتات","سنتًا"],f:0},
+  EUR:{e:["يورو","يورو"],m:["يورو","يورو","يورو","يورو"],se:["سنت","سنتين","سنتات"],sm:["سنت","سنتان","سنتات","سنتًا"],f:0}};
+ function amtEgy(n,nm,sub){if(n===1)return nm[0];if(n===2)return nm[1];var w=card(n,"egy");if(sub&&n>=3&&n<=10)return w+" "+nm[2];return w+" "+nm[0];}
+ function amtMsa(n,nm,fem){
+  if(n===1)return nm[0]+(fem?" واحدة":" واحد");
+  if(n===2)return nm[1];
+  if(n<=10)return (fem?FEM[n]:MSA_ONES[n])+" "+nm[2];
+  var r=n%100,w=card(n,"msa",false);
+  if(r===0)return w+" "+nm[0];
+  if(r>=3&&r<=10)return w+" "+nm[2];
+  return w+" "+nm[3];}
+ function currencyWords(numStr,code,o){
+  var c=CUR[code],s=numStr.replace(/,/g,""),p=s.split("."),ip=p[0],fp=(p[1]||"");
+  if(ip.length>12)return null;
+  var main=parseInt(ip,10),sub=fp?parseInt((fp+"00").slice(0,2),10):0,parts=[],egy=o.dialect==="egy";
+  if(main>0||sub===0)parts.push(main===0?("صفر "+(egy?c.e[0]:c.m[0])):(egy?amtEgy(main,c.e,false):amtMsa(main,c.m,false)));
+  if(sub>0)parts.push(egy?amtEgy(sub,c.se,true):amtMsa(sub,c.sm,false));
+  return parts.join(" و");}
+ function curCode(t){
+  var u=t.replace(/\./g,"").toUpperCase();
+  if(t==="$"||u==="USD"||/^دولار/.test(t))return "USD";
+  if(t==="€"||u==="EUR"||t==="يورو")return "EUR";
+  if(u==="EGP"||u==="LE"||/^جنيه/.test(t)||/^ج\.?م/.test(t))return "EGP";
+  if(u==="SAR"||/^ريال/.test(t)||/^ر\.?س/.test(t))return "SAR";
+  if(u==="AED"||/^درهم/.test(t)||/^دراهم/.test(t)||/^د\.?إ/.test(t))return "AED";
+  return null;}
+ function norm(t){
+  return t.replace(/[٠-٩]/g,function(c){return String(c.charCodeAt(0)-1632);}).replace(/[۰-۹]/g,function(c){return String(c.charCodeAt(0)-1776);}).replace(/٫/g,".").replace(/٬/g,",").replace(/٪/g,"%");}
+
+ var NUM="\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?";
+ var CURW="(?:EGP|SAR|AED|USD|EUR|L\\.?E\\.?|جنيه(?:ات|ًا)?|ج\\.م\\.?|ر\\.س\\.?|ريال(?:ات)?|د\\.إ\\.?|درهم|دراهم|دولار(?:ات)?|يورو)";
+ var RE=null,REERR=null;
+ try{RE=new RegExp("(?<![A-Za-z_\\d.,])(?:"+
+  "(?<date>\\d{4}-\\d{1,2}-\\d{1,2}|\\d{1,2}[/.\\-]\\d{1,2}[/.\\-]\\d{4})(?!\\d)"+
+  "|(?<time>\\d{1,2}:\\d{2}(?::\\d{2})?)(?:\\s*(?<mk>AM|PM|am|pm|a\\.m\\.|p\\.m\\.|ص|م)(?![A-Za-z\\u0600-\\u06FF]))?"+
+  "|(?<cp>[$€]|EGP|SAR|AED|USD|EUR)\\s*(?<cpn>"+NUM+")"+
+  "|(?<cn>"+NUM+")\\s*(?<cu>"+CURW+"|[$€])(?![A-Za-z\\u0600-\\u06FF])"+
+  "|(?<pct>"+NUM+")\\s*%"+
+  "|(?<ph>\\+\\d[\\d\\s\\-]{6,}\\d|0\\d[\\d\\s\\-]{6,}\\d|\\d{8,})(?!\\d)"+
+  "|(?<neg>-)?(?<num>"+NUM+")"+
+  ")","giu");}catch(e){REERR=e;}
+
+ function convert(text,o){
+  o=o||{};o.dialect=o.dialect||"egy";o.timeStyle=o.timeStyle||"nat";o.dateOrder=o.dateOrder||"dmy";o.dayPart=o.dayPart!==false;o.longDigits=o.longDigits||"digits";
+  if(!RE)throw REERR||new Error("regex");
+  var t=norm(text),egy=o.dialect==="egy";
+  function plainNums(s){return s.replace(/\d+(?:\.\d+)?/g,function(x){return numWords(x,o.dialect,false);});}
+  RE.lastIndex=0;
+  return t.replace(RE,function(){
+   var a=arguments,g=a[a.length-1],m=a[0],r=null;
+   if(g.date){
+    var p=g.date.split(/[\/.\-]/).map(Number),d,mo,y;
+    if(g.date.charAt(4)==="-"&&g.date.indexOf("-")===4){y=p[0];mo=p[1];d=p[2];}
+    else if(o.dateOrder==="mdy"){mo=p[0];d=p[1];y=p[2];}else{d=p[0];mo=p[1];y=p[2];}
+    r=dateWords(d,mo,y,o);if(r===null)return plainNums(m);return r;}
+   if(g.time){
+    var tp=g.time.split(":").map(Number);
+    r=timeWords(tp[0],tp[1],tp.length>2?tp[2]:null,g.mk||"",o);
+    if(r===null)return plainNums(m);return r;}
+   if(g.cp||g.cn){
+    var code=curCode(g.cp||g.cu),num=g.cpn||g.cn;
+    if(!code)return plainNums(m);
+    r=currencyWords(num,code,o);if(r===null)return plainNums(m);return r;}
+   if(g.pct){return numWords(g.pct,o.dialect,false)+(egy?" في المية":" بالمئة");}
+   if(g.ph){
+    var raw=g.ph,digits=raw.replace(/\D/g,"");
+    if(raw.charAt(0)==="+"||raw.charAt(0)==="0"||o.longDigits==="digits"){
+     return (raw.charAt(0)==="+"?"زائد ":"")+digitsWords(digits,o.dialect);}
+    return numWords(digits,o.dialect,false);}
+   if(g.num){
+    var w=numWords(g.num,o.dialect,false);
+    return (g.neg?"سالب ":"")+w;}
+   return m;});
+ }
+ function scan(text){
+  var t=norm(text),m=t.match(/\d+(?:[.,:\/\-]\d+)*/g)||[],seen={},list=[];
+  m.forEach(function(x){if(!seen[x]){seen[x]=1;list.push(x);}});
+  return {count:m.length,unique:list};}
+ return {convert:convert,scan:scan,num:numWords};
+})();
+
+/* ===================== page ===================== */
+(function(){
+var SE=window.SpokenEngine;
+var T={
+en:{dir:"ltr",btn:"العربية",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Say It As Spoken: Numbers to Arabic Words (private test page)",
+ lead:"Turn numbers, dates, times, amounts, percentages and phone numbers in your Arabic text into words, the way they are actually said: Egyptian dialect or Modern Standard Arabic.",
+ beta:"This is a test page. The result is a <strong>draft</strong>: always read it and adjust it to your project guidelines. Everything runs in your browser and your text is not uploaded.",
+ oDialect:"Dialect",dEgy:"Egyptian",dMsa:"Modern Standard (Fusha)",oTime:"Time style",tNat:"Natural (quarter, half…)",tExact:"Exact (minute by minute)",oDate:"Numeric date order",oDay:"Day part (morning, evening…)",yes:"Yes",no:"No",oLong:"Long digit strings (8+ digits)",lDigits:"Read digit by digit",lNumber:"Read as one number",
+ lIn:"Your text",lOut:"Result (you can edit it)",conv:"Convert",up:"Upload .txt",ex:"Insert example",clr:"Clear",copy:"Copy",dl:"Download .txt",
+ scanIn:"Find digits in my text",scanOut:"Find digits left in the result",
+ scanNone:"No digits found.",scanFound:"Digits found: ",
+ review:"Review the result before using it. Some forms are a matter of project style (for example “خمستاشر” or “خمسة عشر”), and Fusha grammar is simplified.",
+ h2a:"Examples",
+ h2b:"Notes",n1:"<strong>Private:</strong> the conversion runs in your browser. Nothing is uploaded.",n2:"<strong>Amounts:</strong> EGP, SAR, AED, USD and EUR are supported, for example “1,250.50 EGP” or “$20”.",n3:"<strong>Known limits:</strong> in Fusha, the counted noun after large numbers follows simplified rules, and some forms need a native speaker’s review.",n4:"<strong>Not converted:</strong> digits attached to Latin letters (like “mp3” or “A4”) are left as they are. Use the digit finder to spot them.",back:"Back to home",
+ errRe:"This browser is too old for this tool. Try a recent Chrome, Edge or Firefox.",
+ sample:"أرسل 3:45 PM يوم 15/03/2026، ودفع 1,250.50 EGP بخصم 15% على رقم 01012345678. الاجتماع الساعة 9:30 ص بعد 25 دقيقة.",
+ exRows:[["3:45 PM","3:45 PM"],["15/03/2026","15/03/2026"],["1,250.50 EGP","1,250.50 EGP"],["15%","15%"],["01012345678","01012345678"]]},
+ar:{dir:"rtl",btn:"English",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"اكتبها كما تُنطق: الأرقام بالحروف (صفحة تجربة خاصة)",
+ lead:"حوّل الأرقام والتواريخ والأوقات والمبالغ والنسب وأرقام الهاتف في نصك العربي إلى كلمات، بالطريقة التي تُنطق بها فعلًا: باللهجة المصرية أو بالفصحى.",
+ beta:"هذه صفحة تجريبية. النتيجة <strong>مسودة</strong>: اقرأها دائمًا وعدّلها حسب إرشادات مشروعك. كل شيء يعمل داخل متصفحك ولا يُرفع نصك.",
+ oDialect:"اللهجة",dEgy:"مصري",dMsa:"فصحى",oTime:"صيغة الوقت",tNat:"طبيعية (وربع، ونص…)",tExact:"بالدقيقة",oDate:"ترتيب التاريخ الرقمي",oDay:"فترة اليوم (الصبح، بالليل…)",yes:"نعم",no:"لا",oLong:"الأرقام الطويلة (8 أرقام أو أكثر)",lDigits:"رقمًا رقمًا",lNumber:"كعدد واحد",
+ lIn:"نصك",lOut:"النتيجة (يمكنك تعديلها)",conv:"حوّل",up:"ارفع ملف .txt",ex:"أدرج مثالًا",clr:"امسح",copy:"انسخ",dl:"نزّل .txt",
+ scanIn:"اكشف الأرقام في نصي",scanOut:"اكشف الأرقام المتبقية في النتيجة",
+ scanNone:"لا توجد أرقام.",scanFound:"أرقام موجودة: ",
+ review:"راجع النتيجة قبل استخدامها. بعض الصيغ تخضع لأسلوب المشروع (مثل «خمستاشر» أو «خمسة عشر»)، ونحو الفصحى مبسّط.",
+ h2a:"أمثلة",
+ h2b:"ملاحظات",n1:"<strong>خصوصية:</strong> التحويل يتم داخل متصفحك. لا يُرفع شيء.",n2:"<strong>المبالغ:</strong> يدعم الجنيه المصري والريال السعودي والدرهم الإماراتي والدولار واليورو، مثل «1,250.50 EGP» أو «$20».",n3:"<strong>حدود معروفة:</strong> في الفصحى، المعدود بعد الأعداد الكبيرة يتبع قواعد مبسّطة، وبعض الصيغ تحتاج مراجعة متحدث أصلي.",n4:"<strong>لا يُحوَّل:</strong> الأرقام الملتصقة بحروف لاتينية (مثل «mp3» أو «A4») تبقى كما هي. استخدم زر كشف الأرقام لتجدها.",back:"العودة للرئيسية",
+ errRe:"هذا المتصفح قديم لهذه الأداة. جرّب Chrome أو Edge أو Firefox حديثًا.",
+ sample:"أرسل 3:45 PM يوم 15/03/2026، ودفع 1,250.50 EGP بخصم 15% على رقم 01012345678. الاجتماع الساعة 9:30 ص بعد 25 دقيقة.",
+ exRows:[["3:45 PM","3:45 PM"],["15/03/2026","15/03/2026"],["1,250.50 EGP","1,250.50 EGP"],["15%","15%"],["01012345678","01012345678"]]}
+};
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+function opts(){return {dialect:$("dialect").value,timeStyle:$("tstyle").value,dateOrder:$("dorder").value,dayPart:$("dpart").value==="1",longDigits:$("longd").value};}
+function fillExamples(){
+ var tb=$("exTable");tb.innerHTML="";
+ T[L].exRows.forEach(function(r){var tr=document.createElement("tr"),a=document.createElement("td"),b=document.createElement("td");a.textContent=r[1];
+  try{b.textContent=SE.convert(r[0],opts());}catch(e){b.textContent="";}b.setAttribute("dir","rtl");tr.appendChild(a);tr.appendChild(b);tb.appendChild(tr);});
+}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var ids={conv:"conv",up:"up",ex:"ex",clr:"clr",copy:"copy",dl:"dl",scanIn:"scanIn",scanOut:"scanOut"};for(var id in ids)$(id).textContent=t[ids[id]];
+ document.title=L==="ar"?"اكتبها كما تُنطق: الأرقام بالحروف | Sayvoi":"Say It As Spoken: Numbers to Words (Test) | Sayvoi";
+ fillExamples();
+}
+function run(){
+ try{$("outp").value=SE.convert($("inp").value,opts());$("scan").style.display="none";}
+ catch(e){$("scan").className="scan bad";$("scan").style.display="block";$("scan").textContent=T[L].errRe;}
+}
+function showScan(text){
+ var r=SE.scan(text),s=$("scan");s.style.display="block";
+ if(!r.count){s.className="scan ok";s.textContent=T[L].scanNone;}
+ else{s.className="scan bad";s.textContent=T[L].scanFound+r.count+" → "+r.unique.slice(0,40).join(" , ")+(r.unique.length>40?" …":"");}
+}
+$("conv").addEventListener("click",run);
+$("ex").addEventListener("click",function(){$("inp").value=T[L].sample;run();});
+$("clr").addEventListener("click",function(){$("inp").value="";$("outp").value="";$("scan").style.display="none";});
+$("up").addEventListener("click",function(){$("upf").click();});
+$("upf").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){$("inp").value=String(rd.result||"").replace(/^﻿/,"");run();};rd.readAsText(f,"utf-8");this.value="";});
+$("copy").addEventListener("click",function(){var v=$("outp").value,b=this,done=function(){var o=T[L].copy;b.textContent="✓";setTimeout(function(){b.textContent=T[L].copy;},1200);};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(done,function(){$("outp").select();document.execCommand("copy");done();});else{$("outp").select();document.execCommand("copy");done();}});
+$("dl").addEventListener("click",function(){var blob=new Blob(["﻿"+$("outp").value],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="spoken.txt";document.body.appendChild(a);a.click();document.body.removeChild(a);});
+$("scanIn").addEventListener("click",function(){showScan($("inp").value);});
+$("scanOut").addEventListener("click",function(){showScan($("outp").value);});
+["dialect","tstyle","dorder","dpart","longd"].forEach(function(id){$(id).addEventListener("change",function(){fillExamples();if($("inp").value.trim())run();});});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+applyLang();
+})();
+</script>
+</body>
+</html>
