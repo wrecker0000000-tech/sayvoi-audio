@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sentence List for Recording (Test) | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.rl .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.rl .col{flex:1 1 150px;min-width:0}
+.rl label{display:block;font-weight:700;margin-bottom:6px}
+.rl select,.rl input[type=number],.rl input[type=text]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.rl select option{color:#111;background:#fff}
+.rl textarea{width:100%;min-height:150px;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;line-height:1.8;background:transparent;color:inherit;box-sizing:border-box;resize:vertical}
+.rl .drop{border:2px dashed rgba(124,77,255,.6);border-radius:16px;padding:24px 14px;text-align:center;cursor:pointer;background:rgba(124,77,255,.06);margin:14px 0}
+.rl .drop.over{background:rgba(124,77,255,.18)}
+.rl .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.rl .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.rl .b:disabled{opacity:.5;cursor:not-allowed}
+.rl .btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.rl .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.rl .chk{display:flex;align-items:center;gap:8px;margin:8px 0}
+.rl .chk label{margin:0;font-weight:600}
+.rl .stat{margin:8px 0;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4)}
+.rl .stat.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.rl .tw{overflow-x:auto;max-height:220px;overflow-y:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px}
+.rl table{border-collapse:collapse;width:100%;min-width:300px}
+.rl th,.rl td{padding:6px 9px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start}
+.rl th{background:#7c4dff;color:#fff;position:sticky;top:0}
+.rl .parts a{display:inline-block;margin:4px 8px 4px 0;padding:6px 12px;border:1px solid rgba(128,128,128,.5);border-radius:10px;text-decoration:none}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="rl">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<div class="note" data-i="beta"></div>
+
+<div class="drop" id="drop" tabindex="0" role="button"><strong data-i="drop"></strong><br><small data-i="dropSub"></small></div>
+<input type="file" id="fi" accept=".xlsx,.xls,.csv,.txt,.tsv" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+<label for="paste" data-i="lPaste"></label>
+<textarea id="paste" dir="auto" spellcheck="false"></textarea>
+<div class="btns"><button type="button" class="b sec" id="usePaste"></button></div>
+<div id="srcInfo"></div>
+
+<div id="cfg" style="display:none">
+<h2 data-i="h2a"></h2>
+<div class="row">
+  <div class="col"><label for="sheet" data-i="oSheet"></label><select id="sheet"></select></div>
+  <div class="col"><label for="scol" data-i="oSent"></label><select id="scol"></select></div>
+  <div class="col"><label for="ncol" data-i="oNum"></label><select id="ncol"></select></div>
+  <div class="col"><label for="mode" data-i="oMode"></label><select id="mode"><option value="cols" data-k="mCols"></option><option value="sent" data-k="mSent"></option><option value="file" data-k="mFile"></option><option value="filesent" data-k="mFileSent"></option></select></div>
+  <div class="col"><label for="ext" data-i="oExt"></label><select id="ext"><option>wav</option><option>mp3</option><option>flac</option><option>m4a</option><option>ogg</option></select></div>
+  <div class="col"><label for="sep" data-i="oSep"></label><select id="sep"><option value=".">001.sentence</option><option value=". ">001. sentence</option><option value="_">001_sentence</option><option value="-">001-sentence</option><option value="\t" data-k="tab"></option><option value=" ">001 sentence</option></select></div>
+  <div class="col"><label for="pad" data-i="oPad"></label><select id="pad"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+  <div class="col"><label for="start" data-i="oStart"></label><input type="number" id="start" value="1" min="0" step="1"></div>
+</div>
+<div class="row">
+  <div class="col"><label for="minw" data-i="oMinW"></label><input type="number" id="minw" min="0" step="1" inputmode="numeric"></div>
+  <div class="col"><label for="maxw" data-i="oMaxW"></label><input type="number" id="maxw" min="0" step="1" inputmode="numeric"></div>
+  <div class="col"><label for="chunk" data-i="oChunk"></label><input type="number" id="chunk" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+</div>
+<div class="chk"><input type="checkbox" id="hdr"><label for="hdr" data-i="oHdr"></label></div>
+<div class="chk"><input type="checkbox" id="dedup"><label for="dedup" data-i="oDedup"></label></div>
+<div class="chk"><input type="checkbox" id="restart" checked><label for="restart" data-i="oRestart"></label></div>
+
+<h3 data-i="lPrev"></h3>
+<div class="tw"><table><tbody id="prev"></tbody></table></div>
+
+<div class="btns"><button type="button" class="b" id="go"></button></div>
+</div>
+
+<div id="res" style="display:none">
+<h2 data-i="h2b"></h2>
+<div id="stats"></div>
+<textarea id="outp" dir="auto" spellcheck="false"></textarea>
+<div class="btns">
+ <button type="button" class="b" id="dl"></button>
+ <button type="button" class="b sec" id="copy"></button>
+</div>
+<div class="parts" id="parts"></div>
+</div>
+
+<h2 data-i="h2n"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+(function(){
+var T={
+en:{dir:"ltr",btn:"العربية",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Sentence List for Recording (private test page)",
+ lead:"Turn a column of sentences from Excel or CSV into a numbered .txt file that is ready for recording, one line per sentence, like 001.sentence.",
+ beta:"Test page. Everything runs in your browser and your file is not uploaded.",
+ drop:"Drop an Excel or CSV file here, or tap to choose",dropSub:".xlsx · .xls · .csv · .txt",
+ lPaste:"Or paste cells copied from Excel (or one sentence per line)",usePaste:"Use pasted text",
+ h2a:"Settings",oSheet:"Sheet",oSent:"Sentence column",oNum:"Number column",oSep:"Format (for sentence mode)",oMode:"Output",mCols:"Same as Excel: all columns with Tab (001 ⇥ sentence ⇥ speed)",mSent:"Number + sentence (001.sentence)",mFile:"File names only (001.wav)",mFileSent:"File name + Tab + sentence (001.wav ⇥ sentence)",oExt:"File extension",oPad:"Number digits",oStart:"Start at",
+ oMinW:"Minimum words (optional)",oMaxW:"Maximum words (optional)",oChunk:"Split every N sentences (optional)",
+ oHdr:"First row is a header (skip it)",oDedup:"Remove duplicate sentences",oRestart:"Restart numbering in each split file",
+ auto:"Automatic (1, 2, 3…)",tab:"001 [Tab] sentence",colN:"Column ",
+ lPrev:"Preview (first rows)",go:"Create list",
+ h2b:"Result",dl:"Download .txt",copy:"Copy",
+ st:"Sentences: ",stSkip:"Skipped (empty, duplicate or outside length): ",stDig:"With digits or Latin letters (check before recording): ",stFiles:"Files: ",
+ part:"Part ",
+ src:"Source: ",rowsW:" rows",
+ errX:"Could not read this file. Check that it is a valid Excel or CSV file.",errLib:"The Excel reader did not load. Check your internet connection and refresh the page.",none:"No sentences found.",
+ n1:"<strong>Private:</strong> the file stays on your device.",n2:"<strong>Number column:</strong> choose “Automatic” to number the sentences yourself, or pick a column to keep the client’s own numbers (they are padded, so 7 becomes 007).",n3:"<strong>Encoding:</strong> the .txt is saved as UTF-8, so Arabic and other languages stay correct.",back:"Back to home"},
+ar:{dir:"rtl",btn:"English",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"قائمة الجمل للتسجيل (صفحة تجربة خاصة)",
+ lead:"حوّل عمود الجمل من Excel أو CSV إلى ملف .txt مرقّم وجاهز للتسجيل، جملة في كل سطر، مثل 001.sentence.",
+ beta:"صفحة تجريبية. كل شيء يعمل داخل متصفحك ولا يُرفع ملفك.",
+ drop:"أسقط ملف Excel أو CSV هنا أو اضغط للاختيار",dropSub:".xlsx · .xls · .csv · .txt",
+ lPaste:"أو الصق خلايا منسوخة من Excel (أو جملة في كل سطر)",usePaste:"استخدم النص الملصوق",
+ h2a:"الإعدادات",oSheet:"الشيت",oSent:"عمود الجمل",oNum:"عمود الرقم",oSep:"الشكل (لوضع الجملة)",oMode:"المخرجات",mCols:"مثل Excel: كل الأعمدة بفاصل Tab (001 ⇥ جملة ⇥ سرعة)",mSent:"رقم + جملة (001.جملة)",mFile:"أسماء الملفات فقط (001.wav)",mFileSent:"اسم الملف + Tab + الجملة (001.wav ⇥ جملة)",oExt:"امتداد الملف",oPad:"عدد خانات الرقم",oStart:"ابدأ من",
+ oMinW:"أقل عدد كلمات (اختياري)",oMaxW:"أكثر عدد كلمات (اختياري)",oChunk:"قسّم كل N جملة (اختياري)",
+ oHdr:"الصف الأول عناوين (تجاهله)",oDedup:"احذف الجمل المكررة",oRestart:"أعد الترقيم في كل ملف مقسّم",
+ auto:"تلقائي (1، 2، 3…)",tab:"001 [Tab] جملة",colN:"عمود ",
+ lPrev:"معاينة (أول الصفوف)",go:"أنشئ القائمة",
+ h2b:"النتيجة",dl:"نزّل .txt",copy:"انسخ",
+ st:"عدد الجمل: ",stSkip:"المتجاهَل (فارغ أو مكرر أو خارج الطول): ",stDig:"جمل فيها أرقام أو حروف لاتينية (راجعها قبل التسجيل): ",stFiles:"عدد الملفات: ",
+ part:"الجزء ",
+ src:"المصدر: ",rowsW:" صف",
+ errX:"تعذّرت قراءة الملف. تأكد أنه Excel أو CSV سليم.",errLib:"لم يتم تحميل قارئ Excel. تأكد من الإنترنت وحدّث الصفحة.",none:"لا توجد جمل.",
+ n1:"<strong>خصوصية:</strong> الملف يبقى على جهازك.",n2:"<strong>عمود الرقم:</strong> اختر «تلقائي» لترقيم الجمل بنفسك، أو اختر عمودًا للإبقاء على أرقام العميل (تُكمَّل بأصفار، فيصبح 7 هو 007).",n3:"<strong>الترميز:</strong> يُحفظ الـ .txt بترميز UTF-8 فتبقى العربية وغيرها سليمة.",back:"العودة للرئيسية"}
+};
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var book=null,fileName="",rows=[],outParts=[];
+
+function colName(i){var s="";i++;while(i>0){var m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26);}return s;}
+function setSource(sheets,name){
+ book={sheets:sheets,name:name};fileName=name;
+ var sel=$("sheet");sel.innerHTML="";
+ sheets.forEach(function(s,i){var o=document.createElement("option");o.value=i;o.textContent=s.name;sel.appendChild(o);});
+ $("cfg").style.display="block";$("res").style.display="none";
+ loadSheet();}
+function loadSheet(){
+ var sh=book.sheets[parseInt($("sheet").value,10)||0];rows=sh.rows;
+ var cols=0;rows.slice(0,200).forEach(function(r){if(r.length>cols)cols=r.length;});
+ if(!cols)cols=1;
+ var sc=$("scol"),nc=$("ncol");sc.innerHTML="";nc.innerHTML="";
+ var o=document.createElement("option");o.value="-1";o.textContent=T[L].auto;nc.appendChild(o);
+ for(var i=0;i<cols;i++){
+  var a=document.createElement("option");a.value=i;a.textContent=T[L].colN+colName(i);sc.appendChild(a);
+  var b=document.createElement("option");b.value=i;b.textContent=T[L].colN+colName(i);nc.appendChild(b);}
+ if(cols>=2){
+  var first=rows.slice(1,11).map(function(r){return String(r[0]==null?"":r[0]).trim();}).filter(Boolean);
+  var numeric=first.length&&first.every(function(v){return /^\d+$/.test(v);});
+  if(numeric){nc.value="0";sc.value="1";var h0=String(rows[0]&&rows[0][0]!=null?rows[0][0]:"").trim();$("hdr").checked=!/^\d+$/.test(h0);}else sc.value="0";
+ }else sc.value="0";
+ $("srcInfo").textContent=T[L].src+fileName+" · "+sh.name+" · "+rows.length+T[L].rowsW;
+ prev();}
+function prev(){
+ var t=$("prev"),h="";
+ rows.slice(0,6).forEach(function(r){h+="<tr>";var n=Math.max(r.length,1);for(var i=0;i<Math.min(n,6);i++)h+="<td>"+esc(r[i]==null?"":r[i])+"</td>";h+="</tr>";});
+ t.innerHTML=h;}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+
+function parseText(text){
+ text=text.replace(/^﻿/,"");
+ var lines=text.split(/\r\n|\n|\r/),tabs=lines.some(function(l){return l.indexOf("\t")>-1;}),semi=!tabs&&lines.slice(0,5).every(function(l){return l.indexOf(";")>-1;}),r=[];
+ lines.forEach(function(l){if(tabs)r.push(l.split("\t"));else if(semi)r.push(l.split(";"));else r.push([l]);});
+ return [{name:"Text",rows:r}];}
+function parseCsv(text){
+ if(!window.XLSX)return parseText(text);
+ try{var wb=XLSX.read(text.replace(/^﻿/,""),{type:"string"});return wbToSheets(wb);}catch(e){return parseText(text);}}
+function wbToSheets(wb){
+ return wb.SheetNames.map(function(n){var a=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:false,defval:"",blankrows:false});return {name:n,rows:a};});}
+function readFile(f){
+ var ext=(/\.([A-Za-z0-9]+)$/.exec(f.name)||[,""])[1].toLowerCase(),rd=new FileReader();
+ if(ext==="xlsx"||ext==="xls"){
+  if(!window.XLSX){status(T[L].errLib);return;}
+  rd.onload=function(){try{setSource(wbToSheets(XLSX.read(new Uint8Array(rd.result),{type:"array"})),f.name);status("");}catch(e){status(T[L].errX);}};
+  rd.readAsArrayBuffer(f);
+ }else{
+  rd.onload=function(){try{var t=String(rd.result||"");setSource(ext==="csv"?parseCsv(t):parseText(t),f.name);status("");}catch(e){status(T[L].errX);}};
+  rd.readAsText(f,"utf-8");}}
+function status(m){$("srcInfo").textContent=m;}
+
+function wc(s){return s.split(/\s+/).filter(Boolean).length;}
+function build(){
+ var sc=parseInt($("scol").value,10)||0,nc=parseInt($("ncol").value,10),
+     pad=parseInt($("pad").value,10)||3,start=parseInt($("start").value,10),sep=$("sep").value,
+     minw=parseInt($("minw").value,10)||0,maxw=parseInt($("maxw").value,10)||0,
+     mode=$("mode").value,ext=$("ext").value,chunk=parseInt($("chunk").value,10)||0,hdr=$("hdr").checked,dedup=$("dedup").checked,restart=$("restart").checked;
+ if(isNaN(start))start=1;
+ var items=[],seen={},skipped=0,dig=0;
+ rows.forEach(function(r,i){
+  if(hdr&&i===0)return;
+  var s=String(r[sc]==null?"":r[sc]).replace(/[‎‏‪-‮]/g,"").replace(/\s+/g," ").trim();
+  if(!s)return;
+  var w=wc(s);
+  if((minw&&w<minw)||(maxw&&w>maxw)){skipped++;return;}
+  if(dedup){if(seen[s]){skipped++;return;}seen[s]=1;}
+  var num=nc>=0?String(r[nc]==null?"":r[nc]).trim():null;
+  items.push({s:s,n:num,row:r});
+  if(/[0-9٠-٩A-Za-z]/.test(s))dig++;});
+ function fmt(n){var x=String(n);while(x.length<pad)x="0"+x;return x;}
+ function numFor(it,k){
+  if(it.n!==null&&it.n!==""){return /^\d+$/.test(it.n)?fmt(parseInt(it.n,10)):it.n;}
+  return fmt(start+k);}
+ var parts=[];
+ if(chunk>0){for(var p=0;p<items.length;p+=chunk)parts.push(items.slice(p,p+chunk));}else parts=[items];
+ outParts=parts.map(function(part,pi){
+  return part.map(function(it,k){
+   var idx=(restart||chunk===0)?k:pi*chunk+k;
+   var nm=numFor(it,idx);
+   if(mode==="cols"){
+    var cells=it.row.map(function(c){return String(c==null?"":c).replace(/\s+/g," ").trim();});
+    while(cells.length&&cells[cells.length-1]==="")cells.pop();
+    if(nc>=0)cells[nc]=nm;else cells.unshift(nm);
+    return cells.join("\t");}
+   if(mode==="file")return nm+"."+ext;
+   if(mode==="filesent")return nm+"."+ext+"\t"+it.s;
+   return nm+sep+it.s;}).join("\r\n");});
+ return {count:items.length,skipped:skipped,dig:dig,files:parts.length};}
+
+function showRes(r){
+ var t=T[L];$("res").style.display="block";
+ if(!r.count){$("stats").innerHTML='<div class="stat bad">'+t.none+'</div>';$("outp").value="";$("parts").innerHTML="";return;}
+ $("stats").innerHTML='<div class="stat">'+t.st+'<strong>'+r.count+'</strong>'+(r.files>1?' · '+t.stFiles+'<strong>'+r.files+'</strong>':'')+'</div>'+
+  (r.skipped?'<div class="stat">'+t.stSkip+'<strong>'+r.skipped+'</strong></div>':'')+
+  (r.dig?'<div class="stat bad">'+t.stDig+'<strong>'+r.dig+'</strong></div>':'');
+ $("outp").value=outParts.length>1?outParts[0]:outParts[0];
+ var h="";
+ if(outParts.length>1){outParts.forEach(function(p,i){h+='<a href="#" data-p="'+i+'">'+t.part+(i+1)+' ↓</a>';});}
+ $("parts").innerHTML=h;
+}
+function dlText(text,name){var b=new Blob(["﻿"+text],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+function baseName(){return (fileName||"sentences").replace(/\.[^.]+$/,"").replace(/[^\w؀-ۿ\-]+/g,"_")||"sentences";}
+
+$("go").addEventListener("click",function(){showRes(build());});
+$("dl").addEventListener("click",function(){
+ if(outParts.length>1){dlText(outParts[0],baseName()+"_part1.txt");return;}
+ dlText($("outp").value,baseName()+"_recording.txt");});
+$("parts").addEventListener("click",function(e){var p=e.target.getAttribute&&e.target.getAttribute("data-p");if(p===null||p===undefined)return;e.preventDefault();dlText(outParts[+p],baseName()+"_part"+(+p+1)+".txt");});
+$("copy").addEventListener("click",function(){var v=outParts.length>1?outParts[0]:$("outp").value,b=this,ok=function(){b.textContent="✓";setTimeout(function(){b.textContent=T[L].copy;},1200);};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,function(){});else{$("outp").select();try{document.execCommand("copy");}catch(e){}ok();}});
+$("sheet").addEventListener("change",loadSheet);
+$("usePaste").addEventListener("click",function(){var v=$("paste").value;if(!v.trim())return;setSource(parseText(v),"pasted");});
+$("drop").addEventListener("click",function(){$("fi").click();});
+$("drop").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();$("fi").click();}});
+$("fi").addEventListener("change",function(){if(this.files[0])readFile(this.files[0]);this.value="";});
+["dragenter","dragover"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.add("over");});});
+["dragleave","drop"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.remove("over");});});
+$("drop").addEventListener("drop",function(e){var f=e.dataTransfer&&e.dataTransfer.files[0];if(f)readFile(f);});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ $("usePaste").textContent=t.usePaste;$("go").textContent=t.go;$("dl").textContent=t.dl;$("copy").textContent=t.copy;
+ document.title=L==="ar"?"قائمة الجمل للتسجيل | Sayvoi":"Sentence List for Recording (Test) | Sayvoi";
+ if(book){var cs=$("scol").value,cn=$("ncol").value;loadSheet();$("scol").value=cs;$("ncol").value=cn;}
+}
+applyLang();
+})();
+</script>
+</body>
+</html>
