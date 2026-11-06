@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Add many audio files and get the total hours, average length, longest and shortest file, plus sample rate and channels. Check files against project rules and export a CSV. Free, no upload.">
+<link rel="canonical" href="https://convert.sayvoi.com/audio-duration/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Audio Duration Calculator">
+<meta property="og:description" content="Add many audio files and get the total hours, average length, longest and shortest file, plus sample rate and channels. Check files against project rules and export a CSV. Free, no upload.">
+<meta property="og:url" content="https://convert.sayvoi.com/audio-duration/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Audio Duration Calculator: Total Length of Many Files | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.dc .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.dc .col{flex:1 1 150px;min-width:0}
+.dc label{display:block;font-weight:700;margin-bottom:6px}
+.dc select,.dc input[type=number]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.dc select option{color:#111;background:#fff}
+.dc .drop{border:2px dashed rgba(124,77,255,.6);border-radius:16px;padding:28px 14px;text-align:center;cursor:pointer;background:rgba(124,77,255,.06);margin:14px 0}
+.dc .drop.over{background:rgba(124,77,255,.18)}
+.dc .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.dc .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.dc .b:disabled{opacity:.5;cursor:not-allowed}
+.dc .btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.dc .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.dc .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.dc .card{padding:12px;border-radius:14px;border:1px solid rgba(128,128,128,.35)}
+.dc .card small{display:block;opacity:.75}
+.dc .card strong{font-size:1.25em;direction:ltr;display:inline-block}
+.dc .prog{height:8px;border-radius:8px;background:rgba(128,128,128,.25);overflow:hidden;margin:8px 0;display:none}
+.dc .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c4dff,#ff8a3d)}
+.dc .tw{overflow-x:auto;max-height:520px;overflow-y:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px}
+.dc table{border-collapse:collapse;width:100%;direction:ltr;text-align:left;min-width:560px}
+.dc th,.dc td{padding:7px 9px;border-bottom:1px solid rgba(128,128,128,.25);white-space:nowrap}
+.dc th{position:sticky;top:0;background:#7c4dff;color:#fff;cursor:pointer;user-select:none}
+.dc td.nm{white-space:normal;word-break:break-all;max-width:260px}
+.dc tr.bad td{background:rgba(224,160,48,.18)}
+.dc .flag{color:#b35c00;font-weight:700}
+.dc .chk{display:flex;align-items:center;gap:8px;margin:10px 0}
+.dc .chk label{margin:0;font-weight:600}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="dc">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<div class="note" data-i="beta"></div>
+
+<div class="drop" id="drop" tabindex="0" role="button"><strong data-i="drop"></strong><br><small data-i="dropSub"></small></div>
+<input type="file" id="fi" multiple accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.wma,.amr" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+<div class="prog" id="prog"><i id="progBar"></i></div>
+<div id="status" aria-live="polite"></div>
+
+<h2 data-i="h2c"></h2>
+<div class="row">
+  <div class="col"><label for="tmin" data-i="fMin"></label><input type="number" id="tmin" min="0" step="0.1" inputmode="decimal"></div>
+  <div class="col"><label for="tmax" data-i="fMax"></label><input type="number" id="tmax" min="0" step="0.1" inputmode="decimal"></div>
+  <div class="col"><label for="trate" data-i="fRate"></label><select id="trate"><option value="0" data-k="any"></option><option>8000</option><option>16000</option><option>22050</option><option>24000</option><option>32000</option><option>44100</option><option>48000</option></select></div>
+  <div class="col"><label for="tch" data-i="fCh"></label><select id="tch"><option value="0" data-k="any"></option><option value="1" data-k="mono"></option><option value="2" data-k="stereo"></option></select></div>
+  <div class="col"><label for="need" data-i="fNeed"></label><input type="number" id="need" min="0" step="0.1" inputmode="decimal"></div>
+</div>
+
+<div class="cards" id="cards"></div>
+<div id="needBox"></div>
+
+<div class="chk"><input type="checkbox" id="only"><label for="only" data-i="onlyBad"></label></div>
+<div class="btns">
+  <button type="button" class="b" id="csv" disabled></button>
+  <button type="button" class="b sec" id="copy" disabled></button>
+  <button type="button" class="b sec" id="clr" disabled></button>
+</div>
+<div class="tw"><table><thead><tr>
+ <th data-s="name">File</th><th data-s="ext">Type</th><th data-s="dur">Duration</th><th data-s="rate">Hz</th><th data-s="ch">Ch</th><th data-s="bits">Bits</th><th data-s="flag">Check</th>
+</tr></thead><tbody id="tb"></tbody></table></div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+
+<script>
+(function(){
+var T={
+en:{dir:"ltr",btn:"العربية",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Audio Duration Calculator",
+ lead:"Add many audio files at once and get the total hours, average length, longest and shortest file, plus a table you can export. Optional checks flag files that break your project rules.",
+ beta:"Everything runs in your browser and your files are not uploaded. Sample rate, channels and bit depth are read from the file header for WAV, FLAC, MP3 and OGG. Other formats show duration only.",
+ drop:"Drop audio files here, or tap to choose",dropSub:"You can select hundreds of files at once",
+ h2c:"Project rules (optional)",fMin:"Minimum length (seconds)",fMax:"Maximum length (seconds)",fRate:"Required sample rate (Hz)",fCh:"Required channels",fNeed:"Hours required by client",any:"Any",mono:"Mono (1)",stereo:"Stereo (2)",
+ onlyBad:"Show only files that break the rules",
+ csv:"Download CSV",copy:"Copy table",clr:"Clear all",
+ cTotal:"Total time",cCount:"Files",cAvg:"Average",cMax:"Longest",cMin:"Shortest",cBad:"Flagged",cSize:"Total size",
+ proc:"Reading files: ",done:"Done. Files read: ",failed:"Could not read: ",
+ left:"Still needed: ",over:"Over the target by: ",reached:"Target reached.",
+ fShort:"too short",fLong:"too long",fRateW:"rate",fChW:"channels",ok:"OK",
+ n1:"<strong>Private:</strong> files never leave your device.",n2:"<strong>Duration:</strong> WAV is calculated from its header. Other formats use the browser’s own reading, which can be slightly off for some VBR MP3 files.",n3:"<strong>M4A / AAC / other:</strong> the duration works, but sample rate and channels are shown as “–”. If you set a rate or channel rule, those files are marked as “unknown”.",back:"Back to home",
+ unk:"unknown"},
+ar:{dir:"rtl",btn:"English",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"حاسبة مدة الملفات الصوتية",
+ lead:"أضف ملفات صوتية كثيرة دفعة واحدة واحصل على إجمالي الساعات والمتوسط وأطول وأقصر ملف، مع جدول يمكن تصديره. فحوصات اختيارية تعلّم الملفات المخالفة لشروط مشروعك.",
+ beta:"كل شيء يعمل داخل متصفحك ولا تُرفع ملفاتك. معدل العينات والقنوات وعمق البت تُقرأ من رأس الملف في WAV وFLAC وMP3 وOGG. الصيغ الأخرى تظهر لها المدة فقط.",
+ drop:"أسقط الملفات الصوتية هنا أو اضغط للاختيار",dropSub:"يمكنك اختيار مئات الملفات مرة واحدة",
+ h2c:"شروط المشروع (اختياري)",fMin:"الحد الأدنى للمدة (ثانية)",fMax:"الحد الأقصى للمدة (ثانية)",fRate:"معدل العينات المطلوب (Hz)",fCh:"القنوات المطلوبة",fNeed:"الساعات المطلوبة من العميل",any:"أي",mono:"مونو (1)",stereo:"ستيريو (2)",
+ onlyBad:"أظهر الملفات المخالفة فقط",
+ csv:"نزّل CSV",copy:"انسخ الجدول",clr:"امسح الكل",
+ cTotal:"إجمالي الوقت",cCount:"عدد الملفات",cAvg:"المتوسط",cMax:"الأطول",cMin:"الأقصر",cBad:"المخالفة",cSize:"الحجم الكلي",
+ proc:"جارٍ قراءة الملفات: ",done:"تم. الملفات المقروءة: ",failed:"تعذّرت قراءة: ",
+ left:"المتبقي: ",over:"زيادة عن المطلوب: ",reached:"تم الوصول للمطلوب.",
+ fShort:"قصير",fLong:"طويل",fRateW:"المعدل",fChW:"القنوات",ok:"سليم",
+ n1:"<strong>خصوصية:</strong> الملفات لا تغادر جهازك.",n2:"<strong>المدة:</strong> في WAV تُحسب من رأس الملف. الصيغ الأخرى يقرؤها المتصفح نفسه، وقد يختلف قليلًا في بعض ملفات MP3 متغيرة المعدل.",n3:"<strong>M4A / AAC وغيرها:</strong> المدة تعمل لكن المعدل والقنوات تظهر «–». لو حددت شرطًا للمعدل أو القنوات تُعلَّم هذه الملفات «غير معروف».",back:"العودة للرئيسية",
+ unk:"غير معروف"}
+};
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var rows=[],sortKey=null,sortDir=1,gen=0;
+
+function u32(b,o){return (b[o]|(b[o+1]<<8)|(b[o+2]<<16))+b[o+3]*16777216;}
+function u16(b,o){return b[o]|(b[o+1]<<8);}
+function tag(b,o,s){for(var i=0;i<s.length;i++)if(b[o+i]!==s.charCodeAt(i))return false;return true;}
+function parseHeader(b,size){
+ var r={};
+ if(b.length>44&&tag(b,0,"RIFF")&&tag(b,8,"WAVE")){
+  var p=12,rate=0,ch=0,bits=0,br=0;
+  while(p+8<=b.length){
+   var id=String.fromCharCode(b[p],b[p+1],b[p+2],b[p+3]),sz=u32(b,p+4);
+   if(id==="fmt "){ch=u16(b,p+10);rate=u32(b,p+12);br=u32(b,p+16);bits=u16(b,p+22);}
+   if(id==="data"){
+    var avail=size-(p+8),len=(sz>avail||sz===0xFFFFFFFF)?avail:sz;
+    r.fmt="WAV";if(br)r.dur=len/br;r.rate=rate;r.ch=ch;r.bits=bits;return r;}
+   p+=8+sz+(sz&1);}
+  return r;}
+ if(tag(b,0,"fLaC")&&b.length>26){
+  var rt=(b[18]<<12)|(b[19]<<4)|(b[20]>>4),c=((b[20]>>1)&7)+1,bt=(((b[20]&1)<<4)|(b[21]>>4))+1;
+  var tot=(b[21]&15)*4294967296+(b[22]*16777216+(b[23]<<16)+(b[24]<<8)+b[25]);
+  r.fmt="FLAC";r.rate=rt;r.ch=c;r.bits=bt;if(rt&&tot)r.dur=tot/rt;return r;}
+ if(tag(b,0,"OggS")){
+  var lim=Math.min(b.length-16,400);
+  for(var i=0;i<lim;i++){
+   if(b[i]===1&&tag(b,i+1,"vorbis")){r.fmt="OGG";r.ch=b[i+11];r.rate=u32(b,i+12);return r;}
+   if(tag(b,i,"OpusHead")){r.fmt="OPUS";r.ch=b[i+9];r.rate=u32(b,i+12);return r;}}
+  r.fmt="OGG";return r;}
+ if(tag(b,4,"ftyp")){r.fmt="M4A";return r;}
+ var s=0;
+ if(tag(b,0,"ID3")&&b.length>10){s=10+(((b[6]&127)<<21)|((b[7]&127)<<14)|((b[8]&127)<<7)|(b[9]&127));}
+ if(s<b.length-4){
+  for(var k=s;k<Math.min(b.length-4,s+8192);k++){
+   if(b[k]===255&&(b[k+1]&224)===224){
+    var ver=(b[k+1]>>3)&3,lay=(b[k+1]>>1)&3,sr=(b[k+2]>>2)&3;
+    if(ver!==1&&lay!==0&&sr!==3){
+     var tb=ver===3?[44100,48000,32000]:(ver===2?[22050,24000,16000]:[11025,12000,8000]);
+     r.fmt=lay===1?"MP3":"MPEG";r.rate=tb[sr];r.ch=((b[k+3]>>6)&3)===3?1:2;return r;}}}}
+ return r;}
+
+function mediaDur(file){
+ return new Promise(function(res){
+  var a=new Audio(),url=URL.createObjectURL(file),done=false;
+  function fin(v){if(done)return;done=true;clearTimeout(tm);a.removeAttribute("src");try{a.load();}catch(e){}URL.revokeObjectURL(url);res(v);}
+  var tm=setTimeout(function(){fin(null);},20000);
+  a.preload="metadata";
+  a.onloadedmetadata=function(){var d=a.duration;if(d===Infinity||isNaN(d)){a.currentTime=1e9;a.ontimeupdate=function(){a.ontimeupdate=null;fin(isFinite(a.duration)?a.duration:null);};}else fin(d);};
+  a.onerror=function(){fin(null);};
+  a.src=url;});
+}
+function extOf(n){var m=/\.([A-Za-z0-9]+)$/.exec(n);return m?m[1].toUpperCase():"";}
+function readOne(file){
+ return file.slice(0,65536).arrayBuffer().then(function(ab){
+  var h={};try{h=parseHeader(new Uint8Array(ab),file.size);}catch(e){}
+  var row={name:file.name,size:file.size,ext:h.fmt||extOf(file.name),dur:h.dur,rate:h.rate||0,ch:h.ch||0,bits:h.bits||0,err:false};
+  if(row.dur>0)return row;
+  return mediaDur(file).then(function(d){if(d>0)row.dur=d;else row.err=true;return row;});
+ }).catch(function(){return {name:file.name,size:file.size,ext:extOf(file.name),dur:0,rate:0,ch:0,bits:0,err:true};});
+}
+
+function hms(s){s=Math.round(s);var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return h+":"+(m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+function dur2(s){return s>=60?hms(s):(Math.round(s*100)/100)+" s";}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function rules(){return {min:parseFloat($("tmin").value)||0,max:parseFloat($("tmax").value)||0,rate:parseInt($("trate").value,10)||0,ch:parseInt($("tch").value,10)||0};}
+function flags(r){
+ var R=rules(),f=[],t=T[L];if(r.err)return [t.unk];
+ if(R.min&&r.dur<R.min)f.push(t.fShort);
+ if(R.max&&r.dur>R.max)f.push(t.fLong);
+ if(R.rate){if(!r.rate)f.push(t.fRateW+" ?");else if(r.rate!==R.rate)f.push(t.fRateW+" "+r.rate);}
+ if(R.ch){if(!r.ch)f.push(t.fChW+" ?");else if(r.ch!==R.ch)f.push(t.fChW+" "+r.ch);}
+ return f;}
+function sizeStr(b){return b>=1073741824?(b/1073741824).toFixed(2)+" GB":(b/1048576).toFixed(1)+" MB";}
+
+function render(){
+ var t=T[L],ok=rows.filter(function(r){return !r.err;}),tot=0,mx=null,mn=null;
+ ok.forEach(function(r){tot+=r.dur;if(!mx||r.dur>mx.dur)mx=r;if(!mn||r.dur<mn.dur)mn=r;});
+ var bad=0,sz=0;rows.forEach(function(r){r._f=flags(r);if(r._f.length)bad++;sz+=r.size;});
+ var c=[[t.cTotal,hms(tot)],[t.cCount,rows.length],[t.cAvg,ok.length?dur2(tot/ok.length):"–"],[t.cMax,mx?dur2(mx.dur):"–"],[t.cMin,mn?dur2(mn.dur):"–"],[t.cBad,bad],[t.cSize,sizeStr(sz)]];
+ $("cards").innerHTML=rows.length?c.map(function(x){return '<div class="card"><small>'+x[0]+'</small><strong>'+x[1]+'</strong></div>';}).join(""):"";
+ var need=parseFloat($("need").value);
+ if(need>0&&rows.length){var diff=need*3600-tot;$("needBox").innerHTML='<div class="note">'+(Math.abs(diff)<1?t.reached:(diff>0?t.left:t.over)+hms(Math.abs(diff))+" ("+(Math.abs(diff)/3600).toFixed(2)+" h)")+'</div>';}
+ else $("needBox").innerHTML="";
+ var list=rows.slice();
+ if($("only").checked)list=list.filter(function(r){return r._f.length;});
+ if(sortKey){list.sort(function(a,b){var x=sortKey==="flag"?a._f.length:a[sortKey],y=sortKey==="flag"?b._f.length:b[sortKey];if(typeof x==="string")return x.localeCompare(y)*sortDir;return ((x||0)-(y||0))*sortDir;});}
+ $("tb").innerHTML=list.map(function(r){
+  return '<tr'+(r._f.length?' class="bad"':'')+'><td class="nm">'+esc(r.name)+'</td><td>'+esc(r.ext)+'</td><td>'+(r.err?"–":dur2(r.dur))+'</td><td>'+(r.rate||"–")+'</td><td>'+(r.ch||"–")+'</td><td>'+(r.bits||"–")+'</td><td>'+(r._f.length?'<span class="flag">'+esc(r._f.join(", "))+'</span>':t.ok)+'</td></tr>';}).join("");
+ ["csv","copy","clr"].forEach(function(i){$(i).disabled=!rows.length;});
+}
+
+function addFiles(files){
+ files=Array.prototype.slice.call(files);if(!files.length)return;
+ var my=++gen,total=files.length,done=0,idx=0,fails=0,t=T[L];
+ $("prog").style.display="block";$("progBar").style.width="0";
+ function step(){
+  if(my!==gen)return Promise.resolve();
+  if(idx>=files.length)return Promise.resolve();
+  var f=files[idx++];
+  return readOne(f).then(function(r){
+   if(my!==gen)return;
+   rows.push(r);if(r.err)fails++;done++;
+   $("progBar").style.width=Math.round(done/total*100)+"%";
+   $("status").textContent=t.proc+done+" / "+total;
+   if(done%25===0)render();
+   return step();});}
+ var workers=[];for(var w=0;w<4;w++)workers.push(step());
+ Promise.all(workers).then(function(){
+  if(my!==gen)return;
+  $("prog").style.display="none";render();
+  $("status").textContent=T[L].done+(done-fails)+(fails?" · "+T[L].failed+fails:"");});
+}
+
+function csvText(sep){
+ var out=[["File","Type","Duration_seconds","Duration_hms","Sample_rate","Channels","Bits","Check"]];
+ rows.forEach(function(r){out.push([r.name,r.ext,r.err?"":r.dur.toFixed(3),r.err?"":hms(r.dur),r.rate||"",r.ch||"",r.bits||"",r._f.join("; ")]);});
+ return out.map(function(a){return a.map(function(v){v=String(v);return sep===","?('"'+v.replace(/"/g,'""')+'"'):v.replace(/[\t\r\n]/g," ");}).join(sep);}).join("\r\n");}
+
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ $("csv").textContent=t.csv;$("copy").textContent=t.copy;$("clr").textContent=t.clr;
+ document.title=L==="ar"?"حاسبة مدة الملفات الصوتية | Sayvoi":"Audio Duration Calculator: Total Length of Many Files | Sayvoi";
+ render();}
+
+$("drop").addEventListener("click",function(){$("fi").click();});
+$("drop").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();$("fi").click();}});
+$("fi").addEventListener("change",function(){addFiles(this.files);this.value="";});
+["dragenter","dragover"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.add("over");});});
+["dragleave","drop"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.remove("over");});});
+$("drop").addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
+["tmin","tmax","trate","tch","need","only"].forEach(function(i){$(i).addEventListener("input",render);$(i).addEventListener("change",render);});
+$("clr").addEventListener("click",function(){gen++;rows=[];$("status").textContent="";$("prog").style.display="none";render();});
+$("csv").addEventListener("click",function(){var b=new Blob(["﻿"+csvText(",")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="durations.csv";document.body.appendChild(a);a.click();document.body.removeChild(a);});
+$("copy").addEventListener("click",function(){var v=csvText("\t"),b=this,ok=function(){b.textContent="✓";setTimeout(function(){b.textContent=T[L].copy;},1200);};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,function(){});else{var ta=document.createElement("textarea");ta.value=v;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);ok();}});
+document.querySelector("thead").addEventListener("click",function(e){var k=e.target.getAttribute&&e.target.getAttribute("data-s");if(!k)return;if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=1;}render();});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+window.DurCalc={parseHeader:parseHeader};
+applyLang();
+})();
+</script>
+</body>
+</html>
