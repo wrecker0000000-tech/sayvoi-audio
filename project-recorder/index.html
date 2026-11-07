@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Record your voice in the browser. Test room noise, choose WAV or MP3, 16, 24 or 48 kHz, mono or stereo, 16 or 24-bit, add silence before and after, and download all takes as a ZIP. Free, no upload.">
+<meta name="twitter:card" content="summary_large_image">
+<title>Online Voice Recorder: WAV, MP3, 16/24/48 kHz, Mono or Stereo | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.vr{--p:#7c4dff;--o:#ff8a3d;--line:rgba(128,128,128,.32)}
+.vr .hero{padding:22px 20px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#7c4dff 0%,#b347d9 55%,#ff8a3d 100%);margin:6px 0 18px;box-shadow:0 10px 30px rgba(124,77,255,.28)}
+.vr .hero h1{color:#fff;margin:0 0 8px;font-size:1.7em;line-height:1.25}
+.vr .hero p{margin:0;opacity:.95}
+.vr .chip{display:inline-block;padding:3px 12px;border-radius:99px;background:rgba(255,255,255,.22);font-size:.82em;font-weight:700;margin-bottom:10px}
+.vr .card{border:1px solid var(--line);border-radius:20px;padding:18px;margin:16px 0;background:rgba(124,77,255,.04);box-shadow:0 4px 16px rgba(0,0,0,.05)}
+.vr .card h2{margin:0 0 14px;font-size:1.2em;display:flex;align-items:center;gap:10px}
+.vr .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--p),var(--o));flex:0 0 auto}
+.vr .presets{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.vr .preset{flex:1 1 170px;text-align:start;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:transparent;color:inherit;font:inherit;cursor:pointer}
+.vr .preset strong{display:block}
+.vr .preset small{opacity:.75}
+.vr .preset.on{border-color:var(--p);background:rgba(124,77,255,.1)}
+.vr details{border:1px solid var(--line);border-radius:14px;margin:10px 0;padding:0 14px}
+.vr summary{cursor:pointer;font-weight:800;padding:12px 0}
+.vr .row{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 14px}
+.vr .col{flex:1 1 150px;min-width:0}
+.vr label{display:block;font-weight:700;margin-bottom:6px;font-size:.93em}
+.vr select,.vr input[type=number],.vr input[type=text]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.vr select option{color:#111;background:#fff}
+.vr select:disabled,.vr input:disabled{opacity:.45}
+.vr .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.vr .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.vr .b:disabled{opacity:.5;cursor:not-allowed}
+.vr .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.vr .box{margin:12px 0;padding:12px 14px;border-radius:14px;border:1px solid var(--line)}
+.vr .box.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.vr .box.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.vr .stage{text-align:center;padding:10px 0 4px}
+.vr .timer{font-size:2.6em;font-weight:800;direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.vr .meter{height:18px;border-radius:12px;background:rgba(128,128,128,.22);overflow:hidden;direction:ltr;margin:10px auto;max-width:520px}
+.vr .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3caa5a,#e0c030 75%,#d93025)}
+.vr .recbtn{display:inline-flex;align-items:center;gap:12px;padding:16px 38px;border:0;border-radius:99px;font:inherit;font-size:1.15em;font-weight:800;color:#fff;cursor:pointer;background:#d93025;box-shadow:0 8px 22px rgba(217,48,37,.35)}
+.vr .recbtn::before{content:"\25CF";font-size:1.2em}
+.vr .recbtn.on{background:#222;animation:pulse 1.2s infinite}
+.vr .recbtn.on::before{content:"\25A0"}
+.vr .recbtn:disabled{opacity:.5;cursor:not-allowed;animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,48,37,.55)}70%{box-shadow:0 0 0 18px rgba(217,48,37,0)}100%{box-shadow:0 0 0 0 rgba(217,48,37,0)}}
+.vr .tools{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0 6px}
+.vr .take{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.5)}
+.vr .take .badge{flex:0 0 auto;min-width:40px;height:40px;padding:0 6px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--p),var(--o));direction:ltr}
+.vr .take audio{flex:1 1 220px;min-width:0;max-width:100%}
+.vr .take input{flex:1 1 130px;max-width:190px}
+.vr .take small{flex:1 1 100%;opacity:.85;direction:ltr;text-align:start}
+.vr .take .flag{color:#b35c00;font-weight:700}
+.vr .take button{padding:8px 14px}
+.vr .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.92);box-shadow:0 6px 20px rgba(0,0,0,.12);margin-top:14px}
+.vr .bar .grow{flex:1 1 160px;font-size:.88em;opacity:.8}
+.vr .sprog{height:8px;border-radius:8px;background:rgba(128,128,128,.25);overflow:hidden;margin:6px 0;direction:ltr}
+.vr .sprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--o))}
+.vr .recbox{border:2px solid rgba(124,77,255,.35);border-radius:22px;padding:14px;background:rgba(255,255,255,.7);margin:10px 0}
+.vr .sent{margin:6px 0;padding:14px 8px;font-size:1.7em;line-height:1.8;text-align:center;font-weight:700;word-break:break-word;min-height:3em}
+.vr .sbadge{display:inline-block;padding:4px 14px;border-radius:99px;background:rgba(124,77,255,.15);font-weight:700}
+.vr .sbadge.ok{background:rgba(60,170,90,.2)}
+.vr .ritem{display:flex;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:10px}
+.vr .ritem:hover{background:rgba(124,77,255,.08)}
+.vr .ritem.cur{background:rgba(124,77,255,.15);font-weight:700}
+.vr .ritem .st{flex:0 0 22px;text-align:center}
+.vr .ritem .id{flex:0 0 auto;direction:ltr;opacity:.7}
+.vr .ritem .tx{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vr .ritem button{padding:4px 10px;flex:0 0 auto}
+.vr #sList{max-height:360px;overflow-y:auto}
+.vr .ctrl{display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0;direction:ltr}
+.vr .nav{min-width:58px;padding:16px 0;font-size:1.3em;border-radius:99px}
+.vr .empty{text-align:center;opacity:.65;padding:18px 0}
+.vr .steps li{margin:6px 0}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+@media(max-width:560px){.vr .hero h1{font-size:1.35em}.vr .timer{font-size:2.1em}.vr .recbtn{padding:14px 30px}}
+#sCount{overflow-wrap:anywhere;word-break:break-all;font-size:13px;line-height:1.5;padding:0 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="vr">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<div class="hero"><span class="chip" data-i="chip"></span><h1 data-i="h1"></h1><p data-i="lead"></p></div>
+
+<section class="card">
+<h2><span class="num">1</span><span data-i="s1"></span></h2>
+<div class="presets" id="presets">
+ <button type="button" class="preset" data-p="wav,16000,1,16"><strong data-i="p1"></strong><small>WAV · 16 kHz · Mono · 16-bit</small></button>
+ <button type="button" class="preset" data-p="wav,48000,1,24"><strong data-i="p2"></strong><small>WAV · 48 kHz · Mono · 24-bit</small></button>
+ <button type="button" class="preset" data-p="mp3,24000,1,16"><strong data-i="p3"></strong><small>MP3 · 24 kHz · Mono</small></button>
+</div>
+<details>
+ <summary data-i="g1"></summary>
+ <div class="row">
+  <div class="col"><label for="fmt" data-i="oFmt"></label><select id="fmt"><option value="wav">WAV</option><option value="mp3">MP3</option><option value="m4a">M4A (AAC)</option><option value="opus">WebM / OGG (Opus)</option></select></div>
+  <div class="col"><label for="rate" data-i="oRate"></label><select id="rate"><option value="16000">16 kHz</option><option value="24000">24 kHz</option><option value="48000" selected>48 kHz</option></select></div>
+  <div class="col"><label for="ch" data-i="oCh"></label><select id="ch"><option value="1" data-k="mono"></option><option value="2" data-k="stereo"></option></select></div>
+  <div class="col"><label for="bits" data-i="oBits"></label><select id="bits"><option value="16">16-bit</option><option value="24">24-bit</option></select></div>
+  <div class="col"><label for="kbps" data-i="oKbps"></label><select id="kbps"><option>96</option><option selected>128</option><option>192</option><option>256</option><option>320</option></select></div>
+ </div>
+ <div class="box" id="fmtNote"></div>
+</details>
+<details>
+ <summary data-i="g2"></summary>
+ <div class="row">
+  <div class="col"><label for="padB" data-i="oPadB"></label><input type="number" id="padB" min="0" max="5" step="0.1" value="1" inputmode="decimal"></div>
+  <div class="col"><label for="padA" data-i="oPadA"></label><input type="number" id="padA" min="0" max="5" step="0.1" value="1" inputmode="decimal"></div>
+  <div class="col"><label for="pre" data-i="oPre"></label><input type="text" id="pre" dir="ltr"></div>
+  <div class="col"><label for="start" data-i="oStart"></label><input type="number" id="start" min="0" step="1" value="1" inputmode="numeric"></div>
+  <div class="col"><label for="digits" data-i="oDigits"></label><select id="digits"><option>1</option><option>2</option><option selected>3</option><option>4</option></select></div>
+ </div>
+</details>
+<details>
+ <summary data-i="g4"></summary>
+ <p style="margin:0 0 10px;opacity:.85" data-i="nzHint"></p>
+ <div class="btns" style="margin-top:0"><button type="button" class="b sec" id="noise"></button></div>
+ <div id="noiseRes"></div>
+</details>
+<details>
+ <summary data-i="g3"></summary>
+ <div class="row">
+  <div class="col"><label for="dev" data-i="oDev"></label><select id="dev"><option value="" data-k="defDev"></option></select></div>
+  <div class="col"><label for="raw" data-i="oRaw"></label><select id="raw"><option value="1" data-k="rawOn"></option><option value="0" data-k="rawOff"></option></select></div>
+ </div>
+</details>
+</section>
+
+<section class="card" id="pmCard">
+<h2><span class="num">★</span><span id="pmH"></span></h2>
+<p id="pmP" style="margin:0 0 12px;color:#4a5170"></p>
+<div class="row">
+  <div class="col"><label for="pmSid" id="pmLSid"></label><input type="text" id="pmSid" dir="ltr" placeholder="100001"></div>
+  <div class="col"><label for="pmG" id="pmLG"></label><select id="pmG"><option value="m">m</option><option value="f">f</option></select></div>
+  <div class="col"><label for="pmAge" id="pmLAge"></label><input type="number" id="pmAge" min="1" max="99" placeholder="28" inputmode="numeric"></div>
+  <div class="col"><label for="pmScene" id="pmLScene"></label><input type="text" id="pmScene" dir="ltr" value="quietroom0.8m"></div>
+</div>
+<label for="pmKw" id="pmLKw" style="display:block;margin-top:12px"></label>
+<textarea id="pmKw" dir="ltr" rows="9" style="width:100%;box-sizing:border-box;font:inherit;padding:10px;border:1px solid #d7dbee;border-radius:12px">take photo
+Video Start
+Video Stop
+Turn on audio
+Turn off audio
+turn on screen
+turn off screen
+turn on WiFi
+turn off WiFi
+show front camera
+show rear camera
+turn on hotspot
+turn off hotspot
+Show both cameras
+lock the video
+inside video on
+back to homepage</textarea>
+<div class="row" style="margin-top:12px">
+  <div class="col"><label id="pmLSp"></label><div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:6px"><label><input type="checkbox" class="pmSp" value="fast" checked> fast</label><label><input type="checkbox" class="pmSp" value="normal" checked> normal</label><label><input type="checkbox" class="pmSp" value="slow" checked> slow</label></div></div>
+  <div class="col"><label for="pmN" id="pmLN"></label><input type="number" id="pmN" min="1" max="20" value="5" inputmode="numeric"></div>
+  <div class="col"><label for="pmOrd" id="pmLOrd"></label><select id="pmOrd"><option value="k"></option><option value="s"></option></select></div>
+</div>
+<div class="box" id="pmInfo" style="margin-top:12px"></div>
+<div class="btns"><button type="button" class="b" id="pmGen"></button></div>
+</section>
+
+<section class="card" id="recCard">
+<h2><span class="num">2</span><span data-i="s2"></span></h2>
+<div class="btns" style="margin-top:0;align-items:center">
+  <button type="button" class="b sec" id="sUp"></button>
+  <button type="button" class="b sec" id="sClr" style="display:none"></button>
+  <input type="file" id="sFile" accept=".txt,text/plain" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+</div>
+<p style="margin:0 0 8px;opacity:.8;font-size:.9em" data-i="sHint"></p>
+<div class="recbox">
+  <div id="sBox" style="display:none">
+    <div class="sprog"><i id="sBar"></i></div>
+    <div id="sCount" style="direction:ltr;text-align:center;font-weight:700"></div>
+    <div class="sent" id="sText" dir="auto"></div>
+    <div style="text-align:center"><span class="sbadge" id="sNote" style="display:none"></span> <span class="sbadge ok" id="sDone" style="display:none"></span></div>
+  </div>
+  <div class="ctrl">
+    <button type="button" class="b sec nav" id="sPrev" style="display:none">◀</button>
+    <button type="button" class="recbtn" id="rec"></button>
+    <button type="button" class="b nav" id="sNext" style="display:none">▶</button>
+  </div>
+  <div class="stage" style="padding:0">
+    <div class="timer" id="timer">00:00.000</div>
+    <div class="meter"><i id="meter"></i></div>
+    <div id="peakTxt" style="direction:ltr;opacity:.8;min-height:1.4em"></div>
+    <div class="btns" style="justify-content:center;margin:6px 0">
+      <button type="button" class="b sec" id="sPlay" style="display:none"></button>
+      <button type="button" class="b sec" id="sDel" style="display:none"></button>
+    </div>
+    <div id="status" aria-live="polite" style="min-height:1.4em"></div>
+    <div class="tools"><button type="button" class="b sec" id="mic"></button></div>
+  </div>
+</div>
+<div id="sBox2" style="display:none">
+  <div class="row" style="justify-content:center;align-items:end">
+    <div class="col" style="max-width:160px"><label for="sGo" data-i="sGo"></label><input type="number" id="sGo" min="1" step="1" inputmode="numeric"></div>
+    <div class="col" style="flex:2 1 240px"><label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="autoNext" checked style="width:auto"><span data-i="sAuto"></span></label></div>
+  </div>
+  <details id="rv">
+   <summary data-i="sRev"></summary>
+   <div class="row" style="margin-top:0"><div class="col" style="max-width:240px"><select id="sFilter"><option value="all" data-k="fAll"></option><option value="todo" data-k="fTodo"></option><option value="done" data-k="fDone"></option></select></div></div>
+   <div id="sList"></div>
+  </details>
+</div>
+</section>
+
+<section class="card">
+<h2><span class="num">3</span><span data-i="s3"></span></h2>
+<div class="box ok" id="saveNote"></div>
+<div id="takes"></div>
+<div class="bar">
+  <button type="button" class="b" id="zip" disabled></button>
+  <button type="button" class="b sec" id="clr" disabled></button>
+  <span class="grow" id="storeInfo"></span>
+</div>
+</section>
+
+
+
+<section class="card">
+<h2 data-i="h2n"></h2>
+<ul class="steps"><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:14px"><a href="/" data-i="back"></a></p>
+</section>
+</article>
+<footer id="foot"></footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+var T={
+en:{dir:"ltr",btn:"العربية",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"Watch: how to use the recorder",vidP:"A short video guide (about 75 seconds). The steps are written on the screen.",h2n:"Notes",sS:"Script (optional)",sHint:"Upload a .txt file, one sentence per line. Lines like “001.sentence” or “001 [Tab] sentence [Tab] speed” work too: the number becomes the file name.",sUp:"Upload script (.txt)",sClr:"Remove script",sPrev:"Previous",sNext:"Next",sGo:"Go to number",sAuto:"Go to the next sentence after recording",sDone:"✓ Recorded",sFile:"File",sOf:" of ",sRecd:" recorded",sErr:"No sentences found in this file.",sConfirm:"Remove the script? Your recordings stay.",sPlay:"▶ Listen to my recording",sDel:"Delete this recording",sRev:"Review all sentences",fAll:"All sentences",fTodo:"Not recorded yet",fDone:"Recorded",sNone:"Nothing to show.",g4:"Room noise test",nzHint:"Stay silent for 3 seconds and the page tells you how noisy your room is. Do this before you start a project.",chip:"Free tool",s1:"Choose your recording quality",s2:"Record",s3:"Your recordings",p1:"Voice project",p2:"High quality",p3:"Small file",g1:"Format and quality",g2:"Silence and file names",g3:"Microphone",saved:"Your recordings are saved on this device, so you can close the page and continue later. Nothing is uploaded.",savedNo:"Saving on this device is not available in this browser. Download your files before closing the page.",confirmDel:"Delete all recordings from this device?",empty:"No recordings yet. Press Record.",storeUsed:"Recordings size: ",h1:"Online Voice Recorder",
+ lead:"Record your voice in the browser, test the room noise first, choose the format, sample rate, channels and bit depth, and download every take in one ZIP file.",
+ 
+ oFmt:"Format",oRate:"Sample rate",oCh:"Channels",oBits:"Bit depth (WAV)",oKbps:"MP3 quality (kbps)",oPadB:"Silence before (seconds)",oPadA:"Silence after (seconds)",oDev:"Microphone",oPre:"File name prefix (optional)",oStart:"First number",oDigits:"Number digits",oRaw:"Microphone processing",
+ mono:"Mono",stereo:"Stereo",defDev:"Default microphone",rawOn:"Off (raw sound, recommended)",rawOff:"On (echo cancel, noise reduction)",
+ mic:"Enable microphone",noise:"Test room noise (3 s)",rec:"Record",stop:"Stop",
+ zip:"Download all (ZIP)",clr:"Delete all",
+ st0:"Press “Enable microphone” to start.",stReady:"Microphone ready.",stRec:"Recording… speak now.",stEnc:"Preparing the file…",stNoise:"Stay silent for 3 seconds…",
+ errMic:"Could not access the microphone. Allow it in the browser and try again.",errHttps:"Recording needs a secure page (https) and a modern browser.",errFmt:"This browser cannot record this format. Choose WAV or MP3.",errLame:"The MP3 encoder did not load. Check your internet connection and refresh.",errZip:"The ZIP tool did not load. Check your internet connection and refresh.",
+ nTitle:"Room noise: ",nQuiet:"Excellent. Very quiet room.",nGood:"Good. Fine for most recording projects.",nOk:"Acceptable. Some background noise. Try a quieter place if the project is strict.",nBad:"Noisy. Move to a quieter place, close windows and turn off fans.",nPeak:" Peak: ",nSpike:"Sudden loud sounds were detected during the test.",
+ take:"Take",del:"Delete",dl:"Download",dur:"Duration",peak:"Peak",avg:"Average",clip:"Clipping! Lower your voice or move away from the microphone.",low:"Very quiet recording. Speak closer to the microphone.",
+ fnWav:"WAV is uncompressed: sample rate, channels and bit depth are applied exactly. Silence before/after is added.",fnMp3:"MP3 is always 16-bit. Sample rate, channels and quality are applied. Silence before/after is added.",fnRaw:"M4A / Opus are recorded by the browser itself. Sample rate, channels, bit depth and silence padding are not applied, and the options available depend on your browser and device.",fnNo:"This browser does not support this format. Choose WAV or MP3.",
+ n1:"<strong>Private:</strong> nothing leaves your device.",n2:"<strong>Best quality:</strong> use WAV, 48 kHz, 24-bit, and keep microphone processing off. Use 16 kHz mono 16-bit if the client asks for it.",n3:"<strong>Noise test:</strong> measures the room for 3 seconds. Under about −50 dB is good for most projects.",n4:"<strong>Saving:</strong> takes are kept in this browser on this device. They disappear if you clear the site data, use a private window, or switch browser or device, so download a ZIP of finished work. A single take can be up to 15 minutes.",back:"Back to home"},
+ar:{dir:"rtl",btn:"English",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"شاهد: طريقة استخدام المسجّل",vidP:"شرح مصوّر قصير (نحو 75 ثانية). الخطوات مكتوبة على الشاشة.",h2n:"ملاحظات",sS:"النص المطلوب تسجيله (اختياري)",sHint:"ارفع ملف .txt فيه جملة في كل سطر. وتشتغل كمان أسطر مثل «001.جملة» أو «001 [Tab] جملة [Tab] سرعة»: الرقم يصبح اسم الملف.",sUp:"ارفع النص (.txt)",sClr:"احذف النص",sPrev:"السابق",sNext:"التالي",sGo:"اذهب للرقم",sAuto:"انتقل للجملة التالية بعد التسجيل",sDone:"✓ تم تسجيلها",sFile:"الملف",sOf:" من ",sRecd:" مسجّلة",sErr:"لا توجد جمل في هذا الملف.",sConfirm:"حذف النص؟ تسجيلاتك تبقى.",sPlay:"▶ استمع لتسجيلي",sDel:"احذف هذا التسجيل",sRev:"مراجعة كل الجمل",fAll:"كل الجمل",fTodo:"لم تُسجَّل بعد",fDone:"المسجّلة",sNone:"لا شيء للعرض.",g4:"اختبار ضوضاء الغرفة",nzHint:"ابقَ صامتًا 3 ثوانٍ وستخبرك الصفحة بمستوى ضوضاء الغرفة. افعل هذا قبل بدء المشروع.",chip:"أداة مجانية",s1:"اختر جودة التسجيل",s2:"سجّل",s3:"تسجيلاتك",p1:"مشروع صوتي",p2:"جودة عالية",p3:"ملف صغير",g1:"الصيغة والجودة",g2:"الصمت وأسماء الملفات",g3:"الميكروفون",saved:"تسجيلاتك محفوظة على هذا الجهاز، فتقدر تقفل الصفحة وتكمل بعدين. لا شيء يُرفع.",savedNo:"الحفظ على الجهاز غير متاح في هذا المتصفح. نزّل ملفاتك قبل إغلاق الصفحة.",confirmDel:"حذف كل التسجيلات من هذا الجهاز؟",empty:"لا توجد تسجيلات بعد. اضغط سجّل.",storeUsed:"حجم التسجيلات: ",h1:"مسجّل الصوت أونلاين",
+ lead:"سجّل صوتك في المتصفح، واختبر ضوضاء الغرفة أولًا، واختر الصيغة ومعدل العينات والقنوات وعمق البت، ونزّل كل التسجيلات في ملف ZIP واحد.",
+ 
+ oFmt:"الصيغة",oRate:"معدل العينات",oCh:"القنوات",oBits:"عمق البت (WAV)",oKbps:"جودة MP3 (kbps)",oPadB:"صمت قبل التسجيل (ثانية)",oPadA:"صمت بعد التسجيل (ثانية)",oDev:"الميكروفون",oPre:"بادئة اسم الملف (اختياري)",oStart:"أول رقم",oDigits:"عدد خانات الرقم",oRaw:"معالجة الميكروفون",
+ mono:"مونو",stereo:"ستيريو",defDev:"الميكروفون الافتراضي",rawOn:"مغلقة (صوت خام، موصى بها)",rawOff:"مفعّلة (إلغاء صدى وتقليل ضوضاء)",
+ mic:"فعّل الميكروفون",noise:"اختبر ضوضاء الغرفة (3 ث)",rec:"سجّل",stop:"إيقاف",
+ zip:"نزّل الكل (ZIP)",clr:"احذف الكل",
+ st0:"اضغط «فعّل الميكروفون» للبدء.",stReady:"الميكروفون جاهز.",stRec:"جارٍ التسجيل… تكلّم الآن.",stEnc:"جارٍ تجهيز الملف…",stNoise:"ابقَ صامتًا 3 ثوانٍ…",
+ errMic:"تعذّر الوصول للميكروفون. اسمح به من المتصفح وحاول مجددًا.",errHttps:"التسجيل يحتاج صفحة آمنة (https) ومتصفحًا حديثًا.",errFmt:"هذا المتصفح لا يستطيع تسجيل هذه الصيغة. اختر WAV أو MP3.",errLame:"لم يتم تحميل مشفّر MP3. تأكد من الإنترنت وحدّث الصفحة.",errZip:"لم يتم تحميل أداة ZIP. تأكد من الإنترنت وحدّث الصفحة.",
+ nTitle:"ضوضاء الغرفة: ",nQuiet:"ممتازة. غرفة هادئة جدًا.",nGood:"جيدة. مناسبة لمعظم مشاريع التسجيل.",nOk:"مقبولة. فيها ضوضاء خلفية. جرّب مكانًا أهدأ إن كان المشروع صارمًا.",nBad:"مزعجة. انتقل لمكان أهدأ، وأغلق النوافذ وأوقف المراوح.",nPeak:" الذروة: ",nSpike:"رُصدت أصوات عالية مفاجئة أثناء الاختبار.",
+ take:"تسجيل",del:"احذف",dl:"نزّل",dur:"المدة",peak:"الذروة",avg:"المتوسط",clip:"تقطيع! اخفض صوتك أو ابتعد عن الميكروفون.",low:"تسجيل هادئ جدًا. اقترب من الميكروفون.",
+ fnWav:"WAV غير مضغوط: معدل العينات والقنوات وعمق البت تُطبَّق بدقة. يُضاف الصمت قبل وبعد.",fnMp3:"MP3 دائمًا 16 بت. يُطبَّق معدل العينات والقنوات والجودة. يُضاف الصمت قبل وبعد.",fnRaw:"M4A / Opus يسجّلها المتصفح نفسه. معدل العينات والقنوات وعمق البت والصمت لا تُطبَّق، والخيارات تعتمد على المتصفح والجهاز.",fnNo:"هذا المتصفح لا يدعم هذه الصيغة. اختر WAV أو MP3.",
+ n1:"<strong>خصوصية:</strong> لا شيء يغادر جهازك.",n2:"<strong>أفضل جودة:</strong> استخدم WAV و48 kHz و24 بت، وأبقِ معالجة الميكروفون مغلقة. واستخدم 16 kHz مونو 16 بت إذا طلبها العميل.",n3:"<strong>اختبار الضوضاء:</strong> يقيس الغرفة 3 ثوانٍ. أقل من حوالي −50 dB جيد لمعظم المشاريع.",n4:"<strong>الحفظ:</strong> التسجيلات تُحفظ في هذا المتصفح على هذا الجهاز. وتختفي لو مسحت بيانات الموقع أو استخدمت نافذة خاصة أو غيّرت المتصفح أو الجهاز، فنزّل ملف ZIP للشغل المنتهي. والتسجيل الواحد حتى 15 دقيقة.",back:"العودة للرئيسية"}
+};
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var stream=null,ctx=null,proc=null,capCh=1,chunks=[],mode="idle",recStart=0,mr=null,mrChunks=[],mrType="",takes=[],counter=0,curPeak=0,noiseAcc=null,tick=null,enc=false;
+var MAXSEC=900,db=null,dbOk=false,script=[],sidx=0,recSid=null;
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function openDb(){return new Promise(function(res){try{var r=indexedDB.open("sayvoi-recorder",1);r.onupgradeneeded=function(){r.result.createObjectStore("takes",{keyPath:"id",autoIncrement:true});};r.onsuccess=function(){db=r.result;dbOk=true;res(true);};r.onerror=function(){res(false);};r.onblocked=function(){res(false);};}catch(e){res(false);}});}
+function dbPut(t){return new Promise(function(res){if(!db)return res(null);try{var o={blob:t.blob,ext:t.ext,base:t.base,stats:t.stats,created:t.created||Date.now(),sid:(t.sid===undefined?null:t.sid)};if(t.id)o.id=t.id;var rq=db.transaction("takes","readwrite").objectStore("takes").put(o);rq.onsuccess=function(){res(rq.result);};rq.onerror=function(){res(null);};}catch(e){res(null);}});}
+function dbDel(id){return new Promise(function(res){if(!db)return res();try{var rq=db.transaction("takes","readwrite").objectStore("takes").delete(id);rq.onsuccess=rq.onerror=function(){res();};}catch(e){res();}});}
+function dbClear(){return new Promise(function(res){if(!db)return res();try{var rq=db.transaction("takes","readwrite").objectStore("takes").clear();rq.onsuccess=rq.onerror=function(){res();};}catch(e){res();}});}
+function dbAll(){return new Promise(function(res){if(!db)return res([]);try{var rq=db.transaction("takes","readonly").objectStore("takes").getAll();rq.onsuccess=function(){res(rq.result||[]);};rq.onerror=function(){res([]);};}catch(e){res([]);}});}
+function showStore(){
+ var n=0;takes.forEach(function(t){n+=t.blob.size;});
+ $("storeInfo").textContent=takes.length?T[L].storeUsed+(n/1048576).toFixed(1)+" MB":"";}
+
+function dB(x){return x>0?20*Math.log10(x):-120;}
+function fmtT(ms){var m=Math.floor(ms/60000),s=Math.floor(ms/1000)%60,x=Math.floor(ms%1000);return (m<10?"0":"")+m+":"+(s<10?"0":"")+s+"."+("00"+x).slice(-3);}
+function setStatus(k,e){$("status").textContent=k?T[L][k]:"";$("status").style.color=e?"#d93025":"";}
+function pickMime(f){
+ if(!window.MediaRecorder||!MediaRecorder.isTypeSupported)return "";
+ var c=f==="m4a"?["audio/mp4;codecs=mp4a.40.2","audio/mp4","audio/aac"]:["audio/webm;codecs=opus","audio/ogg;codecs=opus","audio/webm"];
+ for(var i=0;i<c.length;i++){if(MediaRecorder.isTypeSupported(c[i]))return c[i];}return "";}
+function updFmt(){
+ var f=$("fmt").value,t=T[L],n=$("fmtNote");
+ $("bits").disabled=f!=="wav";$("kbps").disabled=f!=="mp3";
+ var raw=(f==="m4a"||f==="opus");
+ ["rate","ch","padB","padA"].forEach(function(i){$(i).disabled=raw;});
+ var txt=f==="wav"?t.fnWav:(f==="mp3"?t.fnMp3:t.fnRaw);
+ n.className="box";
+ if(raw&&!pickMime(f)){txt=t.fnNo;n.className="box bad";}
+ n.textContent=txt;}
+
+async function listDevices(){
+ try{var d=await navigator.mediaDevices.enumerateDevices(),s=$("dev"),cur=s.value;
+  s.innerHTML='<option value="">'+T[L].defDev+'</option>';
+  d.filter(function(x){return x.kind==="audioinput";}).forEach(function(x,i){var o=document.createElement("option");o.value=x.deviceId;o.textContent=x.label||("Mic "+(i+1));s.appendChild(o);});
+  s.value=cur;}catch(e){}}
+function stopStream(){
+ if(proc){try{proc.disconnect();}catch(e){}proc.onaudioprocess=null;proc=null;}
+ if(stream){stream.getTracks().forEach(function(t){t.stop();});stream=null;}
+ if(ctx){try{ctx.close();}catch(e){}ctx=null;}}
+async function ensureMic(){
+ if(stream&&stream.active&&ctx)return true;
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){setStatus("errHttps",true);return false;}
+ try{
+  stopStream();
+  var raw=$("raw").value==="1",a={channelCount:{ideal:2},echoCancellation:!raw,noiseSuppression:!raw,autoGainControl:!raw},id=$("dev").value;
+  if(id)a.deviceId={exact:id};
+  stream=await navigator.mediaDevices.getUserMedia({audio:a});
+ }catch(e){setStatus("errMic",true);return false;}
+ var AC=window.AudioContext||window.webkitAudioContext;ctx=new AC();
+ if(ctx.state==="suspended")try{await ctx.resume();}catch(e){}
+ var st=stream.getAudioTracks()[0].getSettings?stream.getAudioTracks()[0].getSettings():{};
+ capCh=(st.channelCount&&st.channelCount>=2)?2:1;
+ var src=ctx.createMediaStreamSource(stream);
+ proc=(ctx.createScriptProcessor||ctx.createJavaScriptNode).call(ctx,4096,2,2);
+ var mute=ctx.createGain();mute.gain.value=0;
+ proc.onaudioprocess=onAudio;
+ src.connect(proc);proc.connect(mute);mute.connect(ctx.destination);
+ await listDevices();
+ setStatus("stReady");$("mic").style.display="none";
+ return true;}
+function onAudio(e){
+ var a=e.inputBuffer.getChannelData(0),b=capCh===2&&e.inputBuffer.numberOfChannels>1?e.inputBuffer.getChannelData(1):null,pk=0,i;
+ for(i=0;i<a.length;i++){var v=a[i]<0?-a[i]:a[i];if(v>pk)pk=v;}
+ if(pk>curPeak)curPeak=pk;
+ if(mode==="rec"){
+  chunks.push([new Float32Array(a),b?new Float32Array(b):null]);
+  var n=0;chunks.forEach(function(c){n+=c[0].length;});
+  if(n/ctx.sampleRate>=MAXSEC)stopRec();
+ }else if(mode==="noise"&&noiseAcc){
+  var s=0;for(i=0;i<a.length;i++)s+=a[i]*a[i];
+  noiseAcc.sum+=s;noiseAcc.n+=a.length;if(pk>noiseAcc.peak)noiseAcc.peak=pk;
+  noiseAcc.blocks.push(Math.sqrt(s/a.length));}
+ }
+function anim(){
+ var p=curPeak;curPeak*=0.9;
+ var d=dB(p),w=Math.max(0,Math.min(100,(d+60)/60*100));
+ $("meter").style.width=w+"%";
+ $("peakTxt").textContent=stream?(d>-119?d.toFixed(1)+" dBFS":"−∞ dBFS"):"";
+ if(mode==="rec"){$("timer").textContent=fmtT(performance.now()-recStart);}
+ requestAnimationFrame(anim);}
+
+async function testNoise(){
+ if(mode!=="idle"||enc)return;
+ if(!(await ensureMic()))return;
+ noiseAcc={sum:0,n:0,peak:0,blocks:[]};mode="noise";setStatus("stNoise");$("noise").disabled=true;$("rec").disabled=true;
+ await new Promise(function(r){setTimeout(r,3000);});
+ mode="idle";$("noise").disabled=false;$("rec").disabled=false;setStatus("stReady");
+ var rms=Math.sqrt(noiseAcc.sum/Math.max(1,noiseAcc.n)),db=dB(rms),pk=dB(noiseAcc.peak),t=T[L],k,cls;
+ if(db<-60){k="nQuiet";cls="ok";}else if(db<-50){k="nGood";cls="ok";}else if(db<-40){k="nOk";cls="bad";}else{k="nBad";cls="bad";}
+ var med=noiseAcc.blocks.slice().sort(function(x,y){return x-y;})[Math.floor(noiseAcc.blocks.length/2)]||0;
+ var spike=noiseAcc.peak>0&&med>0&&dB(noiseAcc.peak)-dB(med)>25&&pk>-35;
+ $("noiseRes").innerHTML='<div class="box '+cls+'"><strong>'+t.nTitle+db.toFixed(1)+' dBFS</strong>'+t.nPeak+pk.toFixed(1)+' dBFS<br>'+t[k]+(spike?'<br>'+t.nSpike:'')+'</div>';
+ noiseAcc=null;}
+
+async function startRec(){
+ if(mode!=="idle"||enc)return;
+ var f=$("fmt").value;
+ if((f==="m4a"||f==="opus")&&!pickMime(f)){setStatus("errFmt",true);return;}
+ if(f==="mp3"&&!window.lamejs){setStatus("errLame",true);return;}
+ if(!(await ensureMic()))return;
+ chunks=[];mrChunks=[];mr=null;
+ if(f==="m4a"||f==="opus"){
+  mrType=pickMime(f);
+  try{mr=new MediaRecorder(stream,{mimeType:mrType});}catch(e){setStatus("errFmt",true);return;}
+  mr.ondataavailable=function(ev){if(ev.data&&ev.data.size)mrChunks.push(ev.data);};
+  mr.start(500);}
+ recSid=script.length?sidx:null;mode="rec";recStart=performance.now();$("rec").textContent=T[L].stop;$("rec").classList.add("on");setStatus("stRec");}
+async function stopRec(){
+ if(mode!=="rec")return;
+ mode="idle";$("rec").textContent=T[L].rec;$("rec").classList.remove("on");enc=true;$("rec").disabled=true;$("noise").disabled=true;setStatus("stEnc");
+ var ms=performance.now()-recStart,fmt=$("fmt").value;
+ try{
+  if(mr){
+   await new Promise(function(res){mr.onstop=res;try{mr.stop();}catch(e){res();}});
+   var blob=new Blob(mrChunks,{type:mrType.split(";")[0]});
+   await addTake(blob,mrType.indexOf("mp4")>-1?"m4a":(mrType.indexOf("ogg")>-1?"ogg":"webm"),{dur:ms/1000},recSid);
+  }else{
+   var r=await encodeTake(fmt);if(r)await addTake(r.blob,fmt,r.stats,recSid);}
+ }catch(e){setStatus("errFmt",true);}
+ enc=false;$("rec").disabled=false;$("noise").disabled=false;if(stream)setStatus("stReady");chunks=[];
+ if(recSid!==null&&$("autoNext").checked&&sidx===recSid&&sidx<script.length-1){sidx++;saveIdx();showSentence();}recSid=null;}
+
+function concat(idx){
+ var n=0;chunks.forEach(function(c){n+=c[0].length;});
+ var out=new Float32Array(n),o=0;
+ chunks.forEach(function(c){var s=c[idx]||c[0];out.set(s,o);o+=s.length;});
+ return out;}
+async function encodeTake(fmt){
+ if(!chunks.length)return null;
+ var sr=ctx.sampleRate,rate=parseInt($("rate").value,10),tch=parseInt($("ch").value,10),bits=parseInt($("bits").value,10),kbps=parseInt($("kbps").value,10),
+     padB=Math.max(0,Math.min(5,parseFloat($("padB").value)||0)),padA=Math.max(0,Math.min(5,parseFloat($("padA").value)||0)),
+     left=concat(0),right=capCh===2?concat(1):null,len=left.length,i;
+ var buf=ctx.createBuffer(capCh,len,sr);buf.getChannelData(0).set(left);if(right)buf.getChannelData(1).set(right);
+ var rendered;
+ if(sr===rate&&capCh===tch){rendered=buf;}
+ else{
+  var OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext,off=new OAC(tch,Math.max(1,Math.round(len*rate/sr)),rate),src=off.createBufferSource();
+  src.buffer=buf;src.connect(off.destination);src.start(0);
+  rendered=await new Promise(function(res,rej){var pr=off.startRendering();if(pr&&pr.then)pr.then(res,rej);else off.oncomplete=function(e){res(e.renderedBuffer);};});}
+ var n=rendered.length,nb=Math.round(padB*rate),na=Math.round(padA*rate),tot=nb+n+na,data=[];
+ for(i=0;i<rendered.numberOfChannels;i++){var o=new Float32Array(tot);o.set(rendered.getChannelData(i),nb);data.push(o);}
+ var pk=0,sum=0,clip=0,d0=data[0];
+ for(i=nb;i<nb+n;i++){var v=d0[i]<0?-d0[i]:d0[i];if(v>pk)pk=v;if(v>=0.999)clip++;sum+=v*v;}
+ var blob=fmt==="wav"?wavBlob(data,rate,bits):mp3Blob(data,rate,kbps);
+ return {blob:blob,stats:{dur:tot/rate,peak:pk,rms:Math.sqrt(sum/Math.max(1,n)),clipped:clip,rate:rate,ch:data.length,bits:fmt==="wav"?bits:16}};}
+function ws(v,o,str){for(var i=0;i<str.length;i++)v.setUint8(o+i,str.charCodeAt(i));}
+function wavBlob(data,rate,bits){
+ var ch=data.length,n=data[0].length,bps=bits/8,ba=ch*bps,size=n*ba,buf=new ArrayBuffer(44+size),v=new DataView(buf);
+ ws(v,0,"RIFF");v.setUint32(4,36+size,true);ws(v,8,"WAVE");ws(v,12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);
+ v.setUint32(24,rate,true);v.setUint32(28,rate*ba,true);v.setUint16(32,ba,true);v.setUint16(34,bits,true);ws(v,36,"data");v.setUint32(40,size,true);
+ var o=44,i,c,x,q;
+ for(i=0;i<n;i++){for(c=0;c<ch;c++){
+  x=data[c][i];if(x>1)x=1;else if(x<-1)x=-1;
+  if(bits===16){v.setInt16(o,Math.round(x<0?x*32768:x*32767),true);o+=2;}
+  else{q=Math.round(x<0?x*8388608:x*8388607);v.setUint8(o,q&255);v.setUint8(o+1,(q>>8)&255);v.setUint8(o+2,(q>>16)&255);o+=3;}}}
+ return new Blob([buf],{type:"audio/wav"});}
+function toI16(f){var o=new Int16Array(f.length);for(var i=0;i<f.length;i++){var x=f[i];if(x>1)x=1;else if(x<-1)x=-1;o[i]=Math.round(x<0?x*32768:x*32767);}return o;}
+function mp3Blob(data,rate,kbps){
+ var ch=data.length,e=new lamejs.Mp3Encoder(ch,rate,kbps),L1=toI16(data[0]),R1=ch>1?toI16(data[1]):null,out=[],B=1152,i,m;
+ for(i=0;i<L1.length;i+=B){m=ch>1?e.encodeBuffer(L1.subarray(i,i+B),R1.subarray(i,i+B)):e.encodeBuffer(L1.subarray(i,i+B));if(m.length)out.push(new Int8Array(m));}
+ m=e.flush();if(m.length)out.push(new Int8Array(m));
+ return new Blob(out,{type:"audio/mpeg"});}
+
+function pad(n,d){var x=String(n);while(x.length<d)x="0"+x;return x;}
+function nextName(){
+ var d=parseInt($("digits").value,10)||3,st=parseInt($("start").value,10);if(isNaN(st))st=1;
+ var base=($("pre").value||"").trim().replace(/[\\\/:*?"<>|]+/g,"_")+pad(st+counter,d);counter++;lsSet("vr_counter",String(counter));return base;}
+function scriptName(i){var it=script[i];if(it&&it.f)return it.f;var d=parseInt($("digits").value,10)||3,pre=($("pre").value||"").trim().replace(/[\\\/:*?"<>|]+/g,"_");return pre+pad(it.id,d);}
+async function addTake(blob,ext,stats,sid){
+ if(sid!==null&&sid!==undefined&&script[sid]){
+  for(var q=takes.length-1;q>=0;q--){if(takes[q].sid===sid){URL.revokeObjectURL(takes[q].url);if(takes[q].id)dbDel(takes[q].id);takes.splice(q,1);}}}
+ else sid=null;
+ var t={blob:blob,ext:ext,base:sid!==null?scriptName(sid):nextName(),sid:sid,url:URL.createObjectURL(blob),stats:stats,created:Date.now()};
+ takes.push(t);
+ takes.sort(function(a,b){var x=a.sid===null?1e9:a.sid,y=b.sid===null?1e9:b.sid;return x!==y?x-y:a.created-b.created;});
+ renderTakes();showSentence();
+ var id=await dbPut(t);if(id)t.id=id;
+ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+ showStore();}
+function statLine(t){
+ var s=t.stats,x=[T[L].dur+": "+fmtT(s.dur*1000)];
+ if(s.rate)x.push((s.rate/1000)+" kHz · "+(s.ch===1?T[L].mono:T[L].stereo)+" · "+s.bits+"-bit");
+ if(s.peak!==undefined)x.push(T[L].peak+": "+dB(s.peak).toFixed(1)+" dBFS · "+T[L].avg+": "+dB(s.rms).toFixed(1)+" dBFS");
+ if(t.sid!==null&&t.sid!==undefined&&script[t.sid])x.push("“"+script[t.sid].t.slice(0,50)+(script[t.sid].t.length>50?"…":"")+"”");
+ return x.join(" · ");}
+function renderTakes(){
+ var box=$("takes");box.innerHTML="";
+ takes.forEach(function(t,i){
+  var d=document.createElement("div");d.className="take";
+  var a=document.createElement("audio");a.controls=true;a.src=t.url;d.appendChild(a);
+  var bg=document.createElement("span");bg.className="badge";bg.textContent=String(t.base).slice(-6);d.insertBefore(bg,d.firstChild);
+  var inp=document.createElement("input");inp.type="text";inp.value=t.base;inp.setAttribute("dir","ltr");inp.setAttribute("data-r",i);d.appendChild(inp);
+  var ex=document.createElement("span");ex.textContent="."+t.ext;ex.style.direction="ltr";d.appendChild(ex);
+  var b1=document.createElement("button");b1.type="button";b1.className="b";b1.textContent=T[L].dl;b1.setAttribute("data-d",i);d.appendChild(b1);
+  var b2=document.createElement("button");b2.type="button";b2.className="b sec";b2.textContent=T[L].del;b2.setAttribute("data-x",i);d.appendChild(b2);
+  var sm=document.createElement("small");sm.textContent=statLine(t);d.appendChild(sm);
+  var warn=[];if(t.stats.clipped>0)warn.push(T[L].clip);else if(t.stats.peak!==undefined&&dB(t.stats.peak)<-30)warn.push(T[L].low);
+  if(warn.length){var w=document.createElement("small");w.className="flag";w.textContent=warn.join(" ");d.appendChild(w);}
+  box.appendChild(d);});
+ if(!takes.length){var em=document.createElement("div");em.className="empty";em.textContent=T[L].empty;box.appendChild(em);}
+ $("zip").disabled=$("clr").disabled=!takes.length;}
+function saveBlob(blob,name){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
+function cleanBase(b){return (b||"take").trim().replace(/[\\\/:*?"<>|]+/g,"_")||"take";}
+$("takes").addEventListener("click",function(e){
+ var d=e.target.getAttribute("data-d"),x=e.target.getAttribute("data-x");
+ if(d!==null){var t=takes[+d];saveBlob(t.blob,cleanBase(t.base)+"."+t.ext);}
+ if(x!==null){var k=takes[+x];URL.revokeObjectURL(k.url);if(k.id)dbDel(k.id);takes.splice(+x,1);renderTakes();showStore();}});
+$("takes").addEventListener("input",function(e){var r=e.target.getAttribute("data-r");if(r!==null)takes[+r].base=e.target.value;});
+$("takes").addEventListener("change",function(e){var r=e.target.getAttribute("data-r");if(r!==null){var t=takes[+r];if(t.id)dbPut(t);}});
+$("zip").addEventListener("click",async function(){
+ if(!window.JSZip){setStatus("errZip",true);return;}
+ var z=new JSZip(),used={};
+ takes.forEach(function(t){var n=cleanBase(t.base),f=n+"."+t.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+t.ext;}used[f.toLowerCase()]=1;z.file(f,t.blob);});
+ var ann=[];takes.forEach(function(t){if(t.sid!==null&&t.sid!==undefined&&script[t.sid]&&script[t.sid].f){ann.push(cleanBase(t.base)+"."+t.ext+"\t"+script[t.sid].t);}});
+ if(ann.length){ann.sort();z.file("annotation.txt",ann.join("\n")+"\n");}
+ var blob=await z.generateAsync({type:"blob",compression:"STORE"});saveBlob(blob,"recordings.zip");});
+$("clr").addEventListener("click",async function(){if(!confirm(T[L].confirmDel))return;takes.forEach(function(t){URL.revokeObjectURL(t.url);});takes=[];counter=0;lsSet("vr_counter","0");await dbClear();renderTakes();showStore();});
+$("mic").addEventListener("click",ensureMic);
+$("noise").addEventListener("click",testNoise);
+$("rec").addEventListener("click",function(){if(mode==="rec")stopRec();else startRec();});
+$("fmt").addEventListener("change",updFmt);
+$("dev").addEventListener("change",function(){if(mode==="idle"&&stream){stopStream();$("mic").style.display="";setStatus("st0");}});
+$("raw").addEventListener("change",function(){if(mode==="idle"&&stream){stopStream();$("mic").style.display="";setStatus("st0");}});
+window.addEventListener("pagehide",stopStream);
+function parseScript(text){
+ var lines=text.replace(/^\uFEFF/,"").split(/\r\n|\n|\r/),items=[];
+ lines.forEach(function(l){
+  if(!l.trim())return;
+  var c=l.split("\t"),id=null,t,n="",m=/^\s*(\d+)\s*[.:)\-]\s*(.+)$/.exec(c[0]);
+  if(c.length>=2&&/^\s*\d+\s*$/.test(c[0])){id=parseInt(c[0],10);t=c[1].trim();n=(c[2]||"").trim();}
+  else if(m){id=parseInt(m[1],10);t=m[2].trim();n=c.slice(1).join(" ").trim();}
+  else{t=c[0].trim();n=c.slice(1).join(" ").trim();}
+  if(t)items.push({id:id,t:t,n:n});});
+ var st=parseInt($("start").value,10);if(isNaN(st))st=1;
+ items.forEach(function(it,i){if(it.id===null)it.id=st+i;});
+ return items;}
+function saveIdx(){lsSet("vr_idx",String(sidx));}
+function setScript(items,keep){
+ script=items;sidx=keep?Math.min(sidx,Math.max(0,items.length-1)):0;
+ try{localStorage.setItem("vr_script",JSON.stringify(items));}catch(e){}
+ saveIdx();showSentence();renderTakes();}
+var player=null;
+function takeFor(i){for(var q=0;q<takes.length;q++){if(takes[q].sid===i)return takes[q];}return null;}
+function playTake(t){if(!t)return;try{if(player){player.pause();}player=new Audio(t.url);player.play();}catch(e){}}
+function renderList(){
+ var box=$("sList");box.innerHTML="";if(!$("rv").open)return;
+ var f=$("sFilter").value,shown=0;
+ script.forEach(function(it,i){
+  var tk=takeFor(i);if(f==="todo"&&tk)return;if(f==="done"&&!tk)return;
+  var d=document.createElement("div");d.className="ritem"+(i===sidx?" cur":"");d.setAttribute("data-g",i);
+  var a=document.createElement("span");a.className="st";a.textContent=tk?"✓":"○";d.appendChild(a);
+  var b=document.createElement("span");b.className="id";b.textContent=pad(it.id,parseInt($("digits").value,10)||3);d.appendChild(b);
+  var c=document.createElement("span");c.className="tx";c.setAttribute("dir","auto");c.textContent=it.t;d.appendChild(c);
+  if(tk){var p=document.createElement("button");p.type="button";p.className="b sec";p.textContent="▶";p.setAttribute("data-p",i);d.appendChild(p);}
+  box.appendChild(d);shown++;if(shown>=500)return;});
+ if(!shown){var e=document.createElement("div");e.className="empty";e.textContent=T[L].sNone;box.appendChild(e);}}
+function showSentence(){
+ var has=script.length>0,t=T[L];
+ $("sBox").style.display=has?"block":"none";$("sBox2").style.display=has?"block":"none";$("sClr").style.display=has?"":"none";$("sPrev").style.display=$("sNext").style.display=has?"":"none";
+ if(!has)return;
+ var it=script[sidx],done=0,cur=false,seen={};
+ takes.forEach(function(k){if(k.sid!==null&&k.sid!==undefined&&!seen[k.sid]){seen[k.sid]=1;done++;if(k.sid===sidx)cur=true;}});
+ $("sText").textContent=it.t;
+ $("sCount").setAttribute("dir",L==="ar"?"rtl":"ltr");$("sCount").style.direction=L==="ar"?"rtl":"ltr";$("sCount").textContent=(sidx+1)+t.sOf+script.length+" · "+done+t.sRecd+" · "+(it.f?it.f+"."+($("fmt").value==="mp3"?"mp3":"wav"):t.sFile+" "+pad(it.id,parseInt($("digits").value,10)||3));
+ $("sBar").style.width=Math.round(done/script.length*100)+"%";
+ $("sNote").style.display=it.n?"inline-block":"none";$("sNote").textContent=it.n;
+ $("sDone").style.display=cur?"inline-block":"none";$("sDone").textContent=t.sDone;
+ $("sPlay").style.display=cur?"":"none";$("sDel").style.display=cur?"":"none";$("sPlay").textContent=t.sPlay;$("sDel").textContent=t.sDel;renderList();
+ $("sPrev").disabled=sidx<=0;$("sNext").disabled=sidx>=script.length-1;
+ $("sGo").value=sidx+1;$("sGo").max=script.length;}
+function go(i){if(!script.length||mode==="rec")return;sidx=Math.max(0,Math.min(script.length-1,i));saveIdx();showSentence();}
+$("sUp").addEventListener("click",function(){$("sFile").click();});
+$("sFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var it=parseScript(String(rd.result||""));if(!it.length){alert(T[L].sErr);return;}setScript(it,false);};rd.readAsText(f,"utf-8");this.value="";});
+$("sClr").addEventListener("click",function(){if(!confirm(T[L].sConfirm))return;script=[];sidx=0;try{localStorage.removeItem("vr_script");}catch(e){}saveIdx();showSentence();renderTakes();});
+$("sPlay").addEventListener("click",function(){playTake(takeFor(sidx));});
+$("sDel").addEventListener("click",function(){var k=takeFor(sidx);if(!k)return;var q=takes.indexOf(k);URL.revokeObjectURL(k.url);if(k.id)dbDel(k.id);takes.splice(q,1);renderTakes();showSentence();showStore();});
+$("rv").addEventListener("toggle",renderList);$("sFilter").addEventListener("change",renderList);
+$("sList").addEventListener("click",function(e){var p=e.target.getAttribute("data-p");if(p!==null){playTake(takeFor(+p));return;}var r=e.target.closest?e.target.closest(".ritem"):null;if(r){go(+r.getAttribute("data-g"));try{$("sText").scrollIntoView({behavior:"smooth",block:"center"});}catch(x){}}});
+$("sPrev").addEventListener("click",function(){go(sidx-1);});
+$("sNext").addEventListener("click",function(){go(sidx+1);});
+$("sGo").addEventListener("change",function(){go((parseInt(this.value,10)||1)-1);});
+document.addEventListener("keydown",function(e){
+ var tg=(e.target&&e.target.tagName)||"";if(tg==="INPUT"||tg==="TEXTAREA"||tg==="SELECT"||e.ctrlKey||e.altKey||e.metaKey)return;
+ if(e.key==="ArrowRight")go(sidx+1);else if(e.key==="ArrowLeft")go(sidx-1);
+ else if(e.key===" "||e.code==="Space"){e.preventDefault();if(mode==="rec")stopRec();else startRec();}});
+try{var ss=JSON.parse(lsGet("vr_script","[]"));if(Array.isArray(ss)&&ss.length){script=ss;sidx=Math.min(parseInt(lsGet("vr_idx","0"),10)||0,ss.length-1);}}catch(e){}
+var SET=["fmt","rate","ch","bits","kbps","padB","padA","pre","start","digits","raw"];
+function saveSet(){var o={};SET.forEach(function(i){o[i]=$(i).value;});lsSet("vr_set",JSON.stringify(o));markPreset();}
+function loadSet(){try{var o=JSON.parse(lsGet("vr_set","{}"));SET.forEach(function(i){if(o[i]!==undefined&&$(i))$(i).value=o[i];});}catch(e){}}
+function markPreset(){var cur=[$("fmt").value,$("rate").value,$("ch").value,$("bits").value].join(",");document.querySelectorAll(".preset").forEach(function(b){var p=b.getAttribute("data-p").split(",");var m=p[0]==="mp3"?(cur.indexOf("mp3,"+p[1]+","+p[2])===0):cur===b.getAttribute("data-p");b.classList.toggle("on",m);});}
+SET.forEach(function(i){$(i).addEventListener("change",saveSet);});
+document.getElementById("presets").addEventListener("click",function(e){var b=e.target.closest?e.target.closest(".preset"):null;if(!b)return;var p=b.getAttribute("data-p").split(",");$("fmt").value=p[0];$("rate").value=p[1];$("ch").value=p[2];$("bits").value=p[3];updFmt();saveSet();});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+
+function applyLang(){try{if(typeof pmApplyLang==="function")pmApplyLang();}catch(e){}
+ var t=T[L];var vf=document.getElementById("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?"UfKI5ciue1Y":"vWCQgbYK33w")+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ $("mic").textContent=t.mic;$("noise").textContent=t.noise;$("rec").textContent=mode==="rec"?t.stop:t.rec;$("zip").textContent=t.zip;$("clr").textContent=t.clr;
+ document.title=L==="ar"?"مسجّل الصوت أونلاين | Sayvoi":"Online Voice Recorder: WAV, MP3, 16/24/48 kHz, Mono or Stereo | Sayvoi";
+ if(!stream)setStatus("st0");
+ updFmt();renderTakes();$("saveNote").textContent=dbOk?t.saved:t.savedNo;$("sUp").textContent=t.sUp;$("sClr").textContent=t.sClr;$("sPrev").setAttribute("aria-label",t.sPrev);$("sPrev").title=t.sPrev;$("sNext").setAttribute("aria-label",t.sNext);$("sNext").title=t.sNext;showSentence();}
+/* ---- project mode ---- */
+var PM={
+ en:{h:"Project mode: auto file names",p:"Fill the speaker details and the keyword list once. The recorder creates every keyword × speed × take in order and names each file automatically. The ZIP also contains annotation.txt.",sid:"Speaker ID",g:"Gender",age:"Age",scene:"Scene",kw:"Keywords (one per line). Optional: write  text | filekey  to choose the name used in the file",sp:"Speeds",n:"Takes per speed",ord:"Order",o1:"Keyword, then speed, then take",o2:"Speed, then keyword, then take",gen:"Create the recording list",info:function(k,s,n){return "Total: "+k+" × "+s+" × "+n+" = "+(k*s*n)+" files";},need:"Enter the speaker ID and age first.",done:"Created. Settings were set to WAV, 16 kHz, mono, 16-bit with 0.5 s silence before and after.",spd:{fast:"Fast",normal:"Normal",slow:"Slow"},note:function(sp,i,n){return sp+" · "+i+"/"+n;}},
+ ar:{h:"وضع المشروع: تسمية الملفات تلقائيًا",p:"أدخل بيانات المتحدث وقائمة الكلمات مرة واحدة. يجهّز المسجّل كل كلمة × سرعة × مرة بالترتيب ويسمّي كل ملف تلقائيًا. ويحتوي ملف ZIP أيضًا على annotation.txt.",sid:"رقم المتحدث (SpeakerID)",g:"النوع",age:"العمر",scene:"البيئة (Scene)",kw:"الكلمات (كلمة في كل سطر). اختياري: اكتب  النص | اسم_الملف  لتحديد الاسم المستعمل في الملف",sp:"السرعات",n:"عدد المرات لكل سرعة",ord:"الترتيب",o1:"الكلمة ثم السرعة ثم المرة",o2:"السرعة ثم الكلمة ثم المرة",gen:"أنشئ قائمة التسجيل",info:function(k,s,n){return "الإجمالي: "+k+" × "+s+" × "+n+" = "+(k*s*n)+" ملف";},need:"أدخل رقم المتحدث والعمر أولًا.",done:"تم الإنشاء. ضُبطت الإعدادات على WAV و16 كيلوهرتز ومونو و16 بت مع 0.5 ثانية صمت قبل وبعد.",spd:{fast:"سريع",normal:"عادي",slow:"بطيء"},note:function(sp,i,n){return sp+" · "+i+"/"+n;}}};
+function pmKey(t){return t.toLowerCase().replace(/[^\p{L}\p{N}]+/gu,"");}
+function pmClean(x){return String(x||"").trim().replace(/[^A-Za-z0-9.\-]+/g,"");}
+function pmLines(){var out=[];$("pmKw").value.split(/\r\n|\n|\r/).forEach(function(l){l=l.trim();if(!l)return;var a=l.split("|"),t=a[0].trim(),k=a[1]?pmKey(a[1]):pmKey(t);if(t&&k)out.push({t:t,k:k});});return out;}
+function pmSpeeds(){var o=[];document.querySelectorAll(".pmSp").forEach(function(c){if(c.checked)o.push(c.value);});return o;}
+function pmInfo(){var t=PM[L];$("pmInfo").textContent=t.info(pmLines().length,pmSpeeds().length,parseInt($("pmN").value,10)||1);}
+function pmApplyLang(){var t=PM[L];$("pmH").textContent=t.h;$("pmP").textContent=t.p;$("pmLSid").textContent=t.sid;$("pmLG").textContent=t.g;$("pmLAge").textContent=t.age;$("pmLScene").textContent=t.scene;$("pmLKw").textContent=t.kw;$("pmLSp").textContent=t.sp;$("pmLN").textContent=t.n;$("pmLOrd").textContent=t.ord;$("pmOrd").options[0].textContent=t.o1;$("pmOrd").options[1].textContent=t.o2;$("pmGen").textContent=t.gen;pmInfo();}
+var PMF=["pmSid","pmG","pmAge","pmScene","pmKw","pmN","pmOrd"];
+function pmSave(){var o={};PMF.forEach(function(i){o[i]=$(i).value;});o.sp=pmSpeeds();lsSet("vr_pm",JSON.stringify(o));}
+function pmLoad(){try{var o=JSON.parse(lsGet("vr_pm","{}"));PMF.forEach(function(i){if(o[i]!==undefined)$(i).value=o[i];});if(o.sp){document.querySelectorAll(".pmSp").forEach(function(c){c.checked=o.sp.indexOf(c.value)>=0;});}}catch(e){}}
+$("pmCard").addEventListener("input",function(){pmInfo();pmSave();});
+$("pmCard").addEventListener("change",function(){pmInfo();pmSave();});
+$("pmGen").addEventListener("click",function(){
+ var t=PM[L],sid=pmClean($("pmSid").value),age=pmClean($("pmAge").value),sc=pmClean($("pmScene").value)||"room";
+ if(!sid||!age){alert(t.need);return;}
+ var kws=pmLines(),sps=pmSpeeds(),n=Math.max(1,parseInt($("pmN").value,10)||1),g=$("pmG").value,items=[],id=1;
+ function add(k,sp,i){items.push({id:id++,t:k.t,n:t.note(t.spd[sp],i,n),f:[sid,g,age,sc,k.k,sp,i].join("_")});}
+ if($("pmOrd").value==="k"){kws.forEach(function(k){sps.forEach(function(sp){for(var i=1;i<=n;i++)add(k,sp,i);});});}
+ else{sps.forEach(function(sp){kws.forEach(function(k){for(var i=1;i<=n;i++)add(k,sp,i);});});}
+ if(!items.length)return;
+ $("fmt").value="wav";$("rate").value="16000";$("ch").value="1";$("bits").value="16";$("padB").value="0.5";$("padA").value="0.5";
+ try{updFmt();markPreset();saveSet();}catch(e){}
+ setScript(items,false);pmSave();alert(t.done);
+ try{$("recCard").scrollIntoView({behavior:"smooth"});}catch(e){}});
+pmLoad();
+
+loadSet();counter=parseInt(lsGet("vr_counter","0"),10)||0;
+applyLang();anim();markPreset();
+openDb().then(function(ok){
+ $("saveNote").className="box "+(ok?"ok":"bad");$("saveNote").textContent=ok?T[L].saved:T[L].savedNo;
+ if(!ok)return;
+ return dbAll().then(function(list){list.sort(function(a,b){return a.id-b.id;});takes=[];list.forEach(function(r){takes.push({id:r.id,blob:r.blob,ext:r.ext,base:r.base,sid:(r.sid===undefined?null:r.sid),stats:r.stats,created:r.created,url:URL.createObjectURL(r.blob)});});takes.sort(function(a,b){var x=a.sid===null?1e9:a.sid,y=b.sid===null?1e9:b.sid;return x!==y?x-y:a.created-b.created;});renderTakes();showSentence();showStore();});});
+window.VR={wavBlob:wavBlob};
+})();
+</script>
+</body>
+</html>
