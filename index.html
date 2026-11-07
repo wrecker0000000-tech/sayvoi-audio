@@ -104,6 +104,13 @@
   html[lang="ar"] .promo .pg[lang-block="ar"], html[lang="en"] .promo .pg[lang-block="en"]{display:inline-block}
   [lang-block]{display:none}
   html[lang="ar"] [lang-block="ar"], html[lang="en"] [lang-block="en"]{display:revert}
+  .vd{margin:26px 0 8px;padding:18px;border:1px solid var(--line,#e3e6f3);border-radius:18px;background:#fff}
+  .vd h2{margin:0 0 6px;font-size:20px}
+  .vd p{margin:0 0 12px;color:#4a5170}
+  .vd .fr{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+  .vd iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vd [lang-block]{display:none}
+  html[lang="ar"] .vd [lang-block="ar"], html[lang="en"] .vd [lang-block="en"]{display:block}
 </style>
 </head>
 <body>
@@ -237,6 +244,10 @@
 
   <p class="priv" lang-block="ar">🔒 الملفات لا تُرفع إلى أي سيرفر، وتُعالج بالكامل على جهازك. يُنصح بملفات أقل من 100 ميجابايت للملف الواحد.</p>
   <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
+  <section class="vd">
+    <div lang-block="ar"><h2>شاهد: طريقة استخدام المحوّل</h2><p>شرح مصوّر قصير (نحو 48 ثانية). الخطوات مكتوبة على الشاشة.</p><div class="fr"><iframe title="شرح محوّل الصوت من Sayvoi" loading="lazy" src="https://www.youtube-nocookie.com/embed/ZIWV1nlWjp4?rel=0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>
+    <div lang-block="en"><h2>Watch: how to use the converter</h2><p>A short video guide (about 48 seconds). The steps are written on the screen.</p><div class="fr"><iframe title="Sayvoi audio converter guide" loading="lazy" src="https://www.youtube-nocookie.com/embed/XGBiiejOUwY?rel=0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>
+  </section>
 
   <footer>
     <p lang-block="ar"><a href="/check/">فاحص جودة التسجيلات</a> · <a href="/audio-cutter/">قص الصوت</a> · <a href="/speech-to-text/">الصوت إلى نص</a> · <a href="/numbers-to-words/">الأرقام بالحروف</a> · <a href="/audio-duration/">مدة الملفات</a> · <a href="/voice-recorder/">مسجّل الصوت</a> · <a href="https://sayvoi.com/services/">الخدمات</a> · <a href="/articles/">المقالات</a> · <a href="/about.html">عن الموقع</a> · <a href="/faq.html">الأسئلة الشائعة</a> · <a href="/privacy.html">الخصوصية</a> · <a href="/terms.html">الشروط</a> · <a href="/contact.html">اتصل بنا</a></p>
