@@ -122,6 +122,7 @@
   <tbody id="rows"></tbody>
 </table>
 </div>
+<section class="vd" style="margin:22px 0 6px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff"><h2 data-t="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-t="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi quality checker guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <p class="hint" data-t="privacy"></p>
 
 <footer>
@@ -147,6 +148,7 @@
       check:"افحص", csv:"تصدير CSV", clear:"مسح", files:"ملف", busy:"جارٍ الفحص…", done:"اكتمل الفحص",
       ok:"سليم", warn:"تنبيه", fail:"مرفوض",
       c_status:"الحالة", c_name:"الملف", c_fmt:"الصيغة", c_sr:"معدل العينة", c_ch:"القنوات", c_dur:"المدة", c_peak:"الذروة dBFS", c_rms:"RMS dBFS", c_clip:"تشويه %", c_noise:"ضوضاء dBFS", c_snr:"SNR dB", c_lead:"صمت البداية", c_trail:"صمت النهاية", c_issues:"الملاحظات",
+      vidH:"شاهد: طريقة استخدام الفاحص", vidP:"شرح مصوّر قصير (نحو 55 ثانية). الخطوات مكتوبة على الشاشة.",
       privacy:"لا تُرفع ملفاتك إلى أي خادم. الفحص يجري على جهازك. النتائج تقديرية وتساعد على الفرز السريع، ولا تغني عن الاستماع للتسجيلات الحساسة.",
       none:"لا ملاحظات", decodefail:"تعذّر قراءة الملف (صيغة غير مدعومة أو ملف تالف)", toobig:"الملف أكبر من 200 ميجابايت",
       i_sr:"معدل العينة %a بدل %b", i_ch:"القنوات %a بدل %b", i_fmt:"الصيغة %a بدل %b", i_bit:"عمق البت %a بدل %b", i_min:"أقصر من %a ث", i_max:"أطول من %a ث",
@@ -166,6 +168,7 @@
       check:"Check", csv:"Export CSV", clear:"Clear", files:"files", busy:"Checking…", done:"Check complete",
       ok:"OK", warn:"Warning", fail:"Failed",
       c_status:"Status", c_name:"File", c_fmt:"Format", c_sr:"Sample rate", c_ch:"Channels", c_dur:"Length", c_peak:"Peak dBFS", c_rms:"RMS dBFS", c_clip:"Clipped %", c_noise:"Noise dBFS", c_snr:"SNR dB", c_lead:"Lead silence", c_trail:"Trail silence", c_issues:"Notes",
+      vidH:"Watch: how to use the checker", vidP:"A short video guide (about 55 seconds). The steps are written on the screen.",
       privacy:"Your files are never uploaded. The check runs on your device. Results are estimates for fast triage; they do not replace listening to sensitive recordings.",
       none:"No issues", decodefail:"Could not read the file (unsupported format or corrupted)", toobig:"File is larger than 200 MB",
       i_sr:"Sample rate %a instead of %b", i_ch:"Channels %a instead of %b", i_fmt:"Format %a instead of %b", i_bit:"Bit depth %a instead of %b", i_min:"Shorter than %a s", i_max:"Longer than %a s",
@@ -187,6 +190,7 @@
     document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     document.title = lang === "ar" ? "فاحص جودة التسجيلات الصوتية المجاني | Sayvoi" : "Free Recording Quality Checker | Sayvoi";
     $("langBtn").textContent = lang === "ar" ? "EN" : "عربي";
+    var vf = $("vidFrame"); if (vf){ var vs = "https://www.youtube-nocookie.com/embed/" + (lang === "ar" ? "ERrS_TkqQW0" : "ZiP2YSnS0Fg") + "?rel=0"; if (vf.getAttribute("src") !== vs) vf.setAttribute("src", vs); }
     Array.prototype.forEach.call(document.querySelectorAll("[data-t]"), function(el){ el.textContent = t(el.getAttribute("data-t")); });
     renderAll();
   }
