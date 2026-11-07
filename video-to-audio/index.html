@@ -103,6 +103,13 @@
   .expl li{display:list-item;background:none;border:0;padding:0;margin:4px 0}
   [lang-block]{display:none}
   html[lang="ar"] [lang-block="ar"], html[lang="en"] [lang-block="en"]{display:revert}
+  .vd{margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff}
+  .vd h2{margin:0 0 6px;font-size:20px}
+  .vd p{margin:0 0 12px;color:#4a5170}
+  .vd .fr{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+  .vd iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vd [lang-block]{display:none}
+  html[lang="ar"] .vd [lang-block="ar"], html[lang="en"] .vd [lang-block="en"]{display:block}
 </style>
 </head>
 <body>
@@ -215,6 +222,10 @@
 
   <p class="priv" lang-block="ar">🔒 الملفات لا تُرفع إلى أي سيرفر، وتُعالج بالكامل على جهازك. يُنصح بملفات أقل من 100 ميجابايت للملف الواحد.</p>
   <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
+  <section class="vd">
+    <div lang-block="ar"><h2>شاهد: طريقة استخدام الأداة</h2><p>شرح مصوّر قصير (نحو 48 ثانية). الخطوات مكتوبة على الشاشة.</p><div class="fr"><iframe title="شرح استخراج الصوت من الفيديو من Sayvoi" loading="lazy" src="https://www.youtube-nocookie.com/embed/YN_cz2iSFbg?rel=0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>
+    <div lang-block="en"><h2>Watch: how to use the tool</h2><p>A short video guide (about 48 seconds). The steps are written on the screen.</p><div class="fr"><iframe title="Sayvoi video to audio guide" loading="lazy" src="https://www.youtube-nocookie.com/embed/vwzl6WoFKp4?rel=0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>
+  </section>
 
   
   <section class="expl" lang-block="en">
