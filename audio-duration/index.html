@@ -83,6 +83,7 @@
  <th data-s="name">File</th><th data-s="ext">Type</th><th data-s="dur">Duration</th><th data-s="rate">Hz</th><th data-s="ch">Ch</th><th data-s="bits">Bits</th><th data-s="flag">Check</th>
 </tr></thead><tbody id="tb"></tbody></table></div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi audio duration calculator guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -107,7 +108,7 @@ en:{dir:"ltr",btn:"العربية",
  proc:"Reading files: ",done:"Done. Files read: ",failed:"Could not read: ",
  left:"Still needed: ",over:"Over the target by: ",reached:"Target reached.",
  fShort:"too short",fLong:"too long",fRateW:"rate",fChW:"channels",ok:"OK",
- n1:"<strong>Private:</strong> files never leave your device.",n2:"<strong>Duration:</strong> WAV is calculated from its header. Other formats use the browser’s own reading, which can be slightly off for some VBR MP3 files.",n3:"<strong>M4A / AAC / other:</strong> the duration works, but sample rate and channels are shown as “–”. If you set a rate or channel rule, those files are marked as “unknown”.",back:"Back to home",
+ n1:"<strong>Private:</strong> files never leave your device.",n2:"<strong>Duration:</strong> WAV is calculated from its header. Other formats use the browser’s own reading, which can be slightly off for some VBR MP3 files.",n3:"<strong>M4A / AAC / other:</strong> the duration works, but sample rate and channels are shown as “–”. If you set a rate or channel rule, those files are marked as “unknown”.",vidH:"Watch: how to use the calculator",vidP:"A short video guide (about 60 seconds). The steps are written on the screen.",back:"Back to home",
  unk:"unknown"},
 ar:{dir:"rtl",btn:"English",
  nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
@@ -123,7 +124,7 @@ ar:{dir:"rtl",btn:"English",
  proc:"جارٍ قراءة الملفات: ",done:"تم. الملفات المقروءة: ",failed:"تعذّرت قراءة: ",
  left:"المتبقي: ",over:"زيادة عن المطلوب: ",reached:"تم الوصول للمطلوب.",
  fShort:"قصير",fLong:"طويل",fRateW:"المعدل",fChW:"القنوات",ok:"سليم",
- n1:"<strong>خصوصية:</strong> الملفات لا تغادر جهازك.",n2:"<strong>المدة:</strong> في WAV تُحسب من رأس الملف. الصيغ الأخرى يقرؤها المتصفح نفسه، وقد يختلف قليلًا في بعض ملفات MP3 متغيرة المعدل.",n3:"<strong>M4A / AAC وغيرها:</strong> المدة تعمل لكن المعدل والقنوات تظهر «–». لو حددت شرطًا للمعدل أو القنوات تُعلَّم هذه الملفات «غير معروف».",back:"العودة للرئيسية",
+ n1:"<strong>خصوصية:</strong> الملفات لا تغادر جهازك.",n2:"<strong>المدة:</strong> في WAV تُحسب من رأس الملف. الصيغ الأخرى يقرؤها المتصفح نفسه، وقد يختلف قليلًا في بعض ملفات MP3 متغيرة المعدل.",n3:"<strong>M4A / AAC وغيرها:</strong> المدة تعمل لكن المعدل والقنوات تظهر «–». لو حددت شرطًا للمعدل أو القنوات تُعلَّم هذه الملفات «غير معروف».",vidH:"شاهد: طريقة استخدام الحاسبة",vidP:"شرح مصوّر قصير (نحو 60 ثانية). الخطوات مكتوبة على الشاشة.",back:"العودة للرئيسية",
  unk:"غير معروف"}
 };
 var $=function(i){return document.getElementById(i);};
@@ -247,6 +248,7 @@ function csvText(sep){
 function applyLang(){
  var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?"75aKVLyAn-Y":"pkjvOV2viwE")+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
  var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
