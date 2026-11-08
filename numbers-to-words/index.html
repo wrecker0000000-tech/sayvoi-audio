@@ -79,6 +79,8 @@
 <h2 data-i="h2a"></h2>
 <table class="ex"><tbody id="exTable"></tbody></table>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi Say It As Spoken guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -265,7 +267,7 @@ en:{dir:"ltr",btn:"العربية",
  scanNone:"No digits found.",scanFound:"Digits found: ",
  review:"Review the result before using it. Some forms are a matter of project style (for example “خمستاشر” or “خمسة عشر”), and Fusha grammar is simplified.",
  h2a:"Examples",
- h2b:"Notes",n1:"<strong>Private:</strong> the conversion runs in your browser. Nothing is uploaded.",n2:"<strong>Amounts:</strong> EGP, SAR, AED, USD and EUR are supported, for example “1,250.50 EGP” or “$20”.",n3:"<strong>Known limits:</strong> in Fusha, the counted noun after large numbers follows simplified rules, and some forms need a native speaker’s review.",n4:"<strong>Not converted:</strong> digits attached to Latin letters (like “mp3” or “A4”) are left as they are. Use the digit finder to spot them.",back:"Back to home",
+ vidH:"Watch: how it works",vidP:"A 55-second guide to turning numbers into spoken words.", h2b:"Notes",n1:"<strong>Private:</strong> the conversion runs in your browser. Nothing is uploaded.",n2:"<strong>Amounts:</strong> EGP, SAR, AED, USD and EUR are supported, for example “1,250.50 EGP” or “$20”.",n3:"<strong>Known limits:</strong> in Fusha, the counted noun after large numbers follows simplified rules, and some forms need a native speaker’s review.",n4:"<strong>Not converted:</strong> digits attached to Latin letters (like “mp3” or “A4”) are left as they are. Use the digit finder to spot them.",back:"Back to home",
  errRe:"This browser is too old for this tool. Try a recent Chrome, Edge or Firefox.",
  sample:"أرسل 3:45 PM يوم 15/03/2026، ودفع 1,250.50 EGP بخصم 15% على رقم 01012345678. الاجتماع الساعة 9:30 ص بعد 25 دقيقة.",
  exRows:[["3:45 PM","3:45 PM"],["15/03/2026","15/03/2026"],["1,250.50 EGP","1,250.50 EGP"],["15%","15%"],["01012345678","01012345678"]]},
@@ -281,7 +283,7 @@ ar:{dir:"rtl",btn:"English",
  scanNone:"لا توجد أرقام.",scanFound:"أرقام موجودة: ",
  review:"راجع النتيجة قبل استخدامها. بعض الصيغ تخضع لأسلوب المشروع (مثل «خمستاشر» أو «خمسة عشر»)، ونحو الفصحى مبسّط.",
  h2a:"أمثلة",
- h2b:"ملاحظات",n1:"<strong>خصوصية:</strong> التحويل يتم داخل متصفحك. لا يُرفع شيء.",n2:"<strong>المبالغ:</strong> يدعم الجنيه المصري والريال السعودي والدرهم الإماراتي والدولار واليورو، مثل «1,250.50 EGP» أو «$20».",n3:"<strong>حدود معروفة:</strong> في الفصحى، المعدود بعد الأعداد الكبيرة يتبع قواعد مبسّطة، وبعض الصيغ تحتاج مراجعة متحدث أصلي.",n4:"<strong>لا يُحوَّل:</strong> الأرقام الملتصقة بحروف لاتينية (مثل «mp3» أو «A4») تبقى كما هي. استخدم زر كشف الأرقام لتجدها.",back:"العودة للرئيسية",
+ vidH:"شاهد: طريقة الاستخدام",vidP:"شرح في 55 ثانية لتحويل الأرقام إلى كلمات منطوقة.", h2b:"ملاحظات",n1:"<strong>خصوصية:</strong> التحويل يتم داخل متصفحك. لا يُرفع شيء.",n2:"<strong>المبالغ:</strong> يدعم الجنيه المصري والريال السعودي والدرهم الإماراتي والدولار واليورو، مثل «1,250.50 EGP» أو «$20».",n3:"<strong>حدود معروفة:</strong> في الفصحى، المعدود بعد الأعداد الكبيرة يتبع قواعد مبسّطة، وبعض الصيغ تحتاج مراجعة متحدث أصلي.",n4:"<strong>لا يُحوَّل:</strong> الأرقام الملتصقة بحروف لاتينية (مثل «mp3» أو «A4») تبقى كما هي. استخدم زر كشف الأرقام لتجدها.",back:"العودة للرئيسية",
  errRe:"هذا المتصفح قديم لهذه الأداة. جرّب Chrome أو Edge أو Firefox حديثًا.",
  sample:"أرسل 3:45 PM يوم 15/03/2026، ودفع 1,250.50 EGP بخصم 15% على رقم 01012345678. الاجتماع الساعة 9:30 ص بعد 25 دقيقة.",
  exRows:[["3:45 PM","3:45 PM"],["15/03/2026","15/03/2026"],["1,250.50 EGP","1,250.50 EGP"],["15%","15%"],["01012345678","01012345678"]]}
@@ -295,6 +297,7 @@ function fillExamples(){
   try{b.textContent=SE.convert(r[0],opts());}catch(e){b.textContent="";}b.setAttribute("dir","rtl");tr.appendChild(a);tr.appendChild(b);tb.appendChild(tr);});
 }
 function applyLang(){
+ var vf=document.getElementById("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?"YU8IggisUzw":"EucdM04KqXc")+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
