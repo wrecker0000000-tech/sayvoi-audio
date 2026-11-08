@@ -100,6 +100,8 @@
   <div class="info" data-i="review"></div>
 </div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi speech to text guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
 <h2 data-i="h2a"></h2>
 <ul><li data-h="t1"></li><li data-h="t2"></li><li data-h="t3"></li><li data-h="t4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -122,7 +124,7 @@ en:{dir:"ltr",btn:"العربية",
  hintAr:"For Arabic, choose Accurate. The smaller models make many mistakes in Arabic.",hintGen:"The model is downloaded once and saved in your browser. Larger models are slower and need a modern device.",
  go:"Transcribe",cancel:"Cancel",copy:"Copy text",dl:"Download TXT",copied:"Copied.",ts:"Show timestamps",
  review:"This is an automatic draft. Check names, numbers and dialect words, and edit the text above as your project guidelines require.",
- h2a:"Notes",t1:"<strong>Private:</strong> your audio is processed on your device and never uploaded. Only the model files are downloaded.",t2:"<strong>Limit:</strong> 10 minutes per file. For longer files, cut them first with the <a href=\"/audio-cutter/\">audio cutter</a>.",t3:"<strong>Accuracy:</strong> good for clear speech in Modern Standard Arabic, English and French. Dialects, noise and overlapping speakers give weaker results.",t4:"<strong>Speed:</strong> depends on your device. The first run is slower because the model must download.",back:"Back to home",
+ vidH:"Watch: how it works",vidP:"A 68-second guide to turning speech into text.", h2a:"Notes",t1:"<strong>Private:</strong> your audio is processed on your device and never uploaded. Only the model files are downloaded.",t2:"<strong>Limit:</strong> 10 minutes per file. For longer files, cut them first with the <a href=\"/audio-cutter/\">audio cutter</a>.",t3:"<strong>Accuracy:</strong> good for clear speech in Modern Standard Arabic, English and French. Dialects, noise and overlapping speakers give weaker results.",t4:"<strong>Speed:</strong> depends on your device. The first run is slower because the model must download.",back:"Back to home",
  reading:"Reading the file…",tooLong:"This file is longer than 10 minutes. Cut it first with the audio cutter: ",decErr:"This browser could not read the file. Try another format (MP3 or WAV).",
  loadModel:"Downloading the model… ",loadingM:"Preparing the model…",running:"Transcribing… ",done:"Done in ",secs:" seconds.",err:"Something went wrong: ",cancelled:"Cancelled.",gpuFallback:"Switching to the compatible mode…"},
 ar:{dir:"rtl",btn:"English",
@@ -136,7 +138,7 @@ ar:{dir:"rtl",btn:"English",
  hintAr:"للعربية اختر «دقيق». النماذج الأصغر تخطئ كثيرًا في العربية.",hintGen:"يُحمَّل النموذج مرة واحدة ويُحفظ في متصفحك. النماذج الأكبر أبطأ وتحتاج جهازًا حديثًا.",
  go:"فرّغ الصوت",cancel:"إلغاء",copy:"انسخ النص",dl:"حمّل TXT",copied:"تم النسخ.",ts:"أظهر الأوقات",
  review:"هذه مسودة تلقائية. راجع الأسماء والأرقام وكلمات اللهجة، وعدّل النص أعلاه حسب إرشادات مشروعك.",
- h2a:"ملاحظات",t1:"<strong>خصوصية:</strong> يُعالَج صوتك على جهازك ولا يُرفع. الذي يُحمَّل هو ملفات النموذج فقط.",t2:"<strong>الحد:</strong> 10 دقائق للملف. للملفات الأطول قصّها أولًا بـ<a href=\"/audio-cutter/\">قص الصوت</a>.",t3:"<strong>الدقة:</strong> جيدة للكلام الواضح بالفصحى والإنجليزية والفرنسية. اللهجات والضوضاء وتداخل المتحدثين تعطي نتائج أضعف.",t4:"<strong>السرعة:</strong> تعتمد على جهازك. أول مرة أبطأ لأن النموذج يُحمَّل.",back:"العودة للرئيسية",
+ vidH:"شاهد: طريقة الاستخدام",vidP:"شرح في 68 ثانية لتحويل الكلام إلى نص.", h2a:"ملاحظات",t1:"<strong>خصوصية:</strong> يُعالَج صوتك على جهازك ولا يُرفع. الذي يُحمَّل هو ملفات النموذج فقط.",t2:"<strong>الحد:</strong> 10 دقائق للملف. للملفات الأطول قصّها أولًا بـ<a href=\"/audio-cutter/\">قص الصوت</a>.",t3:"<strong>الدقة:</strong> جيدة للكلام الواضح بالفصحى والإنجليزية والفرنسية. اللهجات والضوضاء وتداخل المتحدثين تعطي نتائج أضعف.",t4:"<strong>السرعة:</strong> تعتمد على جهازك. أول مرة أبطأ لأن النموذج يُحمَّل.",back:"العودة للرئيسية",
  reading:"جارٍ قراءة الملف…",tooLong:"الملف أطول من 10 دقائق. قصّه أولًا بأداة قص الصوت: ",decErr:"لم يستطع المتصفح قراءة الملف. جرّب صيغة أخرى (MP3 أو WAV).",
  loadModel:"جارٍ تحميل النموذج… ",loadingM:"جارٍ تجهيز النموذج…",running:"جارٍ التفريغ… ",done:"تم في ",secs:" ثانية.",err:"حدث خطأ: ",cancelled:"تم الإلغاء.",gpuFallback:"جارٍ التحويل إلى الوضع المتوافق…"}
 };
@@ -145,6 +147,7 @@ var L="en"; try{ if(localStorage.getItem("sayvoi_lang")==="ar") L="ar"; }catch(e
 var audio=null,loadId=0,worker=null,busy=false,t0=0,timer=0,result=null,gen=0,modelReady="";
 
 function applyLang(){
+ var vf=document.getElementById("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?"1CRAHaZHvYg":"iYYSHhyVn1U")+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  var t=T[L]; document.documentElement.lang=L; document.documentElement.dir=t.dir;
  $("nav").innerHTML=t.nav; $("foot").innerHTML=t.foot; $("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]"); for(var i=0;i<a.length;i++){ var k=a[i].getAttribute("data-i"); if(k==="beta") a[i].innerHTML=t[k]; else a[i].textContent=t[k]; }
