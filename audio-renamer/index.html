@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Rename many recordings at once: drop a ZIP or files, set the naming rules, preview the new names and download a renamed ZIP. Free, in your browser.">
+<link rel="canonical" href="https://convert.sayvoi.com/audio-renamer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Batch Rename Audio Files from a ZIP">
+<meta property="og:description" content="Rename many recordings at once with simple rules and download a renamed ZIP. Free, in your browser.">
+<meta property="og:url" content="https://convert.sayvoi.com/audio-renamer/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Batch Rename Audio Files from a ZIP | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 170px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp textarea{width:100%;min-height:170px;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;line-height:1.8;background:transparent;color:inherit;box-sizing:border-box;resize:vertical}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;direction:ltr;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.sp .ex{width:100%;border-collapse:collapse;margin:8px 0}
+.sp .ex td{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.3);vertical-align:top}
+.sp .ex td:first-child{direction:ltr;white-space:nowrap}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+
+.sp input[type=text],.sp input[type=number]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td:first-child,.sp .tbl th:first-child{width:36px;color:#888}
+.sp .tbl td.nw{direction:ltr;font-weight:700}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp code{background:rgba(128,128,128,.18);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<div class="drop" id="drop" tabindex="0" role="button"><b data-i="drop1"></b><br><small data-i="drop2"></small>
+<input type="file" id="file" multiple hidden></div>
+<div class="info" id="loaded" role="status"></div>
+
+<h2 data-i="hRules"></h2>
+<div class="row">
+  <div class="col" style="flex-basis:300px"><label for="pat" data-i="oPat"></label><input type="text" id="pat" dir="ltr" value="{name}" spellcheck="false"><small data-i="patHelp"></small></div>
+  <div class="col"><label for="start" data-i="oStart"></label><input type="number" id="start" value="1" min="0"></div>
+  <div class="col"><label for="step" data-i="oStep"></label><input type="number" id="step" value="1" min="1"></div>
+</div>
+<div class="row">
+  <div class="col"><label for="order" data-i="oOrder"></label><select id="order"><option value="natural" data-k="ordNat"></option><option value="listed" data-k="ordList"></option><option value="date" data-k="ordDate"></option></select></div>
+  <div class="col"><label for="clean" data-i="oClean"></label><select id="clean"><option value="none" data-k="clNone"></option><option value="space" data-k="clSpace"></option><option value="all" data-k="clAll"></option></select></div>
+  <div class="col"><label for="cs" data-i="oCase"></label><select id="cs"><option value="keep" data-k="csKeep"></option><option value="lower" data-k="csLower"></option><option value="upper" data-k="csUpper"></option></select></div>
+  <div class="col"><label for="flat" data-i="oFlat"></label><select id="flat"><option value="1" data-k="yes"></option><option value="0" data-k="no"></option></select></div>
+</div>
+<div class="row">
+  <div class="col"><label for="find" data-i="oFind"></label><input type="text" id="find" spellcheck="false"></div>
+  <div class="col"><label for="repl" data-i="oRepl"></label><input type="text" id="repl" spellcheck="false"></div>
+</div>
+<label for="names" data-i="oNames"></label>
+<textarea id="names" dir="auto" spellcheck="false" style="min-height:110px"></textarea>
+<div class="info" data-i="namesHelp"></div>
+
+<div class="btns">
+  <button type="button" class="b" id="prev"></button>
+  <button type="button" class="b sec" id="clr"></button>
+</div>
+<div class="info" id="stats" role="status"></div>
+<div class="tbl" id="tblBox" style="display:none"><table><thead><tr><th>#</th><th data-i="cOld"></th><th data-i="cNew"></th></tr></thead><tbody id="tb"></tbody></table></div>
+<div class="bar" id="bar"><i id="barI"></i></div>
+<div class="btns">
+  <button type="button" class="b" id="dlzip" disabled></button>
+  <button type="button" class="b sec" id="dlcsv" disabled></button>
+</div>
+<div class="scan" id="msg" role="status"></div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/voice-recorder/" data-i="rec"></a> · <a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var NAVEN='<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/" class="on">Batch renamer</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>';
+var NAVAR='<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/" class="on">إعادة التسمية</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>';
+var T={
+en:{dir:"ltr",btn:"العربية",nav:NAVEN,
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Batch Rename Audio Files from a ZIP",
+ lead:"Drop a ZIP file or many files, set simple naming rules, preview the new names and download everything renamed in one ZIP. The files stay on your device and nothing is uploaded.",
+ drop1:"Tap or drop a ZIP file or your files here",drop2:"You can add several ZIP files or many files at once",
+ hRules:"Naming rules",oPat:"Name pattern",patHelp:"Use {name} for the old name, {n} {n2} {n3} {n4} for a number with 1 to 4 digits, and {folder} for the folder name. The extension is kept.",
+ oStart:"First number",oStep:"Step",oOrder:"Order of files",ordNat:"By name (1, 2, 10)",ordList:"As listed",ordDate:"By date",
+ oClean:"Clean the name",clNone:"No change",clSpace:"Spaces to underscore",clAll:"Spaces to underscore, remove symbols",
+ oCase:"Letter case",csKeep:"Keep",csLower:"lowercase",csUpper:"UPPERCASE",oFlat:"Put all files in one folder",yes:"Yes",no:"No",
+ oFind:"Find text in the old name",oRepl:"Replace with",
+ oNames:"List of new names (optional)",namesHelp:"One name per line. They are applied in the file order above. If the list is shorter than the files, the rest use the pattern. Add no extension, it is kept.",
+ prev:"Preview",clr:"Clear all",dlzip:"Download renamed ZIP",dlcsv:"Download names list (CSV)",
+ cOld:"Old name",cNew:"New name",
+ none:"No files loaded yet.",loaded:"Files loaded: ",skipped:" · hidden files skipped: ",
+ total:"Files: ",dups:" · repeated names fixed: ",more:"Showing the first 300 rows.",
+ building:"Building the ZIP… ",done:"The ZIP is ready and downloading.",err:"Could not read one of the files. Is it a valid ZIP?",errLib:"The ZIP library could not load. Check your connection and reload the page.",
+ h2b:"Notes",
+ n1:"Always check the preview before you download. The tool never changes your original files.",
+ n2:"If two files get the same new name, a number is added to the second one so nothing is lost.",
+ n3:"Symbols that are not allowed in file names ( \\ / : * ? \" < > | ) are removed automatically.",
+ n4:"Very large ZIP files need enough memory on your device. For hundreds of large files, work in batches.",
+ rec:"Record sentences with the Voice recorder",back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",nav:NAVAR,
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"إعادة تسمية الملفات الصوتية دفعة واحدة",
+ lead:"أسقط ملف ZIP أو ملفات كثيرة، وحدّد قواعد تسمية بسيطة، وراجع الأسماء الجديدة ونزّل كل شيء بعد التسمية في ملف ZIP واحد. تبقى الملفات على جهازك ولا يُرفع أي شيء.",
+ drop1:"اضغط أو أسقط هنا ملف ZIP أو ملفاتك",drop2:"يمكنك إضافة عدة ملفات ZIP أو ملفات كثيرة معًا",
+ hRules:"قواعد التسمية",oPat:"نمط الاسم",patHelp:"استعمل {name} للاسم القديم، و{n} أو {n2} أو {n3} أو {n4} لرقم من 1 إلى 4 خانات، و{folder} لاسم المجلد. وتبقى الامتدادات كما هي.",
+ oStart:"الرقم الأول",oStep:"الخطوة",oOrder:"ترتيب الملفات",ordNat:"بالاسم (1، 2، 10)",ordList:"كما وردت",ordDate:"بالتاريخ",
+ oClean:"تنظيف الاسم",clNone:"بدون تغيير",clSpace:"المسافات إلى شرطة سفلية",clAll:"المسافات إلى شرطة سفلية وحذف الرموز",
+ oCase:"حالة الأحرف",csKeep:"كما هي",csLower:"أحرف صغيرة",csUpper:"أحرف كبيرة",oFlat:"وضع كل الملفات في مجلد واحد",yes:"نعم",no:"لا",
+ oFind:"نص للبحث عنه في الاسم القديم",oRepl:"استبدله بـ",
+ oNames:"قائمة الأسماء الجديدة (اختياري)",namesHelp:"اسم في كل سطر. تُطبَّق بترتيب الملفات أعلاه. وإذا كانت القائمة أقصر من الملفات فالباقي يأخذ النمط. لا تكتب الامتداد، فهو يبقى كما هو.",
+ prev:"معاينة",clr:"مسح الكل",dlzip:"تنزيل ZIP بعد التسمية",dlcsv:"تنزيل قائمة الأسماء (CSV)",
+ cOld:"الاسم القديم",cNew:"الاسم الجديد",
+ none:"لم تُحمَّل ملفات بعد.",loaded:"الملفات المحمّلة: ",skipped:" · ملفات مخفية تم تخطيها: ",
+ total:"الملفات: ",dups:" · أسماء مكررة تم إصلاحها: ",more:"تظهر أول 300 صف.",
+ building:"جارٍ بناء ملف ZIP… ",done:"ملف ZIP جاهز ويجري تنزيله.",err:"تعذّرت قراءة أحد الملفات. هل هو ZIP صالح؟",errLib:"تعذّر تحميل مكتبة ZIP. تحقق من الاتصال وأعد تحميل الصفحة.",
+ h2b:"ملاحظات",
+ n1:"راجع المعاينة دائمًا قبل التنزيل. الأداة لا تغيّر ملفاتك الأصلية أبدًا.",
+ n2:"إذا حصل ملفان على الاسم نفسه يُضاف رقم للثاني حتى لا يضيع شيء.",
+ n3:"تُحذف تلقائيًا الرموز غير المسموحة في أسماء الملفات ( \\ / : * ? \" < > | ).",
+ n4:"الملفات الكبيرة جدًا تحتاج ذاكرة كافية في جهازك. وللمئات من الملفات الكبيرة اعمل على دفعات.",
+ rec:"سجّل الجمل بمسجّل الصوت",back:"العودة إلى الأدوات"}
+};
+var items=[],hidden=0,result=null;
+function splitName(n){var i=n.lastIndexOf(".");return i>0?{b:n.slice(0,i),e:n.slice(i)}:{b:n,e:""};}
+function natCmp(a,b){return a.localeCompare(b,undefined,{numeric:true,sensitivity:"base"});}
+function addFiles(list){
+ var msg=$("msg");msg.style.display="none";
+ var ps=[],t=T[L];
+ Array.prototype.forEach.call(list,function(f){
+  if(/\.zip$/i.test(f.name)){
+   if(!window.JSZip){show(t.errLib,true);return;}
+   ps.push(JSZip.loadAsync(f).then(function(z){
+    z.forEach(function(path,en){
+     if(en.dir)return;
+     var parts=path.split("/"),nm=parts[parts.length-1];
+     if(/^__MACOSX\//.test(path)||nm.charAt(0)==="."||!nm){hidden++;return;}
+     items.push({path:path,name:nm,folder:parts.length>1?parts[parts.length-2]:"",date:en.date?en.date.getTime():0,get:function(){return en.async("uint8array");}});
+    });
+   }));
+  }else{
+   var nm=f.name;if(nm.charAt(0)===".")hidden++;
+   else items.push({path:nm,name:nm,folder:"",date:f.lastModified||0,get:function(){return f.arrayBuffer().then(function(b){return new Uint8Array(b);});}});
+  }
+ });
+ Promise.all(ps).then(function(){refreshLoaded();compute();},function(){show(T[L].err,true);});
+}
+function refreshLoaded(){var t=T[L];$("loaded").textContent=items.length?t.loaded+items.length+(hidden?t.skipped+hidden:""):t.none;}
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function pad(n,w){var s=String(n);while(s.length<w)s="0"+s;return s;}
+function compute(){
+ var t=T[L];result=null;$("dlzip").disabled=true;$("dlcsv").disabled=true;
+ if(!items.length){$("tblBox").style.display="none";$("stats").textContent="";return;}
+ var o=$("order").value,list=items.slice();
+ if(o==="natural")list.sort(function(a,b){return natCmp(a.path,b.path);});
+ else if(o==="date")list.sort(function(a,b){return a.date-b.date||natCmp(a.path,b.path);});
+ var pat=$("pat").value||"{name}",st=parseInt($("start").value,10)||0,sp=parseInt($("step").value,10)||1,fd=$("find").value,rp=$("repl").value;
+ var cl=$("clean").value,cs=$("cs").value,flat=$("flat").value==="1";
+ var nl=$("names").value.replace(/\r/g,"").split("\n").map(function(x){return x.trim();}).filter(function(x){return x;});
+ var used={},rows=[],fixed=0;
+ list.forEach(function(it,i){
+  var sn=splitName(it.name),base=sn.b,ext=sn.e;
+  if(fd)base=base.split(fd).join(rp);
+  var num=st+i*sp,nb;
+  if(i<nl.length){nb=nl[i];if(ext&&nb.toLowerCase().slice(-ext.length)===ext.toLowerCase())nb=nb.slice(0,-ext.length);}
+  else nb=pat.replace(/\{name\}/g,base).replace(/\{folder\}/g,it.folder).replace(/\{n([234]?)\}/g,function(m,d){return d?pad(num,+d):String(num);});
+  if(cl!=="none")nb=nb.replace(/\s+/g,"_");
+  if(cl==="all")nb=nb.replace(/[^\p{L}\p{N}_\-.{}]/gu,"");
+  nb=nb.replace(/[\\\/:*?"<>|\u0000-\u001f]/g,"").trim();
+  if(!nb)nb="file";
+  if(cs==="lower")nb=nb.toLowerCase();else if(cs==="upper")nb=nb.toUpperCase();
+  var dir=flat?"":(it.path.indexOf("/")>=0?it.path.slice(0,it.path.lastIndexOf("/")+1):""),full=dir+nb+ext,key=full.toLowerCase(),k=1;
+  while(used[key]){k++;full=dir+nb+"_"+k+ext;key=full.toLowerCase();}
+  if(k>1)fixed++;
+  used[key]=1;rows.push({it:it,nw:full});
+ });
+ result=rows;
+ var tb=$("tb");tb.innerHTML="";
+ rows.slice(0,300).forEach(function(r,i){var tr=document.createElement("tr");
+  [String(i+1),r.it.path,r.nw].forEach(function(x,j){var td=document.createElement("td");td.textContent=x;if(j===2)td.className="nw";td.dir="auto";tr.appendChild(td);});tb.appendChild(tr);});
+ $("tblBox").style.display="block";
+ $("stats").textContent=t.total+rows.length+(fixed?t.dups+fixed:"")+(rows.length>300?" · "+t.more:"");
+ $("dlzip").disabled=false;$("dlcsv").disabled=false;
+}
+function dl(blob,name){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
+function buildZip(){
+ if(!result||!result.length)return;
+ if(!window.JSZip){show(T[L].errLib,true);return;}
+ var z=new JSZip(),t=T[L],bar=$("bar"),bi=$("barI");bar.style.display="block";bi.style.width="0";
+ $("dlzip").disabled=true;
+ var i=0;
+ (function next(){
+  if(i>=result.length){
+   show(t.building+"100%",false);
+   z.generateAsync({type:"blob",compression:"STORE"},function(m){bi.style.width=m.percent.toFixed(0)+"%";}).then(function(b){
+    dl(b,"renamed.zip");show(t.done,false);bar.style.display="none";$("dlzip").disabled=false;
+   },function(){show(t.err,true);bar.style.display="none";$("dlzip").disabled=false;});
+   return;
+  }
+  var r=result[i];
+  r.it.get().then(function(u8){z.file(r.nw,u8,{binary:true});i++;bi.style.width=(i/result.length*50).toFixed(0)+"%";if(i%10===0)show(t.building+i+" / "+result.length,false);setTimeout(next,0);},function(){show(t.err,true);bar.style.display="none";$("dlzip").disabled=false;});
+ })();
+}
+function csv(){
+ if(!result)return;
+ var q=function(s){return '"'+String(s).replace(/"/g,'""')+'"';};
+ var lines=["old_name,new_name"].concat(result.map(function(r){return q(r.it.path)+","+q(r.nw);}));
+ dl(new Blob(["\uFEFF"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),"names.csv");
+}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var ids={prev:"prev",clr:"clr",dlzip:"dlzip",dlcsv:"dlcsv"};for(var id in ids)$(id).textContent=t[ids[id]];
+ document.title=L==="ar"?"إعادة تسمية الملفات الصوتية دفعة واحدة من ZIP | Sayvoi":"Batch Rename Audio Files from a ZIP | Sayvoi";
+ refreshLoaded();
+}
+$("drop").addEventListener("click",function(){$("file").click();});
+$("drop").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();$("file").click();}});
+["dragenter","dragover"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.add("hov");});});
+["dragleave","drop"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.remove("hov");});});
+$("drop").addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files.length)addFiles(e.dataTransfer.files);});
+$("file").addEventListener("change",function(){if(this.files.length)addFiles(this.files);this.value="";});
+["pat","start","step","order","clean","cs","flat","find","repl","names"].forEach(function(id){$(id).addEventListener(id==="order"||id==="clean"||id==="cs"||id==="flat"?"change":"input",compute);});
+$("prev").addEventListener("click",compute);
+$("clr").addEventListener("click",function(){items=[];hidden=0;result=null;$("names").value="";$("find").value="";$("repl").value="";$("pat").value="{name}";$("msg").style.display="none";refreshLoaded();compute();});
+$("dlzip").addEventListener("click",buildZip);
+$("dlcsv").addEventListener("click",csv);
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();compute();});
+applyLang();
+})();
+</script>
+</body>
+</html>

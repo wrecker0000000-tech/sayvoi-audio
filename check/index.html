@@ -79,7 +79,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
 <body>
 <div class="wrap">
 <nav class="top"><a class="brand" href="/">Sayvoi</a>
-  <a href="/" data-t="nav_conv"></a><a href="/check/" class="on" data-t="nav_check"></a><a href="/video-to-audio/" data-t="nav_vid"></a><a href="/audio-cutter/" data-t="nav_cut"></a><a href="/speech-to-text/" data-t="nav_stt"></a><a href="/numbers-to-words/" data-t="nav_num"></a><a href="/audio-duration/" data-t="nav_dur"></a><a href="/sentence-splitter/" data-t="nav_split"></a><a href="/voice-recorder/" data-t="nav_rec"></a><a href="https://sayvoi.com/services/" data-t="nav_svc"></a><a href="/articles/" data-t="nav_art"></a><a href="/about.html" data-t="nav_about"></a>
+  <a href="/" data-t="nav_conv"></a><a href="/check/" class="on" data-t="nav_check"></a><a href="/video-to-audio/" data-t="nav_vid"></a><a href="/audio-cutter/" data-t="nav_cut"></a><a href="/speech-to-text/" data-t="nav_stt"></a><a href="/numbers-to-words/" data-t="nav_num"></a><a href="/audio-duration/" data-t="nav_dur"></a><a href="/sentence-splitter/" data-t="nav_split"></a><a href="/audio-renamer/" data-t="nav_ren"></a><a href="/voice-recorder/" data-t="nav_rec"></a><a href="https://sayvoi.com/services/" data-t="nav_svc"></a><a href="/articles/" data-t="nav_art"></a><a href="/about.html" data-t="nav_about"></a>
   <button class="btn sec" id="langBtn" type="button" style="padding:4px 12px">EN</button></nav>
 
 <h1 data-t="h1"></h1>
@@ -148,7 +148,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
   "use strict";
   var T = {
     ar: {
-      nav_conv:"المحوّل", nav_check:"فاحص الجودة", nav_art:"المقالات", nav_vid:"فيديو إلى صوت", nav_about:"عن الموقع", nav_cut:"قص الصوت", nav_stt:"الصوت إلى نص", nav_num:"الأرقام بالحروف", nav_dur:"مدة الملفات", nav_split:"مقسّم الجمل", nav_rec:"مسجّل الصوت", nav_svc:"الخدمات", f_priv:"الخصوصية", f_contact:"اتصل بنا",
+      nav_conv:"المحوّل", nav_check:"فاحص الجودة", nav_art:"المقالات", nav_vid:"فيديو إلى صوت", nav_about:"عن الموقع", nav_cut:"قص الصوت", nav_stt:"الصوت إلى نص", nav_num:"الأرقام بالحروف", nav_dur:"مدة الملفات", nav_split:"مقسّم الجمل", nav_rec:"مسجّل الصوت", nav_ren:"إعادة التسمية", nav_svc:"الخدمات", f_priv:"الخصوصية", f_contact:"اتصل بنا",
       h1:"فاحص جودة التسجيلات الصوتية", sub:"افحص عشرات التسجيلات دفعة واحدة: معدل العينة، القنوات، التشويه (clipping)، الضوضاء، الصمت، والتكرار. كل شيء داخل متصفحك.",
       drop1:"اسحب الملفات هنا أو اضغط للاختيار", drop2:"WAV · MP3 · FLAC · OGG · M4A — حتى 200 ميجابايت للملف",
       specs:"مواصفات المشروع (اختياري)", specsHint:"اترك الحقل على «أي» أو فارغًا لتجاهله. أي ملف يخالف مواصفة تحددها يُعتبر «مرفوضًا».",
@@ -168,7 +168,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
       i_silent:"الملف صامت تقريبًا", i_fake:"ستيريو لكن القناتان متطابقتان", i_dc:"إزاحة DC ملحوظة", i_dup:"مكرر: نفس محتوى %a", i_short:"ملف قصير جدًا (أقل من 0.3 ث)", i_nospeech:"لا يوجد جزء مسموع واضح فوق الضوضاء"
     },
     en: {
-      nav_conv:"Converter", nav_check:"Quality checker", nav_art:"Articles", nav_vid:"Video to audio", nav_about:"About", nav_cut:"Audio cutter", nav_stt:"Speech to text", nav_num:"Numbers to words", nav_dur:"Audio duration", nav_split:"Sentence splitter", nav_rec:"Voice recorder", nav_svc:"Services", f_priv:"Privacy", f_contact:"Contact",
+      nav_conv:"Converter", nav_check:"Quality checker", nav_art:"Articles", nav_vid:"Video to audio", nav_about:"About", nav_cut:"Audio cutter", nav_stt:"Speech to text", nav_num:"Numbers to words", nav_dur:"Audio duration", nav_split:"Sentence splitter", nav_rec:"Voice recorder", nav_ren:"Batch renamer", nav_svc:"Services", f_priv:"Privacy", f_contact:"Contact",
       h1:"Recording Quality Checker", sub:"Check dozens of recordings at once: sample rate, channels, clipping, noise, silence and duplicates. Everything runs in your browser.",
       drop1:"Drop files here or click to choose", drop2:"WAV · MP3 · FLAC · OGG · M4A — up to 200 MB per file",
       specs:"Project specs (optional)", specsHint:"Leave a field on “Any” or empty to ignore it. A file that breaks a spec you set is marked as failed.",
