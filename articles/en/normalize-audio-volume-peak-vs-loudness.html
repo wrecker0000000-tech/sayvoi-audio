@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peak or Loudness: How to Normalize Audio Volume | Sayvoi</title>
+<meta name="description" content="What audio normalization does, the difference between peak and average loudness, and which one to choose for voice recordings.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/normalize-audio-volume-peak-vs-loudness.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/normalize-audio-volume-peak-vs-loudness.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/normalize-audio-volume-peak-vs-loudness.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Peak or Loudness: How to Normalize Audio Volume">
+<meta property="og:description" content="What audio normalization does, the difference between peak and average loudness, and which one to choose for voice recordings.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/normalize-audio-volume-peak-vs-loudness.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Peak or Loudness: How to Normalize Audio Volume", "description": "What audio normalization does, the difference between peak and average loudness, and which one to choose for voice recordings.", "datePublished": "2026-11-12", "dateModified": "2026-11-12", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/normalize-audio-volume-peak-vs-loudness.html"}</script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/" class="on">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>Peak or Loudness: How to Normalize Audio Volume</h1>
+<p class="meta">Last updated: November 12, 2026</p>
+
+<p>Normalizing audio means changing the volume of a recording by one fixed amount to reach a target. It does not squeeze or reshape the sound. It simply makes the whole file louder or quieter. There are two common targets.</p>
+<h2>Peak normalization</h2>
+<p>The loudest point of the file is set to a chosen level, often a little below the maximum, such as -1 dB. Everything else moves up or down by the same amount. This is useful when you want the recording as loud as possible without clipping. But two files with the same peak can still sound very different in loudness, because a single loud cough can set the peak.</p>
+<h2>Loudness normalization</h2>
+<p>The average level of the speech is set to a target, so different files sound equally loud to the listener. For speech, an average around -20 dB is a common, comfortable choice, and -16 dB is louder. This is better when you deliver many files that should sound consistent.</p>
+<h2>The limit that protects you</h2>
+<p>If a file has big peaks, raising the average to the target could push those peaks past the maximum and cause clipping. The Sayvoi Audio Cleaner never lets the loudest point go above -1 dB, so in that case the file ends a little quieter than the target. That is expected and keeps the sound clean. To understand clipping, read <a href="audio-clipping-distortion.html">audio clipping and distortion</a>.</p>
+<h2>Which one should you choose?</h2>
+<ul>
+<li>One recording that should be as loud as possible: peak.</li>
+<li>Many recordings that should sound alike, such as a voice data project: average loudness.</li>
+<li>Always follow the project guide if it names a level.</li>
+</ul>
+<h2>Normalize last</h2>
+<p>Noise reduction and silence removal change the level of a file. So do them first and normalize at the end. See the full order in <a href="clean-audio-recordings-noise-silence-volume.html">how to clean audio recordings</a>.</p>
+<p>Normalizing cannot fix a recording that is already distorted or very noisy. For that, record again in a quieter place, as explained in <a href="record-clean-audio-phone.html">how to record clean audio with your phone</a>.</p>
+
+<div class="cta"><p>Reduce noise, remove silence and normalize volume for one file or a whole ZIP, free in your browser.</p><a class="btn" href="/audio-cleaner/">Open the audio cleaner</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="clean-audio-recordings-noise-silence-volume.html"><b>How to Clean Audio Recordings: Reduce Noise, Remove Silence, Fix Volume</b><span>A simple order for cleaning voice recordings: reduce steady noise, trim silence, then normalize the volume. Works for one file or a whole ZIP, free in your browser.</span></a><a class="card" href="audio-clipping-distortion.html"><b>What Is Audio Clipping, and How to Avoid It in Your Recordings</b><span>Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.</span></a><a class="card" href="noise-floor-snr.html"><b>Noise Floor and Signal-to-Noise Ratio: What They Mean for Your Recordings</b><span>What the noise floor and SNR are, how to measure them from a recording, what numbers are good for speech, and how to improve them.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>
