@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Clean recordings in your browser: reduce steady noise, remove silence, normalize the volume, for one file or a whole ZIP. Free, nothing is uploaded.">
+<title>Audio Cleaner: Remove Silence and Noise, Normalize | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<div class="drop" id="drop" tabindex="0" role="button"><b data-i="drop1"></b><br><small data-i="drop2"></small>
+<input type="file" id="file" multiple hidden></div>
+<div class="info" id="loaded" role="status"></div>
+
+<div class="note" data-i="orderNote"></div>
+
+<h2 data-i="hNoise"></h2>
+<div class="row">
+  <div class="col"><label for="nz" data-i="oNoise"></label><select id="nz"><option value="off" data-k="off"></option><option value="light" data-k="light" selected></option><option value="medium" data-k="medium"></option><option value="strong" data-k="strong"></option></select></div>
+</div>
+<div class="info" data-i="noiseHelp"></div>
+
+<h2 data-i="hSil"></h2>
+<div class="row">
+  <div class="col" style="flex-basis:300px"><label for="sm" data-i="oSilMode"></label><select id="sm"><option value="off" data-k="smOff"></option><option value="edges" data-k="smEdges" selected></option><option value="all" data-k="smAll"></option></select></div>
+  <div class="col"><label for="sl" data-i="oSilLvl"></label><select id="sl"><option value="-55" data-k="slGentle"></option><option value="-45" data-k="slNormal" selected></option><option value="-35" data-k="slStrong"></option></select></div>
+  <div class="col"><label for="sp" data-i="oPause"></label><select id="sp"><option value="300" data-k="p03"></option><option value="500" data-k="p05" selected></option><option value="1000" data-k="p1"></option></select></div>
+</div>
+<div class="info" data-i="silHelp"></div>
+
+<h2 data-i="hNorm"></h2>
+<div class="row">
+  <div class="col" style="flex-basis:300px"><label for="nm" data-i="oNorm"></label><select id="nm"><option value="off" data-k="off"></option><option value="peak" data-k="nmPeak" selected></option><option value="rms20" data-k="nmR20"></option><option value="rms16" data-k="nmR16"></option></select></div>
+</div>
+<div class="info" data-i="normHelp"></div>
+
+<h2 data-i="hOut"></h2>
+<div class="row">
+  <div class="col"><label for="fmt" data-i="oFmt"></label><select id="fmt"><option value="wav" data-k="fWav"></option><option value="128" data-k="fM128"></option><option value="192" data-k="fM192"></option></select></div>
+  <div class="col"><label for="chn" data-i="oCh"></label><select id="chn"><option value="keep" data-k="chKeep"></option><option value="mono" data-k="chMono"></option></select></div>
+  <div class="col"><label for="sr" data-i="oSr"></label><select id="sr"><option value="auto" data-k="srAuto"></option><option value="16000" data-k="sr16"></option><option value="22050" data-k="sr22"></option><option value="44100" data-k="sr44"></option><option value="48000" data-k="sr48"></option></select></div>
+</div>
+
+<div class="btns">
+  <button type="button" class="b sec" id="prev" disabled></button>
+  <button type="button" class="b" id="run" disabled></button>
+  <button type="button" class="b sec" id="clr"></button>
+</div>
+<div class="bar" id="bar"><i id="barI"></i></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div class="pv" id="pv">
+  <h3 style="margin-top:0" data-i="pvH"></h3>
+  <b data-i="pvB"></b><audio id="aB" controls preload="metadata"></audio>
+  <b data-i="pvA"></b><audio id="aA" controls preload="metadata"></audio>
+  <span class="small" id="pvInfo"></span>
+</div>
+
+<div class="tbl" id="tblBox" style="display:none"><table><thead><tr><th>#</th><th data-i="cFile"></th><th data-i="cBefore"></th><th data-i="cAfter"></th><th data-i="cNote"></th></tr></thead><tbody id="tb"></tbody></table></div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li><li data-h="n5"></li></ul>
+<p style="margin-top:22px"><a href="/voice-recorder/" data-i="rec"></a> · <a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var NAVEN='<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>';
+var NAVAR='<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>';
+var T={
+en:{dir:"ltr",btn:"العربية",nav:NAVEN,
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Audio Cleaner: Remove Silence and Noise, Then Normalize",
+ lead:"Clean one recording or hundreds of them in a few clicks. The tool reduces steady background noise, removes silence, and sets the volume level last. Drop a file, many files or a ZIP, listen to the first file before and after, and download the result as WAV or MP3. Everything runs on your device and nothing is uploaded.",
+ drop1:"Tap or drop audio files or a ZIP here",drop2:"One file, many files, or ZIP files with many recordings",
+ orderNote:"Order of work: 1) reduce noise, 2) remove silence, 3) normalize the volume. Normalizing is always last, so the final level is exact.",
+ hNoise:"1. Reduce steady noise",oNoise:"Strength",off:"Off",light:"Light",medium:"Medium",strong:"Strong",
+ noiseHelp:"Works best on steady noise such as a fan, air conditioner, hiss or room hum. It learns the noise from the quietest parts of the recording, so the file should contain a short pause or two. It also removes low rumble below 80 Hz. It cannot remove voices, music or sudden sounds, and the strong setting can make speech sound slightly watery.",
+ hSil:"2. Remove silence",oSilMode:"What to remove",smOff:"Nothing",smEdges:"Silence at the start and the end",smAll:"Start, end and long pauses in the middle",
+ oSilLvl:"Silence level",slGentle:"Gentle (only very quiet parts)",slNormal:"Normal",slStrong:"Strong (also soft breaths)",
+ oPause:"Pause to keep",p03:"0.3 seconds",p05:"0.5 seconds",p1:"1 second",
+ silHelp:"A short margin of 0.15 seconds is kept at the edges so speech is not cut. Long pauses in the middle are shortened to the pause length you choose, not deleted completely.",
+ hNorm:"3. Normalize the volume (last)",oNorm:"Target",nmPeak:"Peak at -1 dB (the loudest point)",nmR20:"Average loudness -20 dB (speech standard)",nmR16:"Average loudness -16 dB (louder)",
+ normHelp:"The loudness modes never let the loudest point go above -1 dB. If a recording has big peaks, it may end quieter than the target.",
+ hOut:"Output",oFmt:"Format",fWav:"WAV 16-bit (best quality)",fM128:"MP3 128 kbps (small)",fM192:"MP3 192 kbps",
+ oCh:"Channels",chKeep:"Keep as is",chMono:"Mono (one channel)",oSr:"Sample rate",srAuto:"Same as the file (when possible)",sr16:"16 kHz",sr22:"22.05 kHz",sr44:"44.1 kHz",sr48:"48 kHz",
+ prev:"Preview first file",run:"Clean and download",clr:"Clear all",
+ pvH:"Before and after (first file)",pvB:"Before",pvA:"After",pvInfo:"The preview is always WAV. Length: ",
+ cFile:"File",cBefore:"Before",cAfter:"After",cNote:"Note",
+ none:"No files loaded yet.",loaded:"Audio files loaded: ",skipped:" · other files skipped: ",
+ working:"Working on file ",of:" of ",s_dec:"reading",s_nz:"reducing noise",s_sil:"removing silence",s_nm:"normalizing",s_enc:"encoding",s_zip:"building the ZIP",
+ doneOne:"Done. Your file is downloading.",doneZip:"Done. The ZIP is ready and downloading.",
+ errLib:"The ZIP library could not load. Check your connection and reload the page.",errMp3:"The MP3 encoder could not load. Choose WAV or check your connection.",
+ errZip:"Could not read the ZIP file.",errNo:"No audio files found.",errDec:"Could not read this file as audio.",errAny:"Something went wrong: ",
+ nOk:"OK",nSil:"All silent, kept as is",nCap:"Peak limit reached, quieter than target",nFail:"Failed: not readable audio",
+ h2b:"Notes",
+ n1:"Your original files are never changed. Every result is a new file whose name ends with _clean.",
+ n2:"Always listen to the preview before you clean many files. Settings that suit one microphone may not suit another.",
+ n3:"Noise reduction cannot fix distortion, echo or loud voices in the background. For those, record again in a quieter place.",
+ n4:"Long recordings and big ZIP files need memory on your device. For hundreds of large files, work in batches.",
+ n5:"MP3 is a compressed format. For voice data projects, keep WAV.",
+ rec:"Record with the Voice recorder",back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",nav:NAVAR,
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"منظّف الصوت: إزالة الصمت والضوضاء ثم ضبط مستوى الصوت",
+ lead:"نظّف تسجيلًا واحدًا أو مئات التسجيلات ببضع نقرات. تُخفّف الأداة الضوضاء الثابتة في الخلفية، وتزيل الصمت، وتضبط مستوى الصوت في الآخر. أسقط ملفًا أو ملفات كثيرة أو ملف ZIP، واستمع إلى أول ملف قبل وبعد، ثم نزّل النتيجة بصيغة WAV أو MP3. كل شيء يتم على جهازك ولا يُرفع أي شيء.",
+ drop1:"اضغط أو أسقط هنا ملفات صوتية أو ملف ZIP",drop2:"ملف واحد أو ملفات كثيرة أو ملفات ZIP فيها تسجيلات كثيرة",
+ orderNote:"ترتيب العمل: 1) تخفيف الضوضاء، 2) إزالة الصمت، 3) ضبط مستوى الصوت. الضبط دائمًا في الآخر حتى يكون المستوى النهائي دقيقًا.",
+ hNoise:"1. تخفيف الضوضاء الثابتة",oNoise:"القوة",off:"بدون",light:"خفيفة",medium:"متوسطة",strong:"قوية",
+ noiseHelp:"تعمل أفضل مع الضوضاء الثابتة مثل المروحة والتكييف والهسيس وطنين الغرفة. تتعلّم الضوضاء من أهدأ أجزاء التسجيل، لذلك يجب أن يحتوي الملف على وقفة قصيرة أو اثنتين. وتزيل أيضًا الدمدمة المنخفضة تحت 80 هرتز. لا تستطيع إزالة الأصوات البشرية أو الموسيقى أو الأصوات المفاجئة، والإعداد القوي قد يجعل الكلام يبدو مائيًا قليلًا.",
+ hSil:"2. إزالة الصمت",oSilMode:"ماذا تزيل",smOff:"لا شيء",smEdges:"الصمت في البداية والنهاية",smAll:"البداية والنهاية والوقفات الطويلة في المنتصف",
+ oSilLvl:"مستوى الصمت",slGentle:"لطيف (الأجزاء الهادئة جدًا فقط)",slNormal:"عادي",slStrong:"قوي (يشمل الأنفاس الخفيفة)",
+ oPause:"الوقفة التي تبقى",p03:"0.3 ثانية",p05:"0.5 ثانية",p1:"ثانية واحدة",
+ silHelp:"يُترك هامش قصير مقداره 0.15 ثانية عند الحواف حتى لا يُقص الكلام. والوقفات الطويلة في المنتصف تُقصَّر إلى الطول الذي تختاره ولا تُحذف بالكامل.",
+ hNorm:"3. ضبط مستوى الصوت (في الآخر)",oNorm:"الهدف",nmPeak:"الذروة عند ناقص 1 ديسيبل (أعلى نقطة)",nmR20:"متوسط الارتفاع ناقص 20 ديسيبل (معيار الكلام)",nmR16:"متوسط الارتفاع ناقص 16 ديسيبل (أعلى)",
+ normHelp:"أوضاع الارتفاع لا تسمح لأعلى نقطة بأن تتجاوز ناقص 1 ديسيبل. وإذا كان في التسجيل ذروات كبيرة فقد ينتهي أهدأ من الهدف.",
+ hOut:"المخرجات",oFmt:"الصيغة",fWav:"WAV بدقة 16 بت (أعلى جودة)",fM128:"MP3 بسرعة 128 (حجم صغير)",fM192:"MP3 بسرعة 192",
+ oCh:"القنوات",chKeep:"كما هي",chMono:"أحادي (قناة واحدة)",oSr:"معدل العيّنة",srAuto:"نفس الملف (إن أمكن)",sr16:"16 كيلوهرتز",sr22:"22.05 كيلوهرتز",sr44:"44.1 كيلوهرتز",sr48:"48 كيلوهرتز",
+ prev:"جرّب أول ملف",run:"نظّف ونزّل",clr:"مسح الكل",
+ pvH:"قبل وبعد (أول ملف)",pvB:"قبل",pvA:"بعد",pvInfo:"المعاينة دائمًا بصيغة WAV. المدة: ",
+ cFile:"الملف",cBefore:"قبل",cAfter:"بعد",cNote:"ملاحظة",
+ none:"لم تُحمَّل ملفات بعد.",loaded:"الملفات الصوتية المحمّلة: ",skipped:" · ملفات أخرى تم تخطيها: ",
+ working:"جارٍ العمل على الملف ",of:" من ",s_dec:"قراءة",s_nz:"تخفيف الضوضاء",s_sil:"إزالة الصمت",s_nm:"ضبط المستوى",s_enc:"ترميز",s_zip:"بناء ملف ZIP",
+ doneOne:"تم. ملفك يجري تنزيله.",doneZip:"تم. ملف ZIP جاهز ويجري تنزيله.",
+ errLib:"تعذّر تحميل مكتبة ZIP. تحقق من الاتصال وأعد تحميل الصفحة.",errMp3:"تعذّر تحميل مرمّز MP3. اختر WAV أو تحقق من الاتصال.",
+ errZip:"تعذّرت قراءة ملف ZIP.",errNo:"لم يتم العثور على ملفات صوتية.",errDec:"تعذّرت قراءة هذا الملف كصوت.",errAny:"حدث خطأ: ",
+ nOk:"سليم",nSil:"الملف كله صامت وتُرك كما هو",nCap:"بلغت حد الذروة فجاء أهدأ من الهدف",nFail:"فشل: الملف غير مقروء كصوت",
+ h2b:"ملاحظات",
+ n1:"ملفاتك الأصلية لا تتغير أبدًا. كل نتيجة ملف جديد ينتهي اسمه بـ _clean.",
+ n2:"استمع دائمًا إلى المعاينة قبل أن تنظّف ملفات كثيرة. الإعدادات التي تناسب ميكروفونًا قد لا تناسب غيره.",
+ n3:"تخفيف الضوضاء لا يُصلح التشويه ولا الصدى ولا الأصوات العالية في الخلفية. وفي هذه الحالات سجّل من جديد في مكان أهدأ.",
+ n4:"التسجيلات الطويلة وملفات ZIP الكبيرة تحتاج ذاكرة كافية في جهازك. وللمئات من الملفات الكبيرة اعمل على دفعات.",
+ n5:"MP3 صيغة مضغوطة. وفي مشاريع بيانات الصوت احتفظ بصيغة WAV.",
+ rec:"سجّل بمسجّل الصوت",back:"العودة إلى الأدوات"}
+};
+var items=[],skipped=0,rows=[],busy=false,urls=[];
+var AUDIO=/\.(wav|mp3|m4a|aac|ogg|oga|opus|flac|webm|mp4|amr|wma|aif|aiff|3gp|caf)$/i;
+var MIME={wav:"audio/wav",mp3:"audio/mpeg",m4a:"audio/mp4",aac:"audio/aac",ogg:"audio/ogg",oga:"audio/ogg",opus:"audio/ogg",flac:"audio/flac",webm:"audio/webm",mp4:"audio/mp4"};
+function tick(){return new Promise(function(r){setTimeout(r,0);});}
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function setBar(p){var b=$("bar");b.style.display="block";$("barI").style.width=Math.max(0,Math.min(100,p)).toFixed(0)+"%";}
+function hideBar(){$("bar").style.display="none";}
+
+/* ---------- reading files ---------- */
+function addFiles(list){
+ $("msg").style.display="none";
+ var ps=[];
+ Array.prototype.forEach.call(list,function(f){
+  if(/\.zip$/i.test(f.name)){
+   if(!window.JSZip){show(T[L].errLib,true);return;}
+   ps.push(JSZip.loadAsync(f).then(function(z){
+    z.forEach(function(path,en){
+     if(en.dir)return;
+     var parts=path.split("/"),nm=parts[parts.length-1];
+     if(/^__MACOSX\//.test(path)||nm.charAt(0)==="."||!nm||!AUDIO.test(nm)){skipped++;return;}
+     items.push({path:path,name:nm,get:function(){return en.async("uint8array");}});
+    });
+   }));
+  }else if(AUDIO.test(f.name)||/^audio\//.test(f.type)){
+   items.push({path:f.name,name:f.name,get:function(){return f.arrayBuffer().then(function(b){return new Uint8Array(b);});}});
+  }else skipped++;
+ });
+ Promise.all(ps).then(refresh,function(){show(T[L].errZip,true);refresh();});
+}
+function refresh(){
+ var t=T[L];$("loaded").textContent=items.length?t.loaded+items.length+(skipped?t.skipped+skipped:""):t.none+(skipped?t.skipped.replace(" · ","")+skipped:"");
+ $("run").disabled=busy||!items.length;$("prev").disabled=busy||!items.length;
+}
+
+/* ---------- decoding ---------- */
+var ctxs={};
+function getCtx(sr){var k=sr||0;if(ctxs[k])return ctxs[k];var AC=window.AudioContext||window.webkitAudioContext;ctxs[k]=sr?new AC({sampleRate:sr}):new AC();return ctxs[k];}
+function wavRate(u){if(u.length>28&&u[0]===82&&u[1]===73&&u[2]===70&&u[3]===70&&u[8]===87){var r=u[24]|(u[25]<<8)|(u[26]<<16)|(u[27]<<24);return r>=8000&&r<=96000?r:0;}return 0;}
+function decode(u8){
+ var s=$("sr").value,rate=s==="auto"?wavRate(u8):+s,ctx;
+ try{ctx=getCtx(rate);}catch(e){ctx=getCtx(0);}
+ var ab=u8.buffer.slice(u8.byteOffset,u8.byteOffset+u8.byteLength);
+ return new Promise(function(res,rej){var p=ctx.decodeAudioData(ab,res,rej);if(p&&p.then)p.then(res,rej);}).then(function(buf){
+  var ch=[];for(var c=0;c<buf.numberOfChannels;c++)ch.push(new Float32Array(buf.getChannelData(c)));
+  return {sr:buf.sampleRate,ch:ch};
+ });
+}
+
+/* ---------- DSP ---------- */
+function toMono(ch){
+ if(ch.length<2)return ch;
+ var n=ch[0].length,m=new Float32Array(n),k=ch.length;
+ for(var c=0;c<k;c++){var x=ch[c];for(var i=0;i<n;i++)m[i]+=x[i];}
+ for(var j=0;j<n;j++)m[j]/=k;
+ return [m];
+}
+function hpf(x,sr){
+ var w=2*Math.PI*80/sr,c=Math.cos(w),s=Math.sin(w),a=s/(2*0.70710678);
+ var a0=1+a,b0=(1+c)/2/a0,b1=-(1+c)/a0,b2=b0,a1=-2*c/a0,a2=(1-a)/a0;
+ for(var p=0;p<2;p++){var x1=0,x2=0,y1=0,y2=0;
+  for(var i=0;i<x.length;i++){var v=x[i],y=b0*v+b1*x1+b2*x2-a1*y1-a2*y2;x2=x1;x1=v;y2=y1;y1=y;x[i]=y;}}
+}
+function makeFFT(n){
+ var lv=Math.round(Math.log(n)/Math.LN2),cs=new Float64Array(n/2),sn=new Float64Array(n/2),rev=new Uint32Array(n),i;
+ for(i=0;i<n/2;i++){cs[i]=Math.cos(2*Math.PI*i/n);sn[i]=Math.sin(2*Math.PI*i/n);}
+ for(i=0;i<n;i++)rev[i]=(rev[i>>1]>>1)|((i&1)<<(lv-1));
+ return function(re,im,inv){
+  var i,j,k,t;
+  for(i=0;i<n;i++){j=rev[i];if(j>i){t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t;}}
+  for(var size=2;size<=n;size<<=1){
+   var half=size>>1,step=n/size;
+   for(i=0;i<n;i+=size){
+    for(j=i,k=0;j<i+half;j++,k+=step){
+     var wr=cs[k],wi=inv?sn[k]:-sn[k],l=j+half;
+     var tr=re[l]*wr-im[l]*wi,ti=re[l]*wi+im[l]*wr;
+     re[l]=re[j]-tr;im[l]=im[j]-ti;re[j]+=tr;im[j]+=ti;
+    }
+   }
+  }
+  if(inv){for(i=0;i<n;i++){re[i]/=n;im[i]/=n;}}
+ };
+}
+var FFT=null;
+async function denoise(x,sr,lvl,prog){
+ var N=2048,H=1024,B=N/2+1,i,k,t;
+ if(!FFT)FFT=makeFFT(N);
+ var alpha={light:1.0,medium:1.6,strong:2.4}[lvl],floor={light:0.30,medium:0.18,strong:0.10}[lvl];
+ var win=new Float64Array(N);for(i=0;i<N;i++)win[i]=Math.sin(Math.PI*(i+0.5)/N);
+ var len=x.length,nf=Math.floor((H+len-1)/H)+1,plen=(nf-1)*H+N;
+ if(len<N*2)return x;
+ var p=new Float32Array(plen);p.set(x,H);
+ /* pass 1: frame energies (time domain) */
+ var en=new Float64Array(nf);
+ for(t=0;t<nf;t++){var s=0,o=t*H;for(i=0;i<N;i+=4){var v=p[o+i];s+=v*v;}en[t]=s;}
+ /* ignore the padded edge frames when estimating noise */
+ var idx=[];for(t=1;t<nf-1;t++)idx.push(t);
+ if(idx.length<8)return x;
+ idx.sort(function(a,b){return en[a]-en[b];});
+ var take=Math.max(5,Math.floor(idx.length*0.1));
+ var noise=new Float64Array(B),re=new Float64Array(N),im=new Float64Array(N);
+ for(var q=0;q<take;q++){
+  var o2=idx[q]*H;
+  for(i=0;i<N;i++){re[i]=p[o2+i]*win[i];im[i]=0;}
+  FFT(re,im,false);
+  for(k=0;k<B;k++)noise[k]+=Math.sqrt(re[k]*re[k]+im[k]*im[k]);
+ }
+ for(k=0;k<B;k++)noise[k]/=take;
+ /* pass 2: spectral subtraction with smoothing */
+ var out=new Float32Array(plen),g=new Float64Array(B),gs=new Float64Array(B),prev=new Float64Array(B);
+ for(k=0;k<B;k++)prev[k]=1;
+ for(t=0;t<nf;t++){
+  var o3=t*H;
+  for(i=0;i<N;i++){re[i]=p[o3+i]*win[i];im[i]=0;}
+  FFT(re,im,false);
+  for(k=0;k<B;k++){
+   var mag=Math.sqrt(re[k]*re[k]+im[k]*im[k]),gg=1-alpha*noise[k]/(mag+1e-12);
+   g[k]=gg<floor?floor:gg;
+  }
+  for(k=0;k<B;k++){
+   var a=g[k>0?k-1:0],c=g[k<B-1?k+1:B-1],m=0.25*a+0.5*g[k]+0.25*c,pv=t===0?0:prev[k]*0.75;
+   gs[k]=m>pv?m:pv;prev[k]=gs[k];
+  }
+  for(k=0;k<B;k++){re[k]*=gs[k];im[k]*=gs[k];if(k>0&&k<N/2){re[N-k]=re[k];im[N-k]=-im[k];}}
+  FFT(re,im,true);
+  for(i=0;i<N;i++)out[o3+i]+=re[i]*win[i];
+  if(t%40===0){if(prog)prog(t/nf);await tick();}
+ }
+ return out.subarray(H,H+len);
+}
+function silenceCut(ch,sr,mode,thr,keepMs){
+ var n=ch[0].length,w=Math.max(1,Math.round(sr*0.01)),nw=Math.ceil(n/w),loud=new Uint8Array(nw),rm=new Float32Array(nw),lin=Math.pow(10,thr/20),c,i,j;
+ var nc=ch.length;
+ for(j=0;j<nw;j++){
+  var s=0,e=Math.min(n,(j+1)*w),cnt=e-j*w;
+  for(i=j*w;i<e;i++){var v=0;for(c=0;c<nc;c++)v+=ch[c][i];v/=nc;s+=v*v;}
+  rm[j]=Math.sqrt(s/cnt);
+ }
+ /* adapt to the noise floor: never below the chosen level, at most 12 dB above it */
+ var srt=Float32Array.from(rm).sort(),p10=20*Math.log(srt[Math.floor(srt.length*0.1)]+1e-9)/Math.LN10;
+ var eff=Math.min(Math.max(thr,p10+8),thr+12);lin=Math.pow(10,eff/20);
+ for(j=0;j<nw;j++)loud[j]=rm[j]>lin?1:0;
+ /* ignore very short blips (under 30 ms), such as clicks */
+ for(j=0;j<nw;){if(loud[j]){var e2=j;while(e2<nw&&loud[e2])e2++;if(e2-j<3)for(i=j;i<e2;i++)loud[i]=0;j=e2;}else j++;}
+ var f=-1,l=-1;for(j=0;j<nw;j++)if(loud[j]){if(f<0)f=j;l=j;}
+ if(f<0)return null;
+ var padW=15,keepW=Math.round(keepMs/10),h=Math.floor(keepW/2);
+ var st=Math.max(0,f-padW),en=Math.min(nw-1,l+padW),segs=[];
+ if(mode==="all"){
+  var cur=st,j2=f;
+  while(j2<=l){
+   if(!loud[j2]){
+    var a=j2;while(j2<=l&&!loud[j2])j2++;
+    var b=j2-1;
+    if(b-a+1>keepW){segs.push([cur,a+h]);cur=b-h+1;}
+   }else j2++;
+  }
+  segs.push([cur,en+1]);
+ }else segs.push([st,en+1]);
+ var total=0,S=segs.map(function(z){var a=z[0]*w,b=Math.min(n,z[1]*w);total+=b-a;return [a,b];});
+ var fade=Math.round(sr*0.004),res=[];
+ for(c=0;c<nc;c++){
+  var o=new Float32Array(total),pos=0;
+  S.forEach(function(z){
+   var a=z[0],b=z[1],len=b-a,fl=Math.min(fade,len>>1);
+   o.set(ch[c].subarray(a,b),pos);
+   if(a>0)for(var q=0;q<fl;q++)o[pos+q]*=q/fl;
+   if(b<n)for(var r=0;r<fl;r++)o[pos+len-1-r]*=r/fl;
+   pos+=len;
+  });
+  res.push(o);
+ }
+ return res;
+}
+function normalize(ch,sr,mode){
+ var peak=0,c,i,nc=ch.length,n=ch[0].length;
+ for(c=0;c<nc;c++){var x=ch[c];for(i=0;i<n;i++){var a=x[i]<0?-x[i]:x[i];if(a>peak)peak=a;}}
+ if(peak<1e-6)return false;
+ var cap=Math.pow(10,-1/20)/peak,g,capped=false;
+ if(mode==="peak")g=cap;
+ else{
+  var target=mode==="rms16"?-16:-20,w=Math.max(1,Math.round(sr*0.05)),sum=0,cnt=0,sumAll=0,cntAll=0,gate=Math.pow(10,-50/20);
+  for(i=0;i+w<=n;i+=w){
+   var s=0;for(var j=i;j<i+w;j++){var v=0;for(c=0;c<nc;c++)v+=ch[c][j];v/=nc;s+=v*v;}
+   var ms=s/w;sumAll+=ms;cntAll++;
+   if(Math.sqrt(ms)>gate){sum+=ms;cnt++;}
+  }
+  var pw=cnt?sum/cnt:(cntAll?sumAll/cntAll:0);
+  if(pw<=0)return false;
+  g=Math.pow(10,(target-10*Math.log(pw)/Math.LN10)/20);
+  if(g>cap){g=cap;capped=true;}
+ }
+ for(c=0;c<nc;c++){var y=ch[c];for(i=0;i<n;i++)y[i]*=g;}
+ return capped;
+}
+
+/* ---------- encoding ---------- */
+function encWav(ch,sr){
+ var nc=ch.length,n=ch[0].length,buf=new ArrayBuffer(44+n*nc*2),v=new DataView(buf);
+ function ws(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
+ ws(0,"RIFF");v.setUint32(4,36+n*nc*2,true);ws(8,"WAVE");ws(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,nc,true);
+ v.setUint32(24,sr,true);v.setUint32(28,sr*nc*2,true);v.setUint16(32,nc*2,true);v.setUint16(34,16,true);ws(36,"data");v.setUint32(40,n*nc*2,true);
+ var o=44;
+ for(var i=0;i<n;i++)for(var c=0;c<nc;c++){var s=ch[c][i];s=s>1?1:s<-1?-1:s;v.setInt16(o,s<0?s*32768:s*32767,true);o+=2;}
+ return new Blob([buf],{type:"audio/wav"});
+}
+function loadLame(){
+ return new Promise(function(res,rej){
+  if(window.lamejs)return res();
+  var s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";
+  s.onload=function(){window.lamejs?res():rej();};s.onerror=rej;document.head.appendChild(s);
+ });
+}
+function resample(x,from,to){
+ var n=Math.floor(x.length*to/from),o=new Float32Array(n),r=from/to;
+ for(var i=0;i<n;i++){var p=i*r,a=Math.floor(p),f=p-a,b=a+1<x.length?a+1:a;o[i]=x[a]*(1-f)+x[b]*f;}
+ return o;
+}
+async function encMp3(ch,sr,kbps){
+ await loadLame();
+ var okRates=[8000,11025,12000,16000,22050,24000,32000,44100,48000];
+ if(okRates.indexOf(sr)<0){var to=44100;ch=ch.map(function(x){return resample(x,sr,to);});sr=to;}
+ if(sr<32000&&kbps>128)kbps=128;
+ var nc=Math.min(2,ch.length),n=ch[0].length,enc=new lamejs.Mp3Encoder(nc,sr,kbps),parts=[],i,c,B=1152;
+ var ints=[];
+ for(c=0;c<nc;c++){var a=new Int16Array(n),x=ch[c];for(i=0;i<n;i++){var s=x[i];s=s>1?1:s<-1?-1:s;a[i]=s<0?s*32768:s*32767;}ints.push(a);}
+ var blocks=0;
+ for(i=0;i<n;i+=B){
+  var d=nc===1?enc.encodeBuffer(ints[0].subarray(i,i+B)):enc.encodeBuffer(ints[0].subarray(i,i+B),ints[1].subarray(i,i+B));
+  if(d.length)parts.push(new Uint8Array(d));
+  if(++blocks%400===0)await tick();
+ }
+ var f=enc.flush();if(f.length)parts.push(new Uint8Array(f));
+ return new Blob(parts,{type:"audio/mpeg"});
+}
+
+/* ---------- pipeline ---------- */
+function opts(){return {nz:$("nz").value,sm:$("sm").value,thr:+$("sl").value,pause:+$("sp").value,nm:$("nm").value,fmt:$("fmt").value,mono:$("chn").value==="mono"};}
+async function clean(u8,o,stage){
+ var d=await decode(u8),sr=d.sr,ch=d.ch,notes=[];
+ var before=ch[0].length/sr;
+ if(o.mono)ch=toMono(ch);
+ if(o.nz!=="off"){
+  stage("s_nz",0);
+  for(var c=0;c<ch.length;c++){hpf(ch[c],sr);ch[c]=Float32Array.from(await denoise(ch[c],sr,o.nz,function(p){stage("s_nz",(c+p)/ch.length);}));}
+ }
+ if(o.sm!=="off"){
+  stage("s_sil",0);await tick();
+  var r=silenceCut(ch,sr,o.sm,o.thr,o.pause);
+  if(r)ch=r;else notes.push("nSil");
+ }
+ if(o.nm!=="off"){
+  stage("s_nm",0);await tick();
+  if(normalize(ch,sr,o.nm))notes.push("nCap");
+ }
+ if(!notes.length)notes.push("nOk");
+ return {ch:ch,sr:sr,before:before,after:ch[0].length/sr,notes:notes};
+}
+function fmtT(s){var m=Math.floor(s/60),r=s-m*60;return m+":"+(r<10?"0":"")+r.toFixed(1);}
+function renderRows(){
+ var t=T[L],tb=$("tb");tb.innerHTML="";
+ rows.slice(0,300).forEach(function(r,i){
+  var tr=document.createElement("tr"),cells=[String(i+1),r.name,r.fail?"-":fmtT(r.before),r.fail?"-":fmtT(r.after),r.notes.map(function(k){return t[k];}).join(" · ")];
+  cells.forEach(function(x,j){var td=document.createElement("td");td.textContent=x;if(j===1)td.dir="auto";if(j===2||j===3)td.className="n";tr.appendChild(td);});
+  tb.appendChild(tr);
+ });
+ $("tblBox").style.display=rows.length?"block":"none";
+}
+function dl(blob,name){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
+function setBusy(b){busy=b;refresh();$("clr").disabled=b;}
+function outName(path,ext,k){var i=path.lastIndexOf("."),b=i>path.lastIndexOf("/")?path.slice(0,i):path;return b+"_clean"+(k>1?"_"+k:"")+ext;}
+
+async function runAll(){
+ if(busy||!items.length)return;
+ var t=T[L],o=opts(),n=items.length,ext=o.fmt==="wav"?".wav":".mp3";
+ if(o.fmt!=="wav"){try{await loadLame();}catch(e){show(t.errMp3,true);return;}}
+ if(n>1&&!window.JSZip){show(t.errLib,true);return;}
+ setBusy(true);rows=[];renderRows();$("msg").style.display="none";
+ var zip=n>1?new JSZip():null,used={},single=null,okCount=0;
+ try{
+  for(var i=0;i<n;i++){
+   var it=items[i];
+   var stage=function(k,f){setBar(((i+f/5)/n)*100);show(t.working+(i+1)+t.of+n+" · "+t[k],false);};
+   stage("s_dec",0);
+   var res;
+   try{
+    var u8=await it.get();
+    res=await clean(u8,o,stage);
+   }catch(e){rows.push({name:it.path,fail:true,notes:["nFail"]});renderRows();continue;}
+   stage("s_enc",0);await tick();
+   var blob=o.fmt==="wav"?encWav(res.ch,res.sr):await encMp3(res.ch,res.sr,+o.fmt);
+   var k=1,nm=outName(it.path,ext,k),key=nm.toLowerCase();
+   while(used[key]){k++;nm=outName(it.path,ext,k);key=nm.toLowerCase();}
+   used[key]=1;
+   rows.push({name:it.path,before:res.before,after:res.after,notes:res.notes});renderRows();
+   okCount++;
+   if(zip)zip.file(nm,blob);else single={blob:blob,name:nm.split("/").pop()};
+   res=null;await tick();
+  }
+  if(!okCount){show(t.errDec,true);hideBar();setBusy(false);return;}
+  if(zip){
+   show(t.working+n+t.of+n+" · "+t.s_zip,false);
+   var zb=await zip.generateAsync({type:"blob",compression:"STORE"},function(m){setBar(m.percent);});
+   dl(zb,"cleaned.zip");show(t.doneZip,false);
+  }else{dl(single.blob,single.name);show(t.doneOne,false);}
+ }catch(e){show(t.errAny+(e&&e.message?e.message:e),true);}
+ hideBar();setBusy(false);
+}
+async function preview(){
+ if(busy||!items.length)return;
+ var t=T[L],o=opts();o.fmt="wav";setBusy(true);$("msg").style.display="none";
+ try{
+  var it=items[0],u8=await it.get();
+  var res=await clean(u8,o,function(k,f){setBar(f*100);show(t.working+"1 · "+t[k],false);});
+  var ext=(it.name.match(/\.([a-z0-9]+)$/i)||[,""])[1].toLowerCase();
+  urls.forEach(function(u){URL.revokeObjectURL(u);});urls=[];
+  var ub=URL.createObjectURL(new Blob([u8],{type:MIME[ext]||""})),ua=URL.createObjectURL(encWav(res.ch,res.sr));
+  urls.push(ub,ua);$("aB").src=ub;$("aA").src=ua;
+  $("pv").style.display="block";
+  $("pvInfo").textContent=t.pvInfo+fmtT(res.before)+" → "+fmtT(res.after)+" · "+res.notes.map(function(k){return t[k];}).join(" · ");
+  $("pvInfo").setAttribute("data-n",res.notes.join(","));$("pvInfo").setAttribute("data-b",res.before);$("pvInfo").setAttribute("data-a",res.after);
+  $("msg").style.display="none";
+ }catch(e){show(t.errDec,true);}
+ hideBar();setBusy(false);
+}
+function refreshPv(){
+ var p=$("pvInfo");if(!p.getAttribute("data-n"))return;
+ var t=T[L];p.textContent=t.pvInfo+fmtT(+p.getAttribute("data-b"))+" → "+fmtT(+p.getAttribute("data-a"))+" · "+p.getAttribute("data-n").split(",").map(function(k){return t[k];}).join(" · ");
+}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ ["prev","run","clr"].forEach(function(id){$(id).textContent=t[id];});
+ document.title=L==="ar"?"منظّف الصوت: إزالة الصمت والضوضاء وضبط المستوى | Sayvoi":"Audio Cleaner: Remove Silence and Noise, Normalize | Sayvoi";
+ refresh();renderRows();refreshPv();
+}
+$("drop").addEventListener("click",function(){$("file").click();});
+$("drop").addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();$("file").click();}});
+["dragenter","dragover"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.add("hov");});});
+["dragleave","drop"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.remove("hov");});});
+$("drop").addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files.length)addFiles(e.dataTransfer.files);});
+$("file").addEventListener("change",function(){if(this.files.length)addFiles(this.files);this.value="";});
+$("run").addEventListener("click",runAll);
+$("prev").addEventListener("click",preview);
+$("clr").addEventListener("click",function(){items=[];skipped=0;rows=[];urls.forEach(function(u){URL.revokeObjectURL(u);});urls=[];$("pv").style.display="none";$("pvInfo").removeAttribute("data-n");$("aB").removeAttribute("src");$("aA").removeAttribute("src");$("msg").style.display="none";renderRows();refresh();});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+applyLang();
+})();
+</script>
+</body>
+</html>
