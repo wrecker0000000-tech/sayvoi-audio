@@ -21,10 +21,13 @@ var D={
  links:[["/articles/","Articles","المقالات"],["https://sayvoi.com/services/","Services","الخدمات"],["/about.html","About","عن الموقع"]]
 };
 function lang(){return (document.documentElement.getAttribute("lang")||"ar").slice(0,2)==="en"?"en":"ar";}
+var CONV="https://convert.sayvoi.com",MAIN=location.hostname.replace(/^www\./,"")==="sayvoi.com";
+function href(h){if(!MAIN)return h;if(h==="https://sayvoi.com/services/")return "/services/";return h.charAt(0)==="/"&&h!=="/"?CONV+h:(h==="/"?CONV+"/":h);}
+function abs(h){try{var u=new URL(h,location.href);return u.origin+norm(u.pathname);}catch(e){return h;}}
 function norm(p){p=p.replace(/index\.html$/,"");if(p.length>1&&p.slice(-1)!=="/")p=p.replace(/\/$/,"");return p;}
 function here(){return norm(location.pathname);}
-function same(h){return h.charAt(0)==="/"&&norm(h)===here();}
-function inArticles(){return /^\/articles\//.test(location.pathname);}
+function same(h){return abs(href(h))===location.origin+here();}
+function inArticles(){return !MAIN&&/^\/articles\//.test(location.pathname);}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 function build(L){
  var o='<a class="brand" href="/">Sayvoi</a><div class="sv-row">';
@@ -34,13 +37,13 @@ function build(L){
   o+='<div class="sv-pn" role="menu" hidden>';
   g.items.forEach(function(i){
    var cur=same(i[0]);
-   o+='<a role="menuitem" class="sv-it'+(cur?' cur':'')+'" href="'+i[0]+'"'+(cur?' aria-current="page"':'')+'><span class="sv-ic" aria-hidden="true">'+i[1]+'</span><span class="sv-tx"><b>'+esc(L==="en"?i[2]:i[3])+'</b><small>'+esc(L==="en"?i[4]:i[5])+'</small></span></a>';
+   o+='<a role="menuitem" class="sv-it'+(cur?' cur':'')+'" href="'+href(i[0])+'"'+(cur?' aria-current="page"':'')+'><span class="sv-ic" aria-hidden="true">'+i[1]+'</span><span class="sv-tx"><b>'+esc(L==="en"?i[2]:i[3])+'</b><small>'+esc(L==="en"?i[4]:i[5])+'</small></span></a>';
   });
   o+='</div></div>';
  });
  D.links.forEach(function(k){
   var cur=(k[0]==="/articles/"&&inArticles())||same(k[0]);
-  o+='<a class="sv-ln'+(cur?' on':'')+'" href="'+k[0]+'">'+esc(L==="en"?k[1]:k[2])+'</a>';
+  o+='<a class="sv-ln'+(cur?' on':'')+'" href="'+href(k[0])+'">'+esc(L==="en"?k[1]:k[2])+'</a>';
  });
  return o+'</div>';
 }
