@@ -90,6 +90,7 @@
 
 <div class="tbl" id="tblBox" style="display:none"><table><thead><tr><th>#</th><th data-i="cFile"></th><th data-i="cSpeed"></th><th data-i="cBefore"></th><th data-i="cAfter"></th></tr></thead><tbody id="tb"></tbody></table></div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi audio speed changer guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li><li data-h="n5"></li></ul>
 <p style="margin-top:22px"><a href="/audio-cleaner/" data-i="rec"></a> · <a href="/" data-i="back"></a></p>
@@ -128,6 +129,7 @@ en:{dir:"ltr",btn:"العربية",nav:NAVEN,
  doneOne:"Done. Your file is downloading.",doneZip:"Done. The ZIP is ready and downloading.",
  errLib:"The ZIP library could not load. Check your connection and reload the page.",errMp3:"The MP3 encoder could not load. Choose WAV or check your connection.",
  errZip:"Could not read the ZIP file.",errDec:"Could not read this file as audio.",errAny:"Something went wrong: ",errSpd:"Enter speeds between 50 and 200, separated by commas.",
+ vidH:"Watch: how to change audio speed",vidP:"A short video guide (about one minute). The steps are written on the screen.",
  h2b:"Notes",
  n1:"Your original files are never changed. Every result is a new file whose name ends with the speed, such as _80pct.",
  n2:"Always listen to the preview first. Speech between 80 and 125 percent is usually almost transparent. Extreme speeds are more audible.",
@@ -154,6 +156,7 @@ ar:{dir:"rtl",btn:"English",nav:NAVAR,
  doneOne:"تم. ملفك يجري تنزيله.",doneZip:"تم. ملف ZIP جاهز ويجري تنزيله.",
  errLib:"تعذّر تحميل مكتبة ZIP. تحقق من الاتصال وأعد تحميل الصفحة.",errMp3:"تعذّر تحميل مرمّز MP3. اختر WAV أو تحقق من الاتصال.",
  errZip:"تعذّرت قراءة ملف ZIP.",errDec:"تعذّرت قراءة هذا الملف كصوت.",errAny:"حدث خطأ: ",errSpd:"أدخل سرعات بين 50 و200 وافصل بينها بفاصلة.",
+ vidH:"شاهد: كيف تغيّر سرعة الصوت",vidP:"شرح مصوّر قصير (نحو دقيقة). الخطوات مكتوبة على الشاشة.",
  h2b:"ملاحظات",
  n1:"ملفاتك الأصلية لا تتغير أبدًا. كل نتيجة ملف جديد ينتهي اسمه بالسرعة، مثل _80pct.",
  n2:"استمع دائمًا إلى المعاينة أولًا. الكلام بين 80 و125 بالمئة يكاد لا يُلاحَظ فيه فرق. والسرعات القصوى أوضح سمعًا.",
@@ -426,7 +429,8 @@ function refreshPv(){
  p.textContent=T[L].pvInfo+fmtT(+p.getAttribute("data-b"))+" → "+fmtT(+p.getAttribute("data-a"))+" · "+p.getAttribute("data-s")+"%";
 }
 function applyLang(){
- var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ var t=T[L];var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?"TRWsSDSXhtw":"ZFJiWAjGdFU")+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("nav").innerHTML=t.nav;$("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
