@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Slow down or speed up audio in your browser, with or without changing the pitch. One file or a whole ZIP, WAV or MP3. Free, nothing is uploaded.">
-<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://convert.sayvoi.com/audio-speed/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Audio Speed Changer: Slow Down or Speed Up Audio">
+<meta property="og:description" content="Slow down or speed up audio, with or without changing the pitch. One file or a whole ZIP. Free, in your browser.">
+<meta property="og:url" content="https://convert.sayvoi.com/audio-speed/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <title>Audio Speed Changer: Slow Down or Speed Up Audio | Sayvoi</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="/assets/site.css">
@@ -87,6 +94,9 @@
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li><li data-h="n5"></li></ul>
 <p style="margin-top:22px"><a href="/audio-cleaner/" data-i="rec"></a> · <a href="/" data-i="back"></a></p>
 </article>
+<style>.rel{max-width:860px;margin:28px auto;padding:0 16px}.rel h2{font-size:1.1rem;margin:0 0 10px}.rel ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}.rel a{display:block;padding:10px 14px;border:1px solid rgba(127,127,127,.3);border-radius:10px;text-decoration:none;color:inherit}.rel a:hover{border-color:#6366f1}html[lang="ar"] .rel-en,html[lang="en"] .rel-ar{display:none}</style>
+<section class="rel rel-ar" lang="ar" dir="rtl"><h2>مقالات متعلقة</h2><ul><li><a href="/articles/ar/change-audio-speed-keep-pitch.html">كيف تبطّئ الصوت أو تسرّعه دون تغيير النغمة</a></li><li><a href="/articles/ar/speed-audio-for-transcription-and-practice.html">أبطئ الصوت للتفريغ والتدرّب والاستماع</a></li></ul></section>
+<section class="rel rel-en" lang="en" dir="ltr"><h2>Related articles</h2><ul><li><a href="/articles/en/change-audio-speed-keep-pitch.html">How to Slow Down or Speed Up Audio Without Changing the Pitch</a></li><li><a href="/articles/en/speed-audio-for-transcription-and-practice.html">Slow Audio Down for Transcription, Practice and Listening</a></li></ul></section>
 
 <footer id="foot"></footer>
 </div>
@@ -96,8 +106,8 @@
 (function(){
 var $=function(i){return document.getElementById(i);};
 var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
-var NAVEN='<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>';
-var NAVAR='<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>';
+var NAVEN='<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a><a href="/audio-speed/" class="on">Speed changer</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>';
+var NAVAR='<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a><a href="/audio-speed/" class="on">تغيير السرعة</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>';
 var T={
 en:{dir:"ltr",btn:"العربية",nav:NAVEN,
  foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
