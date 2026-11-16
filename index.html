@@ -1,36 +1,753 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>المقالات · Articles | Sayvoi</title>
-<meta name="description" content="Practical guides on audio conversion, sample rates, formats and preparing voice recordings. أدلة عملية عن تحويل الصوت.">
-<link rel="canonical" href="https://convert.sayvoi.com/articles/">
+<title>Sayvoi — محوّل الصوت المجاني | Free Audio Converter</title>
+<meta name="description" content="حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A مجاناً، وغيّر معدل العينة (48 / 24 / 16 kHz)، دفعة واحدة وداخل المتصفح بدون رفع الملفات. Free in-browser audio converter with batch conversion and sample-rate change.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="canonical" href="https://convert.sayvoi.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sayvoi">
-<meta property="og:title" content="المقالات · Articles">
-<meta property="og:description" content="Practical guides on audio conversion, sample rates, formats and preparing voice recordings. أدلة عملية عن تحويل الصوت.">
-<meta property="og:url" content="https://convert.sayvoi.com/articles/">
+<meta property="og:title" content="Sayvoi — محوّل الصوت المجاني | Free Audio Converter">
+<meta property="og:description" content="Convert MP3, WAV, OGG, FLAC and M4A, change sample rate, batch convert, all in your browser. حوّل الصوت مجانًا داخل المتصفح دون رفع الملفات.">
+<meta property="og:url" content="https://convert.sayvoi.com/">
 <meta property="og:image" content="https://convert.sayvoi.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="/assets/site.css">
-
+<style>
+  :root{
+    --bg:#f6f7fc; --card:#ffffff; --ink:#1b2240; --muted:#5b6482;
+    --accent:#6a3df0; --accent-ink:#ffffff; --line:#dfe3f0; --ok:#12875a; --err:#d64545;
+    --grad:linear-gradient(135deg,#7c4dff,#2f80ed); --wm:linear-gradient(90deg,#7c4dff,#2f80ed 55%,#ff8a3d);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(900px 500px at 90% -10%,rgba(124,77,255,.16),transparent 60%),radial-gradient(800px 500px at 0% 0%,rgba(255,138,61,.14),transparent 55%),radial-gradient(900px 600px at 50% 110%,rgba(47,128,237,.12),transparent 60%),var(--bg);
+    color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.7}
+  html[lang="en"] body{font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:780px;margin:0 auto;padding:20px 16px 56px}
+  .top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:6px 0 14px;border-bottom:1px solid var(--line)}
+  .top .brand{font-weight:900;font-size:24px;letter-spacing:-.5px;text-decoration:none;margin-inline-end:auto;background:var(--wm);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .top a.nl{text-decoration:none;color:var(--muted);font-size:15px}
+  .top a.nl:hover{color:var(--accent)}
+  .top a.nl.on{background:var(--grad);color:#fff;font-weight:700;padding:3px 14px;border-radius:99px}
+  .top .nl[lang-block]{display:none}
+  html[lang="ar"] .top .nl[lang-block="ar"], html[lang="en"] .top .nl[lang-block="en"]{display:inline}
+  .lang{background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:999px;
+    padding:6px 14px;cursor:pointer;font:inherit;font-size:14px}
+  .lang:hover{color:var(--ink);border-color:var(--muted)}
+  header{text-align:center;padding:24px 0 14px}
+  h1{margin:0;font-size:clamp(26px,6vw,40px)}
+  h1 span{color:var(--accent)}
+  .wm{background:var(--wm);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:900;letter-spacing:-.5px;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .sub{color:var(--muted);margin:10px auto 0;max-width:600px}
+  .drop{margin-top:20px;border:2px dashed var(--line);border-radius:16px;background:var(--card);
+    padding:30px 16px;text-align:center;cursor:pointer;transition:.15s}
+  .drop.over,.drop:hover{border-color:var(--accent);background:#f0ecff}
+  .drop b{display:block;font-size:18px}
+  .drop small{color:var(--muted);display:block}
+  .drop [lang-block]{display:none}
+  html[lang="ar"] .drop [lang-block="ar"], html[lang="en"] .drop [lang-block="en"]{display:block}
+  .how{margin:14px 0 0;color:var(--muted);font-size:14px;text-align:center}
+  .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+  .opts label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+  select{width:100%;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:10px;
+    padding:10px;font:inherit}
+  select:disabled{opacity:.5}
+  .hint{margin:12px 0 0;color:var(--muted);font-size:13px}
+  .btn{display:inline-block;text-decoration:none;font:inherit;font-weight:700;border-radius:12px;padding:12px 22px;
+    cursor:pointer;border:0;background:var(--grad);color:var(--accent-ink);box-shadow:0 4px 14px rgba(106,61,240,.25)}
+  .btn:not(:disabled):hover{filter:brightness(1.07)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  [hidden]{display:none!important}
+  .btn.small{padding:6px 14px;font-size:14px;border-radius:10px}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .sum{color:var(--muted);font-size:14px;margin-inline-start:auto}
+  ul{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px}
+  li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .nm{flex:1 1 180px;min-width:0;word-break:break-all;direction:ltr;unicode-bidi:plaintext;font-weight:600}
+  .st{font-size:14px;color:var(--muted)}
+  .st.ok{color:var(--ok)} .st.err{color:var(--err)}
+  .rm{background:transparent;border:0;color:var(--muted);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
+  .rm:hover{color:var(--err)}
+  .meta{flex:1 1 100%;font-size:13px;color:var(--muted);display:flex;gap:4px 10px;flex-wrap:wrap;align-items:center}
+  .meta span{unicode-bidi:plaintext}
+  .arrow{display:inline-block;color:var(--accent);font-weight:700}
+  html[dir="rtl"] .arrow{transform:scaleX(-1)}
+  .bar{flex:1 1 100%;height:5px;background:#e8ebf5;border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--grad);transition:width .15s}
+  .quota{margin:12px 0 0;color:var(--muted);font-size:14px;text-align:center}
+  .upgrade{margin-top:14px;border:1px solid rgba(255,138,61,.5);background:rgba(255,138,61,.09);border-radius:12px;padding:12px 14px}
+  .upgrade p{margin:0 0 8px}
+  .upgrade a:not(.btn){color:var(--accent)}
+  .priv{margin-top:26px;text-align:center;color:var(--muted);font-size:14px}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  footer a{color:var(--muted)}
+  .promo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:10px 0 0;padding:14px 18px;border-radius:16px;text-decoration:none;color:#fff;
+    background:linear-gradient(120deg,#7c4dff,#2f80ed 60%,#ff8a3d);box-shadow:0 8px 22px rgba(106,61,240,.28)}
+  .promo:hover{filter:brightness(1.06)}
+  .promo .pi{font-size:26px;line-height:1}
+  .promo .pt{flex:1 1 220px}
+  .promo b{display:block;font-size:17px}
+  .promo small{display:block;opacity:.92;font-size:13.5px;line-height:1.5}
+  .promo .pg{background:#fff;color:#4a2bd0;font-weight:800;border-radius:10px;padding:7px 16px;font-size:14px;white-space:nowrap}
+  .mt{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0 0}
+  .mt a{display:block;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;text-decoration:none;color:var(--ink);border-top:4px solid #7c4dff}
+  .mt a:nth-child(2){border-top-color:#ff8a3d}.mt a:nth-child(3){border-top-color:#2f80ed}.mt a:nth-child(4){border-top-color:#12a37a}
+  .mt a:hover{box-shadow:0 6px 18px rgba(60,50,140,.12)}
+  .mt b{display:block;font-size:16px;margin-bottom:4px}.mt small{display:block;color:var(--muted);font-size:13.5px;line-height:1.5}
+  .mt [lang-block]{display:none}
+  html[lang="ar"] .mt [lang-block="ar"], html[lang="en"] .mt [lang-block="en"]{display:block}
+  .promo [lang-block]{display:none}
+  html[lang="ar"] .promo [lang-block="ar"], html[lang="en"] .promo [lang-block="en"]{display:block}
+  html[lang="ar"] .promo .pg[lang-block="ar"], html[lang="en"] .promo .pg[lang-block="en"]{display:inline-block}
+  [lang-block]{display:none}
+  html[lang="ar"] [lang-block="ar"], html[lang="en"] [lang-block="en"]{display:revert}
+  .vd{margin:26px 0 8px;padding:18px;border:1px solid var(--line,#e3e6f3);border-radius:18px;background:#fff}
+  .vd h2{margin:0 0 6px;font-size:20px}
+  .vd p{margin:0 0 12px;color:#4a5170}
+  .vd .fr{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000}
+  .vd iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .vd [lang-block]{display:none}
+  html[lang="ar"] .vd [lang-block="ar"], html[lang="en"] .vd [lang-block="en"]{display:block}
+/* nav v2 */
+nav.top,.top{gap:8px 8px;padding:4px 0 16px}
+nav.top .brand,.top .brand{order:0;font-size:26px;margin-inline-end:auto}
+nav.top .lang,.top .lang{order:1}
+nav.top::before,.top::before{content:"";order:2;flex-basis:100%;height:0}
+nav.top a:not(.brand),.top a.nl{order:2;font-size:14px;line-height:1.4;padding:5px 13px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.7);color:var(--ink);white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+nav.top a:not(.brand):hover,.top a.nl:hover{border-color:var(--accent);color:var(--accent);background:#fff}
+nav.top a.on,.top a.nl.on{background:var(--grad);color:#fff;border-color:transparent;font-weight:700;padding:5px 14px}
+nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
+@media (max-width:520px){nav.top a:not(.brand),.top a.nl{font-size:13px;padding:4px 11px}}
+/* /nav v2 */
+</style>
 <link rel="stylesheet" href="/assets/nav.css?v=1">
 <script src="/assets/nav.js?v=1" defer></script>
 </head>
 <body>
 <div class="wrap">
-<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a><a href="/audio-speed/">تغيير السرعة</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/" class="on">المقالات</a><a href="/about.html">عن الموقع</a></nav>
-<h1>المقالات · Articles</h1>
-<p class="meta">أدلة عملية عن الصوت وتحويل الصيغ وتجهيز التسجيلات · Practical guides on audio, formats and voice recordings</p>
-<section class="lang" lang="ar" dir="rtl"><h2>بالعربية</h2><div class="cards"><a class="card" href="/articles/ar/record-narration-for-script-video.html"><b>كيف تسجّل تعليقًا صوتيًا لفيديو من سكربت</b><span>سجّل تعليقًا صوتيًا نظيفًا يطابق شرائحك: اكتب للأذن، واقرأ في تسجيل واحد، وحافظ على الترتيب، وافحصه قبل بناء الفيديو.</span></a><a class="card" href="/articles/ar/script-to-video-slides-free.html"><b>كيف تحوّل السكربت إلى فيديو بسيط مجانًا</b><span>حوّل سكربتًا مكتوبًا إلى فيديو شرائح داخل متصفحك: شريحة لكل جملة، مع صورك وتعليقك الصوتي. دليل بسيط لفيديوهات الشرح والشورتس والتدريب.</span></a><a class="card" href="/articles/ar/speed-audio-for-transcription-and-practice.html"><b>أبطئ الصوت للتفريغ والتدرّب والاستماع</b><span>إبطاء التسجيل يساعد في التفريغ وتعلّم اللغة وفحص النطق. تعرّف على أفضل السرعات وطريقة عمل بسيطة، وكيف تصنع نسخًا أبطأ لملفات كثيرة دفعة واحدة.</span></a><a class="card" href="/articles/ar/change-audio-speed-keep-pitch.html"><b>كيف تبطّئ الصوت أو تسرّعه دون تغيير النغمة</b><span>غيّر سرعة التسجيل واحتفظ بصوت طبيعي. تعرّف على متى ينجح مدّ الزمن وما حدوده، وكيف تفعل ذلك لملف واحد أو ملف ZIP كامل، مجانًا داخل متصفحك.</span></a><a class="card" href="/articles/ar/normalize-audio-volume-peak-vs-loudness.html"><b>الذروة أم متوسط الارتفاع: كيف تضبط مستوى الصوت</b><span>ما الذي يفعله ضبط مستوى الصوت، والفرق بين الذروة ومتوسط الارتفاع، وأيهما تختار للتسجيلات الصوتية.</span></a><a class="card" href="/articles/ar/clean-audio-recordings-noise-silence-volume.html"><b>كيف تنظّف التسجيلات الصوتية: تخفيف الضوضاء وإزالة الصمت وضبط الصوت</b><span>ترتيب بسيط لتنظيف التسجيلات: خفّف الضوضاء الثابتة، ثم أزل الصمت، ثم اضبط مستوى الصوت. يصلح لملف واحد أو ملف ZIP كامل، مجانًا داخل متصفحك.</span></a><a class="card" href="/articles/ar/how-to-start-voice-data-recording.html"><b>كيف تبدأ في تسجيل البيانات الصوتية: دليل للمبتدئين</b><span>ما هي البيانات الصوتية، وأنواع مشاريع التسجيل الشائعة، وما تحتاجه لتبدأ، وكيف تلتزم بالمواصفات وتتجنب النصب.</span></a><a class="card" href="/articles/ar/why-voice-recordings-get-rejected.html"><b>لماذا تُرفض التسجيلات الصوتية؟ 7 أخطاء تجنّبها</b><span>أكثر أسباب رفض التسجيلات الصوتية في مشاريع البيانات، من الضوضاء والقصّ إلى الملفات الخاطئة، وكيف تتجنب كلًّا منها قبل التسليم.</span></a><a class="card" href="/articles/ar/reduce-echo-and-noise-in-recordings.html"><b>كيف تقلّل الصدى والضوضاء في تسجيلاتك الصوتية</b><span>لماذا تحتوي التسجيلات على صدى وضوضاء، وكيف تقلّلهما قبل التسجيل بعادات بسيطة في الغرفة والميكروفون، وكيف تفحص ملفاتك مجانًا داخل متصفحك.</span></a><a class="card" href="/articles/ar/wav-vs-mp3-difference.html"><b>الفرق بين WAV وMP3: أيهما تستخدم؟</b><span>WAV يحفظ كل التفاصيل لكنه كبير، وMP3 صغير لكنه يفقد بعض التفاصيل. تعرّف على حجم الملف لكل دقيقة وأي صيغة تناسب التسجيل والمشاركة والتسليم.</span></a><a class="card" href="/articles/ar/audio-file-naming-convention-voice-projects.html"><b>نظام تسمية الملفات الصوتية في مشاريع بيانات الصوت</b><span>كيف تسمّي التسجيلات في مشروع بيانات صوتية: رمز المتحدث ورقم الجملة والأصفار البادئة وعدم استعمال مسافات، ولماذا تأتي مواصفات العميل أولًا.</span></a><a class="card" href="/articles/ar/rename-audio-files-in-bulk-zip.html"><b>كيف تعيد تسمية ملفات صوتية كثيرة دفعة واحدة من ZIP</b><span>أعد تسمية مئات التسجيلات دفعة واحدة: أسقط ملف ZIP، وحدّد نمط تسمية بالأرقام، وراجع الأسماء الجديدة ونزّل ZIP جديدًا، كل ذلك داخل متصفحك.</span></a><a class="card" href="/articles/ar/ideal-sentence-length-voice-recording.html"><b>كم ينبغي أن يكون طول كل جملة في مشروع تسجيل صوتي؟</b><span>دليل عملي لطول الجملة في جمع بيانات الكلام: لماذا تقلل الجمل القصيرة الأخطاء، وكيف تختار حدًّا للطول، ولماذا تأتي مواصفات العميل أولًا.</span></a><a class="card" href="/articles/ar/split-text-into-sentences-recording-script.html"><b>كيف تقسّم نصًّا طويلًا إلى جمل لسكربت التسجيل</b><span>حوّل نصًّا طويلًا إلى جمل قصيرة ونظيفة لسكربت التسجيل الصوتي: حدّد أقصى طول، واحذف المكرر والترقيم، وتجنّب التقسيم عند الاختصارات.</span></a><a class="card" href="/articles/ar/improve-speech-to-text-accuracy.html"><b>كيف تحصل على نتائج أدق في تحويل الصوت إلى نص</b><span>خطوات عملية ترفع دقة التعرف على الكلام: تسجيل نظيف، واللغة والنموذج المناسبان، ومقاطع قصيرة، ومراجعة سريعة.</span></a><a class="card" href="/articles/ar/speech-to-text-in-browser-privacy.html"><b>تحويل الصوت إلى نص داخل المتصفح دون رفعه</b><span>كيف يعمل التعرف على الكلام داخل المتصفح، وما الذي يبقى على جهازك، وما المتوقع في أول تشغيل، وحدوده (نسخة تجريبية).</span></a><a class="card" href="/articles/ar/numbers-in-speech-transcription-guidelines.html"><b>الأرقام في التفريغ الصوتي: أرقام أم حروف؟</b><span>كيف تتعامل إرشادات التفريغ وبيانات الكلام عادة مع الأرقام، ولماذا يهم الاتساق، وكيف تجهّز الجمل ليقرأها المتحدثون بوضوح.</span></a><a class="card" href="/articles/ar/write-numbers-as-words-arabic.html"><b>كيف تكتب الأرقام بالحروف العربية: المصرية والفصحى</b><span>حوّل الأرقام إلى كلمات عربية منطوقة للتواريخ والأوقات والمبالغ والنسب وأرقام الهواتف، باللهجة المصرية أو الفصحى.</span></a><a class="card" href="/articles/ar/audio-file-size-vs-duration.html"><b>حجم الملف الصوتي مقابل المدة: كم تأخذ الدقيقة من مساحة؟</b><span>كيف تقدّر حجم ملف WAV وMP3 من المدة ومعدل العينة وعمق البت والقنوات، مع جدول سريع للإعدادات الشائعة.</span></a><a class="card" href="/articles/ar/calculate-total-audio-duration.html"><b>كيف تحسب المدة الإجمالية لعدة ملفات صوتية دفعة واحدة</b><span>اجمع أطوال عشرات ملفات WAV وMP3 وFLAC وOGG وM4A دون رفعها، واعرف المجموع بالساعات والدقائق والثواني.</span></a><a class="card" href="/articles/ar/record-sentences-from-script-file.html"><b>كيف تسجّل قائمة جمل من ملف نصي جملة بجملة</b><span>ارفع نصًّا وسجّل كل جملة بالترتيب مع التالي والسابق والإعادة، وراجع الكل، ونزّل ملفات WAV مرقّمة في ملف ZIP واحد.</span></a><a class="card" href="/articles/ar/record-voice-online-wav-free.html"><b>كيف تسجّل صوتك أونلاين بصيغة WAV أو MP3 (مجانًا ودون رفع)</b><span>سجّل صوتك داخل المتصفح واحفظه بصيغة WAV أو MP3 مع اختيار معدل العينة وعمق البت وأحادي أو ثنائي القناة، دون تثبيت برنامج ودون رفع صوتك.</span></a><a class="card" href="/articles/ar/wav-to-mp3.html"><b>كيف تحوّل WAV إلى MP3 مجانًا دون رفع ملفاتك</b><span>شرح خطوة بخطوة لتحويل WAV إلى MP3 داخل المتصفح: كيف تختار معدل البت، وتحافظ على جودة جيدة، وتفهم ما الذي يتغيّر في الملف.</span></a><a class="card" href="/articles/ar/sample-rate-16-24-48-khz.html"><b>ما هو معدل العينة؟ شرح 16 و24 و44.1 و48 كيلوهرتز</b><span>شرح معدل العينة بلغة بسيطة: ماذا تعني 16 و24 و44.1 و48 كيلوهرتز، وأيها تختار للكلام أو الموسيقى أو الفيديو، وماذا يحدث عند التحويل.</span></a><a class="card" href="/articles/ar/wav-vs-mp3-vs-flac.html"><b>WAV أم MP3 أم FLAC أم OGG أم M4A: أي صيغة صوتية تختار؟</b><span>مقارنة عملية بين أشهر الصيغ الصوتية: الحجم والجودة والتوافق، وأفضل اختيار للتسجيل والمونتاج والمشاركة والأرشفة.</span></a><a class="card" href="/articles/ar/batch-convert-audio-zip.html"><b>كيف تحوّل عدة ملفات صوتية دفعة واحدة وتنزّلها في ملف ZIP</b><span>حوّل عشرات الملفات الصوتية دفعة واحدة: طبّق الصيغة ومعدل البت ومعدل العينة نفسها على الجميع، ثم نزّل كل شيء في ملف ZIP واحد.</span></a><a class="card" href="/articles/ar/voice-data-recording-specs.html"><b>تجهيز التسجيلات الصوتية لمشاريع البيانات: المواصفات المعتادة وقائمة تحقق</b><span>المتطلبات الشائعة لمشاريع تسجيل الصوت وبيانات الكلام: الصيغة ومعدل العينة ومونو أو ستيريو والصمت والمستويات وتسمية الملفات، مع قائمة تحقق قبل التسليم.</span></a><a class="card" href="/articles/ar/audio-converter-privacy.html"><b>لماذا لا ترفع تسجيلاتك الخاصة إلى محوّلات الصوت على الإنترنت؟</b><span>كيف يُبقي التحويل داخل المتصفح ملفاتك على جهازك، وماذا يحدث حين يرفعها المحوّل إلى خادم، وكيف تتحقق بنفسك.</span></a><a class="card" href="/articles/ar/check-recording-quality-before-delivery.html"><b>قائمة تحقق من جودة التسجيلات الصوتية قبل التسليم</b><span>قائمة عملية قبل تسليم التسجيلات الصوتية: الصيغة ومعدل العينة والقنوات والمستوى والضوضاء والصمت والتشويه والتكرار، وكيف تفحصها بالجملة.</span></a><a class="card" href="/articles/ar/audio-clipping-distortion.html"><b>ما هو التشويه (Clipping) في الصوت وكيف تتجنبه في تسجيلاتك</b><span>التشويه يسطّح أعلى أجزاء التسجيل ولا يمكن إصلاحه فعليًا. تعرّف على علاماته وأسبابه ومستويات التسجيل التي تمنعه.</span></a><a class="card" href="/articles/ar/record-clean-audio-phone.html"><b>كيف تسجّل صوتًا نظيفًا بهاتفك: دليل عملي</b><span>سبع عادات بسيطة تجعل تسجيلات الهاتف واضحة وصالحة للاستعمال: المكان والمسافة والإعدادات والضوضاء وتجربة قصيرة قبل البدء.</span></a><a class="card" href="/articles/ar/mono-vs-stereo-recording.html"><b>مونو أم ستيريو: أيهما تستعمل لتسجيل الصوت البشري؟</b><span>مونو أم ستيريو؟ لتسجيل صوت متحدث واحد غالبًا يكون المونو هو الاختيار الصحيح. تعرّف على الفرق وأثره في الحجم وطريقة التحويل الآمنة.</span></a><a class="card" href="/articles/ar/bit-depth-16-24-32.html"><b>شرح عمق البت: الفرق بين 16 بت و24 بت و32 بت عائم</b><span>ماذا يغيّر عمق البت فعلًا في التسجيل، وكم يضيف إلى الحجم، وأيها تختار للكلام والموسيقى وتسليم المشاريع.</span></a><a class="card" href="/articles/ar/mp3-bitrate-cbr-vbr.html"><b>شرح معدل البت في MP3: الفرق بين CBR وVBR وأي جودة تختار</b><span>افهم معنى معدل البت لملفات MP3، والفرق بين المعدل الثابت والمتغير، وأي الإعدادات تناسب الكلام والموسيقى.</span></a><a class="card" href="/articles/ar/m4a-to-mp3.html"><b>كيف تحوّل M4A إلى MP3 (تسجيلات الآيفون وغيرها)</b><span>حوّل تسجيلات M4A من المذكرات الصوتية في الآيفون وتطبيقات أخرى إلى MP3 مجانًا داخل المتصفح، بمعدل بت مناسب ودون رفع الملف.</span></a><a class="card" href="/articles/ar/mp3-to-wav.html"><b>كيف تحوّل MP3 إلى WAV ومتى تحتاج إلى ذلك</b><span>لماذا يحوّل الناس MP3 إلى WAV، وما الذي يغيّره التحويل وما لا يغيّره، وكم يكبر الملف، وكيف تفعل ذلك مجانًا في المتصفح.</span></a><a class="card" href="/articles/ar/reduce-audio-file-size.html"><b>كيف تصغّر حجم الملف الصوتي دون أن تفسده</b><span>طرق عملية لتصغير الملفات الصوتية: اختيار الصيغة المناسبة، وخفض معدل البت، واستعمال المونو، وخفض معدل العينة، وحذف الصمت، مع أرقام حقيقية.</span></a><a class="card" href="/articles/ar/noise-floor-snr.html"><b>مستوى الضوضاء ونسبة الإشارة إلى الضوضاء: ماذا تعني لتسجيلاتك</b><span>ما هو مستوى الضوضاء (Noise Floor) ونسبة الإشارة إلى الضوضاء (SNR)، وكيف تقيسهما من تسجيل، وما الأرقام الجيدة للكلام، وكيف تحسّنهما.</span></a><a class="card" href="/articles/ar/silence-at-start-and-end.html"><b>لماذا تحتاج التسجيلات إلى صمت في البداية والنهاية (وكم مقداره)</b><span>لماذا تطلب مشاريع تسجيل الصوت صمتًا في بداية التسجيل ونهايته، وما المقدار المعتاد، وما هو الصمت الحقيقي، وكيف تضيفه أو تقصّه.</span></a><a class="card" href="/articles/ar/ogg-vs-mp3.html"><b>OGG أم MP3: أي صيغة تختار؟</b><span>مقارنة واضحة بين OGG وMP3: الجودة بالحجم نفسه، والتوافق، والترخيص، ومتى تناسب كل منهما.</span></a><a class="card" href="/articles/ar/extract-audio-from-video.html"><b>كيف تستخرج الصوت من فيديو (MP4 إلى MP3 أو WAV) داخل المتصفح</b><span>استخرج مسار الصوت من فيديو MP4 أو MOV أو WebM واحفظه بصيغة MP3 أو WAV مجانًا، دون رفع الفيديو إلى أي مكان.</span></a><a class="card" href="/articles/ar/mp4-vs-mkv-vs-webm.html"><b>MP4 وMKV وWebM وMOV: شرح صيغ الفيديو</b><span>ما هي حاويات الفيديو، وبماذا تختلف MP4 وMKV وWebM وMOV، ولماذا الحاوية ليست ترميزًا، وأيها تختار.</span></a><a class="card" href="/articles/ar/flac-to-mp3.html"><b>كيف تحوّل FLAC إلى MP3 مجانًا مع الحفاظ على جودة جيدة</b><span>حوّل ملفات FLAC إلى MP3 داخل المتصفح: أي معدل بت تختار، وكم سيصغر الحجم، ولماذا تحتفظ بنسخة FLAC الأصلية.</span></a><a class="card" href="/articles/ar/ogg-to-mp3.html"><b>كيف تحوّل OGG إلى MP3 ليعمل على كل جهاز</b><span>حوّل ملفات OGG إلى MP3 داخل المتصفح لتعمل على أي هاتف أو مشغّل أو برنامج، مع نصائح لتقليل فقدان الجودة.</span></a><a class="card" href="/articles/ar/best-audio-settings-for-transcription.html"><b>أفضل إعدادات الصوت للتفريغ النصي: الصيغة ومعدل العينة والقنوات</b><span>ما الإعدادات التي تعطي أدق نتيجة عند تفريغ التسجيلات إلى نص؟ الصيغة ومعدل العينة ومونو أم ستيريو ومستوى الصوت وأخطاء شائعة.</span></a><a class="card" href="/articles/ar/lossless-vs-lossy-audio.html"><b>الصوت المضغوط بفقدان وبدون فقدان: متى يهمّك الفرق؟</b><span>ما الفرق بين الضغط مع فقدان وبدون فقدان في الصوت؟ ما الذي يُحذف فعلًا، وكم يوفّر من حجم، ومتى تحتاج نسخة نقية.</span></a></div></section>
-<section class="lang" lang="en" dir="ltr"><h2>In English</h2><div class="cards"><a class="card" href="/articles/en/record-narration-for-script-video.html"><b>How to Record Narration for a Script Video</b><span>Record a clean voiceover that matches your slides: write for the ear, read in one take, keep the file in order, and check it before you build the video.</span></a><a class="card" href="/articles/en/script-to-video-slides-free.html"><b>How to Turn a Script into a Simple Video for Free</b><span>Turn a written script into a slide video in your browser: one slide per sentence, your own images and your own narration. A simple guide for explainers, Shorts and training videos.</span></a><a class="card" href="/articles/en/speed-audio-for-transcription-and-practice.html"><b>Slow Audio Down for Transcription, Practice and Listening</b><span>Slowing a recording helps with transcription, language practice and checking pronunciation. Learn the best speeds, a simple workflow, and how to make slower copies of many files at once.</span></a><a class="card" href="/articles/en/change-audio-speed-keep-pitch.html"><b>How to Slow Down or Speed Up Audio Without Changing the Pitch</b><span>Change the speed of a recording and keep the voice natural. Learn when time-stretching works well, its limits, and how to do it for one file or a whole ZIP, free in your browser.</span></a><a class="card" href="/articles/en/normalize-audio-volume-peak-vs-loudness.html"><b>Peak or Loudness: How to Normalize Audio Volume</b><span>What audio normalization does, the difference between peak and average loudness, and which one to choose for voice recordings.</span></a><a class="card" href="/articles/en/clean-audio-recordings-noise-silence-volume.html"><b>How to Clean Audio Recordings: Reduce Noise, Remove Silence, Fix Volume</b><span>A simple order for cleaning voice recordings: reduce steady noise, trim silence, then normalize the volume. Works for one file or a whole ZIP, free in your browser.</span></a><a class="card" href="/articles/en/how-to-start-voice-data-recording.html"><b>How to Start Recording Voice Data: A Beginner's Guide</b><span>What voice data is, the common types of recording projects, what you need to start, how to follow specs, and how to avoid scams.</span></a><a class="card" href="/articles/en/why-voice-recordings-get-rejected.html"><b>Why Voice Recordings Get Rejected: 7 Mistakes to Avoid</b><span>The most common reasons voice recordings are rejected in data projects, from noise and clipping to wrong files, and how to avoid each one before you submit.</span></a><a class="card" href="/articles/en/reduce-echo-and-noise-in-recordings.html"><b>How to Reduce Echo and Background Noise in Your Recordings</b><span>Why recordings have echo and noise, how to reduce both before you record with simple room and microphone habits, and how to check your files for free in your browser.</span></a><a class="card" href="/articles/en/wav-vs-mp3-difference.html"><b>WAV vs MP3: What Is the Difference and Which Should You Use?</b><span>WAV keeps every detail but is large; MP3 is small but loses some detail. See the file sizes per minute and learn which format fits recording, sharing and delivery.</span></a><a class="card" href="/articles/en/audio-file-naming-convention-voice-projects.html"><b>Audio File Naming Convention for Voice Data Projects</b><span>How to name recordings in a voice data project: speaker ID, sentence number, zero padding, no spaces, and why the client's specification comes first.</span></a><a class="card" href="/articles/en/rename-audio-files-in-bulk-zip.html"><b>How to Rename Many Audio Files at Once from a ZIP</b><span>Rename hundreds of recordings in one go: drop a ZIP, set a naming pattern with numbers, preview the new names and download a renamed ZIP, all in your browser.</span></a><a class="card" href="/articles/en/ideal-sentence-length-voice-recording.html"><b>How Long Should Each Sentence Be in a Voice Recording Project?</b><span>A practical guide to sentence length in speech data collection: why short sentences reduce errors, how to choose a limit, and why your client's specification comes first.</span></a><a class="card" href="/articles/en/split-text-into-sentences-recording-script.html"><b>How to Split a Long Text into Sentences for a Recording Script</b><span>Turn a long text into short, clean sentences for a voice recording script: set a maximum length, remove duplicates and numbering, and avoid splitting at abbreviations.</span></a><a class="card" href="/articles/en/improve-speech-to-text-accuracy.html"><b>How to Get More Accurate Speech-to-Text Results</b><span>Practical steps that raise speech recognition accuracy: clean recording, the right language and model, short clips and a quick review.</span></a><a class="card" href="/articles/en/speech-to-text-in-browser-privacy.html"><b>Speech to Text in Your Browser: Convert Audio to Text Without Uploading It</b><span>How in-browser speech recognition works, what stays on your device, what to expect on the first run, and its limits (beta).</span></a><a class="card" href="/articles/en/numbers-in-speech-transcription-guidelines.html"><b>Numbers in Speech Transcription: Digits or Words?</b><span>How transcription and speech-data guidelines usually treat numbers, why consistency matters, and how to prepare sentences so speakers read them clearly.</span></a><a class="card" href="/articles/en/write-numbers-as-words-arabic.html"><b>How to Write Numbers as Arabic Words: Egyptian and Standard Arabic</b><span>Convert digits to spoken Arabic words for dates, times, money, percentages and phone numbers, in Egyptian dialect or Modern Standard Arabic.</span></a><a class="card" href="/articles/en/audio-file-size-vs-duration.html"><b>Audio File Size vs Duration: How Much Space Does a Minute of Audio Take?</b><span>How to estimate WAV and MP3 file size from duration, sample rate, bit depth and channels, with a quick table for common settings.</span></a><a class="card" href="/articles/en/calculate-total-audio-duration.html"><b>How to Calculate the Total Duration of Many Audio Files at Once</b><span>Add up the length of dozens of WAV, MP3, FLAC, OGG or M4A files in seconds, without uploading them, and see the total in hours, minutes and seconds.</span></a><a class="card" href="/articles/en/record-sentences-from-script-file.html"><b>How to Record a List of Sentences From a Text File, One by One</b><span>Upload a script, record each sentence in order with next, previous and redo, review everything, and download numbered WAV files in one ZIP.</span></a><a class="card" href="/articles/en/record-voice-online-wav-free.html"><b>How to Record Your Voice Online as WAV or MP3 (Free, No Upload)</b><span>Record your voice in the browser and save it as WAV or MP3, choosing sample rate, bit depth and mono or stereo, without installing anything or uploading your audio.</span></a><a class="card" href="/articles/en/wav-to-mp3.html"><b>How to Convert WAV to MP3 for Free, Without Uploading Your Files</b><span>A step-by-step guide to converting WAV to MP3 in your browser: how to choose a bitrate, keep good quality, and understand what changes in the file.</span></a><a class="card" href="/articles/en/sample-rate-16-24-48-khz.html"><b>What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained</b><span>Sample rate explained in plain language: what 16, 24, 44.1 and 48 kHz mean, which one to choose for speech, music or video, and what happens when you convert.</span></a><a class="card" href="/articles/en/wav-vs-mp3-vs-flac.html"><b>WAV vs MP3 vs FLAC vs OGG vs M4A: Which Audio Format Should You Choose?</b><span>A practical comparison of the most common audio formats: file size, quality, compatibility and the best choice for recording, editing, sharing and archiving.</span></a><a class="card" href="/articles/en/batch-convert-audio-zip.html"><b>How to Batch Convert Many Audio Files at Once and Download Them as a ZIP</b><span>Convert dozens of audio files in one go: apply the same format, bitrate and sample rate to all of them, then download everything in a single ZIP file.</span></a><a class="card" href="/articles/en/voice-data-recording-specs.html"><b>Preparing Voice Recordings for Data Projects: Typical Specs and a Checklist</b><span>Common requirements for voice-recording and speech-data projects: format, sample rate, mono or stereo, silence, levels and file naming, with a delivery checklist.</span></a><a class="card" href="/articles/en/audio-converter-privacy.html"><b>Why You Should Not Upload Private Recordings to Online Converters</b><span>How browser-based audio conversion keeps your files on your device, what happens when a converter uploads them to a server, and how to verify it yourself.</span></a><a class="card" href="/articles/en/check-recording-quality-before-delivery.html"><b>A Checklist to Verify Recording Quality Before You Deliver</b><span>A practical pre-delivery checklist for voice recordings: format, sample rate, channels, level, noise, silence, clipping and duplicates, plus how to check them in bulk.</span></a><a class="card" href="/articles/en/audio-clipping-distortion.html"><b>What Is Audio Clipping, and How to Avoid It in Your Recordings</b><span>Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.</span></a><a class="card" href="/articles/en/record-clean-audio-phone.html"><b>How to Record Clean Audio With Your Phone: A Practical Guide</b><span>Seven simple habits that make phone recordings clear and usable: location, distance, settings, handling noise and a quick test before you start.</span></a><a class="card" href="/articles/en/mono-vs-stereo-recording.html"><b>Mono vs Stereo: Which Should You Use for Voice Recordings?</b><span>Mono or stereo? For single-voice recordings, mono is usually the right choice. Here is what each means, what it does to file size, and how to convert safely.</span></a><a class="card" href="/articles/en/bit-depth-16-24-32.html"><b>Bit Depth Explained: 16-bit vs 24-bit vs 32-bit Float</b><span>What bit depth really changes in a recording, how much file size it adds, and which one to choose for speech, music and project delivery.</span></a><a class="card" href="/articles/en/mp3-bitrate-cbr-vbr.html"><b>MP3 Bitrate Explained: CBR vs VBR and What Quality to Choose</b><span>Understand what bitrate means for MP3 files, the difference between constant and variable bitrate, and which settings suit speech and music.</span></a><a class="card" href="/articles/en/m4a-to-mp3.html"><b>How to Convert M4A to MP3 (iPhone Voice Memos and More)</b><span>Convert M4A recordings from iPhone Voice Memos and other apps to MP3 for free in your browser, with the right bitrate and without uploading the file.</span></a><a class="card" href="/articles/en/mp3-to-wav.html"><b>How to Convert MP3 to WAV, and When You Should</b><span>Why people convert MP3 to WAV, what it does and does not change, how big the files get, and how to do it for free in your browser.</span></a><a class="card" href="/articles/en/reduce-audio-file-size.html"><b>How to Reduce the Size of an Audio File Without Ruining It</b><span>Practical ways to make audio files smaller: choose the right format, lower the bitrate, use mono, reduce the sample rate and trim silence, with real numbers.</span></a><a class="card" href="/articles/en/noise-floor-snr.html"><b>Noise Floor and Signal-to-Noise Ratio: What They Mean for Your Recordings</b><span>What the noise floor and SNR are, how to measure them from a recording, what numbers are good for speech, and how to improve them.</span></a><a class="card" href="/articles/en/silence-at-start-and-end.html"><b>Why Recordings Need Silence at the Start and End (and How Much)</b><span>Why voice-recording projects ask for leading and trailing silence, how much is typical, what real silence is, and how to add or trim it.</span></a><a class="card" href="/articles/en/ogg-vs-mp3.html"><b>OGG vs MP3: Which Format Should You Choose?</b><span>A clear comparison of OGG and MP3: quality at the same size, compatibility, licensing, and when each one makes sense.</span></a><a class="card" href="/articles/en/extract-audio-from-video.html"><b>How to Extract Audio From a Video (MP4 to MP3 or WAV) in Your Browser</b><span>Pull the audio track out of an MP4, MOV or WebM video and save it as MP3 or WAV for free, without uploading the video anywhere.</span></a><a class="card" href="/articles/en/mp4-vs-mkv-vs-webm.html"><b>MP4 vs MKV vs WebM vs MOV: Video Formats Explained</b><span>What video container formats are, how MP4, MKV, WebM and MOV differ, why a container is not a codec, and which to choose.</span></a><a class="card" href="/articles/en/flac-to-mp3.html"><b>How to Convert FLAC to MP3 for Free While Keeping Good Quality</b><span>Convert FLAC files to MP3 in your browser: which bitrate to choose, how much smaller the files get, and why you should keep the original FLAC.</span></a><a class="card" href="/articles/en/ogg-to-mp3.html"><b>How to Convert OGG to MP3 So It Plays on Every Device</b><span>Convert OGG files to MP3 in your browser so they play on any phone, player or program, with tips to limit quality loss.</span></a><a class="card" href="/articles/en/best-audio-settings-for-transcription.html"><b>Best Audio Settings for Transcription: Format, Sample Rate and Channels</b><span>Which settings give the most accurate result when transcribing recordings to text? Format, sample rate, mono or stereo, level, and common mistakes.</span></a><a class="card" href="/articles/en/lossless-vs-lossy-audio.html"><b>Lossless vs Lossy Audio: When Does the Difference Matter?</b><span>What is the difference between lossy and lossless audio compression? What is actually removed, how much space it saves, and when you need a pristine copy.</span></a></div></section>
+  <nav class="top"><a class="brand" href="/">Sayvoi</a>
+    <a class="nl on" lang-block="ar" href="/">المحوّل</a><a class="nl on" lang-block="en" href="/">Converter</a>
+    <a class="nl" lang-block="ar" href="/check/">فاحص الجودة</a><a class="nl" lang-block="en" href="/check/">Quality checker</a>
+    <a class="nl" lang-block="ar" href="/video-to-audio/">فيديو إلى صوت</a><a class="nl" lang-block="en" href="/video-to-audio/">Video to audio</a>
+    <a class="nl" lang-block="ar" href="/audio-cutter/">قص الصوت</a><a class="nl" lang-block="en" href="/audio-cutter/">Audio cutter</a>
+    <a class="nl" lang-block="ar" href="/speech-to-text/">الصوت إلى نص</a><a class="nl" lang-block="en" href="/speech-to-text/">Speech to text</a>
+    <a class="nl" lang-block="ar" href="/numbers-to-words/">الأرقام بالحروف</a><a class="nl" lang-block="en" href="/numbers-to-words/">Numbers to words</a>
+    <a class="nl" lang-block="ar" href="/audio-duration/">مدة الملفات</a><a class="nl" lang-block="en" href="/audio-duration/">Audio duration</a>
+    <a class="nl" lang-block="ar" href="/sentence-splitter/">مقسّم الجمل</a><a class="nl" lang-block="en" href="/sentence-splitter/">Sentence splitter</a>
+    <a class="nl" lang-block="ar" href="/audio-renamer/">إعادة التسمية</a><a class="nl" lang-block="en" href="/audio-renamer/">Batch renamer</a>
+    <a class="nl" lang-block="ar" href="/audio-cleaner/">منظّف الصوت</a><a class="nl" lang-block="en" href="/audio-cleaner/">Audio cleaner</a>
+    <a class="nl" lang-block="ar" href="/audio-speed/">تغيير السرعة</a><a class="nl" lang-block="en" href="/audio-speed/">Speed changer</a>
+    <a class="nl" lang-block="ar" href="/voice-recorder/">مسجّل الصوت</a><a class="nl" lang-block="en" href="/voice-recorder/">Voice recorder</a>
+    <a class="nl" lang-block="ar" href="https://sayvoi.com/services/">الخدمات</a><a class="nl" lang-block="en" href="https://sayvoi.com/services/">Services</a>
+    <a class="nl" lang-block="ar" href="/articles/">المقالات</a><a class="nl" lang-block="en" href="/articles/">Articles</a>
+    <a class="nl" lang-block="ar" href="/about.html">عن الموقع</a><a class="nl" lang-block="en" href="/about.html">About</a>
+    <button class="lang" id="langBtn" type="button">English</button></nav>
+
+  <a class="promo" href="/check/">
+    <span class="pi" aria-hidden="true">🎧</span>
+    <span class="pt"><b lang-block="ar">جديد: فاحص جودة التسجيلات</b><b lang-block="en">New: Recording Quality Checker</b>
+    <small lang-block="ar">افحص التشويه والضوضاء ومعدل العينة والصمت والتكرار لعشرات الملفات دفعة واحدة، مجانًا وداخل متصفحك.</small>
+    <small lang-block="en">Check clipping, noise, sample rate, silence and duplicates for dozens of files at once. Free, in your browser.</small></span>
+    <span class="pg" lang-block="ar">جرّب الفاحص</span><span class="pg" lang-block="en">Try the checker</span>
+  </a>
+
+  <a class="promo" href="/audio-cutter/" style="margin-top:12px;background:linear-gradient(120deg,#ff8a3d,#7c4dff 70%,#2f80ed)">
+    <span class="pi" aria-hidden="true">✂️</span>
+    <span class="pt"><b lang-block="ar">جديد: قص الصوت</b><b lang-block="en">New: Audio Cutter</b>
+    <small lang-block="ar">اقطع الجزء الذي تريده من أي ملف صوتي، وأضف تلاشيًا، واحفظه MP3 أو WAV. مجانًا وداخل متصفحك.</small>
+    <small lang-block="en">Cut the part you want from any audio file, add a fade, and save it as MP3 or WAV. Free, in your browser.</small></span>
+    <span class="pg" lang-block="ar">جرّب القص</span><span class="pg" lang-block="en">Try the cutter</span>
+  </a>
+
+  <div class="mt">
+    <a href="/speech-to-text/"><b lang-block="ar">🎙️ الصوت إلى نص (بيتا)</b><b lang-block="en">🎙️ Audio to text (beta)</b><small lang-block="ar">مسودة تفريغ من صوتك داخل المتصفح.</small><small lang-block="en">A draft transcript, in your browser.</small></a>
+    <a href="/numbers-to-words/"><b lang-block="ar">🔢 الأرقام بالحروف</b><b lang-block="en">🔢 Numbers to words</b><small lang-block="ar">باللهجة المصرية أو الفصحى.</small><small lang-block="en">Egyptian dialect or Fusha Arabic.</small></a>
+    <a href="/audio-duration/"><b lang-block="ar">⏱️ حاسبة مدة الملفات</b><b lang-block="en">⏱️ Audio duration calculator</b><small lang-block="ar">إجمالي ساعات عشرات الملفات.</small><small lang-block="en">Total hours of many files.</small></a>
+    <a href="/voice-recorder/"><b lang-block="ar">🎤 مسجّل الصوت</b><b lang-block="en">🎤 Voice recorder</b><small lang-block="ar">سجّل جملة بجملة ونزّل ZIP.</small><small lang-block="en">Record sentence by sentence, get a ZIP.</small></a>
+  </div>
+
+  <header>
+    <h1><b class="wm">Sayvoi</b> <span lang-block="ar">محوّل الصوت</span><span lang-block="en">Audio Converter</span></h1>
+    <p class="sub" lang-block="ar">حوّل ملفات الصوت إلى MP3 أو WAV أو OGG أو FLAC أو M4A، وغيّر معدل العينة (48 / 24 / 16 kHz وغيرها) والقنوات، لعدة ملفات دفعة واحدة. كل شيء يتم داخل متصفحك.</p>
+    <p class="sub" lang-block="en">Convert audio to MP3, WAV, OGG, FLAC or M4A, change the sample rate (48 / 24 / 16 kHz and more) and channels, for many files at once. Everything happens inside your browser.</p>
+  </header>
+
+  <div class="drop" id="drop" tabindex="0" role="button">
+    <b lang-block="ar">اسحب الملفات هنا أو اضغط للاختيار (يمكنك اختيار أكثر من ملف)</b>
+    <b lang-block="en">Drag files here or click to choose (you can select many)</b>
+    <small lang-block="ar">MP3 · WAV · M4A · OGG · FLAC · AAC (حسب دعم متصفحك)</small>
+    <small lang-block="en">MP3 · WAV · M4A · OGG · FLAC · AAC (depends on your browser)</small>
+    <input id="file" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg,.flac,.aac,.opus,.webm" multiple hidden>
+  </div>
+
+  <p class="how" lang-block="ar">1) اختر الملفات &nbsp;2) اضبط «تحويل إلى» والمعدل &nbsp;3) اضغط «حوّل الكل». سيظهر لكل ملف: من ← إلى.</p>
+  <p class="how" lang-block="en">1) Add files &nbsp;2) Set “Convert to” and the rate &nbsp;3) Press “Convert all”. Each file shows: from → to.</p>
+
+  <div class="opts">
+    <div>
+      <label for="fmt"><span lang-block="ar">تحويل إلى (الصيغة)</span><span lang-block="en">Convert to (format)</span></label>
+      <select id="fmt">
+        <option value="mp3">MP3</option><option value="wav">WAV</option>
+        <option value="ogg">OGG (Vorbis)</option><option value="flac">FLAC</option><option value="m4a">M4A (AAC)</option>
+      </select>
+    </div>
+    <div>
+      <label for="br"><span lang-block="ar">الجودة (kbps)</span><span lang-block="en">Quality (kbps)</span></label>
+      <select id="br">
+        <option>64</option><option>96</option><option selected>128</option>
+        <option>192</option><option>256</option><option>320</option>
+      </select>
+    </div>
+    <div>
+      <label for="sr"><span lang-block="ar">معدل العينة (إلى)</span><span lang-block="en">Sample rate (to)</span></label>
+      <select id="sr">
+        <option value="orig" data-ar="الأصلي (بدون تغيير)" data-en="Original (no change)">الأصلي (بدون تغيير)</option>
+        <option value="48000">48 kHz</option>
+        <option value="44100">44.1 kHz</option>
+        <option value="32000">32 kHz</option>
+        <option value="24000">24 kHz</option>
+        <option value="22050">22.05 kHz</option>
+        <option value="16000">16 kHz</option>
+        <option value="12000">12 kHz</option>
+        <option value="11025">11.025 kHz</option>
+        <option value="8000">8 kHz</option>
+      </select>
+    </div>
+    <div>
+      <label for="ch"><span lang-block="ar">القنوات (إلى)</span><span lang-block="en">Channels (to)</span></label>
+      <select id="ch">
+        <option value="orig" data-ar="الأصلي" data-en="Original">الأصلي</option>
+        <option value="1" data-ar="مونو (1)" data-en="Mono (1)">مونو (1)</option>
+        <option value="2" data-ar="ستيريو (2)" data-en="Stereo (2)">ستيريو (2)</option>
+      </select>
+    </div>
+  </div>
+
+  <p class="hint" id="hint" hidden>
+    <span lang-block="ar">عند أول استخدام لـ OGG أو FLAC أو M4A سيتم تحميل مكوّن إضافي (حوالي 30 ميجابايت) مرة واحدة.</span>
+    <span lang-block="en">The first time you use OGG, FLAC or M4A, a one-time add-on (about 30 MB) is downloaded.</span>
+  </p>
+
+  <p class="quota" id="quota" hidden></p>
+
+  <div class="actions">
+    <button class="btn" id="go" type="button" disabled>
+      <span lang-block="ar">حوّل الكل</span><span lang-block="en">Convert all</span>
+    </button>
+    <button class="btn ghost" id="zipBtn" type="button" disabled>
+      <span lang-block="ar">تنزيل الكل (ZIP)</span><span lang-block="en">Download all (ZIP)</span>
+    </button>
+    <button class="btn ghost" id="clear" type="button">
+      <span lang-block="ar">مسح القائمة</span><span lang-block="en">Clear list</span>
+    </button>
+    <span class="sum" id="sum"></span>
+    <a class="btn small" id="zipLink" href="#" download="sayvoi-converted.zip" hidden>
+      <span lang-block="ar">إن لم يبدأ التنزيل اضغط هنا (ZIP)</span><span lang-block="en">Download didn't start? Tap here (ZIP)</span>
+    </a>
+  </div>
+
+  <div class="upgrade" id="upgrade" hidden>
+    <p lang-block="ar">وصلت للحد المجاني اليومي. للحصول على حد أعلى أو للاستخدام الكثيف، تواصل معنا على <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. يتجدد الحد غداً.</p>
+    <p lang-block="en">You've reached today's free limit. For a higher limit or heavy use, contact us at <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a>. The limit resets tomorrow.</p>
+    <a class="btn small" id="upgradeBtn" href="#" target="_blank" rel="noopener" hidden>
+      <span lang-block="ar">ترقية</span><span lang-block="en">Upgrade</span>
+    </a>
+  </div>
+
+  <ul id="list"></ul>
+
+  <p class="priv" lang-block="ar">🔒 الملفات لا تُرفع إلى أي سيرفر، وتُعالج بالكامل على جهازك. يُنصح بملفات أقل من 100 ميجابايت للملف الواحد.</p>
+  <p class="priv" lang-block="en">🔒 Your files are never uploaded. Everything is processed on your device. Files under 100 MB each are recommended.</p>
+  <section class="vd">
+    <div lang-block="ar"><h2>شاهد: طريقة استخدام المحوّل</h2><p>شرح مصوّر قصير (نحو 48 ثانية). الخطوات مكتوبة على الشاشة.</p><div class="fr"><iframe title="شرح محوّل الصوت من Sayvoi" loading="lazy" src="https://www.youtube-nocookie.com/embed/ZIWV1nlWjp4?rel=0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>
+    <div lang-block="en"><h2>Watch: how to use the converter</h2><p>A short video guide (about 48 seconds). The steps are written on the screen.</p><div class="fr"><iframe title="Sayvoi audio converter guide" loading="lazy" src="https://www.youtube-nocookie.com/embed/XGBiiejOUwY?rel=0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div>
+    <div lang-block="ar"><p style="margin-top:10px">💡 مش عارف تختار WAV ولا MP3؟ <a href="/articles/ar/wav-vs-mp3-difference.html">اقرأ المقال واتفرج على الفيديو</a></p></div>
+    <div lang-block="en"><p style="margin-top:10px">💡 Not sure whether to pick WAV or MP3? <a href="/articles/en/wav-vs-mp3-difference.html">Read the article and watch the video</a></p></div>
+  </section>
+
+  <style>.rel{max-width:860px;margin:28px auto;padding:0 16px}.rel h2{font-size:1.1rem;margin:0 0 10px}.rel ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}.rel a{display:block;padding:10px 14px;border:1px solid rgba(127,127,127,.3);border-radius:10px;text-decoration:none;color:inherit}.rel a:hover{border-color:#6366f1}html[lang="ar"] .rel-en,html[lang="en"] .rel-ar{display:none}</style>
+<section class="rel rel-ar" lang="ar" dir="rtl"><h2>مقالات متعلقة</h2><ul><li><a href="/articles/ar/wav-to-mp3.html">كيف تحوّل WAV إلى MP3 مجانًا دون رفع ملفاتك</a></li><li><a href="/articles/ar/mp3-to-wav.html">كيف تحوّل MP3 إلى WAV ومتى تحتاج إلى ذلك</a></li><li><a href="/articles/ar/wav-vs-mp3-difference.html">الفرق بين WAV وMP3: أيهما تستخدم؟</a></li><li><a href="/articles/ar/batch-convert-audio-zip.html">كيف تحوّل عدة ملفات صوتية دفعة واحدة وتنزّلها في ملف ZIP</a></li><li><a href="/articles/ar/sample-rate-16-24-48-khz.html">ما هو معدل العينة؟ شرح 16 و24 و44.1 و48 كيلوهرتز</a></li></ul></section>
+<section class="rel rel-en" lang="en" dir="ltr"><h2>Related articles</h2><ul><li><a href="/articles/en/wav-to-mp3.html">How to Convert WAV to MP3 for Free, Without Uploading Your Files</a></li><li><a href="/articles/en/mp3-to-wav.html">How to Convert MP3 to WAV, and When You Should</a></li><li><a href="/articles/en/wav-vs-mp3-difference.html">WAV vs MP3: What Is the Difference and Which Should You Use?</a></li><li><a href="/articles/en/batch-convert-audio-zip.html">How to Batch Convert Many Audio Files at Once and Download Them as a ZIP</a></li><li><a href="/articles/en/sample-rate-16-24-48-khz.html">What Is Sample Rate? 16 vs 24 vs 44.1 vs 48 kHz Explained</a></li></ul></section>
 <footer>
-<p><a href="/about.html">عن الموقع · About</a><a href="/faq.html">الأسئلة · FAQ</a><a href="/privacy.html">الخصوصية · Privacy</a><a href="/terms.html">الشروط · Terms</a><a href="/contact.html">اتصل بنا · Contact</a></p>
-<p>support@sayvoi.com · hafezseo@gmail.com</p>
-<p>© 2026 Sayvoi</p>
-</footer>
+    <p lang-block="ar"><a href="/check/">فاحص جودة التسجيلات</a> · <a href="/audio-cutter/">قص الصوت</a> · <a href="/speech-to-text/">الصوت إلى نص</a> · <a href="/numbers-to-words/">الأرقام بالحروف</a> · <a href="/audio-duration/">مدة الملفات</a> · <a href="/sentence-splitter/">مقسّم الجمل</a> · <a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a> · <a href="/audio-speed/">تغيير السرعة</a> · <a href="/voice-recorder/">مسجّل الصوت</a> · <a href="https://sayvoi.com/services/">الخدمات</a> · <a href="/articles/">المقالات</a> · <a href="/about.html">عن الموقع</a> · <a href="/faq.html">الأسئلة الشائعة</a> · <a href="/privacy.html">الخصوصية</a> · <a href="/terms.html">الشروط</a> · <a href="/contact.html">اتصل بنا</a></p>
+    <p lang-block="en"><a href="/check/">Recording quality checker</a> · <a href="/audio-cutter/">Audio cutter</a> · <a href="/speech-to-text/">Speech to text</a> · <a href="/numbers-to-words/">Numbers to words</a> · <a href="/audio-duration/">Audio duration</a> · <a href="/sentence-splitter/">Sentence splitter</a> · <a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a> · <a href="/audio-speed/">Speed changer</a> · <a href="/voice-recorder/">Voice recorder</a> · <a href="https://sayvoi.com/services/">Services</a> · <a href="/articles/">Articles</a> · <a href="/about.html">About</a> · <a href="/faq.html">FAQ</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/contact.html">Contact</a></p>
+    <p lang-block="ar">تواصل: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
+    <p lang-block="en">Contact: <a href="mailto:support@sayvoi.com">support@sayvoi.com</a> · <a href="mailto:hafezseo@gmail.com">hafezseo@gmail.com</a></p>
+  </footer>
 </div>
+
+<script src="vendor/lame.min.js"></script>
+<script src="vendor/jszip.min.js"></script>
+<script>
+(function(){
+  var T = {
+    ar:{wait:"في الانتظار", dec:"جارٍ فك التشفير…", res:"جارٍ تغيير المعدل…", enc:"جارٍ الترميز…",
+        done:"تم", dl:"تنزيل", ffload:"جارٍ تحميل المكوّن الإضافي…",
+        fail:"تعذّر التحويل: الصيغة غير مدعومة في هذا المتصفح أو الملف تالف.",
+        nolib:"تعذّر تحميل مكتبة MP3. أعد تحميل الصفحة وحاول مجدداً.",
+        noff:"تعذّر تحميل مكوّن التحويل. تحقق من الاتصال وأعد المحاولة.",
+        big:"الملف كبير جداً (أكثر من 200 ميجابايت).",
+        limit:"تجاوزت الحد المجاني اليومي.",
+        orig:"الأصلي", mono:"مونو", stereo:"ستيريو", from:"من", to:"إلى", zipping:"جارٍ تجهيز ملف ZIP…", zipfail:"تعذّر تجهيز ملف ZIP. حمّل الملفات واحدًا واحدًا، أو أعد تحميل الصفحة وحاول مجددًا.",        quota:function(l,r){ return "الحد المجاني: " + l + " ملفات يومياً · المتبقي اليوم: " + r; },
+        sum:function(a,b){ return "تم تحويل " + a + " من " + b + " ملف"; }},
+    en:{wait:"Waiting", dec:"Decoding…", res:"Resampling…", enc:"Encoding…",
+        done:"Done", dl:"Download", ffload:"Loading add-on…",
+        fail:"Conversion failed: unsupported format in this browser, or a corrupted file.",
+        nolib:"Could not load the MP3 library. Reload the page and try again.",
+        noff:"Could not load the converter add-on. Check your connection and retry.",
+        big:"File is too large (over 200 MB).",
+        limit:"Daily free limit reached.",
+        orig:"Original", mono:"Mono", stereo:"Stereo", from:"From", to:"To", zipping:"Preparing ZIP…", zipfail:"Could not prepare the ZIP. Download the files one by one, or reload the page and try again.",        quota:function(l,r){ return "Free limit: " + l + " files per day · Left today: " + r; },
+        sum:function(a,b){ return "Converted " + a + " of " + b + " file" + (b === 1 ? "" : "s"); }}
+  };
+  /* ===== Free plan settings (edit these two lines) ===== */
+  var FREE_DAILY_LIMIT = 15;  // files converted per day for free; set 0 for unlimited
+  var UPGRADE_URL = "";       // later: link to your payment/pricing page (shows an "Upgrade" button)
+  /* ======================================================= */
+  var MP3_RATES = [8000,11025,12000,16000,22050,24000,32000,44100,48000];
+  var html = document.documentElement, langBtn = document.getElementById("langBtn");
+  var drop = document.getElementById("drop"), fileIn = document.getElementById("file");
+  var list = document.getElementById("list"), go = document.getElementById("go"), zipBtn = document.getElementById("zipBtn");
+  var fmt = document.getElementById("fmt"), br = document.getElementById("br");
+  var srSel = document.getElementById("sr"), chSel = document.getElementById("ch");
+  var sumEl = document.getElementById("sum"), hint = document.getElementById("hint");
+  var jobs = [], busy = false;
+
+  function lang(){ return html.lang === "en" ? "en" : "ar"; }
+  function t(k){ return T[lang()][k]; }
+  function usesBr(f){ return f === "mp3" || f === "ogg" || f === "m4a"; }
+  function viaFFmpeg(f){ return f === "ogg" || f === "flac" || f === "m4a"; }
+
+  /* ---------- free daily limit (soft: stored in this browser only) ---------- */
+  var memUsage = {d:"", n:0};
+  function today(){ var d = new Date(); return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate(); }
+  function getUsed(){
+    var t0 = today(), n = memUsage.d === t0 ? memUsage.n : 0;
+    try{ var v = JSON.parse(localStorage.getItem("sayvoi_usage") || "null"); if (v && v.d === t0) n = Math.max(n, v.n|0); }catch(e){}
+    return n;
+  }
+  function addUsed(){
+    var t0 = today(), n = getUsed() + 1;
+    memUsage = {d:t0, n:n};
+    try{ localStorage.setItem("sayvoi_usage", JSON.stringify({d:t0, n:n})); }catch(e){}
+  }
+  function remaining(){ return FREE_DAILY_LIMIT > 0 ? Math.max(0, FREE_DAILY_LIMIT - getUsed()) : Infinity; }
+
+  /* ---------- settings ---------- */
+  function settings(){ return {f: fmt.value, kbps: parseInt(br.value,10), sr: srSel.value, ch: chSel.value}; }
+  function sigOf(s){ return [s.f, usesBr(s.f) ? s.kbps : 0, s.sr, s.ch].join("|"); }
+  function targetSr(src, s){
+    var v = s.sr === "orig" ? src : parseInt(s.sr,10);
+    if (s.f === "mp3" && MP3_RATES.indexOf(v) < 0) v = 44100;
+    return v;
+  }
+  function targetCh(src, s){ return s.ch === "orig" ? Math.min(src,2) : parseInt(s.ch,10); }
+
+  /* ---------- labels ---------- */
+  function srLabel(n){ return (Math.round(n) / 1000) + " kHz"; }
+  function chLabel(n){ return n === 1 ? t("mono") : t("stereo"); }
+  function srcExt(file){ var m = /\.([^.]+)$/.exec(file.name); return m ? m[1].toUpperCase() : "?"; }
+  function dur(sec){ var m = Math.floor(sec/60), s = Math.round(sec%60); if (s === 60){ m++; s = 0; } return m + ":" + (s < 10 ? "0" : "") + s; }
+
+  function fromText(j){
+    var p = [srcExt(j.file)];
+    if (j.src){ p.push(srLabel(j.src.sr)); p.push(chLabel(j.src.ch)); p.push(dur(j.src.dur)); }
+    return t("from") + ": " + p.join(" · ");
+  }
+  function toText(j){
+    var s = j.used || settings();
+    var p = [s.f.toUpperCase()];
+    p.push(s.sr === "orig" && !j.src ? t("orig") : srLabel(targetSr(j.src ? j.src.sr : 0, s)));
+    p.push(s.ch === "orig" && !j.src ? t("orig") : chLabel(targetCh(j.src ? j.src.ch : 1, s)));
+    if (usesBr(s.f)) p.push(s.kbps + " kbps");
+    return t("to") + ": " + p.join(" · ");
+  }
+  function refreshMeta(j){
+    var m = j.li.querySelector(".meta");
+    m.querySelector(".from").textContent = fromText(j);
+    m.querySelector(".to").textContent = toText(j);
+  }
+  function refreshStatus(j){
+    var st = j.li.querySelector(".st"); st.textContent = t(j.key); st.className = "st " + j.cls;
+    var a = j.li.querySelector(".act a"); if (a) a.textContent = t("dl");
+  }
+  function setStatus(j, key, cls){ j.key = key; j.cls = cls || ""; refreshStatus(j); }
+  function progress(j, p){ j.li.querySelector(".bar i").style.width = Math.round(p*100) + "%"; }
+
+  function needsRun(j){ return !j.done || j.sig !== sigOf(settings()); }
+
+  function updateUI(){
+    var nDone = jobs.filter(function(j){ return j.blob; }).length;
+    var rem = remaining(), limited = FREE_DAILY_LIMIT > 0 && rem <= 0;
+    go.disabled = busy || limited || !jobs.some(needsRun);
+    var quotaEl = document.getElementById("quota"), upEl = document.getElementById("upgrade"), upBtn = document.getElementById("upgradeBtn");
+    quotaEl.hidden = !(FREE_DAILY_LIMIT > 0);
+    if (FREE_DAILY_LIMIT > 0) quotaEl.textContent = t("quota")(FREE_DAILY_LIMIT, rem);
+    upEl.hidden = !limited;
+    if (UPGRADE_URL){ upBtn.href = UPGRADE_URL; upBtn.hidden = false; } else { upBtn.hidden = true; }
+    zipBtn.disabled = busy || nDone < 2;
+    fmt.disabled = srSel.disabled = chSel.disabled = busy;
+    br.disabled = busy || !usesBr(fmt.value);
+    hint.hidden = !viaFFmpeg(fmt.value);
+    sumEl.textContent = jobs.length ? t("sum")(nDone, jobs.length) : "";
+  }
+
+  /* ---------- language ---------- */
+  function setLang(l){
+    html.lang = l; html.dir = l === "ar" ? "rtl" : "ltr";
+    langBtn.textContent = l === "ar" ? "English" : "العربية";
+    var opts = document.querySelectorAll("option[data-ar]");
+    for (var i=0;i<opts.length;i++) opts[i].textContent = opts[i].getAttribute("data-" + l);
+    jobs.forEach(function(j){ refreshStatus(j); refreshMeta(j); });
+    updateUI();
+    try{ localStorage.setItem("lang", l); }catch(e){}
+  }
+  langBtn.addEventListener("click", function(){ setLang(lang() === "ar" ? "en" : "ar"); });
+
+  /* ---------- settings change ---------- */
+  [fmt, br, srSel, chSel].forEach(function(el){
+    el.addEventListener("change", function(){ jobs.forEach(refreshMeta); updateUI(); });
+  });
+
+  /* ---------- adding files ---------- */
+  drop.addEventListener("click", function(){ fileIn.click(); });
+  drop.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " "){ e.preventDefault(); fileIn.click(); }});
+  ["dragenter","dragover"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave","drop"].forEach(function(ev){ drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function(e){ addFiles(e.dataTransfer.files); });
+  fileIn.addEventListener("change", function(){ addFiles(fileIn.files); fileIn.value = ""; });
+
+  function addFiles(files){
+    for (var i=0;i<files.length;i++){
+      var f = files[i], li = document.createElement("li");
+      li.innerHTML = '<span class="nm"></span><span class="st"></span><span class="act"></span>' +
+        '<button class="rm" type="button" aria-label="remove">×</button>' +
+        '<div class="meta"><span class="from"></span><span class="arrow">→</span><span class="to"></span></div>' +
+        '<div class="bar"><i></i></div>';
+      li.querySelector(".nm").textContent = f.name;
+      list.appendChild(li);
+      var job = {file:f, li:li, key:"wait", cls:"", done:false, failed:false, src:null, used:null, sig:null, blob:null, url:null, outName:null};
+      (function(j){ j.li.querySelector(".rm").addEventListener("click", function(){ removeJob(j); }); })(job);
+      jobs.push(job); refreshStatus(job); refreshMeta(job);
+    }
+    updateUI();
+  }
+  function removeJob(j){
+    if (busy) return;
+    if (j.url) URL.revokeObjectURL(j.url);
+    j.li.parentNode && j.li.parentNode.removeChild(j.li);
+    jobs = jobs.filter(function(x){ return x !== j; });
+    updateUI();
+  }
+  document.getElementById("clear").addEventListener("click", function(){
+    if (busy) return;
+    jobs.forEach(function(j){ if (j.url) URL.revokeObjectURL(j.url); });
+    jobs = []; list.innerHTML = ""; zipLink.hidden = true; updateUI();
+  });
+
+  /* ---------- convert all ---------- */
+  go.addEventListener("click", async function(){
+    if (busy) return;
+    var s = settings(), todo = jobs.filter(needsRun);
+    if (!todo.length) return;
+    busy = true; updateUI();
+    for (var i=0;i<todo.length;i++){
+      if (remaining() <= 0){ fail(todo[i], "limit"); continue; }
+      await run(todo[i], s);
+      if (todo[i].done) addUsed();
+      updateUI();
+    }
+    busy = false; updateUI();
+  });
+
+  function tick(){ return new Promise(function(r){ setTimeout(r,0); }); }
+
+  async function run(j, s){
+    j.failed = false; j.done = false; j.used = s;
+    if (j.url){ URL.revokeObjectURL(j.url); j.url = null; }
+    j.blob = null; j.sig = null;
+    var oldA = j.li.querySelector(".act a"); if (oldA) oldA.parentNode.removeChild(oldA);
+    try{
+      if (j.file.size > 200*1024*1024){ fail(j,"big"); return; }
+      var f = s.f, wantMp3 = f === "mp3", viaFF = viaFFmpeg(f);
+      if (wantMp3 && !window.lamejs){ fail(j,"nolib"); return; }
+
+      setStatus(j,"dec"); progress(j,.05); await tick();
+      var arr = await j.file.arrayBuffer();
+      var AC = window.AudioContext || window.webkitAudioContext;
+      /* decode at the file's own sample rate, otherwise the browser silently resamples to its default (e.g. 44.1 kHz) */
+      var nat = probeRate(arr), ctx, buf;
+      try{ ctx = nat ? new AC({sampleRate: nat}) : new AC(); }catch(e){ ctx = new AC(); }
+      try{ buf = await ctx.decodeAudioData(arr); } finally { try{ ctx.close(); }catch(e){} }
+      j.src = {sr: nat || Math.round(buf.sampleRate), ch: buf.numberOfChannels, dur: buf.duration};
+      refreshMeta(j);
+
+      setStatus(j,"res"); progress(j,.3); await tick();
+      var outSR = targetSr(j.src.sr, s), outCh = targetCh(j.src.ch, s);
+      var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      var off = new OAC(outCh, Math.max(1, Math.ceil(buf.duration*outSR)), outSR);
+      var src = off.createBufferSource(); src.buffer = buf; src.connect(off.destination); src.start(0);
+      var rendered = await off.startRendering();
+
+      setStatus(j,"enc"); progress(j,.5); await tick();
+      var blob;
+      if (wantMp3) blob = await encodeMp3(rendered, s.kbps, j);
+      else if (viaFF) blob = await encodeFF(rendered, f, s.kbps, j);
+      else blob = encodeWav(rendered);
+
+      var base = j.file.name.replace(/\.[^.]+$/,"");
+      var sfx = s.sr === "orig" ? "" : "_" + (outSR/1000) + "k";
+      j.outName = base + sfx + "." + f;
+      j.blob = blob; j.url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.className = "btn small"; a.href = j.url; a.download = j.outName;
+      j.li.querySelector(".act").appendChild(a);
+      j.sig = sigOf(s); j.done = true;
+      progress(j,1); setStatus(j,"done","ok"); refreshMeta(j);
+    }catch(e){
+      console.error(e);
+      fail(j, (e && e.code === "noff") ? "noff" : "fail");
+    }
+  }
+  /* read the real sample rate from the file header (WAV, FLAC, OGG, MP3, M4A/MP4, AAC, WebM); 0 = unknown */
+  function probeRate(ab){
+    try{
+      var u = new Uint8Array(ab), n = u.length, v = new DataView(ab), i, r = 0;
+      function s4(o){ return String.fromCharCode(u[o],u[o+1],u[o+2],u[o+3]); }
+      if (n > 44 && s4(0) === "RIFF" && s4(8) === "WAVE"){
+        var p = 12;
+        while (p + 8 <= n){
+          var id = s4(p), sz = v.getUint32(p+4,true);
+          if (id === "fmt "){ r = v.getUint32(p+12,true); break; }
+          p += 8 + sz + (sz & 1);
+        }
+      } else if (n > 22 && s4(0) === "fLaC"){
+        r = (u[18] << 12) | (u[19] << 4) | (u[20] >> 4);
+      } else if (n > 40 && s4(0) === "OggS"){
+        for (i = 0; i < Math.min(n - 20, 600); i++){
+          if (u[i] === 1 && s4(i+1) === "vorb" && u[i+5] === 0x69 && u[i+6] === 0x73){ r = v.getUint32(i+12,true); break; }
+          if (s4(i) === "Opus" && s4(i+4) === "Head"){ r = 48000; break; }
+        }
+      } else if (n > 12 && s4(4) === "ftyp"){
+        // walk moov > trak > mdia and take the timescale of the audio ("soun") track
+        var walk = function(start, end, depth){
+          var q = start;
+          while (q + 8 <= end){
+            var bs = v.getUint32(q), bt = s4(q+4), hdr = 8;
+            if (bs === 1){ bs = v.getUint32(q+12); hdr = 16; }
+            if (bs === 0) bs = end - q;
+            if (bs < 8 || q + bs > end + 1) break;
+            if (bt === "moov" || bt === "mdia"){ var f = walk(q + hdr, q + bs, depth + 1); if (f) return f; }
+            else if (bt === "trak"){
+              var ts = 0, soun = false, z = q + hdr, ze = q + bs;
+              var mdiaStart = 0, mdiaEnd = 0;
+              while (z + 8 <= ze){
+                var zs = v.getUint32(z), zt = s4(z+4);
+                if (zs < 8) break;
+                if (zt === "mdia"){ mdiaStart = z + 8; mdiaEnd = Math.min(ze, z + zs); }
+                z += zs;
+              }
+              var y = mdiaStart;
+              while (y + 8 <= mdiaEnd){
+                var ys = v.getUint32(y), yt = s4(y+4);
+                if (ys < 8) break;
+                if (yt === "mdhd") ts = u[y+8] === 1 ? v.getUint32(y+28) : v.getUint32(y+20);
+                if (yt === "hdlr") soun = s4(y+16) === "soun";
+                y += ys;
+              }
+              if (soun && ts) return ts;
+            }
+            q += bs;
+          }
+          return 0;
+        };
+        r = walk(0, n, 0);
+      } else if (n > 4 && u[0] === 0x1A && u[1] === 0x45 && u[2] === 0xDF && u[3] === 0xA3){
+        r = 48000;
+        var tk = -1, okr = [8000,11025,12000,16000,22050,24000,32000,44100,48000,88200,96000];
+        for (i = 0; i < Math.min(n - 8, 200000); i++){
+          if (u[i] === 0x16 && u[i+1] === 0x54 && u[i+2] === 0xAE && u[i+3] === 0x6B){ tk = i; break; }
+        }
+        if (tk >= 0){
+          for (i = tk; i < Math.min(n - 10, tk + 4000); i++){
+            if (u[i] === 0xB5 && (u[i+1] === 0x84 || u[i+1] === 0x88)){
+              var fv = Math.round(u[i+1] === 0x84 ? v.getFloat32(i+2) : v.getFloat64(i+2));
+              if (okr.indexOf(fv) >= 0){ r = fv; break; }
+            }
+          }
+        }
+      } else {
+        var o = 0;
+        if (s4(0).slice(0,3) === "ID3" && n > 10){
+          o = 10 + ((u[6] & 127) << 21 | (u[7] & 127) << 14 | (u[8] & 127) << 7 | (u[9] & 127));
+        }
+        for (i = o; i < Math.min(n - 4, o + 4096); i++){
+          if (u[i] === 0xFF && (u[i+1] & 0xE0) === 0xE0){
+            var ver = (u[i+1] >> 3) & 3, lay = (u[i+1] >> 1) & 3, si = (u[i+2] >> 2) & 3;
+            if (ver !== 1 && lay !== 0 && si !== 3){
+              r = (ver === 3 ? [44100,48000,32000] : ver === 2 ? [22050,24000,16000] : [11025,12000,8000])[si];
+              break;
+            }
+            if (lay === 0 && (u[i+1] & 0xF6) === 0xF0){
+              r = [96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350][(u[i+2] >> 2) & 15] || 0;
+              break;
+            }
+          }
+        }
+      }
+      return (r >= 3000 && r <= 768000) ? r : 0;
+    }catch(e){ return 0; }
+  }
+  function fail(j, key){ j.failed = true; j.done = false; j.used = null; setStatus(j, key, "err"); refreshMeta(j); }
+
+  /* ---------- download all as ZIP ---------- */
+  var zipUrl = null, zipLink = document.getElementById("zipLink");
+  zipBtn.addEventListener("click", async function(){
+    var ready = jobs.filter(function(j){ return j.blob; });
+    if (!ready.length) return;
+    if (!window.JSZip){ sumEl.textContent = t("zipfail"); return; }
+    zipBtn.disabled = true; zipLink.hidden = true; sumEl.textContent = t("zipping");
+    try{
+      var zip = new JSZip(), used = {};
+      ready.forEach(function(j){
+        var n = j.outName, k = n, i = 2;
+        while (used[k.toLowerCase()]){ k = n.replace(/(\.[^.]+)$/, " (" + i + ")$1"); i++; }
+        used[k.toLowerCase()] = 1; zip.file(k, j.blob);
+      });
+      var out = await zip.generateAsync({type:"blob", compression:"STORE"});
+      if (zipUrl) URL.revokeObjectURL(zipUrl);
+      zipUrl = URL.createObjectURL(out);
+      zipLink.href = zipUrl; zipLink.hidden = false;
+      zipLink.click();
+    }catch(e){
+      console.error(e);
+      updateUI(); sumEl.textContent = t("zipfail");
+      return;
+    }
+    updateUI();
+  });
+
+  /* ---------- encoders ---------- */
+  var ffPromise = null;
+  function loadScript(src){
+    return new Promise(function(res, rej){
+      var el = document.createElement("script");
+      el.src = src; el.onload = res; el.onerror = function(){ rej(new Error("script load failed: " + src)); };
+      document.head.appendChild(el);
+    });
+  }
+  async function blobFrom(urls, type){
+    var parts = [];
+    for (var i=0;i<urls.length;i++){
+      var r = await fetch(urls[i]);
+      if (!r.ok) throw new Error("HTTP " + r.status + " " + urls[i]);
+      parts.push(await r.arrayBuffer());
+    }
+    return URL.createObjectURL(new Blob(parts, {type: type}));
+  }
+  function getFF(){
+    if (!ffPromise){
+      ffPromise = (async function(){
+        await loadScript("vendor/ffmpeg/ffmpeg.js");
+        var coreURL = await blobFrom(["vendor/ffmpeg/ffmpeg-core.js"], "text/javascript");
+        var wasmURL = await blobFrom(["vendor/ffmpeg/core-a.bin", "vendor/ffmpeg/core-b.bin"], "application/wasm");
+        var ff = new FFmpegWASM.FFmpeg();
+        await ff.load({coreURL: coreURL, wasmURL: wasmURL});
+        return ff;
+      })();
+      ffPromise.catch(function(){ ffPromise = null; });
+    }
+    return ffPromise;
+  }
+
+  async function encodeFF(buf, f, kbps, j){
+    var sr = buf.sampleRate;
+    if (f === "m4a"){
+      if (sr < 32000) kbps = Math.min(kbps,128);
+      if (sr <= 12000) kbps = Math.min(kbps,64);
+    }
+    var ff;
+    setStatus(j,"ffload"); progress(j,.55);
+    try{ ff = await getFF(); }catch(e){ console.error(e); throw Object.assign(new Error("noff"), {code:"noff"}); }
+    setStatus(j,"enc");
+    var wavBlob = encodeWav(buf);
+    var inName = "in.wav", outName = "out." + f;
+    await ff.writeFile(inName, new Uint8Array(await wavBlob.arrayBuffer()));
+    var args = ["-i", inName, "-vn"];
+    if (f === "ogg"){
+      var q = {64:0, 96:2, 128:4, 192:6, 256:8, 320:9}[kbps];
+      args = args.concat(["-c:a","libvorbis","-q:a",String(q === undefined ? 4 : q)]);
+    }
+    else if (f === "m4a") args = args.concat(["-c:a","aac","-b:a",kbps+"k","-movflags","+faststart"]);
+    else args = args.concat(["-c:a","flac"]);
+    args.push(outName);
+    var onProg = function(e){ if (e && typeof e.progress === "number") progress(j, .6 + .4*Math.max(0, Math.min(1, e.progress))); };
+    ff.on("progress", onProg);
+    var code;
+    try{ code = await ff.exec(args); } finally { ff.off("progress", onProg); }
+    if (code !== 0) throw new Error("ffmpeg exit " + code);
+    var data = await ff.readFile(outName);
+    try{ await ff.deleteFile(inName); await ff.deleteFile(outName); }catch(e){}
+    var mime = f === "ogg" ? "audio/ogg" : f === "flac" ? "audio/flac" : "audio/mp4";
+    return new Blob([data], {type: mime});
+  }
+
+  function toInt16(f32){
+    var out = new Int16Array(f32.length);
+    for (var i=0;i<f32.length;i++){
+      var v = Math.max(-1, Math.min(1, f32[i]));
+      out[i] = v < 0 ? v*0x8000 : v*0x7FFF;
+    }
+    return out;
+  }
+
+  async function encodeMp3(buf, kbps, j){
+    var ch = buf.numberOfChannels, sr = buf.sampleRate;
+    if (sr < 32000) kbps = Math.min(kbps,128);
+    if (sr <= 12000) kbps = Math.min(kbps,64);
+    var enc = new lamejs.Mp3Encoder(ch, sr, kbps);
+    var l = toInt16(buf.getChannelData(0));
+    var r = ch > 1 ? toInt16(buf.getChannelData(1)) : null;
+    var out = [], block = 1152, n = 0, total = Math.ceil(l.length/block);
+    for (var i=0;i<l.length;i+=block){
+      var lc = l.subarray(i,i+block), chunk;
+      chunk = r ? enc.encodeBuffer(lc, r.subarray(i,i+block)) : enc.encodeBuffer(lc);
+      if (chunk.length) out.push(new Uint8Array(chunk));
+      if (++n % 300 === 0){ progress(j, .5 + .5*(n/total)); await tick(); }
+    }
+    var end = enc.flush(); if (end.length) out.push(new Uint8Array(end));
+    return new Blob(out, {type:"audio/mpeg"});
+  }
+
+  function encodeWav(buf){
+    var ch = buf.numberOfChannels, sr = buf.sampleRate, len = buf.length;
+    var bytes = len*ch*2, ab = new ArrayBuffer(44+bytes), v = new DataView(ab);
+    function w(o,s){ for (var i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); }
+    w(0,"RIFF"); v.setUint32(4,36+bytes,true); w(8,"WAVE"); w(12,"fmt ");
+    v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,ch,true);
+    v.setUint32(24,sr,true); v.setUint32(28,sr*ch*2,true); v.setUint16(32,ch*2,true);
+    v.setUint16(34,16,true); w(36,"data"); v.setUint32(40,bytes,true);
+    var data = [], c, o = 44, i;
+    for (c=0;c<ch;c++) data.push(buf.getChannelData(c));
+    for (i=0;i<len;i++){
+      for (c=0;c<ch;c++){
+        var x = Math.max(-1, Math.min(1, data[c][i]));
+        v.setInt16(o, x < 0 ? x*0x8000 : x*0x7FFF, true); o += 2;
+      }
+    }
+    return new Blob([ab], {type:"audio/wav"});
+  }
+
+  /* ---------- init ---------- */
+  (function(){
+    var s = null; try{ s = localStorage.getItem("lang"); }catch(e){}
+    if (!s) s = "en";
+    setLang(s);
+  })();
+})();
+</script>
 </body>
 </html>
