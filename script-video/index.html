@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Turn a script into a simple video with slides, your images and your narration. Test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>Script to Video | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.7}</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<div class="note" data-i="beta"></div>
+
+<h2 data-i="hScr"></h2>
+<textarea id="scr" rows="8" dir="auto" data-p="ph"></textarea>
+<div class="btns"><button type="button" class="b sec" id="ex" data-i="ex"></button><button type="button" class="b sec" id="clr" data-i="clr"></button></div>
+<div class="info" id="cnt"></div>
+
+<h2 data-i="hLook"></h2>
+<div class="row">
+ <div class="col"><label for="size" data-i="oSize"></label><select id="size"><option value="1280x720" data-k="sz1"></option><option value="720x1280" data-k="sz2"></option><option value="720x720" data-k="sz3"></option></select></div>
+ <div class="col"><label for="theme" data-i="oTheme"></label><select id="theme"><option value="0" data-k="th0"></option><option value="1" data-k="th1"></option><option value="2" data-k="th2"></option><option value="3" data-k="th3"></option><option value="4" data-k="th4"></option></select></div>
+ <div class="col"><label for="fs" data-i="oFs"></label><select id="fs"><option value="0.8" data-k="fs0"></option><option value="1" data-k="fs1" selected></option><option value="1.25" data-k="fs2"></option></select></div>
+</div>
+<div class="drop" id="dropImg" tabindex="0" role="button"><b data-i="imgH"></b><br><small data-i="imgS"></small><input type="file" id="imgs" accept="image/*" multiple hidden></div>
+<div class="info" id="imgInfo"></div>
+
+<h2 data-i="hVoice"></h2>
+<div class="row">
+ <div class="col"><label for="mode" data-i="oMode"></label><select id="mode"><option value="silent" data-k="m0"></option><option value="audio" data-k="m1"></option></select></div>
+ <div class="col" id="cpsBox"><label for="cps" data-i="oCps"></label><select id="cps"><option value="11" data-k="c0"></option><option value="15" data-k="c1" selected></option><option value="20" data-k="c2"></option></select></div>
+</div>
+<div class="drop" id="dropAud" tabindex="0" role="button" style="display:none"><b data-i="audH"></b><br><small data-i="audS"></small><input type="file" id="aud" accept="audio/*,video/mp4,video/webm" hidden></div>
+<div class="info" id="audInfo"></div>
+<div class="note" data-i="voiceHelp"></div>
+<label style="font-weight:400;margin-top:10px"><input type="checkbox" id="tts"> <span data-i="tts"></span></label>
+<label style="font-weight:400"><input type="checkbox" id="wm" checked> <span data-i="wm"></span></label>
+
+<div class="btns">
+ <button type="button" class="b sec" id="prev" data-i="prev"></button>
+ <button type="button" class="b" id="mk" data-i="mk"></button>
+ <button type="button" class="b sec" id="stop" disabled data-i="stop"></button>
+</div>
+<div class="bar" id="bar"><i id="barI"></i></div>
+<div class="scan" id="msg" role="status"></div>
+<canvas id="cv" width="1280" height="720" style="width:100%;max-width:100%;border-radius:14px;background:#111;margin-top:10px;display:block"></canvas>
+<div class="pv" id="pv"><h3 style="margin-top:0" data-i="doneH"></h3><video id="vo" controls playsinline style="width:100%;border-radius:12px"></video><div class="btns"><a class="b" id="dl" download data-i="dl" style="text-decoration:none;display:inline-block"></a></div><span class="small" id="vinfo"></span></div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li><li data-h="n5"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Script to Video",
+ lead:"Write a script and turn it into a simple video: one slide per sentence, with your own images and your own narration. Everything is made on your device and nothing is uploaded.",
+ beta:"Test version. It makes text slides with optional images and your narration file. It does not generate AI voices or AI images.",
+ hScr:"1. Your script",ph:"Write or paste your script here. Each sentence becomes one slide.",ex:"Load an example",clr:"Clear",
+ cnt0:"No script yet.",cntN:" slides · about ",cntS:" seconds",
+ hLook:"2. Look",oSize:"Video size",sz1:"Wide 16:9 (YouTube)",sz2:"Tall 9:16 (Shorts, Reels)",sz3:"Square 1:1",
+ oTheme:"Colors",th0:"Purple and orange",th1:"Ocean blue",th2:"Sunset",th3:"Dark",th4:"Green",
+ oFs:"Text size",fs0:"Small",fs1:"Medium",fs2:"Large",
+ imgH:"Add background images (optional)",imgS:"They are used one after another and repeat if needed",imgNone:"No images. Colored backgrounds will be used.",imgN:"Images loaded: ",
+ hVoice:"3. Voice",oMode:"Timing",m0:"Silent video (timed by reading speed)",m1:"With my narration file",oCps:"Reading speed",c0:"Slow",c1:"Normal",c2:"Fast",
+ audH:"Add your narration audio",audS:"Record it with the Sayvoi voice recorder, or use any voice file",audNone:"No narration file yet.",audN:"Narration loaded, length: ",
+ voiceHelp:"The slides are timed by the length of each sentence. For the best match, record or generate the narration as one file, reading the script in order.",
+ tts:"Read aloud with the browser voice during Preview only (it is not saved in the video)",wm:"Show the small Sayvoi mark",
+ prev:"Preview",mk:"Make the video",stop:"Stop",
+ working:"Recording the video in real time. Keep this tab open: ",
+ doneH:"Your video",dl:"Download the video",vinfo:"Length: ",
+ errScr:"Write a script first.",errAud:"Choose a narration file first.",errAudRead:"Could not read this audio file.",errRec:"This browser cannot record video. Try Chrome, Edge or a recent Android browser.",errAny:"Something went wrong: ",
+ h2b:"Notes",
+ n1:"The video is recorded in real time, so a one-minute video takes one minute. Keep the tab open and visible.",
+ n2:"The file type depends on your browser: MP4 or WebM. Both work on YouTube.",
+ n3:"For a voice, record your own narration or use a voice you are allowed to use. The browser voice can only be heard in the preview.",
+ n4:"Arabic and English text both work. Use short sentences for the best look.",
+ n5:"Your script, images and audio stay on your device.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"من السكربت إلى فيديو",
+ lead:"اكتب سكربتًا وحوّله إلى فيديو بسيط: شريحة لكل جملة، مع صورك أنت وتعليقك الصوتي أنت. كل شيء يتم على جهازك ولا يُرفع أي شيء.",
+ beta:"نسخة تجريبية. تصنع شرائح نصية مع صور اختيارية وملف التعليق الصوتي الذي تضيفه. ولا تولّد أصواتًا أو صورًا بالذكاء الاصطناعي.",
+ hScr:"1. السكربت",ph:"اكتب السكربت هنا أو الصقه. كل جملة تصبح شريحة واحدة.",ex:"حمّل مثالًا",clr:"مسح",
+ cnt0:"لا يوجد سكربت بعد.",cntN:" شريحة · نحو ",cntS:" ثانية",
+ hLook:"2. الشكل",oSize:"مقاس الفيديو",sz1:"عريض 16:9 (يوتيوب)",sz2:"طولي 9:16 (شورتس وريلز)",sz3:"مربع 1:1",
+ oTheme:"الألوان",th0:"بنفسجي وبرتقالي",th1:"أزرق بحري",th2:"غروب",th3:"داكن",th4:"أخضر",
+ oFs:"حجم النص",fs0:"صغير",fs1:"متوسط",fs2:"كبير",
+ imgH:"أضف صور خلفية (اختياري)",imgS:"تُستخدم واحدة بعد الأخرى وتتكرر عند الحاجة",imgNone:"لا توجد صور. ستُستخدم خلفيات ملونة.",imgN:"الصور المحمّلة: ",
+ hVoice:"3. الصوت",oMode:"التوقيت",m0:"فيديو صامت (التوقيت حسب سرعة القراءة)",m1:"مع ملف التعليق الصوتي الخاص بي",oCps:"سرعة القراءة",c0:"بطيئة",c1:"عادية",c2:"سريعة",
+ audH:"أضف ملف التعليق الصوتي",audS:"سجّله بمسجّل الصوت من Sayvoi أو استخدم أي ملف صوتي",audNone:"لا يوجد ملف صوتي بعد.",audN:"تم تحميل التعليق، مدته: ",
+ voiceHelp:"تُوزَّع الشرائح حسب طول كل جملة. وللحصول على أفضل تطابق سجّل التعليق أو ولّده في ملف واحد يقرأ السكربت بالترتيب.",
+ tts:"اقرأ بصوت المتصفح أثناء المعاينة فقط (لا يُحفظ في الفيديو)",wm:"أظهر علامة Sayvoi الصغيرة",
+ prev:"معاينة",mk:"اصنع الفيديو",stop:"إيقاف",
+ working:"يجري تسجيل الفيديو في الوقت الحقيقي. أبقِ هذه الصفحة مفتوحة: ",
+ doneH:"الفيديو جاهز",dl:"نزّل الفيديو",vinfo:"المدة: ",
+ errScr:"اكتب السكربت أولًا.",errAud:"اختر ملف التعليق الصوتي أولًا.",errAudRead:"تعذّرت قراءة هذا الملف الصوتي.",errRec:"هذا المتصفح لا يدعم تسجيل الفيديو. جرّب Chrome أو Edge أو متصفح أندرويد حديثًا.",errAny:"حدث خطأ: ",
+ h2b:"ملاحظات",
+ n1:"يُسجَّل الفيديو في الوقت الحقيقي، فالفيديو الذي مدته دقيقة يستغرق دقيقة. أبقِ الصفحة مفتوحة وظاهرة.",
+ n2:"نوع الملف يعتمد على متصفحك: MP4 أو WebM. وكلاهما يعمل على يوتيوب.",
+ n3:"للصوت سجّل تعليقك أنت أو استخدم صوتًا يحق لك استخدامه. وصوت المتصفح يُسمَع في المعاينة فقط.",
+ n4:"يعمل النص العربي والإنجليزي. واستخدم جملًا قصيرة لأفضل شكل.",
+ n5:"السكربت والصور والصوت تبقى على جهازك.",
+ back:"العودة إلى الأدوات"}
+};
+/* ---------- app ---------- */
+var imgs=[],aud=null,audDur=0,running=false,cancel=false,urlOut=null;
+var THEMES=[["#6a3df0","#ff8a3d"],["#0f4c81","#2fb3e8"],["#c2410c","#7c3aed"],["#0b1020","#334155"],["#065f46","#34d399"]];
+var EXAMPLE={en:"Welcome to Sayvoi.\nFree audio tools that run in your browser.\nConvert, clean and check your recordings.\nYour files never leave your device.\nTry them today at convert.sayvoi.com.",
+ ar:"أهلًا بك في Sayvoi.\nأدوات صوت مجانية تعمل داخل متصفحك.\nحوّل تسجيلاتك ونظّفها وافحصها.\nملفاتك لا تغادر جهازك أبدًا.\nجرّبها اليوم على convert.sayvoi.com."};
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function setBar(p){var b=$("bar");b.style.display="block";$("barI").style.width=Math.max(0,Math.min(100,p)).toFixed(0)+"%";}
+function hideBar(){$("bar").style.display="none";}
+function isAr(s){return /[؀-ۿ]/.test(s);}
+function splitScript(txt){
+ var out=[];
+ txt.split(/\r?\n+/).forEach(function(line){
+  line=line.trim();if(!line)return;
+  line.split(/(?<=[.!?؟۔…])\s+/).forEach(function(s){
+   s=s.trim();if(!s)return;
+   if(s.length>130){
+    var parts=s.split(/(?<=[,،;؛:])\s+/),cur="";
+    parts.forEach(function(p){if(cur&&(cur+" "+p).length>110){out.push(cur);cur=p;}else cur=cur?cur+" "+p:p;});
+    if(cur)out.push(cur);
+   }else out.push(s);
+  });
+ });
+ return out.slice(0,80);
+}
+function dims(){var v=$("size").value.split("x");return [+v[0],+v[1]];}
+function plan(){
+ var sl=splitScript($("scr").value),mode=$("mode").value,cps=+$("cps").value,d=[],tot=0;
+ if(mode==="audio"&&audDur>0){
+  var wsum=0;sl.forEach(function(s){wsum+=s.length+8;});
+  sl.forEach(function(s){d.push((s.length+8)/wsum*audDur);});
+  tot=audDur;
+ }else{
+  sl.forEach(function(s){var x=Math.max(2.4,s.length/cps+0.8);d.push(x);tot+=x;});
+ }
+ return {slides:sl,dur:d,total:tot};
+}
+function updCount(){
+ var t=T[L],p=plan();
+ $("cnt").textContent=p.slides.length?(p.slides.length+t.cntN+Math.round(p.total)+t.cntS):t.cnt0;
+ drawStatic();
+}
+function wrap(ctx,text,maxW){
+ var words=text.split(/\s+/),lines=[],cur="";
+ words.forEach(function(w){
+  var t=cur?cur+" "+w:w;
+  if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w;}else cur=t;
+ });
+ if(cur)lines.push(cur);return lines;
+}
+function cover(ctx,im,W,H,zoom){
+ var r=Math.max(W/im.width,H/im.height)*zoom,w=im.width*r,h=im.height*r;
+ ctx.drawImage(im,(W-w)/2,(H-h)/2,w,h);
+}
+function draw(si,tIn,dur,pl,gT,gTot){
+ var cv=$("cv"),ctx=cv.getContext("2d"),W=cv.width,H=cv.height,th=THEMES[+$("theme").value]||THEMES[0];
+ var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,th[0]);g.addColorStop(1,th[1]);
+ ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ var prog=dur>0?Math.min(1,tIn/dur):0;
+ if(imgs.length){
+  var im=imgs[si%imgs.length];ctx.save();cover(ctx,im,W,H,1+0.08*prog);ctx.restore();
+  ctx.fillStyle="rgba(0,0,0,.42)";ctx.fillRect(0,0,W,H);
+ }else{
+  ctx.fillStyle="rgba(255,255,255,.10)";
+  ctx.beginPath();ctx.arc(W*(0.15+0.12*prog),H*0.2,H*0.28,0,7);ctx.fill();
+  ctx.beginPath();ctx.arc(W*(0.88-0.10*prog),H*0.85,H*0.34,0,7);ctx.fill();
+ }
+ var text=pl.slides[si]||"";
+ if(text){
+  var base=Math.round(Math.min(W,H)*0.072*(+$("fs").value)),ar=isAr(text);
+  ctx.font="800 "+base+"px 'Segoe UI',Tahoma,'Noto Naskh Arabic','Noto Sans Arabic',Arial,sans-serif";
+  ctx.textAlign="center";ctx.textBaseline="middle";ctx.direction=ar?"rtl":"ltr";
+  var maxW=W*0.82,lines=wrap(ctx,text,maxW),lh=base*1.45,bh=lines.length*lh+base*0.9,bw=0;
+  lines.forEach(function(l){bw=Math.max(bw,ctx.measureText(l).width);});
+  bw=Math.min(W*0.92,bw+base*1.4);
+  var a=Math.min(1,tIn/0.3);
+  if(si<pl.slides.length-1)a=Math.min(a,Math.max(0,(dur-tIn)/0.25));
+  ctx.globalAlpha=Math.max(0,a);
+  ctx.fillStyle="rgba(10,12,30,.55)";
+  var x=(W-bw)/2,y=(H-bh)/2,r=base*0.5;
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+bw,y,x+bw,y+bh,r);ctx.arcTo(x+bw,y+bh,x,y+bh,r);ctx.arcTo(x,y+bh,x,y,r);ctx.arcTo(x,y,x+bw,y,r);ctx.closePath();ctx.fill();
+  ctx.fillStyle="#fff";
+  lines.forEach(function(l,k){ctx.fillText(l,W/2,y+base*0.45+lh*(k+0.5));});
+  ctx.globalAlpha=1;
+ }
+ if(gTot>0){ctx.fillStyle="rgba(255,255,255,.85)";ctx.fillRect(0,H-Math.max(5,H*0.008),W*Math.min(1,gT/gTot),Math.max(5,H*0.008));}
+ if($("wm").checked){
+  ctx.font="700 "+Math.round(Math.min(W,H)*0.03)+"px 'Segoe UI',Arial,sans-serif";ctx.textAlign="left";ctx.direction="ltr";
+  ctx.fillStyle="rgba(255,255,255,.75)";ctx.fillText("Sayvoi · convert.sayvoi.com",W*0.03,H-Math.max(20,H*0.04));
+ }
+}
+function drawStatic(){
+ if(running)return;
+ var cv=$("cv"),d=dims();if(cv.width!==d[0]||cv.height!==d[1]){cv.width=d[0];cv.height=d[1];}
+ var pl=plan();draw(0,1,pl.dur[0]||3,pl.slides.length?pl:{slides:[T[L].ph],dur:[3]},0,0);
+}
+function loadImg(f){return new Promise(function(res){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){res(im);};im.onerror=function(){res(null);};im.src=u;});}
+async function addImgs(list){
+ var arr=Array.prototype.slice.call(list).filter(function(f){return /^image\//.test(f.type);});
+ for(var i=0;i<arr.length&&imgs.length<30;i++){var im=await loadImg(arr[i]);if(im)imgs.push(im);}
+ refresh();drawStatic();
+}
+async function setAudio(f){
+ aud=null;audDur=0;
+ try{
+  var ctx=new (window.AudioContext||window.webkitAudioContext)(),buf=await ctx.decodeAudioData(await f.arrayBuffer());
+  aud=buf;audDur=buf.duration;try{ctx.close();}catch(e){}
+ }catch(e){show(T[L].errAudRead,true);}
+ refresh();updCount();
+}
+function refresh(){
+ var t=T[L];
+ $("imgInfo").textContent=imgs.length?t.imgN+imgs.length:t.imgNone;
+ $("audInfo").textContent=aud?t.audN+audDur.toFixed(1)+"s":t.audNone;
+ $("dropAud").style.display=$("mode").value==="audio"?"block":"none";
+ $("cpsBox").style.display=$("mode").value==="audio"?"none":"block";
+ $("prev").disabled=running;$("mk").disabled=running;$("stop").disabled=!running;$("clr").disabled=running;
+}
+function speak(text){
+ try{
+  var u=new SpeechSynthesisUtterance(text);u.lang=isAr(text)?"ar-SA":"en-US";window.speechSynthesis.cancel();window.speechSynthesis.speak(u);
+ }catch(e){}
+}
+function pickMime(){
+ var c=["video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+ if(!window.MediaRecorder)return "";
+ for(var i=0;i<c.length;i++){try{if(MediaRecorder.isTypeSupported(c[i]))return c[i];}catch(e){}}
+ return "";
+}
+async function run(record){
+ if(running)return;
+ var t=T[L],pl=plan();
+ if(!pl.slides.length){show(t.errScr,true);return;}
+ if($("mode").value==="audio"&&!aud){show(t.errAud,true);return;}
+ var mime="";
+ if(record){mime=pickMime();if(!window.MediaRecorder||!$("cv").captureStream){show(t.errRec,true);return;}}
+ running=true;cancel=false;refresh();$("msg").style.display="none";$("pv").style.display="none";
+ var cv=$("cv"),d=dims();cv.width=d[0];cv.height=d[1];
+ var actx=null,src=null,chunks=[],rec=null,dest=null,tracks=[];
+ try{
+  var stream=record?cv.captureStream(30):null;
+  if($("mode").value==="audio"&&aud){
+   actx=new (window.AudioContext||window.webkitAudioContext)();
+   if(actx.state==="suspended")await actx.resume();
+   src=actx.createBufferSource();src.buffer=aud;
+   if(record){dest=actx.createMediaStreamDestination();src.connect(dest);tracks=dest.stream.getAudioTracks();}
+   else src.connect(actx.destination);
+  }
+  if(record){
+   var ms=new MediaStream(stream.getVideoTracks().concat(tracks));
+   rec=new MediaRecorder(ms,mime?{mimeType:mime,videoBitsPerSecond:4000000}:{});
+   rec.ondataavailable=function(e){if(e.data&&e.data.size)chunks.push(e.data);};
+   rec.start(500);
+  }
+  if(src)src.start();
+  var total=pl.total+0.6,t0=performance.now(),si=-1,acc=[],s=0;
+  pl.dur.forEach(function(x){s+=x;acc.push(s);});
+  await new Promise(function(done){
+   function frame(){
+    var el=(performance.now()-t0)/1000;
+    if(cancel||el>=total){done();return;}
+    var k=0;while(k<acc.length-1&&el>=acc[k])k++;
+    var start=k?acc[k-1]:0;
+    if(k!==si){si=k;if(!record&&$("tts").checked)speak(pl.slides[k]);}
+    draw(k,el-start,pl.dur[k],pl,el,pl.total);
+    setBar(el/total*100);show(t.working+Math.round(el)+" / "+Math.round(total)+"s",false);
+    requestAnimationFrame(frame);
+   }
+   frame();
+  });
+  try{window.speechSynthesis.cancel();}catch(e){}
+  if(src){try{src.stop();}catch(e){}}
+  if(record){
+   await new Promise(function(r){rec.onstop=r;try{rec.stop();}catch(e){r();}});
+   if(!cancel){
+    var blob=new Blob(chunks,{type:(rec.mimeType||mime||"video/webm").split(";")[0]}),ext=/mp4/.test(blob.type)?"mp4":"webm";
+    if(urlOut)URL.revokeObjectURL(urlOut);urlOut=URL.createObjectURL(blob);
+    $("vo").src=urlOut;$("dl").href=urlOut;$("dl").download="script_video."+ext;
+    $("vinfo").textContent=t.vinfo+Math.round(pl.total)+"s · "+ext.toUpperCase()+" · "+(blob.size/1048576).toFixed(1)+" MB";
+    $("pv").style.display="block";$("msg").style.display="none";
+   }
+  }else $("msg").style.display="none";
+ }catch(e){show(t.errAny+(e&&e.message?e.message:e),true);}
+ try{if(actx)actx.close();}catch(e){}
+ hideBar();running=false;refresh();drawStatic();
+}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"من السكربت إلى فيديو | Sayvoi":"Script to Video | Sayvoi";
+ refresh();updCount();
+}
+$("dropImg").addEventListener("click",function(){$("imgs").click();});
+$("dropAud").addEventListener("click",function(){$("aud").click();});
+$("imgs").addEventListener("change",function(){if(this.files.length)addImgs(this.files);this.value="";});
+$("aud").addEventListener("change",function(){if(this.files.length)setAudio(this.files[0]);this.value="";});
+["scr","size","theme","fs","mode","cps","wm"].forEach(function(id){$(id).addEventListener(id==="scr"?"input":"change",function(){refresh();updCount();});});
+$("ex").addEventListener("click",function(){$("scr").value=EXAMPLE[L];updCount();});
+$("clr").addEventListener("click",function(){$("scr").value="";imgs=[];aud=null;audDur=0;$("pv").style.display="none";$("msg").style.display="none";refresh();updCount();});
+$("prev").addEventListener("click",function(){run(false);});
+$("mk").addEventListener("click",function(){run(true);});
+$("stop").addEventListener("click",function(){cancel=true;});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+applyLang();
+})();
+</script>
+</body>
+</html>
