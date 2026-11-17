@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ما هي نسبة الخطأ في الكلمات (WER) وكيف تُحسب؟ | Sayvoi</title>
+<meta name="description" content="نسبة الخطأ في الكلمات تقيس بُعد التفريغ عن النص الصحيح. تعرّف على القانون ومثال محلول وكيف تحصل عليها مجانًا داخل متصفحك.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/ar/word-error-rate-wer-explained.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/word-error-rate-wer-explained.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/word-error-rate-wer-explained.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="ما هي نسبة الخطأ في الكلمات (WER) وكيف تُحسب؟">
+<meta property="og:description" content="نسبة الخطأ في الكلمات تقيس بُعد التفريغ عن النص الصحيح. تعرّف على القانون ومثال محلول وكيف تحصل عليها مجانًا داخل متصفحك.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/ar/word-error-rate-wer-explained.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "ما هي نسبة الخطأ في الكلمات (WER) وكيف تُحسب؟", "description": "نسبة الخطأ في الكلمات تقيس بُعد التفريغ عن النص الصحيح. تعرّف على القانون ومثال محلول وكيف تحصل عليها مجانًا داخل متصفحك.", "datePublished": "2026-11-17", "dateModified": "2026-11-17", "inLanguage": "ar", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/ar/word-error-rate-wer-explained.html"}</script>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a><a href="/audio-speed/">تغيير السرعة</a><a href="/script-video/">من السكربت إلى فيديو</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/" class="on">المقالات</a><a href="/about.html">عن الموقع</a></nav>
+<article>
+<h1>ما هي نسبة الخطأ في الكلمات (WER) وكيف تُحسب؟</h1>
+<p class="meta">آخر تحديث: 17 نوفمبر 2026</p>
+
+<p>نسبة الخطأ في الكلمات، أو WER، هي الطريقة المعتادة لقياس دقة التفريغ. وتُستخدم لفحص التعرف الآلي على الكلام ولمراجعة التفريغ البشري. وكلما قلّ الرقم اقترب التفريغ من النص الصحيح.</p>
+<h2>القانون</h2>
+<p><b>WER = (المستبدَل + المحذوف + المضاف) ÷ عدد كلمات الأصل</b></p>
+<ul>
+<li><b>المستبدَل</b>: كلمة حلّت محلها كلمة مختلفة.</li>
+<li><b>المحذوف</b>: كلمة في الأصل وناقصة من التفريغ.</li>
+<li><b>المضاف</b>: كلمة في التفريغ وليست في الأصل.</li>
+</ul>
+<h2>مثال محلول</h2>
+<p>الأصل عشر كلمات. في التفريغ كلمة واحدة مستبدلة وكلمة ناقصة وكلمتان زائدتان. فالأخطاء 1 + 1 + 2 = 4. إذن WER = 4 ÷ 10 = 40%.</p>
+<h2>أشياء تعرفها</h2>
+<ul>
+<li>قد تزيد النسبة على 100% إذا أضاف التفريغ كلمات كثيرة زائدة.</li>
+<li>النص الأصلي هو المرجع. ضع فيه دائمًا النص الصحيح.</li>
+<li>قرّر قبل أن تبدأ ما الذي يُعدّ خطأ. فعلامات الترقيم والحروف الكبيرة والتشكيل العربي كثيرًا ما تُتجاهل، لتُحسب فروق الكلمات الحقيقية فقط.</li>
+<li>في العربية قرّر هل تُعدّ صور الحروف مثل أ وا أخطاء. فهذا يغيّر الرقم.</li>
+<li>تعامل النسبة كل الكلمات بالتساوي. فالكلمة الصغيرة الخاطئة تُحسب مثل الاسم الخاطئ.</li>
+</ul>
+<h2>كيف تحصل عليها مجانًا</h2>
+<ol>
+<li>افتح <a href="compare-two-transcripts-find-differences.html">أداة مقارنة النصوص</a> من Sayvoi.</li>
+<li>الصق النص الصحيح في خانة الأصل، والتفريغ في خانة النص المعدَّل.</li>
+<li>قارن بالكلمات، وتجاهل الترقيم والتشكيل.</li>
+<li>اقرأ نسبة الخطأ والتشابه في النتيجة.</li>
+</ol>
+<p>تعمل الأداة على جهازك ولا تُرفع نصوصك.</p>
+
+<div class="cta"><p>قارن نصّين أو تفريغين وشاهد ما أُضيف وما حُذف وما تغيّر مع نسبة الخطأ. مجانًا داخل متصفحك.</p><a class="btn" href="/text-diff/">افتح أداة مقارنة النصوص</a></div>
+<div class="related"><h2>اقرأ أيضًا</h2><div class="cards"><a class="card" href="compare-two-transcripts-find-differences.html"><b>مقارنة نصّين لمعرفة الفرق بينهما: دليل لمراجعة التفريغ</b><span>قارن نسختين من تفريغ أو نص وشاهد بالضبط ما أُضيف وما حُذف وما تغيّر. دليل بسيط مع خيارات للنص العربي، مجانًا داخل متصفحك.</span></a><a class="card" href="script-to-video-slides-free.html"><b>كيف تحوّل السكربت إلى فيديو بسيط مجانًا</b><span>حوّل سكربتًا مكتوبًا إلى فيديو شرائح داخل متصفحك: شريحة لكل جملة، مع صورك وتعليقك الصوتي. دليل بسيط لفيديوهات الشرح والشورتس والتدريب.</span></a><a class="card" href="clean-audio-recordings-noise-silence-volume.html"><b>كيف تنظّف التسجيلات الصوتية: تخفيف الضوضاء وإزالة الصمت وضبط الصوت</b><span>ترتيب بسيط لتنظيف التسجيلات: خفّف الضوضاء الثابتة، ثم أزل الصمت، ثم اضبط مستوى الصوت. يصلح لملف واحد أو ملف ZIP كامل، مجانًا داخل متصفحك.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">كل المقالات</a></p>
+</article>
+<footer>
+<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>
