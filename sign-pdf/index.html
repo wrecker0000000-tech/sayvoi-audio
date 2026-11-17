@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Sign a PDF in your browser. Test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>Sign PDF | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}.fnm{margin:0 10px;opacity:.8;word-break:break-all}
+.padbox{border:1px solid rgba(128,128,128,.4);border-radius:16px;padding:14px;margin:12px 0}
+#pad{width:100%;background:#fff;border:1px solid rgba(128,128,128,.5);border-radius:12px;touch-action:none;display:block;cursor:crosshair}
+.b.on{outline:2px solid #6366f1}
+.upprev{margin:8px 0;background:#fff;border:1px dashed rgba(128,128,128,.5);border-radius:12px;padding:6px;text-align:center}.upprev img{max-width:100%;max-height:140px}
+.saved{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px}.svi{position:relative;background:#fff;border:1px solid rgba(128,128,128,.4);border-radius:10px;padding:4px 8px}.svi img{height:48px;display:block;cursor:pointer}.svx{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;border:0;background:#ef4444;color:#fff;font-size:15px;line-height:20px;cursor:pointer;padding:0}
+.pager{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px 0}.pager .b{padding:6px 16px}.pager .b:disabled{opacity:.4}
+.selbar{margin:6px 0;flex-wrap:wrap}
+.pagewrap{position:relative;margin:10px auto;max-width:900px;direction:ltr;background:#fff;box-shadow:0 2px 14px rgba(0,0,0,.25);line-height:0}
+.pagewrap canvas{display:block}
+.ov{position:absolute;left:0;top:0;width:100%}
+.itm{position:absolute;cursor:move;border:1.5px dashed transparent;touch-action:none;user-select:none;-webkit-user-select:none}
+.itm.sel{border-color:#6366f1}.itm img{width:100%;height:100%;display:block;pointer-events:none}
+.itm.t{white-space:nowrap;line-height:1.2;color:#111}
+.rs{position:absolute;right:-10px;bottom:-10px;width:20px;height:20px;border-radius:50%;background:#6366f1;border:2px solid #fff;cursor:nwse-resize;display:none;touch-action:none}.itm.sel .rs{display:block}
+.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0 14px}
+.st{border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:10px 12px;text-align:center}
+.st b{display:block;font-size:22px}.st small{opacity:.75}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lg{padding:3px 10px;border-radius:99px;font-size:13px}
+.lg.del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through}
+.lg.ins{background:rgba(34,197,94,.2);color:#166534}
+.lg.eq{background:rgba(128,128,128,.15)}
+.diffout{white-space:pre-wrap;line-height:2;font-size:18px;border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:14px;word-break:break-word}
+.diffout del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through;border-radius:4px;padding:0 2px}
+.diffout ins{background:rgba(34,197,94,.22);color:#166534;text-decoration:none;border-radius:4px;padding:0 2px}
+@media (prefers-color-scheme:dark){.lg.del,.diffout del{color:#fca5a5}.lg.ins,.diffout ins{color:#86efac}}</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<p class="privp" data-i="priv"></p>
+
+<h2 data-i="hIn"></h2>
+<div class="btns"><button type="button" class="b" id="pick" data-i="pick"></button><input type="file" id="filePdf" accept="application/pdf,.pdf" hidden><span id="fname" class="fnm"></span></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div id="work" style="display:none">
+ <h2 data-i="hSign"></h2>
+ <div class="btns"><button type="button" class="b" id="addSig" data-i="addSig"></button><button type="button" class="b sec" id="addTxt" data-i="addTxt"></button><button type="button" class="b sec" id="addDate" data-i="addDate"></button></div>
+ <div id="savedBox" style="display:none"><p class="smallp" data-i="savedT"></p><div id="saved" class="saved"></div></div>
+
+ <div id="padBox" class="padbox" style="display:none">
+  <div class="btns"><button type="button" class="b sec on" id="tabDraw" data-i="tabDraw"></button><button type="button" class="b sec" id="tabUp" data-i="tabUp"></button></div>
+  <div id="drawBox">
+   <p class="smallp" data-i="padHint"></p>
+   <canvas id="pad"></canvas>
+   <div class="row"><div class="col"><label for="inkc" data-i="inkC"></label><select id="inkc"><option value="#111111" data-k="cBlack" selected></option><option value="#1e3a8a" data-k="cBlue"></option></select></div><div class="col"><label for="inkw" data-i="inkW"></label><select id="inkw"><option value="2.5" data-k="wThin"></option><option value="4" data-k="wMed" selected></option><option value="6.5" data-k="wThick"></option></select></div></div>
+  </div>
+  <div id="upBox" style="display:none">
+   <div class="btns"><button type="button" class="b sec" id="upBtn" data-i="upBtn"></button><input type="file" id="fileImg" accept="image/*" hidden></div>
+   <label style="font-weight:400;display:block"><input type="checkbox" id="upTrans" checked> <span data-i="upTransT"></span></label>
+   <div class="upprev"><img id="upImg" alt="" style="display:none"></div>
+  </div>
+  <label style="font-weight:400;display:block;margin-top:8px"><input type="checkbox" id="remember" checked> <span data-i="rememberT"></span></label>
+  <div class="btns"><button type="button" class="b" id="padUse" data-i="padUse"></button><button type="button" class="b sec" id="padUndo" data-i="padUndo"></button><button type="button" class="b sec" id="padClear" data-i="padClear"></button><button type="button" class="b sec" id="padClose" data-i="padClose"></button></div>
+ </div>
+
+ <h2 data-i="hPlace"></h2>
+ <p class="smallp" data-i="placeHint"></p>
+ <div class="pager"><button type="button" class="b sec" id="prev" aria-label="prev">&#9664;</button><span id="pg"></span><button type="button" class="b sec" id="next" aria-label="next">&#9654;</button></div>
+ <div id="selbar" class="btns selbar" style="display:none"><button type="button" class="b sec" id="sEdit" data-i="sEdit"></button><button type="button" class="b sec" id="sSm" data-i="sSm"></button><button type="button" class="b sec" id="sLg" data-i="sLg"></button><button type="button" class="b sec" id="sAll" data-i="sAll"></button><button type="button" class="b sec" id="sDel" data-i="sDel"></button></div>
+ <div class="pagewrap" id="pw"><canvas id="pc"></canvas><div id="ov" class="ov"></div></div>
+
+ <h2 data-i="hDl"></h2>
+ <div class="btns"><button type="button" class="b" id="dl" data-i="dl"></button></div>
+</div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Sign a PDF Online: Free and Private",
+ lead:"Open a PDF such as a contract or an authorization letter, draw your signature with your finger, a pen or the mouse, place it where you want, and download the signed PDF. Everything runs on your device.",
+ priv:"Your PDF is never uploaded. It is opened and signed inside your browser.",
+ hIn:"1. Choose your PDF",pick:"Choose a PDF file",
+ hSign:"2. Add your signature, text or date",addSig:"Add signature",addTxt:"Add text",addDate:"Add today's date",
+ savedT:"Your saved signatures (tap one to place it):",
+ tabDraw:"Draw",tabUp:"Upload an image",padHint:"Draw your signature in the box.",inkC:"Ink color",inkW:"Pen thickness",cBlack:"Black",cBlue:"Blue",wThin:"Thin",wMed:"Medium",wThick:"Thick",
+ upBtn:"Choose a picture of your signature",upTransT:"Make the white background transparent",
+ rememberT:"Save this signature on this device",padUse:"Use this signature",padUndo:"Undo",padClear:"Clear",padClose:"Cancel",
+ hPlace:"3. Place it on the page",placeHint:"Drag an item to move it. Drag the round handle to resize. Use the page arrows to move between pages.",
+ pageOf:"Page {a} of {b}",
+ sEdit:"Edit text",sSm:"Smaller",sLg:"Larger",sAll:"Copy to all pages",sDel:"Delete",
+ hDl:"4. Download",dl:"Download the signed PDF",
+ askText:"Type the text:",editText:"Edit the text:",
+ errPdf:"Could not open this PDF. It may be damaged or protected by a password.",errBig:"This file is too large for the browser.",errEmptyPad:"Draw your signature first.",errNoImg:"Choose a picture first.",errLib:"Could not load the PDF engine. Check your connection and try again.",errSave:"Could not create the signed PDF.",errNone:"Add at least one signature or text first.",
+ busy:"Working...",done:"Done. The signed PDF was downloaded.",loaded:"PDF opened.",
+ h2b:"Notes",
+ n1:"This puts an image of your signature on the PDF. It is not a certified digital signature. It is suitable for ordinary authorizations and contracts, but some bodies require a certified electronic signature.",
+ n2:"Your PDF and your signatures stay on your device and are not uploaded. Saved signatures are kept in this browser only.",
+ n3:"Text and dates can be in Arabic or English.",
+ n4:"Always open the downloaded file and check it before you send it.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"وقّع ملف PDF أونلاين: مجانًا وبخصوصية",
+ lead:"افتح ملف PDF مثل عقد أو تفويض، وارسم توقيعك بإصبعك أو بالقلم أو بالماوس، وضعه حيث تريد، ثم نزّل الملف موقّعًا. كل شيء يتم على جهازك.",
+ priv:"لا يُرفع ملفك أبدًا. يُفتح ويُوقَّع داخل متصفحك.",
+ hIn:"1. اختر ملف PDF",pick:"اختر ملف PDF",
+ hSign:"2. أضف توقيعك أو نصًا أو تاريخًا",addSig:"أضف توقيعًا",addTxt:"أضف نصًا",addDate:"أضف تاريخ اليوم",
+ savedT:"توقيعاتك المحفوظة (اضغط على واحد لوضعه):",
+ tabDraw:"ارسم",tabUp:"ارفع صورة",padHint:"ارسم توقيعك داخل المربع.",inkC:"لون الحبر",inkW:"سُمك القلم",cBlack:"أسود",cBlue:"أزرق",wThin:"رفيع",wMed:"متوسط",wThick:"سميك",
+ upBtn:"اختر صورة لتوقيعك",upTransT:"اجعل الخلفية البيضاء شفافة",
+ rememberT:"احفظ هذا التوقيع على هذا الجهاز",padUse:"استخدم هذا التوقيع",padUndo:"تراجع",padClear:"مسح",padClose:"إلغاء",
+ hPlace:"3. ضعه على الصفحة",placeHint:"اسحب أي عنصر لتحريكه. واسحب المقبض الدائري لتغيير حجمه. واستخدم أسهم الصفحات للتنقل بين الصفحات.",
+ pageOf:"صفحة {a} من {b}",
+ sEdit:"عدّل النص",sSm:"أصغر",sLg:"أكبر",sAll:"انسخ لكل الصفحات",sDel:"احذف",
+ hDl:"4. التنزيل",dl:"نزّل الملف الموقّع",
+ askText:"اكتب النص:",editText:"عدّل النص:",
+ errPdf:"تعذّر فتح هذا الملف. قد يكون تالفًا أو محميًا بكلمة مرور.",errBig:"هذا الملف أكبر من أن يتحمّله المتصفح.",errEmptyPad:"ارسم توقيعك أولًا.",errNoImg:"اختر صورة أولًا.",errLib:"تعذّر تحميل محرك PDF. تأكد من اتصالك وحاول مرة أخرى.",errSave:"تعذّر إنشاء الملف الموقّع.",errNone:"أضف توقيعًا أو نصًا واحدًا على الأقل أولًا.",
+ busy:"جارٍ العمل...",done:"تم. نزل الملف الموقّع.",loaded:"تم فتح الملف.",
+ h2b:"ملاحظات",
+ n1:"هذه الأداة تضع صورة توقيعك على الملف. وهي ليست توقيعًا رقميًا معتمدًا بشهادة. تناسب التفويضات والعقود العادية، لكن بعض الجهات تشترط توقيعًا إلكترونيًا معتمدًا.",
+ n2:"ملفك وتوقيعاتك تبقى على جهازك ولا تُرفع. والتوقيعات المحفوظة تُحفظ في هذا المتصفح فقط.",
+ n3:"يمكن أن يكون النص والتاريخ بالعربية أو بالإنجليزية.",
+ n4:"افتح الملف الذي نزّلته وراجعه دائمًا قبل إرساله.",
+ back:"العودة إلى الأدوات"}
+};
+/* ---------- app ---------- */
+var BASE="/sign-pdf/lib/",libs={},doc=null,bytes=null,N=0,cur=1,items=[],sel=null,cssW=0,cssH=0,fileBase="document",renderTok=0,uid=1;
+var SKEY="sayvoi_sign_sigs";
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function hide(){$("msg").style.display="none";}
+function loadScript(src){
+ if(libs[src])return libs[src];
+ libs[src]=new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){libs[src]=null;rej(new Error("lib"));};document.head.appendChild(s);});
+ return libs[src];
+}
+function ensurePdfjs(){return loadScript(BASE+"pdf.min.js").then(function(){window.pdfjsLib.GlobalWorkerOptions.workerSrc=BASE+"pdf.worker.min.js";});}
+function ensureLib(){return loadScript(BASE+"pdf-lib.min.js");}
+function fmt(s,a,b){return s.replace("{a}",a).replace("{b}",b);}
+
+/* ---- open pdf ---- */
+function openFile(f){
+ if(!f)return;
+ if(f.size>150*1024*1024){show(T[L].errBig,true);return;}
+ show(T[L].busy,false);
+ var fr=new FileReader();
+ fr.onerror=function(){show(T[L].errPdf,true);};
+ fr.onload=function(){
+  var ab=fr.result;
+  ensurePdfjs().then(function(){
+   return window.pdfjsLib.getDocument({data:new Uint8Array(ab.slice(0))}).promise;
+  }).then(function(d){
+   doc=d;bytes=ab;N=d.numPages;cur=1;items=[];sel=null;
+   fileBase=f.name.replace(/\.pdf$/i,"")||"document";
+   $("fname").textContent=f.name;$("work").style.display="block";
+   hide();renderPage();
+  }).catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errPdf,true);});
+ };
+ fr.readAsArrayBuffer(f);
+}
+function renderPage(){
+ if(!doc)return;
+ var tok=++renderTok;
+ doc.getPage(cur).then(function(page){
+  if(tok!==renderTok)return;
+  var pw=$("pw"),avail=Math.min(pw.parentNode.clientWidth||600,900);
+  var base=page.getViewport({scale:1}),scale=avail/base.width,dpr=Math.min(window.devicePixelRatio||1,2);
+  var vp=page.getViewport({scale:scale*dpr}),c=$("pc");
+  c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);
+  cssW=Math.round(avail);cssH=Math.round(base.height*scale);
+  pw.style.width=cssW+"px";c.style.width=cssW+"px";c.style.height=cssH+"px";
+  $("ov").style.height=cssH+"px";
+  page.render({canvasContext:c.getContext("2d"),viewport:vp}).promise.then(function(){if(tok===renderTok)drawOverlay();},function(){});
+  drawOverlay();
+  $("pg").textContent=fmt(T[L].pageOf,cur,N);
+  $("prev").disabled=cur<=1;$("next").disabled=cur>=N;
+ }).catch(function(){show(T[L].errPdf,true);});
+}
+
+/* ---- items ---- */
+function dirOf(s){return /[֐-ࣿ]/.test(s)?"rtl":"ltr";}
+function drawOverlay(){
+ var ov=$("ov");ov.textContent="";
+ items.forEach(function(it){
+  if(it.page!==cur)return;
+  var el=document.createElement("div");el.className="itm"+(it.type==="text"?" t":"")+(sel===it.id?" sel":"");
+  el.setAttribute("data-id",it.id);el.style.left=(it.x*100)+"%";el.style.top=(it.y*100)+"%";
+  if(it.type==="img"){
+   el.style.width=(it.w*100)+"%";el.style.height=(it.w*cssW*it.ar)+"px";
+   var im=document.createElement("img");im.src=it.src;im.alt="";im.draggable=false;el.appendChild(im);
+   var rs=document.createElement("div");rs.className="rs";el.appendChild(rs);
+  }else{
+   el.style.fontSize=(it.size*cssW)+"px";el.style.color=it.color||"#111";el.dir=dirOf(it.text);el.textContent=it.text;
+  }
+  ov.appendChild(el);
+ });
+ $("selbar").style.display=sel?"flex":"none";
+ var s=items.filter(function(i){return i.id===sel;})[0];
+ $("sEdit").style.display=s&&s.type==="text"?"":"none";
+}
+function select(id){sel=id;drawOverlay();}
+function getItem(id){return items.filter(function(i){return i.id===id;})[0];}
+function addImage(src,cb){
+ var im=new Image();
+ im.onload=function(){
+  var w=0.26,ar=im.naturalHeight/im.naturalWidth,h=w*cssW*ar/cssH;
+  var it={id:uid++,page:cur,type:"img",src:src,ar:ar,w:w,x:0.5-w/2,y:Math.min(0.62,0.95-h)};
+  items.push(it);select(it.id);if(cb)cb();
+ };
+ im.src=src;
+}
+function addText(txt){
+ if(!txt)return;
+ var it={id:uid++,page:cur,type:"text",text:txt,size:0.028,color:"#111111",x:0.3,y:0.5};
+ items.push(it);select(it.id);
+}
+function pad2(n){return (n<10?"0":"")+n;}
+function today(){var d=new Date();return pad2(d.getDate())+"/"+pad2(d.getMonth()+1)+"/"+d.getFullYear();}
+
+var drag=null;
+$("ov").addEventListener("pointerdown",function(e){
+ var el=e.target.closest?e.target.closest(".itm"):null;
+ if(!el){if(sel){sel=null;drawOverlay();}return;}
+ var id=+el.getAttribute("data-id"),it=getItem(id);
+ if(sel!==id){sel=id;drawOverlay();el=$("ov").querySelector('[data-id="'+id+'"]');}
+ if(!el)return;
+ var rsz=e.target.classList&&e.target.classList.contains("rs");
+ drag={id:id,mode:rsz?"rs":"mv",sx:e.clientX,sy:e.clientY,ox:it.x,oy:it.y,ow:it.w,el:el};
+ try{el.setPointerCapture(e.pointerId);}catch(x){}
+ e.preventDefault();
+});
+$("ov").addEventListener("pointermove",function(e){
+ if(!drag)return;
+ var it=getItem(drag.id),r=$("ov").getBoundingClientRect();
+ var dx=(e.clientX-drag.sx)/r.width,dy=(e.clientY-drag.sy)/r.height;
+ if(drag.mode==="mv"){
+  var bw=drag.el.offsetWidth/r.width,bh=drag.el.offsetHeight/r.height;
+  it.x=Math.max(0,Math.min(1-bw,drag.ox+dx));it.y=Math.max(0,Math.min(1-bh,drag.oy+dy));
+  drag.el.style.left=(it.x*100)+"%";drag.el.style.top=(it.y*100)+"%";
+ }else if(it.type==="img"){
+  var nw=Math.max(0.04,Math.min(1-it.x,drag.ow+dx));
+  it.w=nw;drag.el.style.width=(nw*100)+"%";drag.el.style.height=(nw*cssW*it.ar)+"px";
+ }
+ e.preventDefault();
+});
+function endDrag(){drag=null;}
+$("ov").addEventListener("pointerup",endDrag);$("ov").addEventListener("pointercancel",endDrag);
+
+$("sDel").addEventListener("click",function(){items=items.filter(function(i){return i.id!==sel;});sel=null;drawOverlay();});
+$("sSm").addEventListener("click",function(){var it=getItem(sel);if(!it)return;if(it.type==="text")it.size=Math.max(0.01,it.size*0.9);else it.w=Math.max(0.04,it.w*0.9);drawOverlay();});
+$("sLg").addEventListener("click",function(){var it=getItem(sel);if(!it)return;if(it.type==="text")it.size=Math.min(0.2,it.size*1.1);else it.w=Math.min(1-it.x,it.w*1.1);drawOverlay();});
+$("sEdit").addEventListener("click",function(){var it=getItem(sel);if(!it||it.type!=="text")return;var v=window.prompt(T[L].editText,it.text);if(v!==null&&v.trim()){it.text=v.trim();drawOverlay();}});
+$("sAll").addEventListener("click",function(){
+ var it=getItem(sel);if(!it)return;
+ items=items.filter(function(o){return !(o.copyOf===it.id);});
+ for(var p=1;p<=N;p++){if(p===it.page)continue;var c=JSON.parse(JSON.stringify(it));c.id=uid++;c.page=p;c.copyOf=it.id;items.push(c);}
+ drawOverlay();
+});
+document.addEventListener("keydown",function(e){
+ if((e.key==="Delete"||e.key==="Backspace")&&sel&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||"")){$("sDel").click();e.preventDefault();}
+});
+$("prev").addEventListener("click",function(){if(cur>1){cur--;sel=null;renderPage();}});
+$("next").addEventListener("click",function(){if(cur<N){cur++;sel=null;renderPage();}});
+var rzT=null;window.addEventListener("resize",function(){clearTimeout(rzT);rzT=setTimeout(function(){if(doc)renderPage();},250);});
+
+/* ---- saved signatures ---- */
+function getSaved(){try{return JSON.parse(localStorage.getItem(SKEY)||"[]")||[];}catch(e){return[];}}
+function setSaved(a){try{localStorage.setItem(SKEY,JSON.stringify(a));}catch(e){}}
+function renderSaved(){
+ var a=getSaved(),box=$("saved");box.textContent="";
+ $("savedBox").style.display=a.length?"block":"none";
+ a.forEach(function(src,i){
+  var w=document.createElement("div");w.className="svi";
+  var im=document.createElement("img");im.src=src;im.alt="";
+  im.addEventListener("click",function(){addImage(src);});
+  var x=document.createElement("button");x.type="button";x.className="svx";x.textContent="×";x.setAttribute("aria-label","delete");
+  x.addEventListener("click",function(){var b=getSaved();b.splice(i,1);setSaved(b);renderSaved();});
+  w.appendChild(im);w.appendChild(x);box.appendChild(w);
+ });
+}
+
+/* ---- signature pad ---- */
+var pad=$("pad"),pctx=null,strokes=[],curStroke=null,padMode="draw",upData=null;
+function setupPad(){
+ var dpr=Math.min(window.devicePixelRatio||1,2),w=pad.clientWidth||500,h=Math.round(w*0.38);
+ pad.style.height=h+"px";pad.width=Math.round(w*dpr);pad.height=Math.round(h*dpr);
+ pctx=pad.getContext("2d");pctx.setTransform(dpr,0,0,dpr,0,0);redrawPad();
+}
+function redrawPad(){
+ if(!pctx)return;
+ pctx.clearRect(0,0,pad.width,pad.height);
+ pctx.strokeStyle=$("inkc").value;pctx.fillStyle=$("inkc").value;pctx.lineCap="round";pctx.lineJoin="round";
+ var bw=parseFloat($("inkw").value);
+ strokes.forEach(function(s){
+  var pts=s.pts;
+  if(pts.length===1){pctx.beginPath();pctx.arc(pts[0].x,pts[0].y,bw/2,0,6.2832);pctx.fill();return;}
+  for(var i=1;i<pts.length;i++){
+   var a=pts[i-1],b=pts[i],mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+   pctx.lineWidth=bw*(s.pen?(0.5+b.p):1);
+   pctx.beginPath();
+   if(i===1)pctx.moveTo(a.x,a.y);else pctx.moveTo((pts[i-2].x+a.x)/2,(pts[i-2].y+a.y)/2);
+   pctx.quadraticCurveTo(a.x,a.y,mx,my);pctx.stroke();
+  }
+ });
+}
+function pp(e){var r=pad.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top,p:e.pressure>0?e.pressure:0.5};}
+pad.addEventListener("pointerdown",function(e){curStroke={pen:e.pointerType==="pen",pts:[pp(e)]};strokes.push(curStroke);try{pad.setPointerCapture(e.pointerId);}catch(x){}redrawPad();e.preventDefault();});
+pad.addEventListener("pointermove",function(e){if(!curStroke)return;curStroke.pts.push(pp(e));redrawPad();e.preventDefault();});
+function padEnd(){curStroke=null;}
+pad.addEventListener("pointerup",padEnd);pad.addEventListener("pointercancel",padEnd);
+$("inkc").addEventListener("change",redrawPad);$("inkw").addEventListener("change",redrawPad);
+$("padUndo").addEventListener("click",function(){strokes.pop();redrawPad();});
+$("padClear").addEventListener("click",function(){strokes=[];upData=null;$("upImg").style.display="none";redrawPad();});
+$("padClose").addEventListener("click",function(){$("padBox").style.display="none";});
+$("addSig").addEventListener("click",function(){
+ $("padBox").style.display="block";strokes=[];upData=null;$("upImg").style.display="none";setTab("draw");
+ setTimeout(function(){setupPad();$("padBox").scrollIntoView({behavior:"smooth",block:"nearest"});},30);
+});
+function setTab(m){
+ padMode=m;$("drawBox").style.display=m==="draw"?"block":"none";$("upBox").style.display=m==="up"?"block":"none";
+ $("tabDraw").classList.toggle("on",m==="draw");$("tabUp").classList.toggle("on",m==="up");
+ $("padUndo").style.display=m==="draw"?"":"none";
+ if(m==="draw")setTimeout(setupPad,20);
+}
+$("tabDraw").addEventListener("click",function(){setTab("draw");});
+$("tabUp").addEventListener("click",function(){setTab("up");});
+$("upBtn").addEventListener("click",function(){$("fileImg").click();});
+function cropCanvas(src){
+ var w=src.width,h=src.height,d=src.getContext("2d").getImageData(0,0,w,h).data,x0=w,y0=h,x1=-1,y1=-1,x,y;
+ for(y=0;y<h;y++)for(x=0;x<w;x++){if(d[(y*w+x)*4+3]>20){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;}}
+ if(x1<0)return null;
+ var m=Math.round(Math.max(w,h)*0.01);x0=Math.max(0,x0-m);y0=Math.max(0,y0-m);x1=Math.min(w-1,x1+m);y1=Math.min(h-1,y1+m);
+ var c=document.createElement("canvas");c.width=x1-x0+1;c.height=y1-y0+1;c.getContext("2d").drawImage(src,x0,y0,c.width,c.height,0,0,c.width,c.height);
+ var mx=1000;if(c.width>mx){var r=document.createElement("canvas");r.width=mx;r.height=Math.round(c.height*mx/c.width);r.getContext("2d").drawImage(c,0,0,r.width,r.height);return r;}
+ return c;
+}
+$("fileImg").addEventListener("change",function(){
+ var f=this.files[0];this.value="";if(!f)return;
+ var u=URL.createObjectURL(f),im=new Image();
+ im.onload=function(){
+  var s=Math.min(1,1400/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement("canvas");
+  c.width=Math.max(1,Math.round(im.naturalWidth*s));c.height=Math.max(1,Math.round(im.naturalHeight*s));
+  var x=c.getContext("2d");x.drawImage(im,0,0,c.width,c.height);
+  if($("upTrans").checked){
+   var id=x.getImageData(0,0,c.width,c.height),d=id.data;
+   for(var i=0;i<d.length;i+=4){var l=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];if(l>235)d[i+3]=0;else if(l>185)d[i+3]=Math.round((235-l)/50*d[i+3]);}
+   x.putImageData(id,0,0);
+  }
+  var cr=cropCanvas(c);upData=cr?cr.toDataURL("image/png"):null;
+  var pv=$("upImg");if(upData){pv.src=upData;pv.style.display="block";}
+  URL.revokeObjectURL(u);
+ };
+ im.src=u;
+});
+$("upTrans").addEventListener("change",function(){upData=null;$("upImg").style.display="none";});
+$("padUse").addEventListener("click",function(){
+ var data=null;
+ if(padMode==="draw"){
+  if(!strokes.length){show(T[L].errEmptyPad,true);return;}
+  var cr=cropCanvas(pad);if(cr)data=cr.toDataURL("image/png");
+ }else{
+  if(!upData){show(T[L].errNoImg,true);return;}
+  data=upData;
+ }
+ if(!data){show(T[L].errEmptyPad,true);return;}
+ hide();
+ if($("remember").checked){var a=getSaved().filter(function(x){return x!==data;});a.unshift(data);setSaved(a.slice(0,4));renderSaved();}
+ addImage(data);$("padBox").style.display="none";
+});
+$("addTxt").addEventListener("click",function(){var v=window.prompt(T[L].askText,"");if(v&&v.trim())addText(v.trim());});
+$("addDate").addEventListener("click",function(){addText(today());});
+
+/* ---- export ---- */
+function textPng(text,fontUnits,color){
+ var k=3,fp=Math.max(8,fontUnits*k),c=document.createElement("canvas"),x=c.getContext("2d");
+ var font=fp+'px "Segoe UI",Tahoma,Arial,sans-serif';x.font=font;x.direction=dirOf(text);
+ var w=Math.ceil(x.measureText(text).width)+4,h=Math.ceil(fp*1.2);
+ c.width=w;c.height=h;x=c.getContext("2d");x.font=font;x.direction=dirOf(text);x.fillStyle=color||"#111";x.textBaseline="middle";x.textAlign=dirOf(text)==="rtl"?"right":"left";
+ x.fillText(text,dirOf(text)==="rtl"?w-2:2,h/2+fp*0.04);
+ return {url:c.toDataURL("image/png"),w:w/k,h:h/k};
+}
+function dataToBytes(u){var b=atob(u.split(",")[1]),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+function exportPdf(){
+ if(!items.length){show(T[L].errNone,true);return;}
+ show(T[L].busy,false);
+ ensureLib().then(function(){
+  var P=window.PDFLib;
+  return P.PDFDocument.load(bytes.slice(0),{ignoreEncryption:true}).then(function(pd){
+   var pages=pd.getPages(),cache={},chain=Promise.resolve();
+   items.forEach(function(it){
+    chain=chain.then(function(){
+     var pg=pages[it.page-1];if(!pg)return;
+     var rot=((pg.getRotation().angle%360)+360)%360,cb=pg.getCropBox?pg.getCropBox():pg.getMediaBox();
+     var W=cb.width,H=cb.height,Wv=rot%180?H:W,Hv=rot%180?W:H;
+     var src,w,h;
+     if(it.type==="img"){src=it.src;w=it.w*Wv;h=w*it.ar;}
+     else{var tp=textPng(it.text,it.size*Wv,it.color);src=tp.url;w=tp.w;h=tp.h;}
+     var u0=it.x*Wv,v0=it.y*Hv,x,y;
+     if(rot===0){x=u0;y=H-v0-h;}else if(rot===90){x=v0+h;y=u0;}else if(rot===180){x=W-u0;y=v0+h;}else{x=W-v0-h;y=H-u0;}
+     var p=cache[src]?Promise.resolve(cache[src]):pd.embedPng(dataToBytes(src)).then(function(im){cache[src]=im;return im;});
+     return p.then(function(im){pg.drawImage(im,{x:x+cb.x,y:y+cb.y,width:w,height:h,rotate:P.degrees(rot)});});
+    });
+   });
+   return chain.then(function(){return pd.save();});
+  });
+ }).then(function(out){
+  var u=URL.createObjectURL(new Blob([out],{type:"application/pdf"})),a=document.createElement("a");
+  a.href=u;a.download=fileBase+"-signed.pdf";document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(u);},4000);show(T[L].done,false);
+ }).catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errSave,true);});
+}
+$("dl").addEventListener("click",exportPdf);
+$("pick").addEventListener("click",function(){$("filePdf").click();});
+$("filePdf").addEventListener("change",function(){var f=this.files[0];this.value="";openFile(f);});
+
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ document.title=L==="ar"?"وقّع PDF أونلاين مجانًا | Sayvoi":"Sign a PDF Online: Free and Private | Sayvoi";
+ if(doc)$("pg").textContent=fmt(t.pageOf,cur,N);
+}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+renderSaved();applyLang();
+})();
+</script>
+</body>
+</html>
