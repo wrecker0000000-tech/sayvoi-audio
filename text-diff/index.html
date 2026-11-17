@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Compare two texts or transcripts and see what was added, removed or changed. Test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>Text Diff Checker | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0 14px}
+.st{border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:10px 12px;text-align:center}
+.st b{display:block;font-size:22px}.st small{opacity:.75}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lg{padding:3px 10px;border-radius:99px;font-size:13px}
+.lg.del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through}
+.lg.ins{background:rgba(34,197,94,.2);color:#166534}
+.lg.eq{background:rgba(128,128,128,.15)}
+.diffout{white-space:pre-wrap;line-height:2;font-size:18px;border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:14px;word-break:break-word}
+.diffout del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through;border-radius:4px;padding:0 2px}
+.diffout ins{background:rgba(34,197,94,.22);color:#166534;text-decoration:none;border-radius:4px;padding:0 2px}
+@media (prefers-color-scheme:dark){.lg.del,.diffout del{color:#fca5a5}.lg.ins,.diffout ins{color:#86efac}}</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<h2 data-i="hIn"></h2>
+<div class="row">
+ <div class="col" style="flex-basis:320px">
+  <label for="ta" data-i="lA"></label>
+  <textarea id="ta" rows="9" dir="auto" data-p="phA"></textarea>
+  <div class="btns"><button type="button" class="b sec" id="fa" data-i="load"></button><input type="file" id="fileA" accept=".txt,.srt,.vtt,.csv,.json,.md,text/*" hidden></div>
+ </div>
+ <div class="col" style="flex-basis:320px">
+  <label for="tb" data-i="lB"></label>
+  <textarea id="tb" rows="9" dir="auto" data-p="phB"></textarea>
+  <div class="btns"><button type="button" class="b sec" id="fb" data-i="load"></button><input type="file" id="fileB" accept=".txt,.srt,.vtt,.csv,.json,.md,text/*" hidden></div>
+ </div>
+</div>
+<div class="btns"><button type="button" class="b sec" id="ex" data-i="ex"></button><button type="button" class="b sec" id="swap" data-i="swap"></button><button type="button" class="b sec" id="clr" data-i="clr"></button></div>
+
+<h2 data-i="hOpt"></h2>
+<div class="row">
+ <div class="col"><label for="unit" data-i="oUnit"></label><select id="unit"><option value="word" data-k="uW" selected></option><option value="line" data-k="uL"></option><option value="char" data-k="uC"></option></select></div>
+</div>
+<label style="font-weight:400;display:block;margin-top:8px"><input type="checkbox" id="oCase"> <span data-i="oCaseT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oPunct" checked> <span data-i="oPunctT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oDia" checked> <span data-i="oDiaT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oAr"> <span data-i="oArT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oWs" checked> <span data-i="oWsT"></span></label>
+
+<div class="btns"><button type="button" class="b" id="go" data-i="go"></button><button type="button" class="b sec" id="copy" data-i="copy" disabled></button></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div class="pv" id="res" style="display:none">
+ <h3 style="margin-top:0" data-i="rH"></h3>
+ <div id="stats" class="stats"></div>
+ <div class="legend"><span class="lg del" data-i="lgDel"></span> <span class="lg ins" data-i="lgIns"></span> <span class="lg eq" data-i="lgEq"></span></div>
+ <div id="out" class="diffout" dir="auto"></div>
+</div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Text Diff Checker: Compare Two Texts and Transcripts",
+ lead:"Paste two versions of a text, or load two files, and see exactly what was added, removed or changed. Made for comparing transcripts of the same recording, with options for Arabic text and a word error rate. Everything runs on your device and nothing is uploaded.",
+ hIn:"1. The two texts",lA:"Original (reference)",lB:"Changed (to check)",phA:"Paste the original text here",phB:"Paste the changed text here",
+ load:"Load a text file",ex:"Load an example",swap:"Swap the two texts",clr:"Clear all",
+ hOpt:"2. Options",oUnit:"Compare by",uW:"Words",uL:"Lines",uC:"Characters",
+ oCaseT:"Ignore upper and lower case",oPunctT:"Ignore punctuation",oDiaT:"Ignore Arabic diacritics (tashkeel)",oArT:"Treat similar Arabic letters as the same (أ إ آ = ا, ى = ي, ة = ه)",oWsT:"Ignore extra spaces and empty lines",
+ go:"Compare",copy:"Copy the summary",
+ rH:"Result",lgDel:"Removed from the original",lgIns:"Added in the changed text",lgEq:"Same",
+ sA:"Items in the original",sB:"Items in the changed text",sEq:"Same",sDel:"Removed",sIns:"Added",sRep:"Replaced",sWer:"Error rate (WER)",sSim:"Similarity",
+ identical:"The two texts are identical with these options.",
+ errEmpty:"Write or load both texts first.",errBig:"The texts are too long to compare by this unit. Use lines, or compare in smaller parts.",errFile:"Could not read this file.",
+ copied:"Summary copied.",
+ h2b:"Notes",
+ n1:"The error rate is the number of replaced, removed and added words divided by the number of words in the original. Lower is better.",
+ n2:"For transcript checks, ignore punctuation and diacritics so that only real word differences are counted.",
+ n3:"The original is the reference. Words removed are in it but not in the changed text.",
+ n4:"Your texts stay on your device and are not uploaded.",
+ back:"Back to the tools",ex1:"We went to the market in the morning and bought fresh bread.\nThen we walked home together.",ex2:"We went to the market on the morning and bought fresh bread and milk.\nThen we walked home."},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"مقارنة النصوص: اعرف الفرق بين نصّين أو تفريغين",
+ lead:"الصق نسختين من نص أو حمّل ملفين، وشاهد بالضبط ما أُضيف وما حُذف وما تغيّر. مصمَّمة لمقارنة تفريغين لنفس التسجيل، وفيها خيارات للنص العربي ونسبة الخطأ في الكلمات. كل شيء يتم على جهازك ولا يُرفع أي شيء.",
+ hIn:"1. النصّان",lA:"الأصل (المرجع)",lB:"النص المعدَّل (المراد فحصه)",phA:"الصق النص الأصلي هنا",phB:"الصق النص المعدَّل هنا",
+ load:"حمّل ملفًا نصيًا",ex:"حمّل مثالًا",swap:"بدّل النصّين",clr:"مسح الكل",
+ hOpt:"2. الخيارات",oUnit:"قارن حسب",uW:"الكلمات",uL:"الأسطر",uC:"الحروف",
+ oCaseT:"تجاهل الحروف الكبيرة والصغيرة",oPunctT:"تجاهل علامات الترقيم",oDiaT:"تجاهل التشكيل العربي",oArT:"اعتبر الحروف العربية المتشابهة واحدة (أ إ آ = ا، ى = ي، ة = ه)",oWsT:"تجاهل المسافات الزائدة والأسطر الفارغة",
+ go:"قارن",copy:"انسخ الملخص",
+ rH:"النتيجة",lgDel:"محذوف من الأصل",lgIns:"مضاف في النص المعدَّل",lgEq:"متطابق",
+ sA:"عناصر الأصل",sB:"عناصر النص المعدَّل",sEq:"متطابق",sDel:"محذوف",sIns:"مضاف",sRep:"مستبدَل",sWer:"نسبة الخطأ (WER)",sSim:"التشابه",
+ identical:"النصّان متطابقان بهذه الخيارات.",
+ errEmpty:"اكتب النصّين أو حمّلهما أولًا.",errBig:"النصّان أطول من أن يُقارنا بهذه الوحدة. استخدم الأسطر، أو قارن على أجزاء أصغر.",errFile:"تعذّرت قراءة هذا الملف.",
+ copied:"تم نسخ الملخص.",
+ h2b:"ملاحظات",
+ n1:"نسبة الخطأ هي عدد الكلمات المستبدلة والمحذوفة والمضافة مقسومًا على عدد كلمات الأصل. وكلما قلّت كان أفضل.",
+ n2:"عند فحص التفريغ تجاهل علامات الترقيم والتشكيل لتُحسب فقط فروق الكلمات الحقيقية.",
+ n3:"الأصل هو المرجع. والكلمات المحذوفة موجودة فيه وغير موجودة في النص المعدَّل.",
+ n4:"نصوصك تبقى على جهازك ولا تُرفع.",
+ back:"العودة إلى الأدوات",ex1:"ذهبنا إلى السوق في الصباح واشترينا خبزًا طازجًا.\nثم مشينا إلى البيت معًا.",ex2:"ذهبنا إلى السوق صباحًا واشترينا خبزًا طازجًا وحليبًا.\nثم مشينا إلى البيت."}
+};
+/* ---------- app ---------- */
+var last=null;
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function normTok(s){
+ if($("oCase").checked)s=s.toLowerCase();
+ if($("oDia").checked)s=s.replace(/[ً-ٰٟـ]/g,"");
+ if($("oAr").checked)s=s.replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه");
+ if($("oPunct").checked)s=s.replace(/[^\p{L}\p{N}\s]/gu,"");
+ return s;
+}
+function tokens(text,unit){
+ var ws=$("oWs").checked;
+ if(unit==="line"){
+  var ls=text.replace(/\r/g,"").split("\n");
+  if(ws)ls=ls.map(function(x){return x.trim().replace(/\s+/g," ");}).filter(function(x){return x.length>0;});
+  return ls;
+ }
+ if(unit==="char"){
+  var t=ws?text.replace(/\s+/g," ").trim():text;
+  return Array.from(t);
+ }
+ return text.split(/\s+/).filter(function(x){return x.length>0;});
+}
+function diff(a,b){
+ var na=a.length,nb=b.length,pre=0;
+ while(pre<na&&pre<nb&&a[pre]===b[pre])pre++;
+ var suf=0;
+ while(suf<na-pre&&suf<nb-pre&&a[na-1-suf]===b[nb-1-suf])suf++;
+ var A=a.slice(pre,na-suf),B=b.slice(pre,nb-suf),n=A.length,m=B.length,ops=[],i,j;
+ if(n*m>30000000)return null;
+ for(i=0;i<pre;i++)ops.push(["=",i,i]);
+ if(n===0){for(j=0;j<m;j++)ops.push(["+",-1,pre+j]);}
+ else if(m===0){for(i=0;i<n;i++)ops.push(["-",pre+i,-1]);}
+ else{
+  var W=m+1,T2=new Uint16Array((n+1)*W);
+  var mx=Math.max(n,m);
+  var Tab=mx>65000?new Uint32Array((n+1)*W):T2;
+  for(i=n-1;i>=0;i--){
+   for(j=m-1;j>=0;j--){
+    if(A[i]===B[j])Tab[i*W+j]=Tab[(i+1)*W+j+1]+1;
+    else{var x=Tab[(i+1)*W+j],y=Tab[i*W+j+1];Tab[i*W+j]=x>=y?x:y;}
+   }
+  }
+  i=0;j=0;
+  while(i<n&&j<m){
+   if(A[i]===B[j]){ops.push(["=",pre+i,pre+j]);i++;j++;}
+   else if(Tab[(i+1)*W+j]>=Tab[i*W+j+1]){ops.push(["-",pre+i,-1]);i++;}
+   else{ops.push(["+",-1,pre+j]);j++;}
+  }
+  while(i<n){ops.push(["-",pre+i,-1]);i++;}
+  while(j<m){ops.push(["+",-1,pre+j]);j++;}
+ }
+ for(i=0;i<suf;i++)ops.push(["=",na-suf+i,nb-suf+i]);
+ return ops;
+}
+function run(){
+ var t=T[L],ta=$("ta").value,tb=$("tb").value;
+ if(!ta.trim()||!tb.trim()){show(t.errEmpty,true);return;}
+ var unit=$("unit").value,ra=tokens(ta,unit),rb=tokens(tb,unit);
+ var na=ra.map(normTok),nb=rb.map(normTok),ops=diff(na,nb);
+ if(!ops){show(t.errBig,true);return;}
+ $("msg").style.display="none";
+ var out=$("out");out.textContent="";
+ var sep=unit==="char"?"":(unit==="line"?"\n":" ");
+ var eq=0,del=0,ins=0,rep=0,k=0,first=true;
+ function put(cls,txt,pre){
+  var s=document.createElement(cls==="eq"?"span":(cls==="del"?"del":"ins"));
+  s.textContent=txt;out.appendChild(s);
+  out.appendChild(document.createTextNode(sep));
+ }
+ while(k<ops.length){
+  if(ops[k][0]==="="){eq++;put("eq",rb[ops[k][2]]);k++;continue;}
+  var d=[],a2=[];
+  while(k<ops.length&&ops[k][0]!=="="){if(ops[k][0]==="-")d.push(ops[k][1]);else a2.push(ops[k][2]);k++;}
+  var r=Math.min(d.length,a2.length);rep+=r;del+=d.length-r;ins+=a2.length-r;
+  d.forEach(function(ix){put("del",ra[ix]);});
+  a2.forEach(function(ix){put("ins",rb[ix]);});
+ }
+ var N=ra.length,M=rb.length,wer=N?((rep+del+ins)/N*100):0,sim=(N+M)?(2*eq/(N+M)*100):100;
+ var st=[[t.sA,N],[t.sB,M],[t.sEq,eq],[t.sDel,del+rep],[t.sIns,ins+rep],[t.sRep,rep],[t.sWer,wer.toFixed(1)+"%"],[t.sSim,sim.toFixed(1)+"%"]];
+ var box=$("stats");box.textContent="";
+ st.forEach(function(x){var c=document.createElement("div");c.className="st";var b=document.createElement("b");b.textContent=x[1];var s=document.createElement("small");s.textContent=x[0];c.appendChild(b);c.appendChild(s);box.appendChild(c);});
+ $("res").style.display="block";$("copy").disabled=false;
+ last=st.map(function(x){return x[0]+": "+x[1];}).join("\n");
+ if(!del&&!ins&&!rep)show(t.identical,false);
+ $("res").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function readFile(f,target){
+ var fr=new FileReader();
+ fr.onload=function(){$(target).value=String(fr.result||"");};
+ fr.onerror=function(){show(T[L].errFile,true);};
+ fr.readAsText(f,"UTF-8");
+}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"مقارنة النصوص: الفرق بين نصّين أو تفريغين | Sayvoi":"Text Diff Checker: Compare Two Texts | Sayvoi";
+}
+$("fa").addEventListener("click",function(){$("fileA").click();});
+$("fb").addEventListener("click",function(){$("fileB").click();});
+$("fileA").addEventListener("change",function(){if(this.files[0])readFile(this.files[0],"ta");this.value="";});
+$("fileB").addEventListener("change",function(){if(this.files[0])readFile(this.files[0],"tb");this.value="";});
+$("go").addEventListener("click",run);
+$("ex").addEventListener("click",function(){$("ta").value=T[L].ex1;$("tb").value=T[L].ex2;run();});
+$("swap").addEventListener("click",function(){var x=$("ta").value;$("ta").value=$("tb").value;$("tb").value=x;if($("res").style.display==="block")run();});
+$("clr").addEventListener("click",function(){$("ta").value="";$("tb").value="";$("res").style.display="none";$("msg").style.display="none";$("copy").disabled=true;last=null;});
+$("copy").addEventListener("click",function(){
+ if(!last)return;
+ var done=function(){show(T[L].copied,false);};
+ try{navigator.clipboard.writeText(last).then(done,function(){});}catch(e){var x=document.createElement("textarea");x.value=last;document.body.appendChild(x);x.select();try{document.execCommand("copy");done();}catch(e2){}document.body.removeChild(x);}
+});
+["oCase","oPunct","oDia","oAr","oWs","unit"].forEach(function(id){$(id).addEventListener("change",function(){if($("res").style.display==="block")run();});});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();if($("res").style.display==="block")run();});
+applyLang();
+})();
+</script>
+</body>
+</html>
