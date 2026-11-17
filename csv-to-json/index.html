@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Convert CSV to JSON in your browser. Auto-detects the separator, handles quotes and Arabic text. Free, and nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/csv-to-json/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="CSV to JSON Converter: Free and Private">
+<meta property="og:description" content="Convert CSV to clean JSON in one click. Free, in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://convert.sayvoi.com/csv-to-json/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>CSV to JSON Converter | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0 14px}
+.st{border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:10px 12px;text-align:center}
+.st b{display:block;font-size:22px}.st small{opacity:.75}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lg{padding:3px 10px;border-radius:99px;font-size:13px}
+.lg.del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through}
+.lg.ins{background:rgba(34,197,94,.2);color:#166534}
+.lg.eq{background:rgba(128,128,128,.15)}
+.diffout{white-space:pre-wrap;line-height:2;font-size:18px;border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:14px;word-break:break-word}
+.diffout del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through;border-radius:4px;padding:0 2px}
+.diffout ins{background:rgba(34,197,94,.22);color:#166534;text-decoration:none;border-radius:4px;padding:0 2px}
+@media (prefers-color-scheme:dark){.lg.del,.diffout del{color:#fca5a5}.lg.ins,.diffout ins{color:#86efac}}</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<h2 data-i="hIn"></h2>
+<label for="ta" data-i="lA"></label>
+<textarea id="ta" rows="9" dir="auto" spellcheck="false" data-p="phA"></textarea>
+<div class="btns"><button type="button" class="b sec" id="fa" data-i="load"></button><input type="file" id="fileA" accept=".csv,.tsv,.txt,text/csv,text/plain" hidden><button type="button" class="b sec" id="ex" data-i="ex"></button><button type="button" class="b sec" id="clr" data-i="clr"></button></div>
+
+<h2 data-i="hOpt"></h2>
+<div class="row">
+ <div class="col"><label for="delim" data-i="oDelim"></label><select id="delim"><option value="auto" data-k="dAuto" selected></option><option value="," data-k="dComma"></option><option value=";" data-k="dSemi"></option><option value="&#9;" data-k="dTab"></option><option value="|" data-k="dPipe"></option></select></div>
+ <div class="col"><label for="fmt" data-i="oFormat"></label><select id="fmt"><option value="obj" data-k="fObj" selected></option><option value="arr" data-k="fArr"></option></select></div>
+ <div class="col"><label for="ind" data-i="oIndent"></label><select id="ind"><option value="2" data-k="i2" selected></option><option value="4" data-k="i4"></option><option value="0" data-k="iMin"></option></select></div>
+</div>
+<label style="font-weight:400;display:block;margin-top:8px"><input type="checkbox" id="oHead" checked> <span data-i="oHeadT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oTrim" checked> <span data-i="oTrimT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oNum" checked> <span data-i="oNumT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oBool" checked> <span data-i="oBoolT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oNull"> <span data-i="oNullT"></span></label>
+
+<div class="btns"><button type="button" class="b" id="go" data-i="go"></button></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div class="pv" id="res" style="display:none">
+ <h3 style="margin-top:0" data-i="rH"></h3>
+ <div id="stats" class="stats"></div>
+ <textarea id="out" rows="14" dir="ltr" spellcheck="false" readonly></textarea>
+ <div class="btns"><button type="button" class="b sec" id="copy" data-i="copy"></button><button type="button" class="b sec" id="dl" data-i="dl"></button></div>
+ <h3 data-i="pvH"></h3>
+ <div class="tbl"><table id="pvt"></table></div>
+</div>
+
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi CSV to JSON guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"CSV to JSON Converter: Free and Private",
+ lead:"Paste a CSV or load a file and get clean JSON in one click. It handles quotes, commas inside values and line breaks inside values, and can detect the separator for you. Everything runs on your device and nothing is uploaded.",
+ hIn:"1. Your CSV",lA:"CSV data",phA:"Paste your CSV here, with the header row first",
+ load:"Load a CSV file",ex:"Load an example",clr:"Clear",
+ hOpt:"2. Options",oDelim:"Separator",dAuto:"Detect automatically",dComma:"Comma ( , )",dSemi:"Semicolon ( ; )",dTab:"Tab",dPipe:"Pipe ( | )",
+ oFormat:"JSON shape",fObj:"List of objects",fArr:"List of lists",oIndent:"Spacing",i2:"2 spaces",i4:"4 spaces",iMin:"Minified (one line)",
+ oHeadT:"The first row is the header (the names of the columns)",oTrimT:"Trim spaces around values",oNumT:"Turn numbers into JSON numbers",oBoolT:"Turn true and false into JSON booleans",oNullT:"Turn empty values into null",
+ go:"Convert",copy:"Copy the JSON",dl:"Download .json",
+ rH:"Result",sRows:"Rows",sCols:"Columns",sDelim:"Separator",sRag:"Uneven rows",
+ pvH:"Preview of the first rows",
+ dn:{",":"Comma",";":"Semicolon","\t":"Tab","|":"Pipe"},
+ errEmpty:"Paste or load your CSV first.",errParse:"The CSV has a quote that is never closed. Check the quotes.",errFile:"Could not read this file.",
+ copied:"JSON copied.",
+ vidH:"Watch: how to convert CSV to JSON",vidP:"A short video guide (under one minute). The steps are written on the screen.",
+ h2b:"Notes",
+ n1:"Choose List of objects to get one object per row, using the header as the keys. Choose List of lists to keep the rows as plain arrays.",
+ n2:"If a value contains the separator, it must be inside double quotes. A double quote inside a value is written as two double quotes.",
+ n3:"Numbers with a leading zero, such as 007 or phone numbers, and very long numbers stay as text so that nothing is lost.",
+ n4:"Your data stays on your device and is not uploaded.",
+ back:"Back to the tools",
+ ex1:"name,age,city,active\nAmal,29,Cairo,true\nOmar,34,\"Alexandria, Egypt\",false\nSara,,Giza,true"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"تحويل CSV إلى JSON: مجانًا وبخصوصية",
+ lead:"الصق ملف CSV أو حمّله واحصل على JSON نظيف بضغطة واحدة. تتعامل الأداة مع علامات الاقتباس والفواصل داخل القيم والأسطر داخل القيم، ويمكنها اكتشاف الفاصل بنفسها. كل شيء يتم على جهازك ولا يُرفع أي شيء.",
+ hIn:"1. ملف CSV",lA:"بيانات CSV",phA:"الصق بيانات CSV هنا، وصف العناوين أولًا",
+ load:"حمّل ملف CSV",ex:"حمّل مثالًا",clr:"مسح",
+ hOpt:"2. الخيارات",oDelim:"الفاصل",dAuto:"اكتشاف تلقائي",dComma:"فاصلة ( , )",dSemi:"فاصلة منقوطة ( ; )",dTab:"Tab",dPipe:"خط عمودي ( | )",
+ oFormat:"شكل JSON",fObj:"قائمة كائنات",fArr:"قائمة قوائم",oIndent:"التنسيق",i2:"مسافتان",i4:"4 مسافات",iMin:"مضغوط (سطر واحد)",
+ oHeadT:"الصف الأول هو العناوين (أسماء الأعمدة)",oTrimT:"احذف المسافات حول القيم",oNumT:"حوّل الأرقام إلى أرقام JSON",oBoolT:"حوّل true وfalse إلى قيم منطقية",oNullT:"حوّل القيم الفارغة إلى null",
+ go:"حوّل",copy:"انسخ JSON",dl:"نزّل ملف .json",
+ rH:"النتيجة",sRows:"الصفوف",sCols:"الأعمدة",sDelim:"الفاصل",sRag:"صفوف غير متساوية",
+ pvH:"معاينة أول الصفوف",
+ dn:{",":"فاصلة",";":"فاصلة منقوطة","\t":"Tab","|":"خط عمودي"},
+ errEmpty:"الصق ملف CSV أو حمّله أولًا.",errParse:"في الملف علامة اقتباس لم تُغلق. راجع علامات الاقتباس.",errFile:"تعذّرت قراءة هذا الملف.",
+ copied:"تم نسخ JSON.",
+ vidH:"شاهد: كيف تحوّل CSV إلى JSON",vidP:"شرح مصوّر قصير (أقل من دقيقة). الخطوات مكتوبة على الشاشة.",
+ h2b:"ملاحظات",
+ n1:"اختر قائمة كائنات للحصول على كائن لكل صف، وتكون العناوين هي المفاتيح. واختر قائمة قوائم لتبقى الصفوف مصفوفات عادية.",
+ n2:"إذا كانت القيمة تحتوي على الفاصل فيجب أن تكون بين علامتي اقتباس مزدوجتين. وعلامة الاقتباس داخل القيمة تُكتب مرتين.",
+ n3:"الأرقام التي تبدأ بصفر مثل 007 وأرقام الهواتف، والأرقام الطويلة جدًا، تبقى نصًا حتى لا يضيع منها شيء.",
+ n4:"بياناتك تبقى على جهازك ولا تُرفع.",
+ back:"العودة إلى الأدوات",
+ ex1:"الاسم,العمر,المدينة,نشط\nأمل,29,القاهرة,true\nعمر,34,\"الإسكندرية, مصر\",false\nسارة,,الجيزة,true"}
+};
+/* ---------- app ---------- */
+var fname="data";var VID={en:"",ar:""};
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function detect(text){
+ var cands=[",",";","\t","|"],best=",",bc=-1;
+ var line="",q=false,i,ch;
+ for(i=0;i<text.length;i++){ch=text[i];if(ch==='"')q=!q;if(!q&&(ch==="\n"||ch==="\r"))break;line+=ch;}
+ cands.forEach(function(c){var n=0,qq=false;for(var k=0;k<line.length;k++){if(line[k]==='"')qq=!qq;else if(!qq&&line[k]===c)n++;}if(n>bc){bc=n;best=c;}});
+ return best;
+}
+function parse(text,d){
+ var rows=[],row=[],f="",q=false,i=0,n=text.length,ch;
+ if(text.charCodeAt(0)===0xFEFF)i=1;
+ var any=false;
+ for(;i<n;i++){
+  ch=text[i];
+  if(q){
+   if(ch==='"'){if(text[i+1]==='"'){f+='"';i++;}else q=false;}
+   else f+=ch;
+  }else if(ch==='"'&&f===""){q=true;any=true;}
+  else if(ch===d){row.push(f);f="";any=true;}
+  else if(ch==="\n"||ch==="\r"){
+   if(ch==="\r"&&text[i+1]==="\n")i++;
+   row.push(f);f="";
+   if(!(row.length===1&&row[0]===""&&!any))rows.push(row);
+   row=[];any=false;
+  }else{f+=ch;any=true;}
+ }
+ if(q)return null;
+ if(f!==""||row.length||any){row.push(f);rows.push(row);}
+ return rows;
+}
+var NUM=/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/;
+function conv(v){
+ if($("oTrim").checked)v=v.trim();
+ if(v===""&&$("oNull").checked)return null;
+ if($("oNum").checked&&NUM.test(v)&&v.replace(/[^0-9]/g,"").length<=15)return Number(v);
+ if($("oBool").checked){var l=v.toLowerCase();if(l==="true")return true;if(l==="false")return false;}
+ return v;
+}
+function run(){
+ var t=T[L],text=$("ta").value;
+ if(!text.trim()){show(t.errEmpty,true);return;}
+ var d=$("delim").value;if(d==="auto")d=detect(text);
+ var rows=parse(text,d);
+ if(!rows){show(t.errParse,true);return;}
+ if(!rows.length){show(t.errEmpty,true);return;}
+ var head=$("oHead").checked,cols=0,rag=0;
+ rows.forEach(function(r){if(r.length>cols)cols=r.length;});
+ var keys=[],start=0,i,j;
+ if(head){
+  var seen={};
+  for(j=0;j<cols;j++){
+   var k=j<rows[0].length?rows[0][j].trim():"";
+   if(k==="")k="column_"+(j+1);
+   if(seen[k]){seen[k]++;k=k+"_"+seen[k];}else seen[k]=1;
+   keys.push(k);
+  }
+  start=1;
+ }else{for(j=0;j<cols;j++)keys.push("column_"+(j+1));}
+ var data=[];
+ for(i=start;i<rows.length;i++){
+  var r=rows[i];if(r.length!==cols)rag++;
+  var vals=[];for(j=0;j<cols;j++)vals.push(conv(j<r.length?r[j]:""));
+  if($("fmt").value==="arr")data.push(vals);
+  else{var o={};for(j=0;j<cols;j++)o[keys[j]]=vals[j];data.push(o);}
+ }
+ var ind=parseInt($("ind").value,10);
+ $("out").value=ind?JSON.stringify(data,null,ind):JSON.stringify(data);
+ $("msg").style.display="none";
+ var st=[[t.sRows,data.length],[t.sCols,cols],[t.sDelim,t.dn[d]||d]];
+ if(rag)st.push([t.sRag,rag]);
+ var box=$("stats");box.textContent="";
+ st.forEach(function(x){var c=document.createElement("div");c.className="st";var b=document.createElement("b");b.textContent=x[1];var s=document.createElement("small");s.textContent=x[0];c.appendChild(b);c.appendChild(s);box.appendChild(c);});
+ var tb=$("pvt");tb.textContent="";
+ var th=document.createElement("tr");keys.forEach(function(k){var e=document.createElement("th");e.textContent=k;th.appendChild(e);});tb.appendChild(th);
+ for(i=start;i<rows.length&&i<start+10;i++){
+  var tr=document.createElement("tr");
+  for(j=0;j<cols;j++){var td=document.createElement("td");td.textContent=j<rows[i].length?($("oTrim").checked?rows[i][j].trim():rows[i][j]):"";tr.appendChild(td);}
+  tb.appendChild(tr);
+ }
+ $("res").style.display="block";
+ $("res").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function readFile(f){
+ var fr=new FileReader();
+ fr.onload=function(){$("ta").value=String(fr.result||"");fname=f.name.replace(/\.[^.]*$/,"")||"data";};
+ fr.onerror=function(){show(T[L].errFile,true);};
+ fr.readAsText(f,"UTF-8");
+}
+function applyLang(){
+ var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"تحويل CSV إلى JSON مجانًا | Sayvoi":"CSV to JSON Converter: Free and Private | Sayvoi";
+}
+$("fa").addEventListener("click",function(){$("fileA").click();});
+$("fileA").addEventListener("change",function(){if(this.files[0])readFile(this.files[0]);this.value="";});
+$("go").addEventListener("click",run);
+$("ex").addEventListener("click",function(){$("ta").value=T[L].ex1;run();});
+$("clr").addEventListener("click",function(){$("ta").value="";$("res").style.display="none";$("msg").style.display="none";});
+$("copy").addEventListener("click",function(){
+ var v=$("out").value;if(!v)return;
+ var done=function(){show(T[L].copied,false);};
+ try{navigator.clipboard.writeText(v).then(done,function(){});}catch(e){$("out").select();try{document.execCommand("copy");done();}catch(e2){}}
+});
+$("dl").addEventListener("click",function(){
+ var v=$("out").value;if(!v)return;
+ var u=URL.createObjectURL(new Blob([v],{type:"application/json"})),a=document.createElement("a");
+ a.href=u;a.download=fname+".json";document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},1000);
+});
+["delim","fmt","ind","oHead","oTrim","oNum","oBool","oNull"].forEach(function(id){$(id).addEventListener("change",function(){if($("res").style.display==="block")run();});});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();if($("res").style.display==="block")run();});
+applyLang();
+})();
+</script>
+</body>
+</html>

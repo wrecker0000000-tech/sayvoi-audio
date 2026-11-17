@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Convert CSV to JSON for Free, With Examples | Sayvoi</title>
+<meta name="description" content="Turn a CSV file into clean JSON in your browser. Learn the two JSON shapes, how separators work, and which options to choose. Free, and nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/convert-csv-to-json-free.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/convert-csv-to-json-free.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/convert-csv-to-json-free.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="How to Convert CSV to JSON for Free, With Examples">
+<meta property="og:description" content="Turn a CSV file into clean JSON in your browser. Learn the two JSON shapes, how separators work, and which options to choose. Free, and nothing is uploaded.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/convert-csv-to-json-free.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How to Convert CSV to JSON for Free, With Examples", "description": "Turn a CSV file into clean JSON in your browser. Learn the two JSON shapes, how separators work, and which options to choose. Free, and nothing is uploaded.", "datePublished": "2026-11-17", "dateModified": "2026-11-17", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/convert-csv-to-json-free.html"}</script>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+<style>pre{direction:ltr;text-align:left;overflow-x:auto;padding:12px 14px;border-radius:12px;background:rgba(128,128,128,.12);border:1px solid rgba(128,128,128,.3);font-size:14px;line-height:1.6;max-width:100%}code{direction:ltr;unicode-bidi:embed}</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a><a href="/audio-speed/">Speed changer</a><a href="/script-video/">Script to video</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/" class="on">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>How to Convert CSV to JSON for Free, With Examples</h1>
+<p class="meta">Last updated: November 17, 2026</p>
+
+<p>CSV is the simple table format that spreadsheets export. JSON is the format that apps, websites and APIs read. Converting one to the other is a common job, and you do not need to write code or upload your data to do it.</p>
+<h2>A small example</h2>
+<p>This CSV has a header row and two data rows:</p>
+<pre>name,age,city
+Amal,29,Cairo
+Omar,34,Giza</pre>
+<p>As a <b>list of objects</b>, the JSON is:</p>
+<pre>[
+  { "name": "Amal", "age": 29, "city": "Cairo" },
+  { "name": "Omar", "age": 34, "city": "Giza" }
+]</pre>
+<p>As a <b>list of lists</b>, it is:</p>
+<pre>[
+  ["Amal", 29, "Cairo"],
+  ["Omar", 34, "Giza"]
+]</pre>
+<h2>Step by step</h2>
+<ol>
+<li>Paste your CSV, or load the file.</li>
+<li>Leave the separator on automatic, or choose it yourself.</li>
+<li>Choose the JSON shape: objects when you want named fields, lists when you want plain rows.</li>
+<li>Choose the options, then press Convert.</li>
+<li>Copy the JSON, or download it as a .json file.</li>
+</ol>
+<h2>Which options to choose</h2>
+<ul>
+<li><b>The first row is the header</b>: the names of the columns become the keys of each object.</li>
+<li><b>Trim spaces</b>: removes spaces around each value.</li>
+<li><b>Turn numbers into numbers</b>: 29 becomes a number, not the text "29". Values such as 007 stay as text.</li>
+<li><b>Turn true and false into booleans</b>: useful for yes and no columns.</li>
+<li><b>Turn empty values into null</b>: so that a missing value is clear in the JSON.</li>
+</ul>
+<h2>Good to know</h2>
+<p>The tool runs on your device and your data is not uploaded. It handles commas inside quoted values, line breaks inside values, and files with Arabic text. If something looks wrong, read <a href="fix-common-csv-problems.html">common CSV problems and how to fix them</a>.</p>
+
+<div class="cta"><p>Convert a CSV file to clean JSON, with options for separators and number types. Free in your browser.</p><a class="btn" href="/csv-to-json/">Open the CSV to JSON converter</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="fix-common-csv-problems.html"><b>Common CSV Problems and How to Fix Them</b><span>Broken columns, commas inside text, strange Arabic letters and lost leading zeros. The most common CSV problems and simple fixes.</span></a><a class="card" href="compare-two-transcripts-find-differences.html"><b>How to Compare Two Transcripts and Find the Differences</b><span>Compare two versions of a transcript or text and see exactly what was added, removed or changed. A simple guide with options for Arabic text, free in your browser.</span></a><a class="card" href="word-error-rate-wer-explained.html"><b>What Is Word Error Rate (WER) and How Do You Calculate It?</b><span>Word error rate measures how far a transcript is from the correct text. Learn the formula, a worked example, and how to get it free in your browser.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>
