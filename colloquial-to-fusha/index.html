@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Convert Egyptian colloquial Arabic to Standard Arabic. Test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>Egyptian to Fusha | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.cfout{white-space:pre-wrap;line-height:2.1;font-size:19px;border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:14px;word-break:break-word}.cfout mark.cv{background:rgba(59,130,246,.18);color:#1d4ed8;border-radius:5px;padding:0 3px}.cfout mark.amb{border-bottom:2px dotted #1d4ed8;cursor:pointer}.hintp{font-size:14px;opacity:.8}
+@media (prefers-color-scheme:dark){.cfout mark.cv{color:#93c5fd}.cfout mark.amb{border-color:#93c5fd}}
+.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0 14px}
+.st{border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:10px 12px;text-align:center}
+.st b{display:block;font-size:22px}.st small{opacity:.75}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lg{padding:3px 10px;border-radius:99px;font-size:13px}
+.lg.del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through}
+.lg.ins{background:rgba(34,197,94,.2);color:#166534}
+.lg.eq{background:rgba(128,128,128,.15)}
+.diffout{white-space:pre-wrap;line-height:2;font-size:18px;border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:14px;word-break:break-word}
+.diffout del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through;border-radius:4px;padding:0 2px}
+.diffout ins{background:rgba(34,197,94,.22);color:#166534;text-decoration:none;border-radius:4px;padding:0 2px}
+@media (prefers-color-scheme:dark){.lg.del,.diffout del{color:#fca5a5}.lg.ins,.diffout ins{color:#86efac}}</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<h2 data-i="hIn"></h2>
+<label for="ta" data-i="lA"></label>
+<textarea id="ta" rows="8" dir="rtl" spellcheck="false" data-p="phA"></textarea>
+<div class="btns"><button type="button" class="b" id="go" data-i="go"></button><button type="button" class="b sec" id="ex" data-i="ex"></button><button type="button" class="b sec" id="clr" data-i="clr"></button></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div class="pv" id="res" style="display:none">
+ <h3 style="margin-top:0" data-i="rH"></h3>
+ <div id="stats" class="stats"></div>
+ <p id="hint" class="hintp" data-i="hint"></p>
+ <div id="out" class="cfout" dir="rtl"></div>
+ <div class="btns"><button type="button" class="b" id="copy" data-i="copy"></button></div>
+</div>
+
+<h2 data-i="hMy"></h2>
+<p data-i="myP"></p>
+<textarea id="my" rows="6" dir="rtl" spellcheck="false" data-p="phMy"></textarea>
+<div class="btns"><button type="button" class="b" id="sv" data-i="sv"></button><button type="button" class="b sec" id="exp" data-i="exp"></button><button type="button" class="b sec" id="imp" data-i="imp"></button><input type="file" id="fileI" accept=".txt,text/plain" hidden></div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Egyptian Arabic to Standard Arabic (Fusha) Converter",
+ lead:"Paste a text written in Egyptian colloquial Arabic and get it back in Modern Standard Arabic. It uses a built-in dictionary and verb rules that run on your device, and you can add your own words. Nothing is uploaded. It is a helper: always read the result before you use it.",
+ hIn:"1. Your text",lA:"Text in Egyptian colloquial Arabic",phA:"الصق النص بالعامية المصرية هنا",
+ go:"Convert to Fusha",ex:"Load an example",clr:"Clear",
+ rH:"Result",sW:"Words",sC:"Words changed",
+ hint:"Blue words were changed. A word with a dotted line has other options: click it to switch.",
+ copy:"Copy the text",copied:"Text copied.",errEmpty:"Paste your text first.",
+ hMy:"2. My own words",myP:"Add words the built-in dictionary does not know. One per line, written as: colloquial = fusha. You can give more than one option with a vertical bar. Your words are saved in this browser only.",
+ phMy:"مثال:\nبيتفرج = يشاهد\nعايزين = نريد | يريدون",
+ sv:"Save my words",exp:"Export my words",imp:"Import a file",saved:"Saved. Your words will be used now.",
+ h2b:"Notes",
+ n1:"This version covers Egyptian Arabic. Other dialects can be added later.",
+ n2:"It replaces words and common verb forms, and moves هذا before the noun. It does not fix all the grammar of the sentence, so review the result.",
+ n3:"Words it does not know stay as they are. Add them in My own words and they will be converted next time.",
+ n4:"Your texts and your words stay on your device and are not uploaded.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"تحويل العامية المصرية إلى الفصحى",
+ lead:"الصق نصًا مكتوبًا بالعامية المصرية واحصل عليه بالفصحى. تستخدم الأداة قاموسًا مدمجًا وقواعد للأفعال تعمل على جهازك، ويمكنك إضافة كلماتك الخاصة. لا يُرفع أي شيء. هي أداة مساعدة: اقرأ النتيجة دائمًا قبل استخدامها.",
+ hIn:"1. نصّك",lA:"النص بالعامية المصرية",phA:"الصق النص بالعامية المصرية هنا",
+ go:"حوّل إلى الفصحى",ex:"حمّل مثالًا",clr:"مسح",
+ rH:"النتيجة",sW:"الكلمات",sC:"كلمات تغيّرت",
+ hint:"الكلمات الزرقاء تغيّرت. والكلمة التي تحتها خط منقّط لها خيارات أخرى: اضغط عليها للتبديل.",
+ copy:"انسخ النص",copied:"تم نسخ النص.",errEmpty:"الصق نصّك أولًا.",
+ hMy:"2. كلماتي الخاصة",myP:"أضف الكلمات التي لا يعرفها القاموس المدمج. كلمة في كل سطر بهذا الشكل: العامية = الفصحى. ويمكنك وضع أكثر من خيار بخط عمودي. تُحفظ كلماتك في هذا المتصفح فقط.",
+ phMy:"مثال:\nبيتفرج = يشاهد\nعايزين = نريد | يريدون",
+ sv:"احفظ كلماتي",exp:"صدّر كلماتي",imp:"استورد ملفًا",saved:"تم الحفظ. ستُستخدم كلماتك الآن.",
+ h2b:"ملاحظات",
+ n1:"هذه النسخة تغطي العامية المصرية. ويمكن إضافة لهجات أخرى لاحقًا.",
+ n2:"تستبدل الكلمات وصيغ الأفعال الشائعة، وتقدّم «هذا» قبل الاسم. ولا تصحّح كل قواعد الجملة، فراجع النتيجة.",
+ n3:"الكلمات التي لا تعرفها تبقى كما هي. أضِفها في «كلماتي الخاصة» وستتحوّل في المرة القادمة.",
+ n4:"نصوصك وكلماتك تبقى على جهازك ولا تُرفع.",
+ back:"العودة إلى الأدوات"}
+};
+var EX="انا مش عارف ازاي اروح الشغل النهارده. الكتاب ده مش بتاعي، وهو بيقول انه هيجيب فلوس كتير بكره. احنا عايزين نروح البيت دلوقتي عشان الاكل جاهز، وبعدين هنقعد شوية ونتكلم.";
+/* ---- built-in Egyptian -> MSA dictionary ---- */
+var RAW_D=[
+"انا=أنا","انه=إنه|أنه","انها=إنها|أنها","اني=إني|أني","انك=إنك|أنك","انهم=إنهم|أنهم","اننا=إننا|أننا","مخلصتش=لم أنتهِ","مروحتش=لم أذهب","مشفتش=لم أرَ","مقلتش=لم أقل","معملتش=لم أفعل","مفهمتش=لم أفهم","مكلتش=لم آكل","ملقيتش=لم أجد","منمتش=لم أنم","مرضيتش=لم أرضَ","مجتش=لم تأتِ","مجاش=لم يأتِ","متكلمتش=لم أتحدث","ماتكلمتش=لم أتحدث","انت=أنتَ","انتي=أنتِ","احنا=نحن","انتو=أنتم","انتوا=أنتم","هما=هم","همه=هم",
+"ايه=ماذا|ما","ايه ده=ما هذا","ايه دي=ما هذه","ازاي=كيف","ليه=لماذا","فين=أين","امتي=متى","مين=مَن","كام=كم","انهي=أيّ","انهو=أيّ",
+"ازيك=كيف حالك","ازاي حالك=كيف حالك","عامل ايه=كيف حالك","عاملة ايه=كيف حالكِ","اخبارك ايه=كيف حالك","اخبارك=كيف حالك",
+"ده=هذا","دا=هذا","دي=هذه","دول=هؤلاء","كده=هكذا","كدا=هكذا","كدة=هكذا",
+"دلوقتي=الآن","دلوقت=الآن","دلوقتى=الآن","النهارده=اليوم","النهارضه=اليوم","بكره=غدًا","بكرة=غدًا","امبارح=أمس","اول امبارح=أول أمس",
+"بعدين=لاحقًا|ثم","قبل كده=من قبل","لسه=ما زال|بعدُ","لسا=ما زال","خلاص=انتهى|حسنًا","كمان=أيضًا|كذلك","برضه=أيضًا","برده=أيضًا","برضو=أيضًا",
+"مش=ليس|لا","مفيش=لا يوجد","مافيش=لا يوجد","مفيهوش=لا يوجد فيه","عشان=لأنّ|من أجل","علشان=لأنّ|من أجل","عشان كده=لذلك","علشان كده=لذلك","عشان كدة=لذلك",
+"بس=فقط|لكن","لكن=لكنّ","يعني=أي|بمعنى","طيب=حسنًا","طب=إذن","اه=نعم","ايوه=نعم","ايوة=نعم","أيوه=نعم","لأ=لا","لا=لا","ماشي=حسنًا","تمام=حسنًا|جيد","ياريت=ليت|أتمنى","يلا=هيا","اصل=لأنّ","اهو=ها هو","اهي=ها هي","ادي=ها هو",
+"اوي=جدًا","قوي=جدًا","خالص=تمامًا","اوى=جدًا","جدا=جدًا","كتير=كثير","كتيره=كثيرة","شوية=قليل|قليلًا","شويه=قليل|قليلًا","شوية شوية=شيئًا فشيئًا","حبة=قليل","وحش=سيئ","وحشة=سيئة","حلو=جميل","حلوة=جميلة","حلوه=جميلة","كويس=جيد","كويسة=جيدة","كويسه=جيدة","جامد=قوي|رائع","تعبان=متعب|مريض","تعبانة=متعبة","زهقان=ضجِر","زعلان=غاضب|حزين","زعلانة=غاضبة|حزينة","فرحان=سعيد","فرحانة=سعيدة","مبسوط=سعيد","مبسوطة=سعيدة","خايف=خائف","خايفة=خائفة","جعان=جائع","جعانة=جائعة","عطشان=عطشان","نعسان=ناعس","غلطان=مخطئ","صح=صحيح","غلط=خطأ","كبير=كبير","صغير=صغير","جديد=جديد","قديم=قديم",
+"عايز=أريد","عاوز=أريد","عايزة=تريد|أريد","عاوزة=تريد|أريد","عايزين=نريد|يريدون","عاوزين=نريد|يريدون","نفسي=أتمنى|رغبتي","لازم=يجب|ينبغي","المفروض=يُفترض","ممكن=يمكن|هل يمكن","مش ممكن=لا يمكن","مينفعش=لا يصحّ|لا ينفع","ينفع=يصلح|ينفع","ينفعش=لا يصلح","اكيد=بالتأكيد","طبعا=بالطبع","فعلا=فعلًا","اساسا=أصلًا","اصلا=أصلًا","بالظبط=بالضبط","تقريبا=تقريبًا","غالبا=غالبًا",
+"عارف=أعرف|أعلم","عارفة=أعرف","فاهم=أفهم","فاهمة=أفهم","مش عارف=لا أعرف","مش عارفة=لا أعرف","مش فاهم=لا أفهم","مش فاهمة=لا أفهم","مش عايز=لا أريد","مش عاوز=لا أريد","مش عايزة=لا تريد","مش عاوزة=لا تريد","مش موجود=غير موجود","مش كده=أليس كذلك","ماعرفش=لا أعرف","ماعرفتش=لم أعرف","مافهمتش=لم أفهم","ماروحتش=لم أذهب","ماجاش=لم يأتِ","ماجتش=لم تأتِ","ماقلتش=لم أقل","ماعملتش=لم أفعل","ماشفتش=لم أرَ","مارديتش=لم أردّ","ماكلتش=لم آكل","مااكلتش=لم آكل","معرفش=لا أعرف","معرفتش=لم أعرف",
+"برا=خارج","بره=خارج","جوه=داخل","جوا=داخل","قدام=أمام","ورا=خلف","وراه=خلفه","جنب=بجانب","جمب=بجانب","حوالين=حول","فوق=فوق","تحت=تحت","لحد=حتى|إلى","لغاية=حتى","من غير=بدون|بلا","بدون=بدون","زي=مثل","زي ما=كما","زيي=مثلي","زيك=مثلك","زيه=مثله","زيها=مثلها","زينا=مثلنا","كل يوم=كل يوم","طول اليوم=طوال اليوم","طول الوقت=طوال الوقت","طول عمري=طوال حياتي","اللي=الذي|التي|الذين","اللى=الذي|التي",
+"فين=أين","هنا=هنا","هناك=هناك","هناك=هناك","هنا=هنا",
+"ولد=ولد","عيل=طفل","عيال=أطفال","بنوتة=طفلة","راجل=رجل","رجاله=رجال","ست=امرأة|سيدة","ستات=نساء|سيدات","شاب=شاب","واد=ولد","بت=بنت","جوز=زوج","جوزي=زوجي","مراتي=زوجتي","صاحبي=صديقي","صاحبتي=صديقتي","صحابي=أصدقائي","اخويا=أخي","اختي=أختي","ابويا=أبي","امي=أمي","جدي=جدي","عمي=عمي","خالي=خالي","ربنا=الله","يارب=يا ربّ",
+"شغل=عمل","شغلي=عملي","فلوس=مال|نقود","فلوسي=مالي","كلام=كلام","حاجة=شيء","حاجه=شيء","حاجات=أشياء","حاجتي=شيئي","موضوع=موضوع","مشكلة=مشكلة","مشكله=مشكلة","سؤال=سؤال","ازازة=زجاجة","ازازه=زجاجة","كوباية=كوب","كباية=كوب","طبق=طبق","شنطة=حقيبة","شنطه=حقيبة","موبايل=هاتف","تليفون=هاتف","عربية=سيارة","عربيه=سيارة","اوضة=غرفة","اوضه=غرفة","شباك=نافذة","ترابيزة=طاولة","ترابيزه=طاولة","مطبخ=مطبخ","حمام=حمّام","جزمة=حذاء","جزمه=حذاء","هدوم=ملابس","لبس=ملابس","بوليس=شرطة","عيش=خبز","اكل=طعام|أكل","اكلة=أكلة","مية=ماء|مئة","ميه=ماء|مئة","ميت=مئة","شاي=شاي","دماغ=رأس|عقل","ايد=يد","ايدي=يدي","رجلي=قدمي","بطن=بطن","وشي=وجهي","وش=وجه","صوابع=أصابع","صباع=إصبع","ضهر=ظهر","ضهري=ظهري","سنان=أسنان","دكتور=طبيب","مدرس=معلم","مدرسة=مدرسة","جامعة=جامعة","شارع=شارع","عمارة=بناية","محل=متجر","سوق=سوق","بتاع=خاص بـ","بتاعي=الخاص بي","بتاعك=الخاص بك","بتاعتك=الخاصة بك","بتاعه=الخاص به","بتاعها=الخاص بها","بتاعتي=الخاصة بي","بتاعنا=الخاص بنا","بتاعتنا=الخاصة بنا","بتوع=خاصّة بـ","بتوعي=الخاصة بي","بتوعنا=الخاصة بنا",
+"اتنين=اثنان|اثنين","اتنين=اثنان","تلاتة=ثلاثة","تلات=ثلاث","اربعة=أربعة","ستة=ستة","سبعة=سبعة","تمانية=ثمانية","تمنية=ثمانية","تمان=ثمان","تسعة=تسعة","عشرة=عشرة","حداشر=أحد عشر","اتناشر=اثنا عشر","تلاتاشر=ثلاثة عشر","اربعتاشر=أربعة عشر","خمستاشر=خمسة عشر","ستاشر=ستة عشر","سبعتاشر=سبعة عشر","تمنتاشر=ثمانية عشر","تسعتاشر=تسعة عشر","عشرين=عشرون","تلاتين=ثلاثون","اربعين=أربعون","خمسين=خمسون","ستين=ستون","سبعين=سبعون","تمانين=ثمانون","تسعين=تسعون","تلتمية=ثلاثمئة","ربعمية=أربعمئة","خمسمية=خمسمئة","ستمية=ستمئة","سبعمية=سبعمئة","تمنمية=ثمانمئة","تسعمية=تسعمئة","الف=ألف","ربع=ربع","تلت=ثلث",
+"الصبح=في الصباح|صباحًا","بالليل=ليلًا","بالنهار=نهارًا","الضهر=الظهر","العصر=العصر","المغرب=المغرب","بعد الضهر=بعد الظهر","الاسبوع الجاي=الأسبوع القادم","الشهر الجاي=الشهر القادم","السنة الجاية=السنة القادمة","الاسبوع اللي فات=الأسبوع الماضي","الشهر اللي فات=الشهر الماضي","السنة اللي فاتت=السنة الماضية","كل شوية=كل قليل","دايما=دائمًا","علطول=دائمًا|مباشرة","على طول=مباشرة|دائمًا","ساعات=أحيانًا","احيانا=أحيانًا","مرة=مرة","تاني=مرة أخرى|ثانية","تاني مرة=مرة أخرى","اي حاجة=أي شيء","اي حاجه=أي شيء","اي حد=أي أحد","حد=أحد","حدّ=أحد","كله=كله","كلهم=جميعهم","كل حاجة=كل شيء","كل حاجه=كل شيء","ولا حاجة=لا شيء","ولا حد=لا أحد","ولا=ولا",
+"اتفضل=تفضّل","اتفضلي=تفضّلي","اتفضلوا=تفضّلوا","لو سمحت=من فضلك","لو سمحتي=من فضلكِ","معلش=عذرًا|لا بأس","ما تقلقش=لا تقلق","متقلقش=لا تقلق","ما تخافش=لا تخف","متخافش=لا تخف","حاضر=حاضر|حسنًا","ان شاء الله=إن شاء الله","انشالله=إن شاء الله","ماشاءالله=ما شاء الله","الحمدلله=الحمد لله","شكرا=شكرًا","عفوا=عفوًا","صباح الخير=صباح الخير","مساء الخير=مساء الخير",
+"راح=ذهب","راحوا=ذهبوا","رحت=ذهبتُ","رحنا=ذهبنا","راحت=ذهبت","جه=جاء","جِه=جاء","جيت=جئتُ","جينا=جئنا","جم=جاؤوا","جات=جاءت","جوا=جاؤوا","شاف=رأى","شفت=رأيتُ","شفنا=رأينا","شافوا=رأوا","شافت=رأت","شوفت=رأيتُ","قعد=جلس","قعدت=جلستُ","قعدنا=جلسنا","قعدوا=جلسوا","جاب=أحضر","جبت=أحضرتُ","جبنا=أحضرنا","جابوا=أحضروا","جابت=أحضرت","خد=أخذ","اخد=أخذ","خدت=أخذتُ","خدنا=أخذنا","خدوا=أخذوا","كلت=أكلتُ","كلنا=أكلنا","كلوا=أكلوا","طلع=صعد|خرج","طلعت=صعدتُ|خرجتُ","طلعنا=صعدنا|خرجنا","نزل=نزل","نزلت=نزلتُ","خلص=انتهى","خلصت=انتهيتُ","خلصنا=انتهينا","خلصوا=انتهوا","كلمت=اتصلتُ|كلّمتُ","كلمني=اتصل بي|كلّمني","كلمته=كلّمتُه|اتصلتُ به","فضل=بقي","فضلت=بقيتُ","حط=وضع","حطيت=وضعتُ","حطينا=وضعنا","حطها=وضعها","حطه=وضعه","سابوا=تركوا","ساب=ترك","سبت=تركتُ","سيبت=تركتُ","لقيت=وجدتُ","لقي=وجد","لقينا=وجدنا","بعت=بعتُ","اشتريت=اشتريتُ","اتأخر=تأخّر","اتأخرت=تأخّرتُ","اتعلم=تعلّم","اتعلمت=تعلّمتُ","اتكلم=تحدّث","اتكلمت=تحدّثتُ","اتكلمنا=تحدّثنا","اتفرج=شاهد","اتفرجت=شاهدتُ","اتفرجنا=شاهدنا","اتقابل=تقابل","اتقابلنا=تقابلنا","اتحرك=تحرّك","اتغير=تغيّر","اتغيرت=تغيّرتْ","اتعمل=عُمل","اتكتب=كُتب","اتصلت=اتصلتُ","اتفقنا=اتفقنا","اتفق=اتفق","اتأكدت=تأكدتُ","استنيت=انتظرتُ","استني=انتظر","استنى=انتظر","استنوا=انتظروا","بص=انظر|نظر","بصيت=نظرتُ","فكرت=فكّرتُ","افتكرت=تذكّرتُ","افتكر=تذكّر","نسيت=نسيتُ","زعلت=غضبتُ|حزنتُ","ضحكت=ضحكتُ","عيط=بكى","عيطت=بكيتُ","جريت=ركضتُ","جري=ركض","ذاكرت=درستُ","صحيت=استيقظتُ","صحي=استيقظ","سهرت=سهرتُ","تعبت=تعبتُ","خفت=خفتُ","فرحت=فرحتُ","حسيت=شعرتُ","حس=شعر","عملت=فعلتُ|عملتُ","عملنا=فعلنا","عملوا=فعلوا","عمل=فعل|عمل","قلت=قلتُ","قال=قال","قالوا=قالوا","قالت=قالت","سمعت=سمعتُ","فهمت=فهمتُ","عرفت=عرفتُ","كتبت=كتبتُ","فتحت=فتحتُ","قفلت=أغلقتُ","قفل=أغلق","وصلت=وصلتُ","رجعت=رجعتُ","رجعنا=رجعنا","نمت=نمتُ","شربت=شربتُ","اكلت=أكلتُ","مشيت=مشيتُ","مشينا=مشينا","دخلت=دخلتُ","خرجت=خرجتُ","سألت=سألتُ","رديت=رددتُ","حبيت=أحببتُ","كرهت=كرهتُ",
+"روح=اذهب","شوف=انظر","شوفي=انظري","قول=قل","قولي=قولي","خلي=اجعل|دع","خليك=ابقَ","خليكي=ابقَي","سيب=اترك","سيبه=اتركه","هات=أحضر|هاتِ","هاتي=أحضري","خد=خذ","خدي=خذي","اقفل=أغلق","استنى=انتظر","تعبتني=أتعبتني","متروحش=لا تذهب","ماتروحش=لا تذهب","متعملش=لا تفعل","ماتعملش=لا تفعل","متقولش=لا تقل","ماتقولش=لا تقل","متنساش=لا تنسَ","ماتنساش=لا تنسَ","متتأخرش=لا تتأخر","ماتتأخرش=لا تتأخر","متخليش=لا تجعل","ماتخليش=لا تجعل","متزعلش=لا تغضب","ماتزعلش=لا تغضب"
+];
+var RAW_V=[
+"اكل=أكل","اخد=أخذ","روح=ذهب","قعد=جلس","جيب=جلب|حضر","جي=أتي","يجي=أتي","شوف=رى","ادي=عطي","قول=قول","عمل=فعل|عمل","قفل=غلق","طلع=صعد|خرج","خلص=نتهي","كمل=واصل|كمل","تكلم=تحدث","تفرج=شاهد","خلي=جعل","حط=ضع","سيب=ترك","لاقي=جد","بقي=كون|صبح","استني=نتظر","ستني=نتظر","بص=نظر","فتكر=تذكر","حس=شعر","رغي=ثرثر","زعل=غضب|حزن","عيط=بكي","شتغل=عمل","جري=ركض","ذاكر=درس","صحي=ستيقظ","وصل=صل","عدي=مر|عبر","كلم=تصل","اشتري=شتري","شتري=شتري","بيع=بيع","نزل=نزل","فتح=فتح","كتب=كتب","سمع=سمع","فهم=فهم","عرف=عرف","حب=حب","شرب=شرب","رجع=رجع","دخل=دخل","خرج=خرج","مسك=مسك","دفع=دفع","لعب=لعب","سافر=سافر","ساعد=ساعد","حاول=حاول","قدر=قدر","نام=نام","ضحك=ضحك","خاف=خاف","فرح=فرح","تعب=تعب","سهر=سهر","رد=رد","سال=سال","قابل=قابل","تعلم=تعلم","اتعلم=تعلم","اتكلم=تحدث","اتفرج=شاهد","اتفق=تفق","اتاكد=تأكد","تاكد=تأكد","افتكر=تذكر","احتاج=حتاج","حتاج=حتاج","كره=كره","فطر=فطر","نسي=نسي","مشي=مشي"
+];
+/* ---------- app ---------- */
+var D={},V={},toks=[],MYKEY="sayvoi_cf_my";
+function nk(s){return s.replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه");}
+function addTo(map,k,alts,front){
+ k=nk(k.trim());if(!k)return;
+ var cur=map[k]||[],out=front?alts.concat(cur):cur.concat(alts),seen={},r=[];
+ out.forEach(function(a){if(!seen[a]){seen[a]=1;r.push(a);}});
+ map[k]=r;
+}
+function loadRaw(list,map){list.forEach(function(l){var i=l.indexOf("=");if(i<1)return;addTo(map,l.slice(0,i),l.slice(i+1).split("|").map(function(x){return x.trim();}).filter(Boolean),false);});}
+loadRaw(RAW_D,D);loadRaw(RAW_V,V);
+var MY={};
+function loadMy(){
+ MY={};var t="";try{t=localStorage.getItem(MYKEY)||"";}catch(e){}
+ $("my").value=t;
+ t.split("\n").forEach(function(l){var i=l.indexOf("=");if(i<1)return;var a=l.slice(i+1).split("|").map(function(x){return x.trim();}).filter(Boolean);if(a.length)MY[nk(l.slice(0,i).trim())]=a;});
+}
+function lookup(k){return MY[k]||D[k]||null;}
+var ENCL=["ها","هم","ه","ني","نا","ك","كم",""];
+function form(P,stem,kind){
+ var e=/[يى]$/.test(stem),core=e?stem.slice(0,-1):stem;
+ if(kind==="pl")return P+core+"ون";
+ if(kind==="fem")return "ت"+core+"ين";
+ if(P==="أ"&&stem.charAt(0)==="أ")return "آ"+stem.slice(1);
+ return P+stem;
+}
+function parseVerb(n){
+ var Ts=["ب","ه","ح",""],ti,pi,ei;
+ for(ti=0;ti<Ts.length;ti++){
+  var T=Ts[ti];if(T&&n.indexOf(T)!==0)continue;
+  var rest=n.slice(T.length);if(rest.length<2)continue;
+  var cands=[];
+  ["ي","ت","ن"].forEach(function(P){if(rest.charAt(0)===P)cands.push({P:P,r:rest.slice(1)});});
+  if(T)cands.push({P:"أ",r:rest});
+  else if(rest.charAt(0)==="ا")cands.push({P:"أ",r:rest.slice(1)});
+  for(pi=0;pi<cands.length;pi++){
+   var c=cands[pi];
+   for(ei=0;ei<ENCL.length;ei++){
+    var e=ENCL[ei];if(e&&c.r.length<=e.length+1)continue;
+    if(e&&c.r.slice(-e.length)!==e)continue;
+    var core=e?c.r.slice(0,-e.length):c.r,kinds=[["",core]];
+    if(/وا$/.test(core))kinds.push(["pl",core.slice(0,-2)]);
+    if(c.P==="ت"&&/ي$/.test(core))kinds.push(["fem",core.slice(0,-1)]);
+    for(var ki=0;ki<kinds.length;ki++){
+     var st=V[kinds[ki][1]];if(!st)continue;
+     var enc=e;
+     var alts=st.map(function(s){
+      if(enc&&/[يى]$/.test(s))return null;
+      return form(c.P,s,kinds[ki][0])+enc;
+     }).filter(Boolean);
+     if(!alts.length)continue;
+     return {T:T,alts:alts};
+    }
+   }
+  }
+ }
+ return null;
+}
+function addDia(s){return s;}
+var AR="[\\u0621-\\u065F\\u0670-\\u06D3]";
+var WANT={"أريد":1,"نريد":1,"تريد":1,"يريد":1,"يريدون":1,"يجب":1,"ينبغي":1,"يمكن":1,"أستطيع":1};
+function resolve(n,depth){
+ var a=lookup(n);if(a)return {alts:a,pre:"",v:""};
+ var pv=parseVerb(n);if(pv)return {alts:pv.alts,pre:"",v:pv.T,isV:true};
+ if(depth<2&&n.length>2&&(n.charAt(0)==="و"||n.charAt(0)==="ف")){
+  var r=resolve(n.slice(1),depth+1);if(r)return {alts:r.alts,pre:n.charAt(0)+r.pre,v:r.v,isV:r.isV};
+ }
+ if(n.length>3&&n.indexOf("ال")===0){var a2=lookup(n.slice(2));if(a2)return {alts:a2,pre:"ال",v:""};}
+ return null;
+}
+function conv(text){
+ var rx=new RegExp(AR+"+|[^\\u0621-\\u065F\\u0670-\\u06D3]+","g"),isA=new RegExp(AR);
+ var parts=text.match(rx)||[];
+ var items=parts.map(function(p){return {w:isA.test(p),s:p,n:nk(p)};});
+ var out=[],i=0,N=items.length,nextNoS=false;
+ function nextWord(i){if(i+2<N&&items[i+1].s===" "&&items[i+2].w)return i+2;return -1;}
+ function push(s,alts,orig){out.push({s:s,alts:alts||null,sel:0,orig:orig||s});}
+ function isDem(n){return n==="ده"||n==="دا"||n==="دي"||n==="دول";}
+ function prevWord(){for(var k=out.length-1;k>=0;k--){if(out[k].s.trim()==="")continue;return out[k];}return null;}
+ while(i<N){
+  var it=items[i];
+  if(!it.w){push(it.s);i++;continue;}
+  var done=false,L,key,alts;
+  for(L=3;L>=2&&!done;L--){
+   var idx=[i],j=i;
+   while(idx.length<L){var nj=nextWord(j);if(nj<0)break;idx.push(nj);j=nj;}
+   if(idx.length<L)continue;
+   key=idx.map(function(x){return items[x].n;}).join(" ");
+   alts=lookup(key);
+   if(alts){push(alts[0],alts,idx.map(function(x){return items[x].s;}).join(" "));i=idx[idx.length-1]+1;done=true;}
+  }
+  if(done)continue;
+  var n=it.n;
+  if(n==="مش"){
+   var nw=nextWord(i),pv=nw>0?parseVerb(items[nw].n):null;
+   if(pv&&!lookup(items[nw].n)){var fut=pv.T==="ه"||pv.T==="ح";push(fut?"لن":"لا",fut?["لن","لا","ليس"]:["لا","ليس"],it.s);nextNoS=true;i++;continue;}
+  }
+  var r=resolve(n,0);
+  if(!r){nextNoS=false;push(it.s);i++;continue;}
+  if(!r.isV&&isDem(n)){
+   var k=out.length-1,start=-1;
+   while(k>=1&&out[k].s===" "&&out[k-1].orig&&nk(out[k-1].orig).indexOf("ال")===0){start=k-1;k-=2;}
+   if(start>=0){
+    if(out[out.length-1].s===" ")out.pop();
+    out.splice(start,0,{s:r.alts[0],alts:r.alts,sel:0,orig:it.s},{s:" ",alts:null,sel:0,orig:" "});
+    i++;continue;
+   }
+  }
+  var al=r.alts.map(function(a){
+   if(r.isV){
+    if((r.v==="ه"||r.v==="ح")&&!nextNoS)a="س"+a;
+    var pw=prevWord();if(pw&&WANT[pw.alts?pw.alts[pw.sel]:pw.s])a="أن "+a;
+   }
+   return r.pre+a;
+  });
+  if(r.isV)nextNoS=false;
+  push(al[0],al,it.s);i++;
+ }
+ return out;
+}
+function strip(s){return s.replace(/[\u064B-\u065F\u0670]/g,"");}
+function isChanged(t){return t.alts&&strip(t.alts[t.sel])!==strip(t.orig);}
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function render(){
+ var out=$("out");out.textContent="";
+ var words=0,ch=0;
+ toks.forEach(function(t,ix){
+  var txt=t.alts?t.alts[t.sel]:t.s;
+  if(/[\u0621-\u065F\u0670-\u06D3]/.test(t.orig))words++;
+  if(isChanged(t)){
+   ch++;
+   var m=document.createElement("mark");m.className="cv"+(t.alts.length>1?" amb":"");
+   m.textContent=txt;m.title=t.orig;m.setAttribute("data-ix",ix);
+   if(t.alts.length>1)m.setAttribute("role","button");
+   out.appendChild(m);
+  }else out.appendChild(document.createTextNode(txt));
+ });
+ var t=T[L],box=$("stats");box.textContent="";
+ [[t.sW,words],[t.sC,ch]].forEach(function(x){var c=document.createElement("div");c.className="st";var b=document.createElement("b");b.textContent=x[1];var s=document.createElement("small");s.textContent=x[0];c.appendChild(b);c.appendChild(s);box.appendChild(c);});
+}
+function plain(){return toks.map(function(t){return t.alts?t.alts[t.sel]:t.s;}).join("");}
+function run(){
+ var txt=$("ta").value;
+ if(!txt.trim()){show(T[L].errEmpty,true);return;}
+ $("msg").style.display="none";
+ toks=conv(txt);render();$("res").style.display="block";
+ $("res").scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("out").addEventListener("click",function(e){
+ var m=e.target;if(!m||m.tagName!=="MARK")return;
+ var t=toks[+m.getAttribute("data-ix")];
+ if(t&&t.alts&&t.alts.length>1){t.sel=(t.sel+1)%t.alts.length;render();}
+});
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"تحويل العامية المصرية إلى الفصحى | Sayvoi":"Egyptian Arabic to Standard Arabic Converter | Sayvoi";
+}
+$("go").addEventListener("click",run);
+$("ex").addEventListener("click",function(){$("ta").value=EX;run();});
+$("clr").addEventListener("click",function(){$("ta").value="";$("res").style.display="none";$("msg").style.display="none";toks=[];});
+$("copy").addEventListener("click",function(){
+ var v=plain();if(!v)return;
+ var done=function(){show(T[L].copied,false);};
+ try{navigator.clipboard.writeText(v).then(done,function(){});}catch(e){var x=document.createElement("textarea");x.value=v;document.body.appendChild(x);x.select();try{document.execCommand("copy");done();}catch(e2){}document.body.removeChild(x);}
+});
+$("sv").addEventListener("click",function(){
+ try{localStorage.setItem(MYKEY,$("my").value);}catch(e){}
+ loadMy();show(T[L].saved,false);if($("res").style.display==="block"&&$("ta").value.trim()){toks=conv($("ta").value);render();}
+});
+$("exp").addEventListener("click",function(){
+ var u=URL.createObjectURL(new Blob([$("my").value],{type:"text/plain;charset=utf-8"})),a=document.createElement("a");
+ a.href=u;a.download="my-words.txt";document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},1000);
+});
+$("imp").addEventListener("click",function(){$("fileI").click();});
+$("fileI").addEventListener("change",function(){
+ var f=this.files[0];this.value="";if(!f)return;
+ var fr=new FileReader();fr.onload=function(){var v=$("my").value;$("my").value=(v?v.replace(/\n*$/,"\n"):"")+String(fr.result||"");};fr.readAsText(f,"UTF-8");
+});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();if(toks.length)render();});
+loadMy();applyLang();
+})();
+</script>
+</body>
+</html>
