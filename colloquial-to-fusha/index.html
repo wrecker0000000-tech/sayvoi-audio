@@ -3,9 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Convert Egyptian colloquial Arabic to Standard Arabic. Test version.">
-<meta name="robots" content="noindex, nofollow">
-<title>Egyptian to Fusha | Sayvoi</title>
+<meta name="description" content="Convert Egyptian colloquial Arabic to Modern Standard Arabic (fusha) in your browser. Built-in dictionary, verb rules and your own words. Free, and nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/colloquial-to-fusha/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Egyptian Arabic to Standard Arabic (Fusha) Converter">
+<meta property="og:description" content="Turn Egyptian colloquial Arabic into fusha in one click. Free, in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://convert.sayvoi.com/colloquial-to-fusha/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Egyptian Arabic to Fusha Converter | Sayvoi</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 .sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
@@ -76,6 +83,8 @@
  <div class="btns"><button type="button" class="b" id="copy" data-i="copy"></button></div>
 </div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi colloquial to fusha guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
 <h2 data-i="hMy"></h2>
 <p data-i="myP"></p>
 <textarea id="my" rows="6" dir="rtl" spellcheck="false" data-p="phMy"></textarea>
@@ -102,6 +111,7 @@ en:{dir:"ltr",btn:"العربية",
  rH:"Result",sW:"Words",sC:"Words changed",
  hint:"Blue words were changed. A word with a dotted line has other options: click it to switch.",
  copy:"Copy the text",copied:"Text copied.",errEmpty:"Paste your text first.",
+ vidH:"Watch: how the converter works",vidP:"A short video guide that explains every button.",
  hMy:"2. My own words",myP:"Add words the built-in dictionary does not know. One per line, written as: colloquial = fusha. You can give more than one option with a vertical bar. Your words are saved in this browser only.",
  phMy:"مثال:\nبيتفرج = يشاهد\nعايزين = نريد | يريدون",
  sv:"Save my words",exp:"Export my words",imp:"Import a file",saved:"Saved. Your words will be used now.",
@@ -120,6 +130,7 @@ ar:{dir:"rtl",btn:"English",
  rH:"النتيجة",sW:"الكلمات",sC:"كلمات تغيّرت",
  hint:"الكلمات الزرقاء تغيّرت. والكلمة التي تحتها خط منقّط لها خيارات أخرى: اضغط عليها للتبديل.",
  copy:"انسخ النص",copied:"تم نسخ النص.",errEmpty:"الصق نصّك أولًا.",
+ vidH:"شاهد: كيف تعمل الأداة",vidP:"شرح مصوّر قصير يشرح كل الأزرار.",
  hMy:"2. كلماتي الخاصة",myP:"أضف الكلمات التي لا يعرفها القاموس المدمج. كلمة في كل سطر بهذا الشكل: العامية = الفصحى. ويمكنك وضع أكثر من خيار بخط عمودي. تُحفظ كلماتك في هذا المتصفح فقط.",
  phMy:"مثال:\nبيتفرج = يشاهد\nعايزين = نريد | يريدون",
  sv:"احفظ كلماتي",exp:"صدّر كلماتي",imp:"استورد ملفًا",saved:"تم الحفظ. ستُستخدم كلماتك الآن.",
@@ -158,7 +169,7 @@ var RAW_V=[
 "اكل=أكل","اخد=أخذ","روح=ذهب","قعد=جلس","جيب=جلب|حضر","جي=أتي","يجي=أتي","شوف=رى","ادي=عطي","قول=قول","عمل=فعل|عمل","قفل=غلق","طلع=صعد|خرج","خلص=نتهي","كمل=واصل|كمل","تكلم=تحدث","تفرج=شاهد","خلي=جعل","حط=ضع","سيب=ترك","لاقي=جد","بقي=كون|صبح","استني=نتظر","ستني=نتظر","بص=نظر","فتكر=تذكر","حس=شعر","رغي=ثرثر","زعل=غضب|حزن","عيط=بكي","شتغل=عمل","جري=ركض","ذاكر=درس","صحي=ستيقظ","وصل=صل","عدي=مر|عبر","كلم=تصل","اشتري=شتري","شتري=شتري","بيع=بيع","نزل=نزل","فتح=فتح","كتب=كتب","سمع=سمع","فهم=فهم","عرف=عرف","حب=حب","شرب=شرب","رجع=رجع","دخل=دخل","خرج=خرج","مسك=مسك","دفع=دفع","لعب=لعب","سافر=سافر","ساعد=ساعد","حاول=حاول","قدر=قدر","نام=نام","ضحك=ضحك","خاف=خاف","فرح=فرح","تعب=تعب","سهر=سهر","رد=رد","سال=سال","قابل=قابل","تعلم=تعلم","اتعلم=تعلم","اتكلم=تحدث","اتفرج=شاهد","اتفق=تفق","اتاكد=تأكد","تاكد=تأكد","افتكر=تذكر","احتاج=حتاج","حتاج=حتاج","كره=كره","فطر=فطر","نسي=نسي","مشي=مشي"
 ];
 /* ---------- app ---------- */
-var D={},V={},toks=[],MYKEY="sayvoi_cf_my";
+var VID={en:"",ar:""};var D={},V={},toks=[],MYKEY="sayvoi_cf_my";
 function nk(s){return s.replace(/[\u064B-\u065F\u0670\u0640]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه");}
 function addTo(map,k,alts,front){
  k=nk(k.trim());if(!k)return;
@@ -311,7 +322,7 @@ $("out").addEventListener("click",function(e){
  if(t&&t.alts&&t.alts.length>1){t.sel=(t.sel+1)%t.alts.length;render();}
 });
 function applyLang(){
- var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
