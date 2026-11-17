@@ -102,6 +102,8 @@
  <div id="out" class="diffout" dir="auto"></div>
 </div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi text diff guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -128,6 +130,7 @@ en:{dir:"ltr",btn:"العربية",
  identical:"The two texts are identical with these options.",
  errEmpty:"Write or load both texts first.",errBig:"The texts are too long to compare by this unit. Use lines, or compare in smaller parts.",errFile:"Could not read this file.",
  copied:"Summary copied.",
+ vidH:"Watch: how to compare two texts",vidP:"A short video guide (under one minute). The steps are written on the screen.",
  h2b:"Notes",
  n1:"The error rate is the number of replaced, removed and added words divided by the number of words in the original. Lower is better.",
  n2:"For transcript checks, ignore punctuation and diacritics so that only real word differences are counted.",
@@ -148,6 +151,7 @@ ar:{dir:"rtl",btn:"English",
  identical:"النصّان متطابقان بهذه الخيارات.",
  errEmpty:"اكتب النصّين أو حمّلهما أولًا.",errBig:"النصّان أطول من أن يُقارنا بهذه الوحدة. استخدم الأسطر، أو قارن على أجزاء أصغر.",errFile:"تعذّرت قراءة هذا الملف.",
  copied:"تم نسخ الملخص.",
+ vidH:"شاهد: كيف تقارن بين نصّين",vidP:"شرح مصوّر قصير (أقل من دقيقة). الخطوات مكتوبة على الشاشة.",
  h2b:"ملاحظات",
  n1:"نسبة الخطأ هي عدد الكلمات المستبدلة والمحذوفة والمضافة مقسومًا على عدد كلمات الأصل. وكلما قلّت كان أفضل.",
  n2:"عند فحص التفريغ تجاهل علامات الترقيم والتشكيل لتُحسب فقط فروق الكلمات الحقيقية.",
@@ -249,7 +253,8 @@ function readFile(f,target){
  fr.readAsText(f,"UTF-8");
 }
 function applyLang(){
- var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ var t=T[L];var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?"wqvyTAJLrVY":"BwSqaOQKwuw")+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
