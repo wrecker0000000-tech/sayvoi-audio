@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Convert Word to PDF in your browser. Test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>Word to PDF | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}.fnm{margin:0 10px;opacity:.8;word-break:break-all}
+.docprev{border:1px solid rgba(128,128,128,.4);border-radius:12px;padding:16px;max-height:460px;overflow:auto;background:#fff;color:#111}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<p class="privp" data-i="priv"></p>
+
+<h2 data-i="hIn"></h2>
+<div class="btns"><button type="button" class="b" id="pick" data-i="pick"></button><input type="file" id="fileW" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden><span id="fname" class="fnm"></span></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div id="work" style="display:none">
+ <h2 data-i="hOpt"></h2>
+ <div class="row">
+  <div class="col"><label for="psz" data-i="oSize"></label><select id="psz"><option value="a4" selected>A4</option><option value="letter">Letter</option></select></div>
+  <div class="col"><label for="mg" data-i="oMargin"></label><select id="mg"><option value="25" data-k="mN"></option><option value="40" data-k="mM" selected></option><option value="56" data-k="mW"></option></select></div>
+  <div class="col"><label for="fs" data-i="oFont"></label><select id="fs"><option value="14" data-k="fS"></option><option value="16" data-k="fM" selected></option><option value="18" data-k="fL"></option></select></div>
+  <div class="col"><label for="dirs" data-i="oDir"></label><select id="dirs"><option value="auto" data-k="dA" selected></option><option value="rtl" data-k="dR"></option><option value="ltr" data-k="dL"></option></select></div>
+ </div>
+
+ <h2 data-i="hPrev"></h2>
+ <p class="smallp" id="warn"></p>
+ <div id="prev" class="docprev doccss"></div>
+
+ <h2 data-i="hDl"></h2>
+ <div class="btns"><button type="button" class="b" id="dl" data-i="dl"></button><button type="button" class="b sec" id="prt" data-i="prt"></button></div>
+ <p class="smallp" data-i="dlHint"></p>
+</div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Word to PDF Converter: Free and Private",
+ lead:"Choose a Word file (.docx) and turn it into a PDF in your browser. It keeps the text, headings, lists, tables and pictures, and it handles Arabic and right-to-left text.",
+ priv:"Your file is never uploaded. It is converted on your device.",
+ hIn:"1. Choose your Word file",pick:"Choose a .docx file",
+ hOpt:"2. Options",oSize:"Paper size",oMargin:"Margins",mN:"Narrow",mM:"Normal",mW:"Wide",oFont:"Text size",fS:"Small",fM:"Normal",fL:"Large",oDir:"Text direction",dA:"Automatic (best for mixed text)",dR:"Right to left (Arabic)",dL:"Left to right",
+ hPrev:"3. Preview",warnN:"Notes from the file: {n}",warn0:"Converted with no warnings.",
+ hDl:"4. Get the PDF",dl:"Download PDF",prt:"Print or save as PDF (text can be selected)",
+ dlHint:"Download PDF works everywhere, but the pages are pictures. The Print option gives a smaller PDF with selectable text: choose Save as PDF in the print window.",
+ errType:"Please choose a .docx file. Old .doc files must be saved as .docx in Word first.",errRead:"Could not read this Word file. It may be damaged or protected.",errLib:"Could not load the converter. Check your connection and try again.",errBig:"This file is too large for the browser.",errPdf:"Could not create the PDF.",
+ busy:"Working...",page:"Creating page {a} of {b}...",done:"Done. The PDF was downloaded.",
+ h2b:"Notes",
+ n1:"This converts the content of the document: text, headings, lists, tables and pictures. Headers, footers, text boxes and exact fonts are not kept, so the layout can differ from Word.",
+ n2:"For Arabic documents leave the direction on Automatic, or choose Right to left if the alignment looks wrong.",
+ n3:"For the best quality, use the Print option and choose Save as PDF. The text stays selectable and the file is smaller.",
+ n4:"Your file stays on your device and is not uploaded. Always check the PDF before you send it.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"تحويل Word إلى PDF: مجانًا وبخصوصية",
+ lead:"اختر ملف Word (.docx) وحوّله إلى PDF داخل متصفحك. تحافظ الأداة على النصوص والعناوين والقوائم والجداول والصور، وتتعامل مع العربية والنص من اليمين إلى اليسار.",
+ priv:"لا يُرفع ملفك أبدًا. يتم التحويل على جهازك.",
+ hIn:"1. اختر ملف Word",pick:"اختر ملف .docx",
+ hOpt:"2. الخيارات",oSize:"حجم الورق",oMargin:"الهوامش",mN:"ضيقة",mM:"عادية",mW:"واسعة",oFont:"حجم الخط",fS:"صغير",fM:"عادي",fL:"كبير",oDir:"اتجاه النص",dA:"تلقائي (الأفضل للنص المختلط)",dR:"من اليمين إلى اليسار (عربي)",dL:"من اليسار إلى اليمين",
+ hPrev:"3. المعاينة",warnN:"ملاحظات من الملف: {n}",warn0:"تم التحويل دون تحذيرات.",
+ hDl:"4. احصل على PDF",dl:"نزّل PDF",prt:"اطبع أو احفظ كـ PDF (النص قابل للتحديد)",
+ dlHint:"خيار نزّل PDF يعمل في كل مكان، لكن الصفحات تكون صورًا. أما خيار الطباعة فيعطي PDF أصغر والنص فيه قابل للتحديد: اختر «حفظ كـ PDF» في نافذة الطباعة.",
+ errType:"اختر ملف .docx من فضلك. وملفات .doc القديمة احفظها بصيغة .docx من Word أولًا.",errRead:"تعذّرت قراءة ملف Word هذا. قد يكون تالفًا أو محميًا.",errLib:"تعذّر تحميل المحوّل. تأكد من اتصالك وحاول مرة أخرى.",errBig:"هذا الملف أكبر من أن يتحمّله المتصفح.",errPdf:"تعذّر إنشاء PDF.",
+ busy:"جارٍ العمل...",page:"جارٍ إنشاء الصفحة {a} من {b}...",done:"تم. نزل ملف PDF.",
+ h2b:"ملاحظات",
+ n1:"تحوّل الأداة محتوى المستند: النصوص والعناوين والقوائم والجداول والصور. أما الترويسة والتذييل ومربعات النص والخطوط الدقيقة فلا تُحفظ، فقد يختلف الشكل عن Word.",
+ n2:"للمستندات العربية اترك الاتجاه على تلقائي، أو اختر من اليمين إلى اليسار إذا بدت المحاذاة خاطئة.",
+ n3:"لأفضل جودة استخدم خيار الطباعة واختر «حفظ كـ PDF». يبقى النص قابلًا للتحديد ويكون الملف أصغر.",
+ n4:"ملفك يبقى على جهازك ولا يُرفع. وراجع ملف PDF دائمًا قبل إرساله.",
+ back:"العودة إلى الأدوات"}
+};
+/* ---------- app ---------- */
+var VID={en:"",ar:""};var BASE="/word-to-pdf/lib/",libs={},html="",fileBase="document",busy=false,warns=0;
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function hide(){$("msg").style.display="none";}
+function loadScript(src){
+ if(libs[src])return libs[src];
+ libs[src]=new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){libs[src]=null;rej(new Error("lib"));};document.head.appendChild(s);});
+ return libs[src];
+}
+var DOCCSS=".doccss{color:#111;background:#fff;line-height:1.55;font-family:'Segoe UI',Tahoma,Arial,sans-serif;word-wrap:break-word;overflow-wrap:break-word}"+
+".doccss p{margin:0 0 .7em}.doccss h1{font-size:1.9em;margin:.4em 0 .5em}.doccss h2{font-size:1.5em;margin:.9em 0 .5em}.doccss h3{font-size:1.25em;margin:.8em 0 .4em}.doccss h4,.doccss h5,.doccss h6{font-size:1.05em;margin:.7em 0 .4em}"+
+".doccss ul,.doccss ol{margin:0 0 .7em;padding-inline-start:1.7em}.doccss li{margin:.15em 0}"+
+".doccss table{border-collapse:collapse;max-width:100%;margin:0 0 .8em}.doccss td,.doccss th{border:1px solid #888;padding:4px 8px;vertical-align:top}.doccss img{max-width:100%;height:auto}"+
+".doccss a{color:#1d4ed8}.doccss blockquote{margin:0 0 .7em;padding-inline-start:1em;border-inline-start:3px solid #ccc}";
+(function(){var s=document.createElement("style");s.textContent=DOCCSS;document.head.appendChild(s);})();
+
+function applyDir(root){
+ var d=$("dirs").value,q=root.querySelectorAll("p,h1,h2,h3,h4,h5,h6,li,td,th,blockquote,table,ul,ol");
+ for(var i=0;i<q.length;i++)q[i].setAttribute("dir",d);
+ if(d==="rtl")root.style.textAlign="right";else if(d==="ltr")root.style.textAlign="left";else root.style.textAlign="";
+}
+function fillPreview(){
+ var p=$("prev");p.innerHTML=html;applyDir(p);p.style.fontSize=$("fs").value+"px";
+}
+function openFile(f){
+ if(!f)return;
+ if(!/\.docx$/i.test(f.name)){show(T[L].errType,true);return;}
+ if(f.size>80*1024*1024){show(T[L].errBig,true);return;}
+ show(T[L].busy,false);
+ var fr=new FileReader();
+ fr.onerror=function(){show(T[L].errRead,true);};
+ fr.onload=function(){
+  loadScript(BASE+"mammoth.browser.min.js").then(function(){
+   return window.mammoth.convertToHtml({arrayBuffer:fr.result});
+  }).then(function(r){
+   html=r.value;warns=(r.messages||[]).filter(function(m){return m.type==="warning";}).length;
+   fileBase=f.name.replace(/\.docx$/i,"")||"document";
+   $("fname").textContent=f.name;$("work").style.display="block";
+   fillPreview();setWarn();hide();
+   $("work").scrollIntoView({behavior:"smooth",block:"start"});
+  }).catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errRead,true);});
+ };
+ fr.readAsArrayBuffer(f);
+}
+function setWarn(){$("warn").textContent=warns?T[L].warnN.replace("{n}",warns):T[L].warn0;}
+
+/* ---- PDF (pages as images) ---- */
+function pageDims(){
+ var pt=$("psz").value==="letter"?[612,792]:[595.28,841.89],m=parseInt($("mg").value,10);
+ return {W:pt[0],H:pt[1],m:m,cw:Math.round((pt[0]-2*m)/0.75),ch:Math.floor((pt[1]-2*m)/0.75)};
+}
+function makeHost(cw){
+ var h=document.createElement("div");h.className="doccss";
+ h.style.cssText="position:absolute;left:-100000px;top:0;width:"+cw+"px;font-size:"+$("fs").value+"px;background:#fff";
+ h.innerHTML=html;applyDir(h);document.body.appendChild(h);return h;
+}
+function waitImgs(root){
+ var im=root.querySelectorAll("img"),ps=[];
+ for(var i=0;i<im.length;i++){if(!im[i].complete)ps.push(new Promise(function(r){im[i].onload=im[i].onerror=r;}));}
+ return Promise.all(ps);
+}
+function paginate(host,ch){
+ var kids=host.children,pages=[],start=0,i;
+ for(i=0;i<kids.length;i++){
+  var top=kids[i].offsetTop,bottom=top+kids[i].offsetHeight;
+  if(bottom-start>ch&&top>start){pages.push([start,top]);start=top;}
+  while(bottom-start>ch){pages.push([start,start+ch]);start+=ch;}
+ }
+ var total=Math.max(host.scrollHeight,start+1);
+ if(total-start>1)pages.push([start,total]);
+ return pages;
+}
+function downloadPdf(){
+ if(busy||!html)return;busy=true;show(T[L].busy,false);
+ var dm=pageDims(),host=null;
+ Promise.all([loadScript(BASE+"html2canvas.min.js"),loadScript(BASE+"pdf-lib.min.js")]).then(function(){
+  host=makeHost(dm.cw);
+  return waitImgs(host);
+ }).then(function(){
+  var pages=paginate(host,dm.ch),P=window.PDFLib;
+  return P.PDFDocument.create().then(function(pd){
+   var chain=Promise.resolve();
+   pages.forEach(function(rg,idx){
+    chain=chain.then(function(){
+     show(T[L].page.replace("{a}",idx+1).replace("{b}",pages.length),false);
+     var h=rg[1]-rg[0],wrap=document.createElement("div");
+     wrap.style.cssText="position:absolute;left:-100000px;top:0;width:"+dm.cw+"px;height:"+h+"px;overflow:hidden;background:#fff";
+     var inner=host.cloneNode(true);inner.style.left="0";inner.style.top=(-rg[0])+"px";
+     wrap.appendChild(inner);document.body.appendChild(wrap);
+     return window.html2canvas(wrap,{scale:2,backgroundColor:"#ffffff",logging:false}).then(function(cv){
+      document.body.removeChild(wrap);
+      var jpg=cv.toDataURL("image/jpeg",0.88),b=atob(jpg.split(",")[1]),u=new Uint8Array(b.length);
+      for(var k=0;k<b.length;k++)u[k]=b.charCodeAt(k);
+      return pd.embedJpg(u).then(function(im){
+       var pg=pd.addPage([dm.W,dm.H]),hh=h*0.75;
+       pg.drawImage(im,{x:dm.m,y:dm.H-dm.m-hh,width:dm.cw*0.75,height:hh});
+      });
+     },function(e){if(wrap.parentNode)document.body.removeChild(wrap);throw e;});
+    });
+   });
+   return chain.then(function(){return pd.save();});
+  });
+ }).then(function(out){
+  if(host&&host.parentNode)document.body.removeChild(host);
+  var u=URL.createObjectURL(new Blob([out],{type:"application/pdf"})),a=document.createElement("a");
+  a.href=u;a.download=fileBase+".pdf";document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(u);},4000);busy=false;show(T[L].done,false);
+ }).catch(function(e){
+  if(host&&host.parentNode)document.body.removeChild(host);
+  busy=false;show(e&&e.message==="lib"?T[L].errLib:T[L].errPdf,true);
+ });
+}
+/* ---- print (selectable text) ---- */
+function printPdf(){
+ if(!html)return;
+ var dm=pageDims(),fr=document.createElement("iframe");
+ fr.style.cssText="position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden";
+ document.body.appendChild(fr);
+ var d=fr.contentWindow.document,mm=Math.round(dm.m*0.3528);
+ var body=document.createElement("div");body.className="doccss";body.innerHTML=html;applyDir(body);
+ d.open();
+ d.write('<!doctype html><html><head><meta charset="utf-8"><title>'+fileBase.replace(/[<>&]/g,"")+'</title><style>@page{size:'+($("psz").value==="letter"?"letter":"A4")+';margin:'+mm+'mm}html,body{margin:0;padding:0}body{font-size:'+$("fs").value+'px}'+DOCCSS+'.doccss tr,.doccss img{page-break-inside:avoid}.doccss h1,.doccss h2,.doccss h3{page-break-after:avoid}</style></head><body></body></html>');
+ d.close();
+ d.body.appendChild(body);
+ setTimeout(function(){try{fr.contentWindow.focus();fr.contentWindow.print();}catch(e){show(T[L].errPdf,true);}setTimeout(function(){if(fr.parentNode)document.body.removeChild(fr);},60000);},500);
+}
+$("dl").addEventListener("click",downloadPdf);
+$("prt").addEventListener("click",printPdf);
+$("pick").addEventListener("click",function(){$("fileW").click();});
+$("fileW").addEventListener("change",function(){var f=this.files[0];this.value="";openFile(f);});
+["dirs","fs"].forEach(function(id){$(id).addEventListener("change",function(){if(html)fillPreview();});});
+
+function applyLang(){
+ var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ document.title=L==="ar"?"تحويل Word إلى PDF مجانًا | Sayvoi":"Word to PDF Converter: Free and Private | Sayvoi";
+ if(html)setWarn();
+}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+applyLang();
+})();
+</script>
+</body>
+</html>
