@@ -91,7 +91,7 @@ en:{dir:"ltr",btn:"العربية",
  lead:"Choose a Word file (.docx) and turn it into a PDF in your browser. It keeps the text, headings, lists, tables and pictures, and it handles Arabic and right-to-left text.",
  priv:"Your file is never uploaded. It is converted on your device.",
  hIn:"1. Choose your Word file",pick:"Choose a .docx file",
- hOpt:"2. Options",oSize:"Paper size",oMargin:"Margins",mN:"Narrow",mM:"Normal",mW:"Wide",oFont:"Text size",fS:"Small",fM:"Normal",fL:"Large",oDir:"Text direction",dA:"Automatic (best for mixed text)",dR:"Right to left (Arabic)",dL:"Left to right",
+ hOpt:"2. Options",oSize:"Paper size",oMargin:"Margins",mN:"Narrow",mM:"Normal",mW:"Wide",oFont:"Text size",fS:"Small",fM:"Normal",fL:"Large",oDir:"Text direction",dA:"Automatic (by the main language of each paragraph)",dR:"Right to left (Arabic)",dL:"Left to right",
  hPrev:"3. Preview",warnN:"Notes from the file: {n}",warn0:"Converted with no warnings.",
  hDl:"4. Get the PDF",dl:"Download PDF",prt:"Print or save as PDF (text can be selected)",
  dlHint:"Download PDF works everywhere, but the pages are pictures. The Print option gives a smaller PDF with selectable text: choose Save as PDF in the print window.",
@@ -109,7 +109,7 @@ ar:{dir:"rtl",btn:"English",
  lead:"اختر ملف Word (.docx) وحوّله إلى PDF داخل متصفحك. تحافظ الأداة على النصوص والعناوين والقوائم والجداول والصور، وتتعامل مع العربية والنص من اليمين إلى اليسار.",
  priv:"لا يُرفع ملفك أبدًا. يتم التحويل على جهازك.",
  hIn:"1. اختر ملف Word",pick:"اختر ملف .docx",
- hOpt:"2. الخيارات",oSize:"حجم الورق",oMargin:"الهوامش",mN:"ضيقة",mM:"عادية",mW:"واسعة",oFont:"حجم الخط",fS:"صغير",fM:"عادي",fL:"كبير",oDir:"اتجاه النص",dA:"تلقائي (الأفضل للنص المختلط)",dR:"من اليمين إلى اليسار (عربي)",dL:"من اليسار إلى اليمين",
+ hOpt:"2. الخيارات",oSize:"حجم الورق",oMargin:"الهوامش",mN:"ضيقة",mM:"عادية",mW:"واسعة",oFont:"حجم الخط",fS:"صغير",fM:"عادي",fL:"كبير",oDir:"اتجاه النص",dA:"تلقائي (حسب لغة كل فقرة)",dR:"من اليمين إلى اليسار (عربي)",dL:"من اليسار إلى اليمين",
  hPrev:"3. المعاينة",warnN:"ملاحظات من الملف: {n}",warn0:"تم التحويل دون تحذيرات.",
  hDl:"4. احصل على PDF",dl:"نزّل PDF",prt:"اطبع أو احفظ كـ PDF (النص قابل للتحديد)",
  dlHint:"خيار نزّل PDF يعمل في كل مكان، لكن الصفحات تكون صورًا. أما خيار الطباعة فيعطي PDF أصغر والنص فيه قابل للتحديد: اختر «حفظ كـ PDF» في نافذة الطباعة.",
@@ -138,9 +138,14 @@ var DOCCSS=".doccss{color:#111;background:#fff;line-height:1.55;font-family:'Seg
 ".doccss a{color:#1d4ed8}.doccss blockquote{margin:0 0 .7em;padding-inline-start:1em;border-inline-start:3px solid #ccc}";
 (function(){var s=document.createElement("style");s.textContent=DOCCSS;document.head.appendChild(s);})();
 
+function autoDir(el){
+ var t=el.textContent||"",ar=(t.match(/[\u0590-\u08FF\uFB1D-\uFDFF\uFE70-\uFEFF]/g)||[]).length,la=(t.match(/[A-Za-z]/g)||[]).length;
+ if(!ar&&!la)return "auto";
+ return ar>=la?"rtl":"ltr";
+}
 function applyDir(root){
  var d=$("dirs").value,q=root.querySelectorAll("p,h1,h2,h3,h4,h5,h6,li,td,th,blockquote,table,ul,ol");
- for(var i=0;i<q.length;i++)q[i].setAttribute("dir",d);
+ for(var i=0;i<q.length;i++)q[i].setAttribute("dir",d==="auto"?autoDir(q[i]):d);
  if(d==="rtl")root.style.textAlign="right";else if(d==="ltr")root.style.textAlign="left";else root.style.textAlign="";
 }
 function fillPreview(){
