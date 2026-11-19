@@ -104,6 +104,7 @@ input[type=text],input[type=number]{width:100%;padding:10px;border-radius:10px;b
 
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi PDF organizer guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
 </article>
 
@@ -116,6 +117,7 @@ var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
 var T={
 en:{dir:"ltr",btn:"العربية",
  foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"Watch: merge, split and organize PDF pages",vidP:"A short video guide that explains every button.",
  h1:"Merge, Split and Organize PDF Pages: Free and Private",
  lead:"Combine several PDFs into one, split a PDF into parts, and delete, rotate or reorder pages. You see every page as a small picture, so you know what you are doing.",
  priv:"Your files are never uploaded. Everything happens on your device.",
@@ -137,6 +139,7 @@ en:{dir:"ltr",btn:"العربية",
  back:"Back to the tools"},
 ar:{dir:"rtl",btn:"English",
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"شاهد: دمج وتقسيم وترتيب صفحات PDF",vidP:"شرح مصوّر قصير يشرح كل الأزرار.",
  h1:"دمج وتقسيم وترتيب صفحات PDF: مجانًا وبخصوصية",
  lead:"ادمج عدة ملفات PDF في ملف واحد، وقسّم ملف PDF إلى أجزاء، واحذف الصفحات أو دوّرها أو غيّر ترتيبها. ترى كل صفحة صورةً صغيرة، فتعرف ماذا تفعل.",
  priv:"لا تُرفع ملفاتك أبدًا. كل شيء يتم على جهازك.",
@@ -350,7 +353,7 @@ function applyLang(){
  if(pages.length)render();
 }
 $("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
-var VID={en:"",ar:""};
+var VID={en:"Mdcfh0775TM",ar:"r_4SlhF561o"};
 applyLang();
 })();
 </script>
