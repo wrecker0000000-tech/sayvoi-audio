@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Merge, split and organize PDF pages in your browser. Test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>Organize PDF | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}
+.flist{display:flex;flex-direction:column;gap:8px;margin:10px 0}.fchip{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid rgba(128,128,128,.35);border-radius:12px}
+.fchip .tg{font-weight:800;padding:2px 8px;border-radius:8px;background:rgba(124,77,255,.15)}.fchip .fn{flex:1;word-break:break-all}.fchip .fp{opacity:.7;font-size:14px;white-space:nowrap}.fchip button{border:0;background:transparent;font-size:18px;cursor:pointer;color:inherit}
+.tb .b{padding:8px 12px;font-size:14px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:12px 0}
+.pc{position:relative;border:2px solid rgba(128,128,128,.3);border-radius:14px;padding:8px;background:rgba(128,128,128,.06);text-align:center;cursor:grab}
+.pc.on{border-color:#7c4dff;background:rgba(124,77,255,.12)}
+.pc .ck{position:absolute;top:6px;inset-inline-start:8px;z-index:2}.pc .ck input{width:20px;height:20px}
+.pc .th{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pc .th img{max-width:100%;max-height:100%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform .15s}
+.pc .nm{font-size:13px;margin:6px 0;opacity:.85}
+.pc .pb{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}.pc .pb button{width:30px;height:30px;border-radius:8px;border:1px solid rgba(128,128,128,.4);background:transparent;color:inherit;cursor:pointer;font-size:14px;padding:0}
+input[type=text],input[type=number]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit;box-sizing:border-box}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<p class="privp" data-i="priv"></p>
+
+<h2 data-i="hIn"></h2>
+<div class="btns"><button type="button" class="b" id="pick" data-i="pick"></button><input type="file" id="fileP" accept=".pdf,application/pdf" multiple hidden></div>
+<p class="smallp" data-i="dropHint"></p>
+<div class="scan" id="msg" role="status"></div>
+<div id="files" class="flist"></div>
+
+<div id="work" style="display:none">
+ <h2 data-i="hEdit"></h2>
+ <p class="smallp" data-i="editHint"></p>
+ <div class="btns tb">
+  <button type="button" class="b sec" id="bAll" data-i="bAll"></button>
+  <button type="button" class="b sec" id="bNone" data-i="bNone"></button>
+  <button type="button" class="b sec" id="bRL" data-i="bRL"></button>
+  <button type="button" class="b sec" id="bRR" data-i="bRR"></button>
+  <button type="button" class="b sec" id="bDel" data-i="bDel"></button>
+  <button type="button" class="b sec" id="bRev" data-i="bRev"></button>
+  <button type="button" class="b sec" id="bUndo" data-i="bUndo"></button>
+ </div>
+ <p class="smallp" id="cnt"></p>
+ <div id="grid" class="pgrid"></div>
+
+ <h2 data-i="hOut"></h2>
+ <div class="btns">
+  <button type="button" class="b" id="oAll" data-i="oAll"></button>
+  <button type="button" class="b" id="oSel" data-i="oSel"></button>
+ </div>
+ <div class="row" style="margin-top:14px">
+  <div class="col"><label for="rng" data-i="rngL"></label><input type="text" id="rng" dir="ltr" placeholder="1-3, 5, 8-10"><div class="btns" style="margin-top:8px"><button type="button" class="b sec" id="oRng" data-i="oRng"></button></div></div>
+  <div class="col"><label for="nper" data-i="nL"></label><input type="number" id="nper" min="1" value="1"><div class="btns" style="margin-top:8px"><button type="button" class="b sec" id="oZip" data-i="oZip"></button></div></div>
+ </div>
+ <p class="smallp" data-i="outHint"></p>
+</div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Merge, Split and Organize PDF Pages: Free and Private",
+ lead:"Combine several PDFs into one, split a PDF into parts, and delete, rotate or reorder pages. You see every page as a small picture, so you know what you are doing.",
+ priv:"Your files are never uploaded. Everything happens on your device.",
+ hIn:"1. Add your PDF files",pick:"Choose PDF files",dropHint:"You can choose several files at once, or drop them here. Add more files later to merge them.",
+ hEdit:"2. Arrange the pages",editHint:"Tick pages to select them. Use the small buttons on each page to rotate, move or delete it. On a computer you can also drag a page to a new place.",
+ bAll:"Select all",bNone:"Select none",bRL:"Rotate selected left",bRR:"Rotate selected right",bDel:"Delete selected",bRev:"Reverse order",bUndo:"Undo",
+ cnt:"{n} pages, {s} selected.",
+ hOut:"3. Get your PDF",oAll:"Download all pages as one PDF",oSel:"Download selected pages only",
+ rngL:"Pages to extract (current order)",oRng:"Download these pages",nL:"Split into parts of this many pages",oZip:"Download parts as a ZIP",
+ outHint:"The page numbers refer to the order you see now. A ZIP file contains one PDF per part.",
+ tL:"Rotate left",tR:"Rotate right",tE:"Move earlier",tLt:"Move later",tD:"Delete page",tS:"Select page",rmF:"Remove this file",pg:"pages",pgn:"Page",
+ errType:"Please choose PDF files only.",errRead:"Could not read {f}. It may be damaged.",errPass:"{f} is protected with a password. Remove the password first.",errLib:"Could not load the tool. Check your connection and try again.",errBig:"{f} is too large for the browser.",errEmpty:"There are no pages to download.",errNoSel:"Select at least one page first.",errRange:"The page numbers are not valid. Example: 1-3, 5, 8-10",errN:"Enter a number of pages for each part.",errOut:"Could not create the PDF.",
+ busy:"Working...",load:"Reading {a} of {b}...",done:"Done. The file was downloaded.",
+ h2b:"Notes",
+ n1:"Merging keeps the pages, text and pictures of the original files. It does not change them.",
+ n2:"Forms, bookmarks and links may not survive when pages are copied into a new file.",
+ n3:"A password-protected PDF must be unlocked before you can use it here.",
+ n4:"Very large files depend on your device memory. Your files stay on your device and are not uploaded.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"دمج وتقسيم وترتيب صفحات PDF: مجانًا وبخصوصية",
+ lead:"ادمج عدة ملفات PDF في ملف واحد، وقسّم ملف PDF إلى أجزاء، واحذف الصفحات أو دوّرها أو غيّر ترتيبها. ترى كل صفحة صورةً صغيرة، فتعرف ماذا تفعل.",
+ priv:"لا تُرفع ملفاتك أبدًا. كل شيء يتم على جهازك.",
+ hIn:"1. أضف ملفات PDF",pick:"اختر ملفات PDF",dropHint:"يمكنك اختيار عدة ملفات معًا، أو إسقاطها هنا. وأضف ملفات أخرى لاحقًا لدمجها.",
+ hEdit:"2. رتّب الصفحات",editHint:"علّم الصفحات لتحديدها. واستخدم الأزرار الصغيرة على كل صفحة لتدويرها أو تحريكها أو حذفها. وعلى الكمبيوتر يمكنك أيضًا سحب الصفحة إلى مكان جديد.",
+ bAll:"تحديد الكل",bNone:"إلغاء التحديد",bRL:"دوّر المحدد لليسار",bRR:"دوّر المحدد لليمين",bDel:"احذف المحدد",bRev:"اعكس الترتيب",bUndo:"تراجع",
+ cnt:"{n} صفحة، المحدد {s}.",
+ hOut:"3. احصل على ملف PDF",oAll:"نزّل كل الصفحات في ملف واحد",oSel:"نزّل الصفحات المحددة فقط",
+ rngL:"الصفحات المراد استخراجها (حسب الترتيب الحالي)",oRng:"نزّل هذه الصفحات",nL:"قسّم إلى أجزاء بهذا العدد من الصفحات",oZip:"نزّل الأجزاء في ملف ZIP",
+ outHint:"أرقام الصفحات تتبع الترتيب الذي تراه الآن. وملف ZIP يحوي ملف PDF لكل جزء.",
+ tL:"دوّر لليسار",tR:"دوّر لليمين",tE:"حرّك للأمام",tLt:"حرّك للخلف",tD:"احذف الصفحة",tS:"حدد الصفحة",rmF:"أزل هذا الملف",pg:"صفحة",pgn:"صفحة",
+ errType:"اختر ملفات PDF فقط من فضلك.",errRead:"تعذّرت قراءة {f}. قد يكون تالفًا.",errPass:"الملف {f} محمي بكلمة مرور. أزل كلمة المرور أولًا.",errLib:"تعذّر تحميل الأداة. تأكد من اتصالك وحاول مرة أخرى.",errBig:"الملف {f} أكبر من أن يتحمّله المتصفح.",errEmpty:"لا توجد صفحات للتنزيل.",errNoSel:"حدد صفحة واحدة على الأقل أولًا.",errRange:"أرقام الصفحات غير صحيحة. مثال: 1-3, 5, 8-10",errN:"اكتب عدد الصفحات في كل جزء.",errOut:"تعذّر إنشاء ملف PDF.",
+ busy:"جارٍ العمل...",load:"جارٍ قراءة {a} من {b}...",done:"تم. نزل الملف.",
+ h2b:"ملاحظات",
+ n1:"الدمج يحافظ على صفحات الملفات الأصلية ونصوصها وصورها. ولا يغيّرها.",
+ n2:"النماذج والفهارس والروابط قد لا تبقى عند نسخ الصفحات إلى ملف جديد.",
+ n3:"ملف PDF المحمي بكلمة مرور يجب فتحه قبل استخدامه هنا.",
+ n4:"الملفات الكبيرة جدًا تعتمد على ذاكرة جهازك. وملفاتك تبقى على جهازك ولا تُرفع.",
+ back:"العودة إلى الأدوات"}
+};
+/* ---------- app ---------- */
+var BASE="/organize-pdf/lib/",libs={},files=[],pages=[],hist=[],thumbs={},tq=[],tbusy=false,busy=false,nextId=1;
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function hide(){$("msg").style.display="none";}
+function fmt(s,o){for(var k in o)s=s.replace("{"+k+"}",o[k]);return s;}
+function loadScript(src){
+ if(libs[src])return libs[src];
+ libs[src]=new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){libs[src]=null;rej(new Error("lib"));};document.head.appendChild(s);});
+ return libs[src];
+}
+function ensurePdfjs(){return loadScript(BASE+"pdf.min.js").then(function(){window.pdfjsLib.GlobalWorkerOptions.workerSrc=BASE+"pdf.worker.min.js";});}
+function ensureLib(){return loadScript(BASE+"pdf-lib.min.js");}
+function snap(){hist.push(JSON.stringify(pages));if(hist.length>60)hist.shift();}
+/* ----- thumbnails ----- */
+function queueThumb(f,p){
+ var k=f+":"+p;if(thumbs[k]!==undefined)return;thumbs[k]=null;tq.push([f,p]);runThumbs();
+}
+function runThumbs(){
+ if(tbusy||!tq.length)return;tbusy=true;
+ var j=tq.shift(),fo=files[j[0]];
+ if(!fo){tbusy=false;return runThumbs();}
+ fo.doc.getPage(j[1]+1).then(function(pg){
+  var v0=pg.getViewport({scale:1}),sc=200/Math.max(v0.width,v0.height),v=pg.getViewport({scale:sc});
+  var c=document.createElement("canvas");c.width=Math.round(v.width);c.height=Math.round(v.height);
+  var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);
+  return pg.render({canvasContext:ctx,viewport:v}).promise.then(function(){
+   thumbs[j[0]+":"+j[1]]=c.toDataURL("image/jpeg",0.7);fillThumbs();
+  });
+ }).catch(function(){thumbs[j[0]+":"+j[1]]="";}).then(function(){tbusy=false;runThumbs();});
+}
+function fillThumbs(){
+ var im=$("grid").querySelectorAll("img[data-k]");
+ for(var i=0;i<im.length;i++){var u=thumbs[im[i].getAttribute("data-k")];if(u&&im[i].getAttribute("src")!==u)im[i].src=u;}
+}
+/* ----- grid ----- */
+var dragI=-1;
+function render(){
+ var g=$("grid");g.innerHTML="";
+ pages.forEach(function(p,i){
+  var t=T[L],fo=files[p.f],d=document.createElement("div");
+  d.className="pc"+(p.sel?" on":"");d.draggable=true;
+  var earlier=t.dir==="rtl"?"▶":"◀",later=t.dir==="rtl"?"◀":"▶";
+  d.innerHTML='<label class="ck"><input type="checkbox"'+(p.sel?" checked":"")+' aria-label="'+t.tS+'"></label>'+
+   '<div class="th"><img data-k="'+p.f+":"+p.p+'" alt="" draggable="false" style="transform:rotate('+p.rot+'deg)"></div>'+
+   '<div class="nm"><b>'+(i+1)+'</b> <span>'+esc(fo?fo.tag:"")+" · "+t.pgn+" "+(p.p+1)+'</span></div>'+
+   '<div class="pb"><button type="button" data-a="l" title="'+t.tL+'" aria-label="'+t.tL+'">⟲</button><button type="button" data-a="r" title="'+t.tR+'" aria-label="'+t.tR+'">⟳</button>'+
+   '<button type="button" data-a="e" title="'+t.tE+'" aria-label="'+t.tE+'">'+earlier+'</button><button type="button" data-a="n" title="'+t.tLt+'" aria-label="'+t.tLt+'">'+later+'</button><button type="button" data-a="d" title="'+t.tD+'" aria-label="'+t.tD+'">✕</button></div>';
+  d.setAttribute("data-i",i);g.appendChild(d);queueThumb(p.f,p.p);
+ });
+ fillThumbs();count();renderFiles();
+ $("work").style.display=pages.length?"":"none";
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+function count(){var s=0;pages.forEach(function(p){if(p.sel)s++;});$("cnt").textContent=fmt(T[L].cnt,{n:pages.length,s:s});}
+function renderFiles(){
+ var b=$("files"),h="";
+ files.forEach(function(f,i){if(!f)return;h+='<div class="fchip"><span class="tg">'+esc(f.tag)+'</span><span class="fn">'+esc(f.name)+'</span><span class="fp">'+f.n+" "+T[L].pg+'</span><button type="button" data-rm="'+i+'" aria-label="'+T[L].rmF+'" title="'+T[L].rmF+'">✕</button></div>';});
+ b.innerHTML=h;
+}
+$("files").addEventListener("click",function(e){
+ var b=e.target.closest("button[data-rm]");if(!b)return;var i=+b.getAttribute("data-rm");
+ snap();files[i]=null;pages=pages.filter(function(p){return p.f!==i;});render();
+});
+$("grid").addEventListener("click",function(e){
+ var d=e.target.closest(".pc");if(!d)return;var i=+d.getAttribute("data-i"),b=e.target.closest("button[data-a]");
+ if(e.target.closest(".ck")){setTimeout(function(){pages[i].sel=d.querySelector("input").checked;d.classList.toggle("on",pages[i].sel);count();},0);return;}
+ if(!b)return;var a=b.getAttribute("data-a");snap();
+ if(a==="l")pages[i].rot=(pages[i].rot+270)%360;
+ else if(a==="r")pages[i].rot=(pages[i].rot+90)%360;
+ else if(a==="d")pages.splice(i,1);
+ else if(a==="e"&&i>0){var x=pages[i];pages[i]=pages[i-1];pages[i-1]=x;}
+ else if(a==="n"&&i<pages.length-1){var y=pages[i];pages[i]=pages[i+1];pages[i+1]=y;}
+ render();
+});
+$("grid").addEventListener("dragstart",function(e){var d=e.target.closest&&e.target.closest(".pc");if(!d)return;dragI=+d.getAttribute("data-i");try{e.dataTransfer.setData("text/plain","p");e.dataTransfer.effectAllowed="move";}catch(x){}});
+$("grid").addEventListener("dragover",function(e){if(dragI>=0)e.preventDefault();});
+$("grid").addEventListener("drop",function(e){
+ if(dragI<0)return;e.preventDefault();e.stopPropagation();var d=e.target.closest(".pc");if(!d){dragI=-1;return;}
+ var to=+d.getAttribute("data-i");if(to!==dragI){snap();var m=pages.splice(dragI,1)[0];pages.splice(to,0,m);render();}dragI=-1;
+});
+$("grid").addEventListener("dragend",function(){dragI=-1;});
+function selCount(){return pages.filter(function(p){return p.sel;}).length;}
+$("bAll").addEventListener("click",function(){pages.forEach(function(p){p.sel=true;});render();});
+$("bNone").addEventListener("click",function(){pages.forEach(function(p){p.sel=false;});render();});
+function rotSel(a){if(!selCount()){show(T[L].errNoSel,true);return;}hide();snap();pages.forEach(function(p){if(p.sel)p.rot=(p.rot+a)%360;});render();}
+$("bRL").addEventListener("click",function(){rotSel(270);});
+$("bRR").addEventListener("click",function(){rotSel(90);});
+$("bDel").addEventListener("click",function(){if(!selCount()){show(T[L].errNoSel,true);return;}hide();snap();pages=pages.filter(function(p){return !p.sel;});render();});
+$("bRev").addEventListener("click",function(){snap();pages.reverse();render();});
+$("bUndo").addEventListener("click",function(){if(!hist.length)return;pages=JSON.parse(hist.pop());render();});
+/* ----- open files ----- */
+function openFiles(list){
+ list=Array.prototype.slice.call(list||[]);if(!list.length)return;
+ var bad=list.filter(function(f){return !/\.pdf$/i.test(f.name)&&f.type!=="application/pdf";});
+ if(bad.length&&bad.length===list.length){show(T[L].errType,true);return;}
+ list=list.filter(function(f){return bad.indexOf(f)<0;});
+ show(T[L].busy,false);
+ var chain=ensurePdfjs().catch(function(){show(T[L].errLib,true);throw 0;}),k=0;
+ list.forEach(function(f,idx){chain=chain.then(function(){
+  show(fmt(T[L].load,{a:idx+1,b:list.length}),false);
+  if(f.size>300*1024*1024){show(fmt(T[L].errBig,{f:f.name}),true);return;}
+  return new Promise(function(res){var fr=new FileReader();fr.onerror=function(){show(fmt(T[L].errRead,{f:f.name}),true);res();};
+   fr.onload=function(){
+    var bytes=new Uint8Array(fr.result);
+    window.pdfjsLib.getDocument({data:bytes.slice(0)}).promise.then(function(doc){
+     var id=files.length,tag="F"+(nextId++);
+     files.push({name:f.name,bytes:bytes,doc:doc,n:doc.numPages,tag:tag,lib:null});
+     snap();for(var p=0;p<doc.numPages;p++)pages.push({f:id,p:p,rot:0,sel:false});
+     res();
+    }).catch(function(e){show(fmt(e&&e.name==="PasswordException"?T[L].errPass:T[L].errRead,{f:f.name}),true);res();});
+   };fr.readAsArrayBuffer(f);});
+ });});
+ chain.then(function(){if(pages.length){if($("msg").className.indexOf("bad")<0)hide();render();}}).catch(function(){});
+}
+$("pick").addEventListener("click",function(){$("fileP").click();});
+$("fileP").addEventListener("change",function(){var l=this.files;openFiles(l);this.value="";});
+document.addEventListener("dragover",function(e){if(dragI<0&&e.dataTransfer&&e.dataTransfer.types&&Array.prototype.indexOf.call(e.dataTransfer.types,"Files")>=0)e.preventDefault();});
+document.addEventListener("drop",function(e){if(dragI<0&&e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length){e.preventDefault();openFiles(e.dataTransfer.files);}});
+/* ----- export ----- */
+function buildPdf(list){
+ return ensureLib().then(function(){
+  var PD=window.PDFLib.PDFDocument,out,need={},ids;
+  list.forEach(function(p){need[p.f]=1;});ids=Object.keys(need);
+  return PD.create().then(function(o){
+   out=o;var ch=Promise.resolve();
+   ids.forEach(function(id){ch=ch.then(function(){if(files[id].lib)return;return PD.load(files[id].bytes).then(function(d){files[id].lib=d;});});});
+   return ch;
+  }).then(function(){
+   var ch=Promise.resolve(),map={};
+   ids.forEach(function(id){
+    var u=[],seen={};list.forEach(function(p){if(String(p.f)===id&&!seen[p.p]){seen[p.p]=1;u.push(p.p);}});
+    ch=ch.then(function(){return out.copyPages(files[id].lib,u);}).then(function(r){u.forEach(function(pi,k){map[id+":"+pi]=r[k];});});
+   });
+   return ch.then(function(){
+    list.forEach(function(p){
+     var pg=map[p.f+":"+p.p],a=pg.getRotation().angle||0;
+     pg.setRotation(window.PDFLib.degrees((a+p.rot)%360));out.addPage(pg);
+    });
+    return out.save();
+   });
+  });
+ });
+}
+function saveBlob(blob,name){
+ var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+ setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},4000);
+}
+function baseName(){for(var i=0;i<files.length;i++)if(files[i])return files[i].name.replace(/\.pdf$/i,"");return "document";}
+function doSingle(list,suffix){
+ if(busy)return;if(!list.length){show(T[L].errEmpty,true);return;}
+ busy=true;show(T[L].busy,false);
+ buildPdf(list).then(function(b){saveBlob(new Blob([b],{type:"application/pdf"}),baseName()+suffix+".pdf");show(T[L].done,false);})
+ .catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errOut,true);}).then(function(){busy=false;});
+}
+function parseRange(s){
+ s=s.replace(/[٠-٩]/g,function(c){return c.charCodeAt(0)-1632;}).replace(/[۰-۹]/g,function(c){return c.charCodeAt(0)-1776;});
+ var parts=s.split(/[,،;\s]+/).filter(Boolean),out=[],i,m;
+ if(!parts.length)return null;
+ for(i=0;i<parts.length;i++){
+  m=/^(\d+)(?:\s*[-–]\s*(\d+))?$/.exec(parts[i]);if(!m)return null;
+  var a=+m[1],b=m[2]?+m[2]:a;if(a<1||b<a||b>pages.length)return null;
+  for(var k=a;k<=b;k++)out.push(pages[k-1]);
+ }
+ return out;
+}
+$("oAll").addEventListener("click",function(){doSingle(pages,"-merged");});
+$("oSel").addEventListener("click",function(){var l=pages.filter(function(p){return p.sel;});if(!l.length){show(T[L].errNoSel,true);return;}doSingle(l,"-selected");});
+$("oRng").addEventListener("click",function(){var l=parseRange($("rng").value);if(!l){show(T[L].errRange,true);return;}doSingle(l,"-pages");});
+$("oZip").addEventListener("click",function(){
+ if(busy)return;var n=parseInt($("nper").value,10);if(!n||n<1){show(T[L].errN,true);return;}if(!pages.length){show(T[L].errEmpty,true);return;}
+ busy=true;show(T[L].busy,false);
+ var parts=[];for(var i=0;i<pages.length;i+=n)parts.push(pages.slice(i,i+n));
+ var zip,bn=baseName(),pad=String(parts.length).length;
+ loadScript(BASE+"jszip.min.js").then(function(){
+  zip=new window.JSZip();var ch=Promise.resolve();
+  parts.forEach(function(l,k){ch=ch.then(function(){show(fmt(T[L].load,{a:k+1,b:parts.length}),false);return buildPdf(l);}).then(function(b){
+   var num=String(k+1);while(num.length<pad)num="0"+num;
+   zip.file(bn+"-part-"+num+".pdf",b);
+  });});
+  return ch;
+ }).then(function(){return zip.generateAsync({type:"blob"});}).then(function(blob){saveBlob(blob,bn+"-split.zip");show(T[L].done,false);})
+ .catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errOut,true);}).then(function(){busy=false;});
+});
+function applyLang(){
+ var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ document.title=L==="ar"?"دمج وتقسيم وترتيب صفحات PDF مجانًا | Sayvoi":"Merge, Split and Organize PDF Pages: Free and Private | Sayvoi";
+ if(pages.length)render();
+}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+var VID={en:"",ar:""};
+applyLang();
+})();
+</script>
+</body>
+</html>
