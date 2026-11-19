@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Convert Word to PDF in your browser. Test version.">
+<meta name="description" content="Convert Word to PDF and PDF to Word in your browser. Test version.">
 <meta name="robots" content="noindex, nofollow">
-<title>Word to PDF | Sayvoi</title>
+<title>Word to PDF and PDF to Word | Sayvoi</title>
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 .sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
@@ -51,6 +51,8 @@
 <p data-i="lead"></p>
 <p class="privp" data-i="priv"></p>
 
+<div class="tabs" role="tablist" style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0"><button type="button" class="b" id="tabW" role="tab" data-i="tabW"></button><button type="button" class="b sec" id="tabP" role="tab" data-i="tabP"></button></div>
+<div id="paneW">
 <h2 data-i="hIn"></h2>
 <div class="btns"><button type="button" class="b" id="pick" data-i="pick"></button><input type="file" id="fileW" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden><span id="fname" class="fnm"></span></div>
 <div class="scan" id="msg" role="status"></div>
@@ -75,6 +77,27 @@
 
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+</div>
+<div id="paneP" style="display:none">
+<h2 data-i="pIn"></h2>
+<div class="btns"><button type="button" class="b" id="ppick" data-i="ppick"></button><input type="file" id="fileP" accept=".pdf,application/pdf" hidden><span id="pname" class="fnm"></span></div>
+<div class="scan" id="pmsg" role="status"></div>
+<div id="pwork" style="display:none">
+ <h2 data-i="pOpt"></h2>
+ <div class="row">
+  <div class="col"><label for="pdir" data-i="pOd"></label><select id="pdir"><option value="auto" data-k="dA" selected></option><option value="rtl" data-k="dR"></option><option value="ltr" data-k="dL"></option></select></div>
+  <div class="col"><label for="pbrk" data-i="pOb"></label><select id="pbrk"><option value="keep" data-k="pbK" selected></option><option value="cont" data-k="pbC"></option></select></div>
+  <div class="col"><label for="psiz" data-i="pOs"></label><select id="psiz"><option value="orig" data-k="psO" selected></option><option value="norm" data-k="psN"></option></select></div>
+ </div>
+ <h2 data-i="pPrev"></h2>
+ <p class="smallp" id="pinfo"></p>
+ <div id="pprev" class="docprev"></div>
+ <h2 data-i="pDl"></h2>
+ <div class="btns"><button type="button" class="b" id="pdl" data-i="pdl"></button></div>
+</div>
+<h2 data-i="h2b"></h2>
+<ul><li data-h="pn1"></li><li data-h="pn2"></li><li data-h="pn3"></li><li data-h="pn4"></li></ul>
+</div>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
 </article>
 
@@ -87,9 +110,20 @@ var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
 var T={
 en:{dir:"ltr",btn:"العربية",
  foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
- h1:"Word to PDF Converter: Free and Private",
- lead:"Choose a Word file (.docx) and turn it into a PDF in your browser. It keeps the text, headings, lists, tables and pictures, and it handles Arabic and right-to-left text.",
- priv:"Your file is never uploaded. It is converted on your device.",
+ tabW:"Word to PDF",tabP:"PDF to Word",
+ pIn:"1. Choose your PDF file",ppick:"Choose a PDF file",
+ pOpt:"2. Options",pOd:"Text direction",pOb:"Page breaks",pbK:"Keep the original pages",pbC:"Continuous text (no page breaks)",pOs:"Text size",psO:"Original sizes",psN:"One normal size",
+ pPrev:"3. Check the text",pinfo:"{p} pages and {n} paragraphs found.",pNoText:"{k} pages have no text (probably pictures).",
+ pDl:"4. Get the Word file",pdl:"Download Word file",
+ errPdfType:"Please choose a PDF file.",errPdfRead:"Could not read this PDF. It may be damaged.",errPass:"This PDF is protected with a password. Remove the password first.",errScan:"This PDF has no text to extract. It is probably a scan (pictures of pages). That needs OCR, which this tool does not do.",errDocx:"Could not create the Word file.",
+ pPage:"Reading page {a} of {b}...",pDone:"Done. The Word file was downloaded.",
+ pn1:"This tool takes the text out of the PDF and puts it in a Word file you can edit. It does not copy the exact layout: pictures, tables, columns, headers and footers are not kept.",
+ pn2:"Scanned PDFs (pictures of pages) have no text, so they cannot be converted. They need OCR.",
+ pn3:"Check Arabic text after converting. Some PDFs store Arabic in a way that makes letters or word order come out wrong, and no tool can fix that perfectly.",
+ pn4:"Your file stays on your device and is not uploaded.",
+ h1:"Word to PDF and PDF to Word Converter: Free and Private",
+ lead:"Turn a Word file (.docx) into a PDF, or a PDF into an editable Word file, in your browser. Both handle Arabic and right-to-left text.",
+ priv:"Your files are never uploaded. It is converted on your device.",
  hIn:"1. Choose your Word file",pick:"Choose a .docx file",
  hOpt:"2. Options",oSize:"Paper size",oMargin:"Margins",mN:"Narrow",mM:"Normal",mW:"Wide",oFont:"Text size",fS:"Small",fM:"Normal",fL:"Large",oDir:"Text direction",dA:"Automatic (by the main language of each paragraph)",dR:"Right to left (Arabic)",dL:"Left to right",
  hPrev:"3. Preview",warnN:"Notes from the file: {n}",warn0:"Converted with no warnings.",
@@ -105,9 +139,20 @@ en:{dir:"ltr",btn:"العربية",
  back:"Back to the tools"},
 ar:{dir:"rtl",btn:"English",
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
- h1:"تحويل Word إلى PDF: مجانًا وبخصوصية",
- lead:"اختر ملف Word (.docx) وحوّله إلى PDF داخل متصفحك. تحافظ الأداة على النصوص والعناوين والقوائم والجداول والصور، وتتعامل مع العربية والنص من اليمين إلى اليسار.",
- priv:"لا يُرفع ملفك أبدًا. يتم التحويل على جهازك.",
+ tabW:"من Word إلى PDF",tabP:"من PDF إلى Word",
+ pIn:"1. اختر ملف PDF",ppick:"اختر ملف PDF",
+ pOpt:"2. الخيارات",pOd:"اتجاه النص",pOb:"فواصل الصفحات",pbK:"الإبقاء على الصفحات الأصلية",pbC:"نص متصل (بدون فواصل صفحات)",pOs:"حجم الخط",psO:"الأحجام الأصلية",psN:"حجم عادي واحد",
+ pPrev:"3. راجع النص",pinfo:"وُجدت {p} صفحات و{n} فقرة.",pNoText:"{k} صفحات بلا نص (غالبًا صور).",
+ pDl:"4. احصل على ملف Word",pdl:"نزّل ملف Word",
+ errPdfType:"اختر ملف PDF من فضلك.",errPdfRead:"تعذّرت قراءة ملف PDF هذا. قد يكون تالفًا.",errPass:"ملف PDF هذا محمي بكلمة مرور. أزل كلمة المرور أولًا.",errScan:"لا يوجد نص في هذا الملف لاستخراجه. غالبًا هو ممسوح ضوئيًا (صور صفحات). وهذا يحتاج OCR وهو غير متوفر في هذه الأداة.",errDocx:"تعذّر إنشاء ملف Word.",
+ pPage:"جارٍ قراءة الصفحة {a} من {b}...",pDone:"تم. نزل ملف Word.",
+ pn1:"تستخرج الأداة النص من ملف PDF وتضعه في ملف Word يمكنك تعديله. ولا تنقل الشكل بالضبط: الصور والجداول والأعمدة والترويسة والتذييل لا تُحفظ.",
+ pn2:"ملفات PDF الممسوحة ضوئيًا (صور صفحات) ليس فيها نص، فلا يمكن تحويلها. وتحتاج إلى OCR.",
+ pn3:"راجع النص العربي بعد التحويل. بعض ملفات PDF تحفظ العربية بطريقة تجعل الحروف أو ترتيب الكلمات يخرج خطأ، ولا توجد أداة تصلح ذلك تمامًا.",
+ pn4:"ملفك يبقى على جهازك ولا يُرفع.",
+ h1:"تحويل Word إلى PDF وPDF إلى Word: مجانًا وبخصوصية",
+ lead:"حوّل ملف Word (.docx) إلى PDF، أو ملف PDF إلى ملف Word قابل للتعديل، داخل متصفحك. والاثنان يتعاملان مع العربية والنص من اليمين إلى اليسار.",
+ priv:"لا تُرفع ملفاتك أبدًا. يتم التحويل على جهازك.",
  hIn:"1. اختر ملف Word",pick:"اختر ملف .docx",
  hOpt:"2. الخيارات",oSize:"حجم الورق",oMargin:"الهوامش",mN:"ضيقة",mM:"عادية",mW:"واسعة",oFont:"حجم الخط",fS:"صغير",fM:"عادي",fL:"كبير",oDir:"اتجاه النص",dA:"تلقائي (حسب لغة كل فقرة)",dR:"من اليمين إلى اليسار (عربي)",dL:"من اليسار إلى اليمين",
  hPrev:"3. المعاينة",warnN:"ملاحظات من الملف: {n}",warn0:"تم التحويل دون تحذيرات.",
@@ -199,10 +244,39 @@ function paginate(host,ch){
  if(total-start>1)pages.push([start,total]);
  return pages;
 }
+function foRender(host,start,h,w){
+ return new Promise(function(res,rej){
+  var wrap=document.createElement("div");
+  wrap.setAttribute("xmlns","http://www.w3.org/1999/xhtml");
+  wrap.style.cssText="position:relative;width:"+w+"px;height:"+h+"px;overflow:hidden;background:#fff";
+  var inner=host.cloneNode(true);inner.style.left="0";inner.style.top=(-start)+"px";wrap.appendChild(inner);
+  var xml=new XMLSerializer().serializeToString(wrap);
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'"><foreignObject x="0" y="0" width="'+w+'" height="'+h+'"><style>'+DOCCSS+'</style>'+xml+'</foreignObject></svg>';
+  var img=new Image();
+  img.onload=function(){
+   try{
+    var c=document.createElement("canvas");c.width=w*2;c.height=h*2;
+    var g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.drawImage(img,0,0,c.width,c.height);
+    c.toDataURL("image/jpeg",0.5);res(c);
+   }catch(e){rej(e);}
+  };
+  img.onerror=function(){rej(new Error("fo"));};
+  img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+ });
+}
+function h2cRender(host,start,h,w){
+ return loadScript(BASE+"html2canvas.min.js").then(function(){
+  var wrap=document.createElement("div");
+  wrap.style.cssText="position:absolute;left:-100000px;top:0;width:"+w+"px;height:"+h+"px;overflow:hidden;background:#fff";
+  var inner=host.cloneNode(true);inner.style.left="0";inner.style.top=(-start)+"px";
+  wrap.appendChild(inner);document.body.appendChild(wrap);
+  return window.html2canvas(wrap,{scale:2,backgroundColor:"#ffffff",logging:false}).then(function(cv){document.body.removeChild(wrap);return cv;},function(e){if(wrap.parentNode)document.body.removeChild(wrap);throw e;});
+ });
+}
 function downloadPdf(){
  if(busy||!html)return;busy=true;show(T[L].busy,false);
  var dm=pageDims(),host=null;
- Promise.all([loadScript(BASE+"html2canvas.min.js"),loadScript(BASE+"pdf-lib.min.js")]).then(function(){
+ loadScript(BASE+"pdf-lib.min.js").then(function(){
   host=makeHost(dm.cw);
   return waitImgs(host);
  }).then(function(){
@@ -212,19 +286,15 @@ function downloadPdf(){
    pages.forEach(function(rg,idx){
     chain=chain.then(function(){
      show(T[L].page.replace("{a}",idx+1).replace("{b}",pages.length),false);
-     var h=rg[1]-rg[0],wrap=document.createElement("div");
-     wrap.style.cssText="position:absolute;left:-100000px;top:0;width:"+dm.cw+"px;height:"+h+"px;overflow:hidden;background:#fff";
-     var inner=host.cloneNode(true);inner.style.left="0";inner.style.top=(-rg[0])+"px";
-     wrap.appendChild(inner);document.body.appendChild(wrap);
-     return window.html2canvas(wrap,{scale:2,backgroundColor:"#ffffff",logging:false}).then(function(cv){
-      document.body.removeChild(wrap);
+     var h=rg[1]-rg[0];
+     return foRender(host,rg[0],h,dm.cw).catch(function(){return h2cRender(host,rg[0],h,dm.cw);}).then(function(cv){
       var jpg=cv.toDataURL("image/jpeg",0.88),b=atob(jpg.split(",")[1]),u=new Uint8Array(b.length);
       for(var k=0;k<b.length;k++)u[k]=b.charCodeAt(k);
       return pd.embedJpg(u).then(function(im){
        var pg=pd.addPage([dm.W,dm.H]),hh=h*0.75;
        pg.drawImage(im,{x:dm.m,y:dm.H-dm.m-hh,width:dm.cw*0.75,height:hh});
       });
-     },function(e){if(wrap.parentNode)document.body.removeChild(wrap);throw e;});
+     });
     });
    });
    return chain.then(function(){return pd.save();});
@@ -259,6 +329,204 @@ $("pick").addEventListener("click",function(){$("fileW").click();});
 $("fileW").addEventListener("change",function(){var f=this.files[0];this.value="";openFile(f);});
 ["dirs","fs"].forEach(function(id){$(id).addEventListener("change",function(){if(html)fillPreview();});});
 
+/* ---------- PDF to Word ---------- */
+var pst={buf:null,base:"document",pages:null,paras:[],busy:false,np:0,empty:0,pw:595,ph:842},tab="w";
+var HAS_AR=/[֐-ࣿיִ-﷿ﹰ-﻿]/,HAS_LA=/[A-Za-z]/;
+function pshow(txt,bad){var m=$("pmsg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function setTab(t){
+ tab=t;$("paneW").style.display=t==="w"?"":"none";$("paneP").style.display=t==="p"?"":"none";
+ $("tabW").className="b"+(t==="w"?"":" sec");$("tabP").className="b"+(t==="p"?"":" sec");
+ $("tabW").setAttribute("aria-selected",t==="w");$("tabP").setAttribute("aria-selected",t==="p");
+ try{history.replaceState(null,"",t==="p"?"#pdf-to-word":location.pathname+location.search);}catch(e){}
+}
+function cnt(s,re){return (s.match(re)||[]).length;}
+function extractPdf(buf,prog){
+ return loadScript(BASE+"pdf.min.js").then(function(){
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc=BASE+"pdf.worker.min.js";
+  return window.pdfjsLib.getDocument({data:new Uint8Array(buf)}).promise;
+ }).then(function(pdf){
+  var pages=[],n=pdf.numPages;
+  function next(i){
+   if(i>n)return pages;
+   prog(i,n);
+   return pdf.getPage(i).then(function(pg){
+    var vp=pg.getViewport({scale:1});
+    return pg.getTextContent().then(function(tc){pages.push({w:vp.width,h:vp.height,items:tc.items});return next(i+1);});
+   });
+  }
+  return Promise.resolve(next(1));
+ });
+}
+function sp(n){return n===2?"   ":n===1?" ":"";}
+function pageLines(pg,pi){
+ var it=[],i,o,s,tr,sz;
+ for(i=0;i<pg.items.length;i++){
+  o=pg.items[i];s=o.str||"";
+  if(s.normalize)s=s.normalize("NFKC");
+  if(!s.replace(/[\s\u064B-\u065F\u0670\u06D6-\u06ED]/g,""))continue;
+  tr=o.transform;sz=Math.sqrt(tr[0]*tr[0]+tr[1]*tr[1])||o.height||10;
+  if(Math.abs(tr[1])>Math.abs(tr[0])*0.5)continue;
+  it.push({s:s,x:tr[4],y:tr[5],w:o.width||0,sz:sz});
+ }
+ it.sort(function(a,b){return (b.y-a.y)||(a.x-b.x);});
+ var groups=[],cur=null;
+ it.forEach(function(o){
+  if(cur&&Math.abs(o.y-cur.y)<=Math.max(cur.sz,o.sz)*0.45)cur.it.push(o);
+  else{cur={y:o.y,sz:o.sz,it:[o]};groups.push(cur);}
+ });
+ var lines=[];
+ groups.forEach(function(g){
+  var a=g.it;a.sort(function(p,q){return p.x-q.x;});
+  var blocks=[],prev=null,x0=1e9,x1=-1e9,tot=0,ar=0,la=0,best=0,bsz=a[0].sz;
+  a.forEach(function(o){
+   var gap=prev?o.x-(prev.x+prev.w):0,sc=0,isAr=HAS_AR.test(o.s),lb=blocks[blocks.length-1];
+   if(prev){if(gap>3*o.sz)sc=2;else if(gap>0.15*o.sz&&!/\s$/.test(prev.s)&&!/^\s/.test(o.s))sc=1;}
+   if(!isAr&&lb&&!lb.ar&&sc<2)lb.t+=sp(sc)+o.s;else blocks.push({t:o.s,ar:isAr,sp:sc});
+   x0=Math.min(x0,o.x);x1=Math.max(x1,o.x+o.w);
+   var n=o.s.length;tot+=n;ar+=cnt(o.s,/[֐-ࣿיִ-﷿ﹰ-﻿]/g);la+=cnt(o.s,/[A-Za-z]/g);
+   if(n>best){best=n;bsz=o.sz;}
+   prev=o;
+  });
+  var rtl=ar>0&&ar>=la,t="",k;
+  if(rtl){blocks.reverse();for(k=0;k<blocks.length;k++){if(k>0)t+=sp(blocks[k-1].sp);t+=blocks[k].t;}}
+  else{for(k=0;k<blocks.length;k++){if(k>0)t+=sp(blocks[k].sp);t+=blocks[k].t;}}
+  t=t.replace(/^\s+|\s+$/g,"");
+  if(t)lines.push({t:t,x0:x0,x1:x1,y:g.y,sz:bsz,rtl:rtl,n:tot,pi:pi,pw:pg.w});
+ });
+ return lines;
+}
+function median(a){if(!a.length)return 0;a=a.slice().sort(function(x,y){return x-y;});return a[Math.floor(a.length/2)];}
+var BUL=/^([•●▪◦‣·○■□*\-–—]|\(?\d{1,3}[.)\-]|\(?[A-Za-z][.)]|[١-٩ء-ي][.)])\s/;
+function buildParas(){
+ var keep=$("pbrk").value==="keep",all=[],stats=[],pi,ls;
+ for(pi=0;pi<pst.pages.length;pi++){
+  ls=pageLines(pst.pages[pi],pi);
+  var gaps=[],left=1e9,right=-1e9,j;
+  for(j=0;j<ls.length;j++){left=Math.min(left,ls[j].x0);right=Math.max(right,ls[j].x1);if(j>0&&ls[j-1].y-ls[j].y>0)gaps.push(ls[j-1].y-ls[j].y);}
+  stats[pi]={typ:median(gaps)||12,left:left,right:right,W:right-left};
+  all=all.concat(ls);
+ }
+ var szc={};all.forEach(function(l){var k=Math.round(l.sz);szc[k]=(szc[k]||0)+l.n;});
+ var body=11,bm=0;for(var k in szc)if(szc[k]>bm){bm=szc[k];body=+k;}
+ var paras=[],cur=null,p=null;
+ all.forEach(function(l){
+  var st=stats[l.pi],brk=false,pb=false;
+  if(!p)brk=true;
+  else{
+   var short;
+   if(st.W<80)short=false;else if(p.rtl)short=(p.x0e-st.left)>0.12*st.W;else short=(st.right-p.x1e)>0.12*st.W;
+   if(p.pi!==l.pi){if(keep){brk=true;pb=true;}else if(short)brk=true;}
+   else{
+    var g=p.y-l.y;
+    if(g>1.5*st.typ||short||BUL.test(l.t)||l.rtl!==p.rtl||(Math.abs(l.sz-p.sz)>1.5&&(l.sz/p.sz>1.15||p.sz/l.sz>1.15)))brk=true;
+   }
+  }
+  if(brk){
+   cur={t:l.t,rtl:l.rtl,sz:l.sz,lines:1,x0:l.x0,x1:l.x1,pw:l.pw,pb:pb||(!p&&false),pi:l.pi};
+   paras.push(cur);
+  }else{cur.t+=" "+l.t;cur.lines++;cur.x0=Math.min(cur.x0,l.x0);cur.x1=Math.max(cur.x1,l.x1);}
+  p={rtl:l.rtl,pi:l.pi,y:l.y,sz:l.sz,x0e:l.x0,x1e:l.x1};
+ });
+ var forced=$("pdir").value;
+ var tr=0,tl=0;paras.forEach(function(q){if(q.rtl)tr++;else tl++;});
+ var docRtl=tr>tl;
+ paras.forEach(function(q){
+  var a=cnt(q.t,/[֐-ࣿיִ-﷿ﹰ-﻿]/g),la=cnt(q.t,/[A-Za-z]/g);
+  q.rtl=forced==="rtl"?true:forced==="ltr"?false:(a||la?a>=la:docRtl);
+  q.h=0;
+  if(q.sz>=body*1.22&&q.lines<=3){q.h=q.sz>=body*1.8?1:q.sz>=body*1.45?2:3;}
+  q.center=q.lines===1&&q.x0>0.12*q.pw&&Math.abs((q.x0+q.x1)/2-q.pw/2)<0.04*q.pw&&(q.x1-q.x0)<0.75*q.pw;
+  q.body=body;
+ });
+ pst.paras=paras;
+}
+function pRenderPrev(){
+ var box=$("pprev"),h="",i,q,lim=Math.min(pst.paras.length,300),esc=function(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;");};
+ for(i=0;i<lim;i++){
+  q=pst.paras[i];
+  var fs=q.h?(q.h===1?22:q.h===2?19:16):14;
+  h+='<p dir="'+(q.rtl?"rtl":"ltr")+'" style="margin:0 0 .6em;font-size:'+fs+'px;'+(q.h?"font-weight:700;":"")+(q.center?"text-align:center;":"")+'">'+esc(q.t)+'</p>';
+ }
+ if(pst.paras.length>lim)h+='<p style="opacity:.6">...</p>';
+ box.innerHTML=h;
+}
+function pInfo(){
+ var t=T[L],s=t.pinfo.replace("{p}",pst.np).replace("{n}",pst.paras.length);
+ if(pst.empty)s+=" "+t.pNoText.replace("{k}",pst.empty);
+ $("pinfo").textContent=s;
+}
+function pRefresh(){if(pst.pages&&$("pwork").style.display!=="none")pInfo();}
+function pOpen(f){
+ if(!f)return;
+ if(!/\.pdf$/i.test(f.name)&&f.type!=="application/pdf"){pshow(T[L].errPdfType,true);return;}
+ if(f.size>80*1024*1024){pshow(T[L].errBig,true);return;}
+ pst.base=f.name.replace(/\.pdf$/i,"")||"document";
+ $("pname").textContent=f.name;$("pwork").style.display="none";pshow(T[L].busy,false);
+ var fr=new FileReader();
+ fr.onerror=function(){pshow(T[L].errPdfRead,true);};
+ fr.onload=function(){
+  extractPdf(fr.result,function(a,b){pshow(T[L].pPage.replace("{a}",a).replace("{b}",b),false);}).then(function(pages){
+   var chars=0,empty=0;
+   pages.forEach(function(pg){var c=0;pg.items.forEach(function(o){c+=(o.str||"").replace(/\s/g,"").length;});chars+=c;if(c<5)empty++;});
+   if(chars<20){pshow(T[L].errScan,true);return;}
+   pst.pages=pages;pst.np=pages.length;pst.empty=empty;pst.pw=pages[0].w;pst.ph=pages[0].h;
+   buildParas();pRenderPrev();pInfo();
+   $("msg").style.display="none";$("pmsg").style.display="none";$("pwork").style.display="";
+  }).catch(function(e){
+   var n=e&&e.name||"";
+   if(n==="PasswordException")pshow(T[L].errPass,true);
+   else if(e&&e.message==="lib")pshow(T[L].errLib,true);
+   else pshow(T[L].errPdfRead,true);
+  });
+ };
+ fr.readAsArrayBuffer(f);
+}
+function runsFor(text,sz,bold,rtl){
+ var d=window.docx,toks=text.split(/(\s+)/),runs=[],cur=null,buf="";
+ function flush(c){
+  if(!buf)return;
+  var isA=(c||(rtl?"a":"l"))==="a";
+  runs.push(new d.TextRun({text:buf,bold:bold,size:sz,sizeComplexScript:sz,rightToLeft:isA,font:"Arial",color:"000000"}));
+  buf="";
+ }
+ toks.forEach(function(t){
+  if(!t)return;
+  var c=HAS_AR.test(t)?"a":HAS_LA.test(t)?"l":null;
+  if(c&&cur&&c!==cur){flush(cur);cur=c;}else if(c&&!cur)cur=c;
+  buf+=t;
+ });
+ flush(cur);
+ return runs;
+}
+function pDownload(){
+ if(pst.busy||!pst.paras.length)return;
+ pst.busy=true;pshow(T[L].busy,false);
+ loadScript(BASE+"docx.umd.js").then(function(){
+  var d=window.docx,orig=$("psiz").value==="orig",kids=[];
+  pst.paras.forEach(function(q){
+   var base=orig?Math.max(14,Math.min(144,Math.round(q.sz*2))):(q.h?(q.h===1?36:q.h===2?30:26):24);
+   var o={children:runsFor(q.t,base,!!q.h,q.rtl),bidirectional:q.rtl,spacing:{after:q.h?160:120},keepNext:!!q.h};
+   if(q.center)o.alignment=d.AlignmentType.CENTER;
+   if(q.pb)o.pageBreakBefore=true;
+   if(q.h)o.heading=q.h===1?d.HeadingLevel.HEADING_1:q.h===2?d.HeadingLevel.HEADING_2:d.HeadingLevel.HEADING_3;
+   kids.push(new d.Paragraph(o));
+  });
+  var doc=new d.Document({sections:[{properties:{page:{size:{width:Math.round(pst.pw*20),height:Math.round(pst.ph*20)},margin:{top:1134,bottom:1134,left:1134,right:1134}}},children:kids}]});
+  return d.Packer.toBlob(doc);
+ }).then(function(blob){
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=pst.base+".docx";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},4000);
+  pshow(T[L].pDone,false);
+ }).catch(function(e){pshow(e&&e.message==="lib"?T[L].errLib:T[L].errDocx,true);}).then(function(){pst.busy=false;});
+}
+$("tabW").addEventListener("click",function(){setTab("w");});
+$("tabP").addEventListener("click",function(){setTab("p");});
+$("ppick").addEventListener("click",function(){$("fileP").click();});
+$("fileP").addEventListener("change",function(){var f=this.files[0];this.value="";pOpen(f);});
+$("pdl").addEventListener("click",pDownload);
+["pdir","pbrk"].forEach(function(id){$(id).addEventListener("change",function(){if(pst.pages){buildParas();pRenderPrev();pInfo();}});});
+if(location.hash==="#pdf-to-word")setTab("p");
+
 function applyLang(){
  var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  document.documentElement.lang=L;document.documentElement.dir=t.dir;
@@ -266,8 +534,9 @@ function applyLang(){
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
  var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
- document.title=L==="ar"?"تحويل Word إلى PDF مجانًا | Sayvoi":"Word to PDF Converter: Free and Private | Sayvoi";
+ document.title=L==="ar"?"تحويل Word إلى PDF وPDF إلى Word مجانًا | Sayvoi":"Word to PDF and PDF to Word Converter: Free and Private | Sayvoi";
  if(html)setWarn();
+ pRefresh();
 }
 $("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
 applyLang();
