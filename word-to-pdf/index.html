@@ -105,6 +105,7 @@
 <h2 data-i="h2b"></h2>
 <ul><li data-h="pn1"></li><li data-h="pn2"></li><li data-h="pn3"></li><li data-h="pn4"></li></ul>
 </div>
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi Word and PDF guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
 </article>
 
@@ -117,6 +118,7 @@ var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
 var T={
 en:{dir:"ltr",btn:"العربية",
  foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"Watch: Word to PDF and PDF to Word",vidP:"A short video guide that explains every button.",
  tabW:"Word to PDF",tabP:"PDF to Word",
  pIn:"1. Choose your PDF file",ppick:"Choose a PDF file",
  pOpt:"2. Options",pOd:"Text direction",pOb:"Page breaks",pbK:"Keep the original pages",pbC:"Continuous text (no page breaks)",pOs:"Text size",psO:"Original sizes",psN:"One normal size",
@@ -146,6 +148,7 @@ en:{dir:"ltr",btn:"العربية",
  back:"Back to the tools"},
 ar:{dir:"rtl",btn:"English",
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"شاهد: من Word إلى PDF ومن PDF إلى Word",vidP:"شرح مصوّر قصير يشرح كل الأزرار.",
  tabW:"من Word إلى PDF",tabP:"من PDF إلى Word",
  pIn:"1. اختر ملف PDF",ppick:"اختر ملف PDF",
  pOpt:"2. الخيارات",pOd:"اتجاه النص",pOb:"فواصل الصفحات",pbK:"الإبقاء على الصفحات الأصلية",pbC:"نص متصل (بدون فواصل صفحات)",pOs:"حجم الخط",psO:"الأحجام الأصلية",psN:"حجم عادي واحد",
@@ -175,7 +178,7 @@ ar:{dir:"rtl",btn:"English",
  back:"العودة إلى الأدوات"}
 };
 /* ---------- app ---------- */
-var VID={en:"",ar:""};var BASE="/word-to-pdf/lib/",libs={},html="",fileBase="document",busy=false,warns=0;
+var VID={en:"LmcmX6n8-y0",ar:"NR36hduf0p8"};var BASE="/word-to-pdf/lib/",libs={},html="",fileBase="document",busy=false,warns=0;
 function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
 function hide(){$("msg").style.display="none";}
 function loadScript(src){
