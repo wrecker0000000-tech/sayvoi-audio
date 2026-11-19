@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Compress PDF online for free. Make a PDF smaller in your browser, keeping the text or getting the smallest file. Nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/compress-pdf/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Compress PDF: Make a PDF Smaller for Free">
+<meta property="og:description" content="Reduce PDF size in your browser. Keep the text or get the smallest file. Nothing is uploaded.">
+<meta property="og:url" content="https://convert.sayvoi.com/compress-pdf/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Compress PDF: Make a PDF Smaller for Free | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}
+.flist{display:flex;flex-direction:column;gap:8px;margin:10px 0}.fchip{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid rgba(128,128,128,.35);border-radius:12px}
+.fchip .tg{font-weight:800;padding:2px 8px;border-radius:8px;background:rgba(124,77,255,.15)}.fchip .fn{flex:1;word-break:break-all}.fchip .fp{opacity:.7;font-size:14px;white-space:nowrap}.fchip button{border:0;background:transparent;font-size:18px;cursor:pointer;color:inherit}
+.tb .b{padding:8px 12px;font-size:14px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:12px 0}
+.pc{position:relative;border:2px solid rgba(128,128,128,.3);border-radius:14px;padding:8px;background:rgba(128,128,128,.06);text-align:center;cursor:grab}
+.pc.on{border-color:#7c4dff;background:rgba(124,77,255,.12)}
+.pc .ck{position:absolute;top:6px;inset-inline-start:8px;z-index:2}.pc .ck input{width:20px;height:20px}
+.pc .th{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pc .th img{max-width:100%;max-height:100%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform .15s}
+.pc .nm{font-size:13px;margin:6px 0;opacity:.85}
+.pc .pb{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}.pc .pb button{width:30px;height:30px;border-radius:8px;border:1px solid rgba(128,128,128,.4);background:transparent;color:inherit;cursor:pointer;font-size:14px;padding:0}
+input[type=text],input[type=number]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit;box-sizing:border-box}
+
+.stat{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0}.stat div{flex:1;min-width:150px;padding:12px;border:1px solid rgba(128,128,128,.35);border-radius:12px}.stat b{display:block;font-size:20px}
+select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<p class="privp" data-i="priv"></p>
+
+<h2 data-i="hIn"></h2>
+<div class="btns"><button type="button" class="b" id="pick" data-i="pick"></button><input type="file" id="fileP" accept=".pdf,application/pdf" hidden></div>
+<p class="smallp" data-i="dropHint"></p>
+<div class="scan" id="msg" role="status"></div>
+<div id="info" class="fchip" style="display:none"><span class="fn" id="fname"></span><span class="fp" id="fsize"></span></div>
+
+<div id="work" style="display:none">
+ <h2 data-i="hOpt"></h2>
+ <div class="row">
+  <div class="col"><label for="mode" data-i="mL"></label><select id="mode"><option value="keep" data-k="mK" selected></option><option value="img" data-k="mI"></option></select></div>
+  <div class="col"><label for="qual" data-i="qL"></label><select id="qual"><option value="hi" data-k="qH"></option><option value="md" data-k="qM" selected></option><option value="lo" data-k="qLo"></option></select></div>
+ </div>
+ <p class="smallp" id="modeHint"></p>
+ <div class="btns"><button type="button" class="b" id="go" data-i="go"></button></div>
+
+ <div id="res" style="display:none">
+  <h2 data-i="hRes"></h2>
+  <div class="stat"><div><span data-i="sOld"></span><b id="vOld"></b></div><div><span data-i="sNew"></span><b id="vNew"></b></div><div><span data-i="sSave"></span><b id="vSave"></b></div></div>
+  <p class="smallp" id="resHint"></p>
+  <div class="btns"><button type="button" class="b" id="dl" data-i="dl"></button></div>
+ </div>
+</div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Compress PDF: Make a PDF Smaller for Free",
+ lead:"Reduce the size of a PDF so it is easy to email or upload. Choose to keep the text selectable, or get the smallest possible file.",
+ priv:"Your file is never uploaded. Everything happens on your device.",
+ hIn:"1. Choose your PDF file",pick:"Choose a PDF file",dropHint:"You can also drop a PDF file here.",
+ hOpt:"2. Choose how to compress",mL:"Method",mK:"Keep the text (shrinks pictures only)",mI:"Smallest file (pages become pictures)",qL:"Quality",qH:"High quality",qM:"Medium (recommended)",qLo:"Smallest size",
+ hKeep:"Text stays selectable and sharp. Only the pictures inside the PDF are made lighter. Works best on PDFs with photos.",
+ hImg:"Every page is turned into a picture. This gives the smallest file for scans, but the text can no longer be selected or searched.",
+ go:"Compress",hRes:"3. Result",sOld:"Original size: ",sNew:"New size: ",sSave:"Saved: ",dl:"Download the smaller PDF",
+ rBetter:"The file is smaller. Check it before you send it.",rSmall:"This file is already small. The new version is only a little smaller.",rNone:"Could not make this file smaller with these settings. Try the other method, or lower the quality.",
+ errType:"Please choose a PDF file.",errRead:"Could not read this PDF. It may be damaged.",errPass:"This PDF is protected with a password. Remove the password first.",errLib:"Could not load the tool. Check your connection and try again.",errOut:"Could not compress this PDF.",
+ busy:"Working...",pg:"Page {a} of {b}...",img:"Pictures {a} of {b}...",
+ h2b:"Notes",
+ n1:"If the first try does not make the file much smaller, choose the second method or a lower quality.",
+ n2:"The second method removes the ability to select text, so use it for scans or when size matters most.",
+ n3:"Always open the new file and check the pages before you send it.",
+ n4:"A password-protected PDF must be unlocked first. Your file stays on your device and is not uploaded.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"ضغط PDF: صغّر حجم ملف PDF مجانًا",
+ lead:"قلّل حجم ملف PDF ليسهل إرساله بالبريد أو رفعه. اختر الإبقاء على النص قابلًا للتحديد، أو احصل على أصغر ملف ممكن.",
+ priv:"لا يُرفع ملفك أبدًا. كل شيء يتم على جهازك.",
+ hIn:"1. اختر ملف PDF",pick:"اختر ملف PDF",dropHint:"ويمكنك أيضًا إسقاط ملف PDF هنا.",
+ hOpt:"2. اختر طريقة الضغط",mL:"الطريقة",mK:"الإبقاء على النص (تصغير الصور فقط)",mI:"أصغر ملف (تتحول الصفحات إلى صور)",qL:"الجودة",qH:"جودة عالية",qM:"متوسطة (موصى بها)",qLo:"أصغر حجم",
+ hKeep:"يبقى النص قابلًا للتحديد وواضحًا. وتُخفَّف الصور داخل الملف فقط. وأفضل نتيجة مع الملفات التي فيها صور.",
+ hImg:"تتحول كل صفحة إلى صورة. وهذا يعطي أصغر ملف للمستندات الممسوحة، لكن لا يمكن بعده تحديد النص أو البحث فيه.",
+ go:"اضغط الملف",hRes:"3. النتيجة",sOld:"الحجم الأصلي: ",sNew:"الحجم الجديد: ",sSave:"الموفَّر: ",dl:"نزّل ملف PDF الأصغر",
+ rBetter:"صار الملف أصغر. راجعه قبل أن ترسله.",rSmall:"هذا الملف صغير أصلًا. والنسخة الجديدة أصغر قليلًا فقط.",rNone:"تعذّر تصغير هذا الملف بهذه الإعدادات. جرّب الطريقة الأخرى، أو خفّض الجودة.",
+ errType:"اختر ملف PDF من فضلك.",errRead:"تعذّرت قراءة ملف PDF هذا. قد يكون تالفًا.",errPass:"ملف PDF هذا محمي بكلمة مرور. أزل كلمة المرور أولًا.",errLib:"تعذّر تحميل الأداة. تأكد من اتصالك وحاول مرة أخرى.",errOut:"تعذّر ضغط هذا الملف.",
+ busy:"جارٍ العمل...",pg:"الصفحة {a} من {b}...",img:"الصور {a} من {b}...",
+ h2b:"ملاحظات",
+ n1:"إذا لم تصغّر المحاولة الأولى الملف كثيرًا، فاختر الطريقة الثانية أو جودة أقل.",
+ n2:"الطريقة الثانية تُلغي إمكانية تحديد النص، فاستخدمها للمستندات الممسوحة أو حين يكون الحجم هو الأهم.",
+ n3:"افتح الملف الجديد وراجع صفحاته دائمًا قبل إرساله.",
+ n4:"ملف PDF المحمي بكلمة مرور يجب فتحه أولًا. وملفك يبقى على جهازك ولا يُرفع.",
+ back:"العودة إلى الأدوات"}
+};
+/* ---------- app ---------- */
+var BASE="/compress-pdf/lib/",libs={},cur=null,outBytes=null,busy=false;
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function hide(){$("msg").style.display="none";}
+function fmt(s,o){for(var k in o)s=s.replace("{"+k+"}",o[k]);return s;}
+function loadScript(src){
+ if(libs[src])return libs[src];
+ libs[src]=new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){libs[src]=null;rej(new Error("lib"));};document.head.appendChild(s);});
+ return libs[src];
+}
+function ensurePdfjs(){return loadScript(BASE+"pdf.min.js").then(function(){window.pdfjsLib.GlobalWorkerOptions.workerSrc=BASE+"pdf.worker.min.js";});}
+function ensureLib(){return loadScript(BASE+"pdf-lib.min.js");}
+function size(n){return n>=1048576?(n/1048576).toFixed(2)+" MB":Math.max(1,Math.round(n/1024))+" KB";}
+function modeHint(){$("modeHint").textContent=$("mode").value==="keep"?T[L].hKeep:T[L].hImg;}
+$("mode").addEventListener("change",modeHint);
+function openFile(f){
+ if(!f)return;
+ if(!/\.pdf$/i.test(f.name)&&f.type!=="application/pdf"){show(T[L].errType,true);return;}
+ var fr=new FileReader();
+ fr.onerror=function(){show(T[L].errRead,true);};
+ fr.onload=function(){
+  var bytes=new Uint8Array(fr.result);
+  ensurePdfjs().then(function(){return window.pdfjsLib.getDocument({data:bytes.slice(0)}).promise;}).then(function(doc){
+   cur={name:f.name,bytes:bytes,doc:doc,n:doc.numPages};outBytes=null;
+   $("fname").textContent=f.name+" ("+doc.numPages+")";$("fsize").textContent=size(bytes.length);
+   $("info").style.display="flex";$("work").style.display="";$("res").style.display="none";hide();modeHint();
+  }).catch(function(e){show(e&&e.message==="lib"?T[L].errLib:(e&&e.name==="PasswordException"?T[L].errPass:T[L].errRead),true);});
+ };
+ fr.readAsArrayBuffer(f);
+}
+$("pick").addEventListener("click",function(){$("fileP").click();});
+$("fileP").addEventListener("change",function(){var f=this.files[0];this.value="";openFile(f);});
+document.addEventListener("dragover",function(e){if(e.dataTransfer&&e.dataTransfer.types&&Array.prototype.indexOf.call(e.dataTransfer.types,"Files")>=0)e.preventDefault();});
+document.addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length){e.preventDefault();openFile(e.dataTransfer.files[0]);}});
+var Q={hi:{q:0.8,md:2400,dpi:150},md:{q:0.62,md:1600,dpi:110},lo:{q:0.45,md:1000,dpi:80}};
+function canvasToBytes(c,q){
+ return new Promise(function(res,rej){
+  function viaData(){try{var u=c.toDataURL("image/jpeg",q),b=atob(u.split(",")[1]),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);res(a);}catch(e){rej(e);}}
+  if(c.toBlob){c.toBlob(function(bl){if(!bl)return viaData();var fr=new FileReader();fr.onload=function(){res(new Uint8Array(fr.result));};fr.onerror=viaData;fr.readAsArrayBuffer(bl);},"image/jpeg",q);}else viaData();
+ });
+}
+/* method 1: keep text, recompress JPEG images */
+function compressKeep(bytes,qc){
+ var P;
+ return ensureLib().then(function(){
+  P=window.PDFLib;return P.PDFDocument.load(bytes);
+ }).then(function(doc){
+  var ctx=doc.context,list=[],N=P.PDFName;
+  ctx.enumerateIndirectObjects().forEach(function(pair){
+   var ref=pair[0],o=pair[1];
+   if(!(o instanceof P.PDFRawStream))return;
+   var d=o.dict;
+   if(d.get(N.of("Subtype"))!==N.of("Image"))return;
+   if(d.get(N.of("Filter"))!==N.of("DCTDecode"))return;
+   var im=d.get(N.of("ImageMask"));if(im&&String(im)==="true")return;
+   var cs=d.get(N.of("ColorSpace")),ok=false;
+   if(cs===N.of("DeviceRGB")||cs===N.of("DeviceGray"))ok=true;
+   else if(cs instanceof P.PDFArray&&cs.size()>1&&cs.get(0)===N.of("ICCBased"))ok=true;
+   if(!ok)return;
+   list.push([ref,o]);
+  });
+  var ch=Promise.resolve(),i=0;
+  list.forEach(function(it){ch=ch.then(function(){
+   $("msg").textContent=fmt(T[L].img,{a:++i,b:list.length});
+   var d=it[1].dict,old=it[1].contents;
+   return new Promise(function(res){
+    var url=URL.createObjectURL(new Blob([old],{type:"image/jpeg"})),img=new Image();
+    img.onerror=function(){URL.revokeObjectURL(url);res();};
+    img.onload=function(){
+     URL.revokeObjectURL(url);
+     var w=img.naturalWidth,h=img.naturalHeight,s=Math.min(1,qc.md/Math.max(w,h)),nw=Math.max(1,Math.round(w*s)),nh=Math.max(1,Math.round(h*s));
+     var c=document.createElement("canvas");c.width=nw;c.height=nh;var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,nw,nh);x.drawImage(img,0,0,nw,nh);
+     canvasToBytes(c,qc.q).then(function(nb){
+      if(nb.length<old.length*0.95){
+       d.set(N.of("Width"),P.PDFNumber.of(nw));d.set(N.of("Height"),P.PDFNumber.of(nh));
+       d.set(N.of("ColorSpace"),N.of("DeviceRGB"));d.set(N.of("BitsPerComponent"),P.PDFNumber.of(8));
+       d.delete(N.of("Decode"));d.delete(N.of("DecodeParms"));d.set(N.of("Length"),P.PDFNumber.of(nb.length));
+       ctx.assign(it[0],P.PDFRawStream.of(d,nb));
+      }
+      res();
+     }).catch(function(){res();});
+    };
+    img.src=url;
+   });
+  });});
+  return ch.then(function(){return doc.save({useObjectStreams:true});});
+ });
+}
+/* method 2: pages become pictures */
+function compressImg(qc){
+ var P,out,n=cur.n;
+ return ensureLib().then(function(){P=window.PDFLib;return P.PDFDocument.create();}).then(function(o){
+  out=o;var ch=Promise.resolve();
+  for(var i=1;i<=n;i++)(function(i){ch=ch.then(function(){
+   $("msg").textContent=fmt(T[L].pg,{a:i,b:n});
+   return cur.doc.getPage(i).then(function(pg){
+    var v1=pg.getViewport({scale:1}),sc=qc.dpi/72,mx=4000;
+    if(Math.max(v1.width,v1.height)*sc>mx)sc=mx/Math.max(v1.width,v1.height);
+    var v=pg.getViewport({scale:sc}),c=document.createElement("canvas");c.width=Math.round(v.width);c.height=Math.round(v.height);
+    var x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);
+    return pg.render({canvasContext:x,viewport:v}).promise.then(function(){return canvasToBytes(c,qc.q);}).then(function(b){
+     c.width=1;c.height=1;
+     return out.embedJpg(b).then(function(im){var p=out.addPage([v1.width,v1.height]);p.drawImage(im,{x:0,y:0,width:v1.width,height:v1.height});});
+    });
+   });
+  });})(i);
+  return ch;
+ }).then(function(){return out.save({useObjectStreams:true});});
+}
+$("go").addEventListener("click",function(){
+ if(busy||!cur)return;busy=true;outBytes=null;$("res").style.display="none";show(T[L].busy,false);
+ var qc=Q[$("qual").value],p=$("mode").value==="keep"?compressKeep(cur.bytes,qc):compressImg(qc);
+ p.then(function(b){
+  var o=cur.bytes.length,nw=b.length;
+  $("vOld").textContent=size(o);$("vNew").textContent=size(nw);
+  var saved=Math.round((1-nw/o)*100);
+  $("vSave").textContent=(saved>0?saved:0)+"%";
+  var hint,can=true;
+  if(nw>=o*0.98){hint=T[L].rNone;can=false;}
+  else if(saved<10){hint=T[L].rSmall;}
+  else hint=T[L].rBetter;
+  $("resHint").textContent=hint;$("dl").style.display=can?"":"none";
+  if(can)outBytes=b;
+  $("res").style.display="";hide();
+ }).catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errOut,true);}).then(function(){busy=false;});
+});
+$("dl").addEventListener("click",function(){
+ if(!outBytes)return;
+ var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([outBytes],{type:"application/pdf"}));
+ a.download=cur.name.replace(/\.pdf$/i,"")+"-compressed.pdf";document.body.appendChild(a);a.click();
+ setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},4000);
+});
+function applyLang(){
+ var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var k=document.querySelectorAll("[data-k]");for(var m=0;m<k.length;m++)k[m].textContent=t[k[m].getAttribute("data-k")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ document.title=L==="ar"?"ضغط PDF: صغّر حجم الملف مجانًا | Sayvoi":"Compress PDF: Make a PDF Smaller for Free | Sayvoi";
+ modeHint();
+}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+var VID={en:"",ar:""};
+applyLang();
+})();
+</script>
+</body>
+</html>
