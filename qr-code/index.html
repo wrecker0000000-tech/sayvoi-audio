@@ -90,6 +90,7 @@ select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,
 
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi QR code guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
 </article>
 
@@ -102,6 +103,7 @@ var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
 var T={
 en:{dir:"ltr",btn:"العربية",
  foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"Watch: how to make a QR code",vidP:"A short video guide that explains every button.",
  h1:"Free QR Code Generator: Link, WhatsApp, Wi-Fi and More",
  lead:"Create a QR code in seconds, add your colors and logo, and download it as PNG or SVG. It is free, has no limit, and never expires.",
  priv:"Your data is not uploaded. The code is made on your device.",
@@ -127,6 +129,7 @@ en:{dir:"ltr",btn:"العربية",
  back:"Back to the tools"},
 ar:{dir:"rtl",btn:"English",
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ vidH:"شاهد: كيف تنشئ باركود QR",vidP:"شرح مصوّر قصير يشرح كل الأزرار.",
  h1:"إنشاء باركود QR مجانًا: رابط وواتساب وواي فاي وغيرها",
  lead:"أنشئ رمز QR (باركود) في ثوانٍ، وأضف ألوانك وشعارك، ونزّله بصيغة PNG أو SVG. مجاني، وبلا حد، ولا تنتهي صلاحيته.",
  priv:"لا تُرفع بياناتك. يُنشأ الرمز على جهازك.",
@@ -267,7 +270,7 @@ function applyLang(){
  renderTypes();renderFields();update();
 }
 $("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
-var VID={en:"",ar:""};
+var VID={en:"yyefwz7LYr8",ar:"1tTH-ptVZ-U"};
 applyLang();
 })();
 </script>
