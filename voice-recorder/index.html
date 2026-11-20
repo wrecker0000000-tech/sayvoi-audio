@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Record your voice in the browser. Test room noise, choose WAV or MP3, 16, 24 or 48 kHz, mono or stereo, 16 or 24-bit, add silence before and after, and download all takes as a ZIP. Free, no upload.">
+<meta name="description" content="Record your voice in the browser. Test room noise, choose WAV or MP3, 16, 24, 44.1 or 48 kHz, mono or stereo, 16 or 24-bit, add silence before and after, and download all takes as a ZIP. Free, no upload.">
 <link rel="canonical" href="https://convert.sayvoi.com/voice-recorder/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sayvoi">
 <meta property="og:title" content="Online Voice Recorder with Noise Test and ZIP Export">
-<meta property="og:description" content="Record your voice in the browser. Test room noise, choose WAV or MP3, 16, 24 or 48 kHz, mono or stereo, 16 or 24-bit, add silence before and after, and download all takes as a ZIP. Free, no upload.">
+<meta property="og:description" content="Record your voice in the browser. Test room noise, choose WAV or MP3, 16, 24, 44.1 or 48 kHz, mono or stereo, 16 or 24-bit, add silence before and after, and download all takes as a ZIP. Free, no upload.">
 <meta property="og:url" content="https://convert.sayvoi.com/voice-recorder/">
 <meta property="og:image" content="https://convert.sayvoi.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -107,7 +107,7 @@
  <summary data-i="g1"></summary>
  <div class="row">
   <div class="col"><label for="fmt" data-i="oFmt"></label><select id="fmt"><option value="wav">WAV</option><option value="mp3">MP3</option><option value="m4a">M4A (AAC)</option><option value="opus">WebM / OGG (Opus)</option></select></div>
-  <div class="col"><label for="rate" data-i="oRate"></label><select id="rate"><option value="16000">16 kHz</option><option value="24000">24 kHz</option><option value="48000" selected>48 kHz</option></select></div>
+  <div class="col"><label for="rate" data-i="oRate"></label><select id="rate"><option value="16000">16 kHz</option><option value="24000">24 kHz</option><option value="44100">44.1 kHz</option><option value="48000" selected>48 kHz</option></select></div>
   <div class="col"><label for="ch" data-i="oCh"></label><select id="ch"><option value="1" data-k="mono"></option><option value="2" data-k="stereo"></option></select></div>
   <div class="col"><label for="bits" data-i="oBits"></label><select id="bits"><option value="16">16-bit</option><option value="24">24-bit</option></select></div>
   <div class="col"><label for="kbps" data-i="oKbps"></label><select id="kbps"><option>96</option><option selected>128</option><option>192</option><option>256</option><option>320</option></select></div>
@@ -143,8 +143,13 @@
 <h2><span class="num">2</span><span data-i="s2"></span></h2>
 <div class="btns" style="margin-top:0;align-items:center">
   <button type="button" class="b sec" id="sUp"></button>
+  <button type="button" class="b sec" id="sWr"></button>
   <button type="button" class="b sec" id="sClr" style="display:none"></button>
   <input type="file" id="sFile" accept=".txt,text/plain" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+</div>
+<div id="wrBox" style="display:none;margin:0 0 10px">
+  <textarea id="wrTxt" dir="auto" rows="7" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #cbd5e1;font:inherit;font-size:1em;line-height:1.6"></textarea>
+  <div class="btns" style="margin-top:8px"><button type="button" class="b" id="wrOk"></button><button type="button" class="b sec" id="wrNo"></button></div>
 </div>
 <p style="margin:0 0 8px;opacity:.8;font-size:.9em" data-i="sHint"></p>
 <div class="recbox">
@@ -220,7 +225,7 @@ var T={
 en:{dir:"ltr",btn:"العربية",
  nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a><a href="/audio-speed/">Speed changer</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
  foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
- vidH:"Watch: how to use the recorder",vidP:"A short video guide (about 75 seconds). The steps are written on the screen.",h2n:"Notes",sS:"Script (optional)",sHint:"Upload a .txt file, one sentence per line. Lines like “001.sentence” or “001 [Tab] sentence [Tab] speed” work too: the number becomes the file name.",sUp:"Upload script (.txt)",sClr:"Remove script",sPrev:"Previous",sNext:"Next",sGo:"Go to number",sAuto:"Go to the next sentence after recording",sDone:"✓ Recorded",sFile:"File",sOf:" of ",sRecd:" recorded",sErr:"No sentences found in this file.",sConfirm:"Remove the script? Your recordings stay.",sPlay:"▶ Listen to my recording",sDel:"Delete this recording",sRev:"Review all sentences",fAll:"All sentences",fTodo:"Not recorded yet",fDone:"Recorded",sNone:"Nothing to show.",g4:"Room noise test",nzHint:"Stay silent for 3 seconds and the page tells you how noisy your room is. Do this before you start a project.",chip:"Free tool",s1:"Choose your recording quality",s2:"Record",s3:"Your recordings",p1:"Voice project",p2:"High quality",p3:"Small file",g1:"Format and quality",g2:"Silence and file names",g3:"Microphone",saved:"Your recordings are saved on this device, so you can close the page and continue later. Nothing is uploaded.",savedNo:"Saving on this device is not available in this browser. Download your files before closing the page.",confirmDel:"Delete all recordings from this device?",empty:"No recordings yet. Press Record.",storeUsed:"Recordings size: ",h1:"Online Voice Recorder",
+ vidH:"Watch: how to use the recorder",vidP:"A short video guide (about 75 seconds). The steps are written on the screen.",h2n:"Notes",sS:"Script (optional)",sHint:"Upload a .txt file or write your sentences yourself, one sentence per line. Lines like “001.sentence” or “001 [Tab] sentence [Tab] speed” work too: the number becomes the file name.",sUp:"Upload script (.txt)",sWr:"✍ Write sentences",wrPh:"Write or paste your sentences here, one sentence per line.",wrOk:"Use these sentences",wrNo:"Cancel",wrEmpty:"Write at least one sentence.",sClr:"Remove script",sPrev:"Previous",sNext:"Next",sGo:"Go to number",sAuto:"Go to the next sentence after recording",sDone:"✓ Recorded",sFile:"File",sOf:" of ",sRecd:" recorded",sErr:"No sentences found in this file.",sConfirm:"Remove the script? Your recordings stay.",sPlay:"▶ Listen to my recording",sDel:"Delete this recording",sRev:"Review all sentences",fAll:"All sentences",fTodo:"Not recorded yet",fDone:"Recorded",sNone:"Nothing to show.",g4:"Room noise test",nzHint:"Stay silent for 3 seconds and the page tells you how noisy your room is. Do this before you start a project.",chip:"Free tool",s1:"Choose your recording quality",s2:"Record",s3:"Your recordings",p1:"Voice project",p2:"High quality",p3:"Small file",g1:"Format and quality",g2:"Silence and file names",g3:"Microphone",saved:"Your recordings are saved on this device, so you can close the page and continue later. Nothing is uploaded.",savedNo:"Saving on this device is not available in this browser. Download your files before closing the page.",confirmDel:"Delete all recordings from this device?",empty:"No recordings yet. Press Record.",storeUsed:"Recordings size: ",h1:"Online Voice Recorder",
  lead:"Record your voice in the browser, test the room noise first, choose the format, sample rate, channels and bit depth, and download every take in one ZIP file.",
  
  oFmt:"Format",oRate:"Sample rate",oCh:"Channels",oBits:"Bit depth (WAV)",oKbps:"MP3 quality (kbps)",oPadB:"Silence before (seconds)",oPadA:"Silence after (seconds)",oDev:"Microphone",oPre:"File name prefix (optional)",oStart:"First number",oDigits:"Number digits",oRaw:"Microphone processing",
@@ -236,7 +241,7 @@ en:{dir:"ltr",btn:"العربية",
 ar:{dir:"rtl",btn:"English",
  nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a><a href="/audio-speed/">تغيير السرعة</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
- vidH:"شاهد: طريقة استخدام المسجّل",vidP:"شرح مصوّر قصير (نحو 75 ثانية). الخطوات مكتوبة على الشاشة.",h2n:"ملاحظات",sS:"النص المطلوب تسجيله (اختياري)",sHint:"ارفع ملف .txt فيه جملة في كل سطر. وتشتغل كمان أسطر مثل «001.جملة» أو «001 [Tab] جملة [Tab] سرعة»: الرقم يصبح اسم الملف.",sUp:"ارفع النص (.txt)",sClr:"احذف النص",sPrev:"السابق",sNext:"التالي",sGo:"اذهب للرقم",sAuto:"انتقل للجملة التالية بعد التسجيل",sDone:"✓ تم تسجيلها",sFile:"الملف",sOf:" من ",sRecd:" مسجّلة",sErr:"لا توجد جمل في هذا الملف.",sConfirm:"حذف النص؟ تسجيلاتك تبقى.",sPlay:"▶ استمع لتسجيلي",sDel:"احذف هذا التسجيل",sRev:"مراجعة كل الجمل",fAll:"كل الجمل",fTodo:"لم تُسجَّل بعد",fDone:"المسجّلة",sNone:"لا شيء للعرض.",g4:"اختبار ضوضاء الغرفة",nzHint:"ابقَ صامتًا 3 ثوانٍ وستخبرك الصفحة بمستوى ضوضاء الغرفة. افعل هذا قبل بدء المشروع.",chip:"أداة مجانية",s1:"اختر جودة التسجيل",s2:"سجّل",s3:"تسجيلاتك",p1:"مشروع صوتي",p2:"جودة عالية",p3:"ملف صغير",g1:"الصيغة والجودة",g2:"الصمت وأسماء الملفات",g3:"الميكروفون",saved:"تسجيلاتك محفوظة على هذا الجهاز، فتقدر تقفل الصفحة وتكمل بعدين. لا شيء يُرفع.",savedNo:"الحفظ على الجهاز غير متاح في هذا المتصفح. نزّل ملفاتك قبل إغلاق الصفحة.",confirmDel:"حذف كل التسجيلات من هذا الجهاز؟",empty:"لا توجد تسجيلات بعد. اضغط سجّل.",storeUsed:"حجم التسجيلات: ",h1:"مسجّل الصوت أونلاين",
+ vidH:"شاهد: طريقة استخدام المسجّل",vidP:"شرح مصوّر قصير (نحو 75 ثانية). الخطوات مكتوبة على الشاشة.",h2n:"ملاحظات",sS:"النص المطلوب تسجيله (اختياري)",sHint:"ارفع ملف .txt أو اكتب جملك بنفسك، جملة في كل سطر. وتشتغل كمان أسطر مثل «001.جملة» أو «001 [Tab] جملة [Tab] سرعة»: الرقم يصبح اسم الملف.",sUp:"ارفع النص (.txt)",sWr:"✍ اكتب الجمل",wrPh:"اكتب أو الصق جملك هنا، جملة في كل سطر.",wrOk:"استخدم هذه الجمل",wrNo:"إلغاء",wrEmpty:"اكتب جملة واحدة على الأقل.",sClr:"احذف النص",sPrev:"السابق",sNext:"التالي",sGo:"اذهب للرقم",sAuto:"انتقل للجملة التالية بعد التسجيل",sDone:"✓ تم تسجيلها",sFile:"الملف",sOf:" من ",sRecd:" مسجّلة",sErr:"لا توجد جمل في هذا الملف.",sConfirm:"حذف النص؟ تسجيلاتك تبقى.",sPlay:"▶ استمع لتسجيلي",sDel:"احذف هذا التسجيل",sRev:"مراجعة كل الجمل",fAll:"كل الجمل",fTodo:"لم تُسجَّل بعد",fDone:"المسجّلة",sNone:"لا شيء للعرض.",g4:"اختبار ضوضاء الغرفة",nzHint:"ابقَ صامتًا 3 ثوانٍ وستخبرك الصفحة بمستوى ضوضاء الغرفة. افعل هذا قبل بدء المشروع.",chip:"أداة مجانية",s1:"اختر جودة التسجيل",s2:"سجّل",s3:"تسجيلاتك",p1:"مشروع صوتي",p2:"جودة عالية",p3:"ملف صغير",g1:"الصيغة والجودة",g2:"الصمت وأسماء الملفات",g3:"الميكروفون",saved:"تسجيلاتك محفوظة على هذا الجهاز، فتقدر تقفل الصفحة وتكمل بعدين. لا شيء يُرفع.",savedNo:"الحفظ على الجهاز غير متاح في هذا المتصفح. نزّل ملفاتك قبل إغلاق الصفحة.",confirmDel:"حذف كل التسجيلات من هذا الجهاز؟",empty:"لا توجد تسجيلات بعد. اضغط سجّل.",storeUsed:"حجم التسجيلات: ",h1:"مسجّل الصوت أونلاين",
  lead:"سجّل صوتك في المتصفح، واختبر ضوضاء الغرفة أولًا، واختر الصيغة ومعدل العينات والقنوات وعمق البت، ونزّل كل التسجيلات في ملف ZIP واحد.",
  
  oFmt:"الصيغة",oRate:"معدل العينات",oCh:"القنوات",oBits:"عمق البت (WAV)",oKbps:"جودة MP3 (kbps)",oPadB:"صمت قبل التسجيل (ثانية)",oPadA:"صمت بعد التسجيل (ثانية)",oDev:"الميكروفون",oPre:"بادئة اسم الملف (اختياري)",oStart:"أول رقم",oDigits:"عدد خانات الرقم",oRaw:"معالجة الميكروفون",
@@ -522,6 +527,13 @@ function showSentence(){
  $("sGo").value=sidx+1;$("sGo").max=script.length;}
 function go(i){if(!script.length||mode==="rec")return;sidx=Math.max(0,Math.min(script.length-1,i));saveIdx();showSentence();}
 $("sUp").addEventListener("click",function(){$("sFile").click();});
+function openWr(){var b=$("wrBox");if(b.style.display!=="none"){b.style.display="none";return;}
+ var st=parseInt($("start").value,10);if(isNaN(st))st=1;
+ $("wrTxt").value=script.map(function(it,i){return it.id===st+i?it.t:(it.id+"."+it.t);}).join("\n");
+ $("wrTxt").placeholder=T[L].wrPh;b.style.display="block";try{$("wrTxt").focus();}catch(e){}}
+$("sWr").addEventListener("click",openWr);
+$("wrNo").addEventListener("click",function(){$("wrBox").style.display="none";});
+$("wrOk").addEventListener("click",function(){var it=parseScript($("wrTxt").value||"");if(!it.length){alert(T[L].wrEmpty);return;}setScript(it,true);$("wrBox").style.display="none";});
 $("sFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){var it=parseScript(String(rd.result||""));if(!it.length){alert(T[L].sErr);return;}setScript(it,false);};rd.readAsText(f,"utf-8");this.value="";});
 $("sClr").addEventListener("click",function(){if(!confirm(T[L].sConfirm))return;script=[];sidx=0;try{localStorage.removeItem("vr_script");}catch(e){}saveIdx();showSentence();renderTakes();});
 $("sPlay").addEventListener("click",function(){playTake(takeFor(sidx));});
@@ -554,7 +566,7 @@ function applyLang(){
  $("mic").textContent=t.mic;$("noise").textContent=t.noise;$("rec").textContent=mode==="rec"?t.stop:t.rec;$("zip").textContent=t.zip;$("clr").textContent=t.clr;
  document.title=L==="ar"?"مسجّل الصوت أونلاين | Sayvoi":"Online Voice Recorder: WAV, MP3, 16/24/48 kHz, Mono or Stereo | Sayvoi";
  if(!stream)setStatus("st0");
- updFmt();renderTakes();$("saveNote").textContent=dbOk?t.saved:t.savedNo;$("sUp").textContent=t.sUp;$("sClr").textContent=t.sClr;$("sPrev").setAttribute("aria-label",t.sPrev);$("sPrev").title=t.sPrev;$("sNext").setAttribute("aria-label",t.sNext);$("sNext").title=t.sNext;showSentence();}
+ updFmt();renderTakes();$("saveNote").textContent=dbOk?t.saved:t.savedNo;$("sUp").textContent=t.sUp;$("sWr").textContent=t.sWr;$("wrOk").textContent=t.wrOk;$("wrNo").textContent=t.wrNo;$("wrTxt").placeholder=t.wrPh;$("sClr").textContent=t.sClr;$("sPrev").setAttribute("aria-label",t.sPrev);$("sPrev").title=t.sPrev;$("sNext").setAttribute("aria-label",t.sNext);$("sNext").title=t.sNext;showSentence();}
 loadSet();counter=parseInt(lsGet("vr_counter","0"),10)||0;
 applyLang();anim();markPreset();
 openDb().then(function(ok){
