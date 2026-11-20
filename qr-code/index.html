@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="QR code generator test version.">
+<meta name="robots" content="noindex, nofollow">
+<title>QR Code | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chips .b{padding:8px 14px;font-size:15px}
+.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.6}
+.sp input[type=text]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit;box-sizing:border-box}
+input[type=color]{width:100%;height:42px;border:1px solid rgba(128,128,128,.5);border-radius:10px;background:transparent;padding:2px}
+select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit}
+.qrbox{display:flex;flex-direction:column;align-items:center;margin:10px 0}#qrPrev{background:#fff;padding:10px;border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,.2);line-height:0}#qrPrev canvas{max-width:100%;height:auto}
+.b:disabled{opacity:.45}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<p class="privp" data-i="priv"></p>
+
+<h2 data-i="hType"></h2>
+<div class="chips" id="types" role="tablist"></div>
+<h2 data-i="hData"></h2>
+<div id="fields"></div>
+
+<h2 data-i="hDesign"></h2>
+<div class="row">
+ <div class="col"><label for="cFg" data-i="cFg"></label><input type="color" id="cFg" value="#111111"></div>
+ <div class="col"><label for="cBg" data-i="cBg"></label><input type="color" id="cBg" value="#ffffff"></div>
+ <div class="col"><label for="sDot" data-i="sDot"></label><select id="sDot"><option value="square" data-k="dSq"></option><option value="rounded" data-k="dRo" selected></option><option value="dots" data-k="dDo"></option><option value="extra-rounded" data-k="dEx"></option><option value="classy" data-k="dCl"></option></select></div>
+ <div class="col"><label for="sCor" data-i="sCor"></label><select id="sCor"><option value="square" data-k="cSq"></option><option value="extra-rounded" data-k="cEx" selected></option><option value="dot" data-k="cDo"></option></select></div>
+</div>
+<div class="btns" style="margin-top:12px"><button type="button" class="b sec" id="logoBtn" data-i="logoBtn"></button><input type="file" id="logoFile" accept="image/*" hidden><button type="button" class="b sec" id="logoDel" data-i="logoDel" style="display:none"></button>
+ <select id="logoSz" style="display:none;max-width:200px"><option value="0.2" data-k="lSm"></option><option value="0.28" data-k="lMd" selected></option><option value="0.36" data-k="lLg"></option></select></div>
+<div class="scan" id="msg" role="status"></div>
+
+<h2 data-i="hPrev"></h2>
+<div class="qrbox"><div id="qrPrev"></div><p class="smallp" id="qrHint"></p></div>
+<div class="row">
+ <div class="col"><label for="outSz" data-i="outSz"></label><select id="outSz"><option value="512">512 × 512</option><option value="1024" selected>1024 × 1024</option><option value="2048">2048 × 2048</option></select></div>
+</div>
+<div class="btns" style="margin-top:10px"><button type="button" class="b" id="dlPng" data-i="dlPng"></button><button type="button" class="b sec" id="dlSvg" data-i="dlSvg"></button></div>
+<p class="smallp" data-i="testHint"></p>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={
+en:{dir:"ltr",btn:"العربية",
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"Free QR Code Generator: Link, WhatsApp, Wi-Fi and More",
+ lead:"Create a QR code in seconds, add your colors and logo, and download it as PNG or SVG. It is free, has no limit, and never expires.",
+ priv:"Your data is not uploaded. The code is made on your device.",
+ hType:"1. Choose the type",hData:"2. Enter the details",hDesign:"3. Style your code",hPrev:"4. Preview and download",
+ tLink:"Link",tText:"Text",tWa:"WhatsApp",tWifi:"Wi-Fi",tPhone:"Phone",tMail:"Email",tCard:"Contact card",
+ fUrl:"Website link",fUrlP:"https://example.com",fText:"Text",fWaNum:"Phone number with country code, digits only",fWaNumP:"201001234567",fWaMsg:"Ready message (optional)",
+ fSsid:"Network name (SSID)",fPass:"Password",fSec:"Security",secWpa:"WPA / WPA2 / WPA3",secWep:"WEP",secNone:"No password",fHidden:"Hidden network",
+ fPhone:"Phone number",fPhoneP:"+201001234567",fTo:"Email address",fSub:"Subject (optional)",fBody:"Message (optional)",
+ fName:"Full name",fOrg:"Company (optional)",fCPhone:"Phone",fCMail:"Email (optional)",fCUrl:"Website (optional)",
+ cFg:"Code color",cBg:"Background color",sDot:"Dot shape",sCor:"Corner shape",
+ dSq:"Square",dRo:"Rounded",dDo:"Dots",dEx:"Extra rounded",dCl:"Classy",cSq:"Square",cEx:"Extra rounded",cDo:"Dot",
+ logoBtn:"Add a logo",logoDel:"Remove logo",lSm:"Small logo",lMd:"Medium logo",lLg:"Large logo",
+ outSz:"Download size",dlPng:"Download PNG",dlSvg:"Download SVG",
+ hintEmpty:"Fill in the details above and your code will appear here.",hintOk:"Scan it with your phone before you print or share it.",
+ warnContrast:"The code color is too close to the background. Some scanners may not read it. Use a dark code on a light background.",warnInv:"A light code on a dark background is not read by some scanners. A dark code on a light background is safer.",
+ testHint:"Always test the code with your phone camera before you print it.",
+ errLogo:"Could not read this image.",errLib:"Could not load the tool. Check your connection and try again.",errSave:"Could not create the file.",
+ h2b:"Notes",
+ n1:"These are static codes. The data is inside the code itself, so they never expire and have no scan limit. You cannot change a printed code, so check everything first.",
+ n2:"A logo covers part of the code. Keep it small or medium, and test the scan.",
+ n3:"For a Wi-Fi code, anyone who scans it can join your network. Share it only with people you trust.",
+ n4:"Everything is made on your device. Nothing you type is uploaded.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ h1:"إنشاء باركود QR مجانًا: رابط وواتساب وواي فاي وغيرها",
+ lead:"أنشئ رمز QR (باركود) في ثوانٍ، وأضف ألوانك وشعارك، ونزّله بصيغة PNG أو SVG. مجاني، وبلا حد، ولا تنتهي صلاحيته.",
+ priv:"لا تُرفع بياناتك. يُنشأ الرمز على جهازك.",
+ hType:"1. اختر النوع",hData:"2. أدخل التفاصيل",hDesign:"3. نسّق الرمز",hPrev:"4. المعاينة والتنزيل",
+ tLink:"رابط",tText:"نص",tWa:"واتساب",tWifi:"واي فاي",tPhone:"هاتف",tMail:"بريد إلكتروني",tCard:"بطاقة اتصال",
+ fUrl:"رابط الموقع",fUrlP:"https://example.com",fText:"النص",fWaNum:"رقم الهاتف مع رمز الدولة، أرقام فقط",fWaNumP:"201001234567",fWaMsg:"رسالة جاهزة (اختياري)",
+ fSsid:"اسم الشبكة (SSID)",fPass:"كلمة المرور",fSec:"الحماية",secWpa:"WPA / WPA2 / WPA3",secWep:"WEP",secNone:"بدون كلمة مرور",fHidden:"شبكة مخفية",
+ fPhone:"رقم الهاتف",fPhoneP:"+201001234567",fTo:"عنوان البريد",fSub:"الموضوع (اختياري)",fBody:"الرسالة (اختياري)",
+ fName:"الاسم الكامل",fOrg:"الشركة (اختياري)",fCPhone:"الهاتف",fCMail:"البريد (اختياري)",fCUrl:"الموقع (اختياري)",
+ cFg:"لون الرمز",cBg:"لون الخلفية",sDot:"شكل النقاط",sCor:"شكل الزوايا",
+ dSq:"مربع",dRo:"مستدير",dDo:"دوائر",dEx:"شديد الاستدارة",dCl:"أنيق",cSq:"مربع",cEx:"شديد الاستدارة",cDo:"دائرة",
+ logoBtn:"أضف شعارًا",logoDel:"أزل الشعار",lSm:"شعار صغير",lMd:"شعار متوسط",lLg:"شعار كبير",
+ outSz:"حجم التنزيل",dlPng:"نزّل PNG",dlSvg:"نزّل SVG",
+ hintEmpty:"املأ التفاصيل بالأعلى ليظهر الرمز هنا.",hintOk:"امسحه بهاتفك قبل أن تطبعه أو تشاركه.",
+ warnContrast:"لون الرمز قريب جدًا من لون الخلفية. وقد لا تقرأه بعض الماسحات. استخدم رمزًا داكنًا على خلفية فاتحة.",warnInv:"الرمز الفاتح على خلفية داكنة لا تقرأه بعض الماسحات. والرمز الداكن على خلفية فاتحة أضمن.",
+ testHint:"جرّب الرمز دائمًا بكاميرا هاتفك قبل أن تطبعه.",
+ errLogo:"تعذّرت قراءة هذه الصورة.",errLib:"تعذّر تحميل الأداة. تأكد من اتصالك وحاول مرة أخرى.",errSave:"تعذّر إنشاء الملف.",
+ h2b:"ملاحظات",
+ n1:"هذه رموز ثابتة. فالبيانات داخل الرمز نفسه، فلا تنتهي صلاحيتها ولا حد لعدد المسح. ولا يمكن تغيير رمز مطبوع، فراجع كل شيء أولًا.",
+ n2:"الشعار يغطي جزءًا من الرمز. اجعله صغيرًا أو متوسطًا، وجرّب المسح.",
+ n3:"في رمز الواي فاي، كل من يمسحه يستطيع دخول شبكتك. فشاركه مع من تثق بهم فقط.",
+ n4:"كل شيء يتم على جهازك. ولا يُرفع شيء مما تكتبه.",
+ back:"العودة إلى الأدوات"}
+};
+/* ---------- app ---------- */
+var BASE="/qr-code/lib/",libs={},V={},type="link",Q=null,logo=null,uT=0;
+var FIELDS={
+ link:[["url","fUrl","text","fUrlP"]],
+ text:[["text","fText","area"]],
+ wa:[["wnum","fWaNum","text","fWaNumP"],["wmsg","fWaMsg","area"]],
+ wifi:[["ssid","fSsid","text"],["pass","fPass","text"],["sec","fSec","sel"],["hid","fHidden","chk"]],
+ phone:[["phone","fPhone","text","fPhoneP"]],
+ mail:[["to","fTo","text"],["sub","fSub","text"],["body","fBody","area"]],
+ card:[["name","fName","text"],["org","fOrg","text"],["cph","fCPhone","text","fPhoneP"],["cml","fCMail","text"],["curl","fCUrl","text","fUrlP"]]
+};
+var TYPES=[["link","tLink"],["text","tText"],["wa","tWa"],["wifi","tWifi"],["phone","tPhone"],["mail","tMail"],["card","tCard"]];
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function hide(){$("msg").style.display="none";}
+function loadScript(src){
+ if(libs[src])return libs[src];
+ libs[src]=new Promise(function(res,rej){var s=document.createElement("script");s.src=src;s.onload=res;s.onerror=function(){libs[src]=null;rej(new Error("lib"));};document.head.appendChild(s);});
+ return libs[src];
+}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+function renderTypes(){
+ var h="";TYPES.forEach(function(t){h+='<button type="button" class="b '+(t[0]===type?"":"sec")+'" data-t="'+t[0]+'" role="tab" aria-selected="'+(t[0]===type)+'">'+T[L][t[1]]+'</button>';});
+ $("types").innerHTML=h;
+}
+function renderFields(){
+ var h="",t=T[L];
+ FIELDS[type].forEach(function(f){
+  var k=f[0],v=V[k]!==undefined?V[k]:(k==="sec"?"WPA":"");
+  if(f[2]==="chk")h+='<label style="font-weight:400;display:block;margin:10px 0"><input type="checkbox" id="f_'+k+'"'+(V[k]?" checked":"")+'> <span>'+t[f[1]]+'</span></label>';
+  else if(f[2]==="sel")h+='<label for="f_'+k+'">'+t[f[1]]+'</label><select id="f_'+k+'"><option value="WPA"'+(v==="WPA"?" selected":"")+'>'+t.secWpa+'</option><option value="WEP"'+(v==="WEP"?" selected":"")+'>'+t.secWep+'</option><option value="nopass"'+(v==="nopass"?" selected":"")+'>'+t.secNone+'</option></select>';
+  else if(f[2]==="area")h+='<label for="f_'+k+'">'+t[f[1]]+'</label><textarea id="f_'+k+'" rows="3">'+esc(v)+'</textarea>';
+  else h+='<label for="f_'+k+'">'+t[f[1]]+'</label><input type="text" id="f_'+k+'" value="'+esc(v)+'"'+(f[3]?' placeholder="'+esc(t[f[3]])+'" dir="ltr"':"")+'>';
+ });
+ $("fields").innerHTML=h;
+}
+$("types").addEventListener("click",function(e){
+ var b=e.target.closest("button[data-t]");if(!b)return;type=b.getAttribute("data-t");renderTypes();renderFields();update();
+});
+$("fields").addEventListener("input",function(e){
+ var el=e.target,k=el.id.slice(2);V[k]=el.type==="checkbox"?el.checked:el.value;update();
+});
+$("fields").addEventListener("change",function(e){
+ var el=e.target,k=el.id.slice(2);V[k]=el.type==="checkbox"?el.checked:el.value;update();
+});
+function wEsc(s){return String(s).replace(/([\;,:"])/g,"\\$1");}
+function payload(){
+ var g=function(k){return (V[k]||"").trim();},p="";
+ if(type==="link"){p=g("url");if(p&&!/^[a-z][a-z0-9+.-]*:/i.test(p))p="https://"+p;}
+ else if(type==="text"){p=(V.text||"").replace(/\s+$/,"");}
+ else if(type==="wa"){var n=g("wnum").replace(/[^\d]/g,"");if(n){p="https://wa.me/"+n;if(g("wmsg"))p+="?text="+encodeURIComponent(g("wmsg"));}}
+ else if(type==="wifi"){if(g("ssid")){var sec=V.sec||"WPA";p="WIFI:T:"+(sec==="nopass"?"nopass":sec)+";S:"+wEsc(g("ssid"))+";"+(sec!=="nopass"&&g("pass")?"P:"+wEsc(g("pass"))+";":"")+(V.hid?"H:true;":"")+";";}}
+ else if(type==="phone"){var ph=g("phone").replace(/[^\d+]/g,"");if(ph)p="tel:"+ph;}
+ else if(type==="mail"){if(g("to")){p="mailto:"+g("to");var q=[];if(g("sub"))q.push("subject="+encodeURIComponent(g("sub")));if(V.body&&V.body.trim())q.push("body="+encodeURIComponent(V.body.trim()));if(q.length)p+="?"+q.join("&");}}
+ else if(type==="card"){if(g("name")||g("cph")){var nm=g("name"),pr=nm.split(/\s+/),last=pr.length>1?pr.pop():"",first=pr.join(" ");
+  p="BEGIN:VCARD\nVERSION:3.0\nN:"+last+";"+first+";;;\nFN:"+nm+"\n"+(g("org")?"ORG:"+g("org")+"\n":"")+(g("cph")?"TEL:"+g("cph")+"\n":"")+(g("cml")?"EMAIL:"+g("cml")+"\n":"")+(g("curl")?"URL:"+g("curl")+"\n":"")+"END:VCARD";}}
+ return p;
+}
+function lum(h){h=h.replace("#","");var c=[0,2,4].map(function(i){var v=parseInt(h.substr(i,2),16)/255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];}
+function opts(size,kind){
+ var fg=$("cFg").value,bg=$("cBg").value,dot=$("sDot").value,cor=$("sCor").value;
+ var o={width:size,height:size,type:kind||"canvas",data:payload(),margin:Math.round(size*0.04),
+  qrOptions:{errorCorrectionLevel:logo?"H":"M"},
+  dotsOptions:{color:fg,type:dot},backgroundOptions:{color:bg},
+  cornersSquareOptions:{color:fg,type:cor},cornersDotOptions:{color:fg,type:cor==="square"?"square":"dot"},
+  image:logo||undefined,imageOptions:{crossOrigin:"anonymous",hideBackgroundDots:true,imageSize:parseFloat($("logoSz").value),margin:Math.round(size*0.015)}};
+ return o;
+}
+function update(){
+ var data=payload(),box=$("qrPrev"),tok=++uT;
+ if(!data){box.style.display="none";$("qrHint").textContent=T[L].hintEmpty;$("dlPng").disabled=$("dlSvg").disabled=true;hide();return;}
+ var fg=$("cFg").value,bg=$("cBg").value,l1=lum(fg),l2=lum(bg),ratio=(Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
+ if(ratio<3)show(T[L].warnContrast,true);else if(l1>l2)show(T[L].warnInv,true);else hide();
+ loadScript(BASE+"qr-code-styling.js").then(function(){
+  if(tok!==uT)return;
+  var o=opts(280,"canvas");
+  if(!Q){Q=new window.QRCodeStyling(o);box.textContent="";Q.append(box);}else Q.update(o);
+  box.style.display="";$("qrHint").textContent=T[L].hintOk;$("dlPng").disabled=$("dlSvg").disabled=false;
+ }).catch(function(){show(T[L].errLib,true);});
+}
+["cFg","cBg","sDot","sCor","logoSz"].forEach(function(id){$(id).addEventListener("input",update);$(id).addEventListener("change",update);});
+$("logoBtn").addEventListener("click",function(){$("logoFile").click();});
+$("logoFile").addEventListener("change",function(){
+ var f=this.files[0];this.value="";if(!f)return;
+ var fr=new FileReader();fr.onerror=function(){show(T[L].errLogo,true);};
+ fr.onload=function(){
+  var im=new Image();im.onerror=function(){show(T[L].errLogo,true);};
+  im.onload=function(){
+   var m=300,w=im.naturalWidth||m,h=im.naturalHeight||m,s=Math.min(1,m/Math.max(w,h)),cw=Math.max(1,Math.round(w*s)),ch=Math.max(1,Math.round(h*s));
+   var c=document.createElement("canvas");c.width=cw;c.height=ch;c.getContext("2d").drawImage(im,0,0,cw,ch);
+   logo=c.toDataURL("image/png");$("logoDel").style.display="";$("logoSz").style.display="";update();
+  };im.src=fr.result;
+ };fr.readAsDataURL(f);
+});
+$("logoDel").addEventListener("click",function(){logo=null;this.style.display="none";$("logoSz").style.display="none";if(Q){Q=null;$("qrPrev").textContent="";}update();});
+function saveBlob(b,name){var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);document.body.removeChild(a);},4000);}
+function dl(ext){
+ if(!payload())return;
+ var size=parseInt($("outSz").value,10);
+ loadScript(BASE+"qr-code-styling.js").then(function(){
+  var q=new window.QRCodeStyling(opts(size,ext==="svg"?"svg":"canvas"));
+  return q.getRawData(ext);
+ }).then(function(b){if(!b)throw new Error("x");saveBlob(b,"qr-code."+ext);}).catch(function(e){show(e&&e.message==="lib"?T[L].errLib:T[L].errSave,true);});
+}
+$("dlPng").addEventListener("click",function(){dl("png");});
+$("dlSvg").addEventListener("click",function(){dl("svg");});
+function applyLang(){
+ var t=T[L];var vf=$("vidFrame");if(vf&&VID.en){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ document.title=L==="ar"?"إنشاء باركود QR مجانًا | Sayvoi":"Free QR Code Generator: Link, WhatsApp, Wi-Fi | Sayvoi";
+ renderTypes();renderFields();update();
+}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+var VID={en:"",ar:""};
+applyLang();
+})();
+</script>
+</body>
+</html>
