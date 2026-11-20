@@ -233,7 +233,7 @@ en:{dir:"ltr",btn:"العربية",
  oFmt:"Format",oRate:"Sample rate",oCh:"Channels",oBits:"Bit depth (WAV)",oKbps:"MP3 quality (kbps)",oPadB:"Silence before (seconds)",oPadA:"Silence after (seconds)",oDev:"Microphone",oPre:"File name prefix (optional)",oStart:"First number",oDigits:"Number digits",oRaw:"Microphone processing",
  mono:"Mono",stereo:"Stereo",defDev:"Default microphone",rawOn:"Off (raw sound, recommended)",rawOff:"On (echo cancel, noise reduction)",
  mic:"Enable microphone",noise:"Test room noise (3 s)",rec:"Record",stop:"Stop",
- zip:"Download all (ZIP)",zName:"ZIP file name (optional)",zPh:"recordings",shr:"Share (WhatsApp…)",shrNo:"This browser cannot share files. Download the ZIP and send it from WhatsApp.",clr:"Delete all",
+ zip:"Download all (ZIP)",zName:"ZIP file name (optional)",zPh:"recordings",shr:"Share (WhatsApp…)",shrAgain:"The ZIP is ready. Press Share once more.",shrNo:"This browser cannot share files. Download the ZIP and send it from WhatsApp.",clr:"Delete all",
  st0:"Press “Enable microphone” to start.",stReady:"Microphone ready.",stRec:"Recording… speak now.",stEnc:"Preparing the file…",stNoise:"Stay silent for 3 seconds…",
  errMic:"Could not access the microphone. Allow it in the browser and try again.",errHttps:"Recording needs a secure page (https) and a modern browser.",errFmt:"This browser cannot record this format. Choose WAV or MP3.",errLame:"The MP3 encoder did not load. Check your internet connection and refresh.",errZip:"The ZIP tool did not load. Check your internet connection and refresh.",
  nTitle:"Room noise: ",nQuiet:"Excellent. Very quiet room.",nGood:"Good. Fine for most recording projects.",nOk:"Acceptable. Some background noise. Try a quieter place if the project is strict.",nBad:"Noisy. Move to a quieter place, close windows and turn off fans.",nPeak:" Peak: ",nSpike:"Sudden loud sounds were detected during the test.",
@@ -249,7 +249,7 @@ ar:{dir:"rtl",btn:"English",
  oFmt:"الصيغة",oRate:"معدل العينات",oCh:"القنوات",oBits:"عمق البت (WAV)",oKbps:"جودة MP3 (kbps)",oPadB:"صمت قبل التسجيل (ثانية)",oPadA:"صمت بعد التسجيل (ثانية)",oDev:"الميكروفون",oPre:"بادئة اسم الملف (اختياري)",oStart:"أول رقم",oDigits:"عدد خانات الرقم",oRaw:"معالجة الميكروفون",
  mono:"مونو",stereo:"ستيريو",defDev:"الميكروفون الافتراضي",rawOn:"مغلقة (صوت خام، موصى بها)",rawOff:"مفعّلة (إلغاء صدى وتقليل ضوضاء)",
  mic:"فعّل الميكروفون",noise:"اختبر ضوضاء الغرفة (3 ث)",rec:"سجّل",stop:"إيقاف",
- zip:"نزّل الكل (ZIP)",zName:"اسم الملف المضغوط (اختياري)",zPh:"recordings",shr:"مشاركة (واتساب…)",shrNo:"المتصفح ده لا يدعم مشاركة الملفات. نزّل ملف ZIP وابعته من الواتساب.",clr:"احذف الكل",
+ zip:"نزّل الكل (ZIP)",zName:"اسم الملف المضغوط (اختياري)",zPh:"recordings",shr:"مشاركة (واتساب…)",shrAgain:"ملف ZIP جاهز. اضغط مشاركة مرة تانية.",shrNo:"المتصفح ده لا يدعم مشاركة الملفات. نزّل ملف ZIP وابعته من الواتساب.",clr:"احذف الكل",
  st0:"اضغط «فعّل الميكروفون» للبدء.",stReady:"الميكروفون جاهز.",stRec:"جارٍ التسجيل… تكلّم الآن.",stEnc:"جارٍ تجهيز الملف…",stNoise:"ابقَ صامتًا 3 ثوانٍ…",
  errMic:"تعذّر الوصول للميكروفون. اسمح به من المتصفح وحاول مجددًا.",errHttps:"التسجيل يحتاج صفحة آمنة (https) ومتصفحًا حديثًا.",errFmt:"هذا المتصفح لا يستطيع تسجيل هذه الصيغة. اختر WAV أو MP3.",errLame:"لم يتم تحميل مشفّر MP3. تأكد من الإنترنت وحدّث الصفحة.",errZip:"لم يتم تحميل أداة ZIP. تأكد من الإنترنت وحدّث الصفحة.",
  nTitle:"ضوضاء الغرفة: ",nQuiet:"ممتازة. غرفة هادئة جدًا.",nGood:"جيدة. مناسبة لمعظم مشاريع التسجيل.",nOk:"مقبولة. فيها ضوضاء خلفية. جرّب مكانًا أهدأ إن كان المشروع صارمًا.",nBad:"مزعجة. انتقل لمكان أهدأ، وأغلق النوافذ وأوقف المراوح.",nPeak:" الذروة: ",nSpike:"رُصدت أصوات عالية مفاجئة أثناء الاختبار.",
@@ -475,12 +475,23 @@ async function buildZip(){
  takes.forEach(function(t){var n=cleanBase(t.base),f=n+"."+t.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+t.ext;}used[f.toLowerCase()]=1;z.file(f,t.blob);});
  return await z.generateAsync({type:"blob",compression:"STORE"});}
 $("zip").addEventListener("click",async function(){var blob=await buildZip();if(blob)saveBlob(blob,zipFileName());});
+var zipCache=null,zipSig="";
+function takesSig(){return takes.map(function(t){return cleanBase(t.base)+"."+t.ext+":"+t.blob.size;}).join("|");}
+function mimeOf(t){return t.ext==="wav"?"audio/wav":(t.ext==="mp3"?"audio/mpeg":(t.blob.type||"audio/mp4"));}
 $("shr").addEventListener("click",async function(){
- var blob=await buildZip();if(!blob)return;
- try{var f=new File([blob],zipFileName(),{type:"application/zip"});
-  if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:f.name});}
-  else{alert(T[L].shrNo);}}
- catch(e){if(e&&e.name==="AbortError")return;alert(T[L].shrNo);}});
+ var t=T[L],sig=takesSig();
+ try{
+  var files=[],used={};
+  takes.forEach(function(k){var n=cleanBase(k.base),f=n+"."+k.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+k.ext;}used[f.toLowerCase()]=1;files.push(new File([k.blob],f,{type:mimeOf(k)}));});
+  if(!navigator.canShare){alert(t.shrNo);return;}
+  /* 1) the audio files themselves (WhatsApp accepts up to 30 at once) */
+  if(files.length&&files.length<=30&&navigator.canShare({files:files})){await navigator.share({files:files});return;}
+  /* 2) a ZIP, if this browser allows it */
+  if(!zipCache||zipSig!==sig){zipCache=await buildZip();zipSig=sig;if(!zipCache)return;}
+  var z=new File([zipCache],zipFileName(),{type:"application/zip"});
+  if(navigator.canShare({files:[z]})){try{await navigator.share({files:[z]});return;}catch(e){if(e&&e.name==="AbortError")return;alert(t.shrAgain);return;}}
+  alert(t.shrNo);
+ }catch(e){if(e&&e.name==="AbortError")return;alert(t.shrNo+" ("+(e&&e.name||"")+")");}});
 if(navigator.share&&window.File){$("shr").style.display="";}
 $("clr").addEventListener("click",async function(){if(!confirm(T[L].confirmDel))return;takes.forEach(function(t){URL.revokeObjectURL(t.url);});takes=[];counter=0;lsSet("vr_counter","0");await dbClear();renderTakes();showStore();});
 $("mic").addEventListener("click",ensureMic);
