@@ -193,8 +193,10 @@
 <h2><span class="num">3</span><span data-i="s3"></span></h2>
 <div class="box ok" id="saveNote"></div>
 <div id="takes"></div>
+<div style="margin:0 0 10px"><label for="zipName" data-i="zName" style="display:block;font-weight:700;margin-bottom:4px"></label><input type="text" id="zipName" dir="auto" maxlength="80" style="width:100%;box-sizing:border-box;padding:9px 10px;border-radius:10px;border:1px solid #cbd5e1;font:inherit"></div>
 <div class="bar">
   <button type="button" class="b" id="zip" disabled></button>
+  <button type="button" class="b" id="shr" disabled style="display:none"></button>
   <button type="button" class="b sec" id="clr" disabled></button>
   <span class="grow" id="storeInfo"></span>
 </div>
@@ -231,7 +233,7 @@ en:{dir:"ltr",btn:"العربية",
  oFmt:"Format",oRate:"Sample rate",oCh:"Channels",oBits:"Bit depth (WAV)",oKbps:"MP3 quality (kbps)",oPadB:"Silence before (seconds)",oPadA:"Silence after (seconds)",oDev:"Microphone",oPre:"File name prefix (optional)",oStart:"First number",oDigits:"Number digits",oRaw:"Microphone processing",
  mono:"Mono",stereo:"Stereo",defDev:"Default microphone",rawOn:"Off (raw sound, recommended)",rawOff:"On (echo cancel, noise reduction)",
  mic:"Enable microphone",noise:"Test room noise (3 s)",rec:"Record",stop:"Stop",
- zip:"Download all (ZIP)",clr:"Delete all",
+ zip:"Download all (ZIP)",zName:"ZIP file name (optional)",zPh:"recordings",shr:"Share (WhatsApp…)",shrNo:"This browser cannot share files. Download the ZIP and send it from WhatsApp.",clr:"Delete all",
  st0:"Press “Enable microphone” to start.",stReady:"Microphone ready.",stRec:"Recording… speak now.",stEnc:"Preparing the file…",stNoise:"Stay silent for 3 seconds…",
  errMic:"Could not access the microphone. Allow it in the browser and try again.",errHttps:"Recording needs a secure page (https) and a modern browser.",errFmt:"This browser cannot record this format. Choose WAV or MP3.",errLame:"The MP3 encoder did not load. Check your internet connection and refresh.",errZip:"The ZIP tool did not load. Check your internet connection and refresh.",
  nTitle:"Room noise: ",nQuiet:"Excellent. Very quiet room.",nGood:"Good. Fine for most recording projects.",nOk:"Acceptable. Some background noise. Try a quieter place if the project is strict.",nBad:"Noisy. Move to a quieter place, close windows and turn off fans.",nPeak:" Peak: ",nSpike:"Sudden loud sounds were detected during the test.",
@@ -247,7 +249,7 @@ ar:{dir:"rtl",btn:"English",
  oFmt:"الصيغة",oRate:"معدل العينات",oCh:"القنوات",oBits:"عمق البت (WAV)",oKbps:"جودة MP3 (kbps)",oPadB:"صمت قبل التسجيل (ثانية)",oPadA:"صمت بعد التسجيل (ثانية)",oDev:"الميكروفون",oPre:"بادئة اسم الملف (اختياري)",oStart:"أول رقم",oDigits:"عدد خانات الرقم",oRaw:"معالجة الميكروفون",
  mono:"مونو",stereo:"ستيريو",defDev:"الميكروفون الافتراضي",rawOn:"مغلقة (صوت خام، موصى بها)",rawOff:"مفعّلة (إلغاء صدى وتقليل ضوضاء)",
  mic:"فعّل الميكروفون",noise:"اختبر ضوضاء الغرفة (3 ث)",rec:"سجّل",stop:"إيقاف",
- zip:"نزّل الكل (ZIP)",clr:"احذف الكل",
+ zip:"نزّل الكل (ZIP)",zName:"اسم الملف المضغوط (اختياري)",zPh:"recordings",shr:"مشاركة (واتساب…)",shrNo:"المتصفح ده لا يدعم مشاركة الملفات. نزّل ملف ZIP وابعته من الواتساب.",clr:"احذف الكل",
  st0:"اضغط «فعّل الميكروفون» للبدء.",stReady:"الميكروفون جاهز.",stRec:"جارٍ التسجيل… تكلّم الآن.",stEnc:"جارٍ تجهيز الملف…",stNoise:"ابقَ صامتًا 3 ثوانٍ…",
  errMic:"تعذّر الوصول للميكروفون. اسمح به من المتصفح وحاول مجددًا.",errHttps:"التسجيل يحتاج صفحة آمنة (https) ومتصفحًا حديثًا.",errFmt:"هذا المتصفح لا يستطيع تسجيل هذه الصيغة. اختر WAV أو MP3.",errLame:"لم يتم تحميل مشفّر MP3. تأكد من الإنترنت وحدّث الصفحة.",errZip:"لم يتم تحميل أداة ZIP. تأكد من الإنترنت وحدّث الصفحة.",
  nTitle:"ضوضاء الغرفة: ",nQuiet:"ممتازة. غرفة هادئة جدًا.",nGood:"جيدة. مناسبة لمعظم مشاريع التسجيل.",nOk:"مقبولة. فيها ضوضاء خلفية. جرّب مكانًا أهدأ إن كان المشروع صارمًا.",nBad:"مزعجة. انتقل لمكان أهدأ، وأغلق النوافذ وأوقف المراوح.",nPeak:" الذروة: ",nSpike:"رُصدت أصوات عالية مفاجئة أثناء الاختبار.",
@@ -457,7 +459,7 @@ function renderTakes(){
   if(warn.length){var w=document.createElement("small");w.className="flag";w.textContent=warn.join(" ");d.appendChild(w);}
   box.appendChild(d);});
  if(!takes.length){var em=document.createElement("div");em.className="empty";em.textContent=T[L].empty;box.appendChild(em);}
- $("zip").disabled=$("clr").disabled=!takes.length;}
+ $("zip").disabled=$("clr").disabled=$("shr").disabled=!takes.length;}
 function saveBlob(blob,name){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
 function cleanBase(b){return (b||"take").trim().replace(/[\\\/:*?"<>|]+/g,"_")||"take";}
 $("takes").addEventListener("click",function(e){
@@ -466,11 +468,20 @@ $("takes").addEventListener("click",function(e){
  if(x!==null){var k=takes[+x];URL.revokeObjectURL(k.url);if(k.id)dbDel(k.id);takes.splice(+x,1);renderTakes();showStore();}});
 $("takes").addEventListener("input",function(e){var r=e.target.getAttribute("data-r");if(r!==null)takes[+r].base=e.target.value;});
 $("takes").addEventListener("change",function(e){var r=e.target.getAttribute("data-r");if(r!==null){var t=takes[+r];if(t.id)dbPut(t);}});
-$("zip").addEventListener("click",async function(){
- if(!window.JSZip){setStatus("errZip",true);return;}
+function zipFileName(){var n=($("zipName").value||"").trim().replace(/\.zip$/i,"").replace(/[\\\/:*?"<>|]+/g,"_").replace(/^\.+/,"");return (n||"recordings")+".zip";}
+async function buildZip(){
+ if(!window.JSZip){setStatus("errZip",true);return null;}
  var z=new JSZip(),used={};
  takes.forEach(function(t){var n=cleanBase(t.base),f=n+"."+t.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+t.ext;}used[f.toLowerCase()]=1;z.file(f,t.blob);});
- var blob=await z.generateAsync({type:"blob",compression:"STORE"});saveBlob(blob,"recordings.zip");});
+ return await z.generateAsync({type:"blob",compression:"STORE"});}
+$("zip").addEventListener("click",async function(){var blob=await buildZip();if(blob)saveBlob(blob,zipFileName());});
+$("shr").addEventListener("click",async function(){
+ var blob=await buildZip();if(!blob)return;
+ try{var f=new File([blob],zipFileName(),{type:"application/zip"});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:f.name});}
+  else{alert(T[L].shrNo);}}
+ catch(e){if(e&&e.name==="AbortError")return;alert(T[L].shrNo);}});
+if(navigator.share&&window.File){$("shr").style.display="";}
 $("clr").addEventListener("click",async function(){if(!confirm(T[L].confirmDel))return;takes.forEach(function(t){URL.revokeObjectURL(t.url);});takes=[];counter=0;lsSet("vr_counter","0");await dbClear();renderTakes();showStore();});
 $("mic").addEventListener("click",ensureMic);
 $("noise").addEventListener("click",testNoise);
@@ -548,7 +559,7 @@ document.addEventListener("keydown",function(e){
  if(e.key==="ArrowRight")go(sidx+1);else if(e.key==="ArrowLeft")go(sidx-1);
  else if(e.key===" "||e.code==="Space"){e.preventDefault();if(mode==="rec")stopRec();else startRec();}});
 try{var ss=JSON.parse(lsGet("vr_script","[]"));if(Array.isArray(ss)&&ss.length){script=ss;sidx=Math.min(parseInt(lsGet("vr_idx","0"),10)||0,ss.length-1);}}catch(e){}
-var SET=["fmt","rate","ch","bits","kbps","padB","padA","pre","start","digits","raw"];
+var SET=["fmt","rate","ch","bits","kbps","padB","padA","pre","start","digits","raw","zipName"];
 function saveSet(){var o={};SET.forEach(function(i){o[i]=$(i).value;});lsSet("vr_set",JSON.stringify(o));markPreset();}
 function loadSet(){try{var o=JSON.parse(lsGet("vr_set","{}"));SET.forEach(function(i){if(o[i]!==undefined&&$(i))$(i).value=o[i];});}catch(e){}}
 function markPreset(){var cur=[$("fmt").value,$("rate").value,$("ch").value,$("bits").value].join(",");document.querySelectorAll(".preset").forEach(function(b){var p=b.getAttribute("data-p").split(",");var m=p[0]==="mp3"?(cur.indexOf("mp3,"+p[1]+","+p[2])===0):cur===b.getAttribute("data-p");b.classList.toggle("on",m);});}
@@ -563,7 +574,7 @@ function applyLang(){
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
  var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
- $("mic").textContent=t.mic;$("noise").textContent=t.noise;$("rec").textContent=mode==="rec"?t.stop:t.rec;$("zip").textContent=t.zip;$("clr").textContent=t.clr;
+ $("mic").textContent=t.mic;$("noise").textContent=t.noise;$("rec").textContent=mode==="rec"?t.stop:t.rec;$("zip").textContent=t.zip;$("shr").textContent=t.shr;$("zipName").placeholder=t.zPh;$("clr").textContent=t.clr;
  document.title=L==="ar"?"مسجّل الصوت أونلاين | Sayvoi":"Online Voice Recorder: WAV, MP3, 16/24/48 kHz, Mono or Stereo | Sayvoi";
  if(!stream)setStatus("st0");
  updFmt();renderTakes();$("saveNote").textContent=dbOk?t.saved:t.savedNo;$("sUp").textContent=t.sUp;$("sWr").textContent=t.sWr;$("wrOk").textContent=t.wrOk;$("wrNo").textContent=t.wrNo;$("wrTxt").placeholder=t.wrPh;$("sClr").textContent=t.sClr;$("sPrev").setAttribute("aria-label",t.sPrev);$("sPrev").title=t.sPrev;$("sNext").setAttribute("aria-label",t.sNext);$("sNext").title=t.sNext;showSentence();}
