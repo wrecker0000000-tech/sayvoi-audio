@@ -196,7 +196,6 @@
 <div style="margin:0 0 10px"><label for="zipName" data-i="zName" style="display:block;font-weight:700;margin-bottom:4px"></label><input type="text" id="zipName" dir="auto" maxlength="80" style="width:100%;box-sizing:border-box;padding:9px 10px;border-radius:10px;border:1px solid #cbd5e1;font:inherit"></div>
 <div class="bar">
   <button type="button" class="b" id="zip" disabled></button>
-  <button type="button" class="b" id="shr" disabled style="display:none"></button>
   <button type="button" class="b sec" id="clr" disabled></button>
   <span class="grow" id="storeInfo"></span>
 </div>
@@ -459,7 +458,7 @@ function renderTakes(){
   if(warn.length){var w=document.createElement("small");w.className="flag";w.textContent=warn.join(" ");d.appendChild(w);}
   box.appendChild(d);});
  if(!takes.length){var em=document.createElement("div");em.className="empty";em.textContent=T[L].empty;box.appendChild(em);}
- $("zip").disabled=$("clr").disabled=$("shr").disabled=!takes.length;}
+ $("zip").disabled=$("clr").disabled=!takes.length;}
 function saveBlob(blob,name){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
 function cleanBase(b){return (b||"take").trim().replace(/[\\\/:*?"<>|]+/g,"_")||"take";}
 $("takes").addEventListener("click",function(e){
@@ -475,24 +474,6 @@ async function buildZip(){
  takes.forEach(function(t){var n=cleanBase(t.base),f=n+"."+t.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+t.ext;}used[f.toLowerCase()]=1;z.file(f,t.blob);});
  return await z.generateAsync({type:"blob",compression:"STORE"});}
 $("zip").addEventListener("click",async function(){var blob=await buildZip();if(blob)saveBlob(blob,zipFileName());});
-var zipCache=null,zipSig="";
-function takesSig(){return takes.map(function(t){return cleanBase(t.base)+"."+t.ext+":"+t.blob.size;}).join("|");}
-function mimeOf(t){return t.ext==="wav"?"audio/wav":(t.ext==="mp3"?"audio/mpeg":(t.blob.type||"audio/mp4"));}
-$("shr").addEventListener("click",async function(){
- var t=T[L],sig=takesSig();
- try{
-  var files=[],used={};
-  takes.forEach(function(k){var n=cleanBase(k.base),f=n+"."+k.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+k.ext;}used[f.toLowerCase()]=1;files.push(new File([k.blob],f,{type:mimeOf(k)}));});
-  if(!navigator.canShare){alert(t.shrNo);return;}
-  /* 1) the audio files themselves (WhatsApp accepts up to 30 at once) */
-  if(files.length&&files.length<=30&&navigator.canShare({files:files})){await navigator.share({files:files});return;}
-  /* 2) a ZIP, if this browser allows it */
-  if(!zipCache||zipSig!==sig){zipCache=await buildZip();zipSig=sig;if(!zipCache)return;}
-  var z=new File([zipCache],zipFileName(),{type:"application/zip"});
-  if(navigator.canShare({files:[z]})){try{await navigator.share({files:[z]});return;}catch(e){if(e&&e.name==="AbortError")return;alert(t.shrAgain);return;}}
-  alert(t.shrNo);
- }catch(e){if(e&&e.name==="AbortError")return;alert(t.shrNo+" ("+(e&&e.name||"")+")");}});
-if(navigator.share&&window.File){$("shr").style.display="";}
 $("clr").addEventListener("click",async function(){if(!confirm(T[L].confirmDel))return;takes.forEach(function(t){URL.revokeObjectURL(t.url);});takes=[];counter=0;lsSet("vr_counter","0");await dbClear();renderTakes();showStore();});
 $("mic").addEventListener("click",ensureMic);
 $("noise").addEventListener("click",testNoise);
@@ -585,7 +566,7 @@ function applyLang(){
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
  var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
- $("mic").textContent=t.mic;$("noise").textContent=t.noise;$("rec").textContent=mode==="rec"?t.stop:t.rec;$("zip").textContent=t.zip;$("shr").textContent=t.shr;$("zipName").placeholder=t.zPh;$("clr").textContent=t.clr;
+ $("mic").textContent=t.mic;$("noise").textContent=t.noise;$("rec").textContent=mode==="rec"?t.stop:t.rec;$("zip").textContent=t.zip;$("zipName").placeholder=t.zPh;$("clr").textContent=t.clr;
  document.title=L==="ar"?"مسجّل الصوت أونلاين | Sayvoi":"Online Voice Recorder: WAV, MP3, 16/24/48 kHz, Mono or Stereo | Sayvoi";
  if(!stream)setStatus("st0");
  updFmt();renderTakes();$("saveNote").textContent=dbOk?t.saved:t.savedNo;$("sUp").textContent=t.sUp;$("sWr").textContent=t.sWr;$("wrOk").textContent=t.wrOk;$("wrNo").textContent=t.wrNo;$("wrTxt").placeholder=t.wrPh;$("sClr").textContent=t.sClr;$("sPrev").setAttribute("aria-label",t.sPrev);$("sPrev").title=t.sPrev;$("sNext").setAttribute("aria-label",t.sNext);$("sNext").title=t.sNext;showSentence();}
