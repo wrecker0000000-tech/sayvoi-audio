@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Make photos smaller without visible loss. Compress and resize many JPG, PNG and WEBP images at once, free, in your browser. Nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/compress-image/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Compress Images Online Free">
+<meta property="og:description" content="Make photos smaller without visible loss. Compress and resize many JPG, PNG and WEBP images at once, free, in your browser. Nothing is uploaded.">
+<meta property="og:url" content="https://convert.sayvoi.com/compress-image/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Compress Images Online Free: Reduce JPG, PNG and WEBP Size | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.img .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.img .col{flex:1 1 200px;min-width:0}
+.img label{display:block;font-weight:700;margin-bottom:6px}
+.img select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.img select option{color:#111;background:#fff}
+.img .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.img .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.img .b:disabled{opacity:.5;cursor:not-allowed}
+.img .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.img .info{margin-top:10px;font-size:.95em}
+.img .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.img .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.img .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.img .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.img .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.img .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.img .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.img .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.img .tbl td,.img .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.img .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.img .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.img .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.img .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.img .pv audio{width:100%;margin:4px 0 12px}
+.img .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chips .b{padding:8px 14px;font-size:15px}
+.img textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.6}
+.img input[type=text]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit;box-sizing:border-box}
+input[type=color]{width:100%;height:42px;border:1px solid rgba(128,128,128,.5);border-radius:10px;background:transparent;padding:2px}
+select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit}
+.qrbox{display:flex;flex-direction:column;align-items:center;margin:10px 0}#qrPrev{background:#fff;padding:10px;border-radius:14px;box-shadow:0 2px 14px rgba(0,0,0,.2);line-height:0}#qrPrev canvas{max-width:100%;height:auto}
+.b:disabled{opacity:.45}
+</style>
+<style>
+.img .seg{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.img .seg .b{padding:9px 16px}
+.img .seg .b.on{box-shadow:0 0 0 3px rgba(124,77,255,.45)}
+.img .seg .b.sec.on{background:linear-gradient(135deg,#7c4dff,#ff8a3d);color:#fff;border-color:transparent}
+.sent{margin:12px 0;padding:18px;border-radius:16px;border:1px solid rgba(128,128,128,.4);font-size:1.5em;line-height:1.6;text-align:center;direction:ltr;word-break:break-word;min-height:3em}
+.sent .w{display:inline-block;margin:0 .15em;padding:0 .12em;border-radius:6px}
+.sent .w.ok{background:rgba(60,170,90,.22)}
+.sent .w.miss{background:rgba(224,60,60,.2);text-decoration:underline wavy rgba(224,60,60,.7)}
+.cnt{text-align:center;font-weight:700}
+.pbar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;margin:8px 0}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c4dff,#ff8a3d)}
+.ctrl{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.recbtn{min-width:150px;padding:14px 22px;border:0;border-radius:99px;font:inherit;font-weight:800;font-size:1.05em;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.recbtn.on{background:#d93a3a;animation:pl 1.1s infinite}
+@keyframes pl{50%{opacity:.7}}
+.res{margin-top:12px;padding:14px;border-radius:14px;border:1px solid rgba(128,128,128,.4);display:none}
+.res .big{font-size:2em;font-weight:900;text-align:center}
+.res .heard{direction:ltr;text-align:start;margin-top:8px;opacity:.9;word-break:break-word}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.85em;font-weight:700;background:rgba(60,170,90,.2);margin-inline-start:6px}
+.img textarea{direction:ltr}
+.img .ritem{display:flex;gap:8px;align-items:center;padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);cursor:pointer;direction:ltr}
+.img .ritem.cur{background:rgba(124,77,255,.12)}
+.img .ritem span.t{flex:1;min-width:0;word-break:break-word}
+.img .ritem span.s{font-weight:800;white-space:nowrap}
+</style>
+<style>.privp{font-weight:600}.smallp{font-size:14px;opacity:.8;margin:6px 0}
+.img .b:disabled{opacity:.5;cursor:not-allowed}
+.img textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.6}
+select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font-size:16px;background:transparent;color:inherit}
+select option{color:#111;background:#fff}
+.b:disabled{opacity:.45}
+
+</style>
+<style>
+.img .drop{border:2px dashed #7c4dff;border-radius:18px;padding:30px 16px;text-align:center;cursor:pointer;background:rgba(124,77,255,.06);margin:12px 0;font-weight:700}
+.img .drop.over{background:rgba(124,77,255,.18)}
+.img .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:12px 0}
+.img .opts label{display:block;font-weight:700;margin-bottom:4px}
+.img input[type=range]{width:100%}
+.img .seg{display:flex;flex-wrap:wrap;gap:8px}
+.img .seg .b{padding:8px 16px}
+.img .seg .b.on{background:linear-gradient(135deg,#7c4dff,#ff8a3d);color:#fff;border-color:transparent}
+.fr{display:flex;gap:12px;align-items:center;padding:10px;border-bottom:1px solid rgba(128,128,128,.28)}
+.fr img{width:58px;height:58px;object-fit:cover;border-radius:10px;flex:none;background:rgba(128,128,128,.15)}
+.fr .m{flex:1;min-width:0}.fr .n{font-weight:700;word-break:break-all}.fr .s{font-size:.9em;opacity:.85}
+.fr .g{color:#1c8a4a;font-weight:800}[dir=rtl] .fr .s{direction:ltr;text-align:right}.fr .bad{color:#d93a3a}
+.fr a.b{padding:7px 14px;font-size:.9em;white-space:nowrap;text-decoration:none}
+.tot{margin:12px 0;font-weight:800;font-size:1.05em}
+.img select,.img input[type=text]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(128,128,128,.5);font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.img select option{color:#111;background:#fff}
+.b:disabled{opacity:.45;cursor:not-allowed}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+<script src="/jszip.min.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="img">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+<p class="privp" data-i="priv"></p>
+<div class="drop" id="drop"><span data-i="drop"></span><input type="file" id="file" accept="image/*" multiple style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none"></div>
+<div class="opts" id="opts"><div id="qWrap"><label for="q"><span data-i="lQ"></span>: <b id="qv"></b></label><input type="range" id="q" min="30" max="95" value="75"></div><div><label for="max" data-i="lMax"></label><select id="max"><option value="0" data-i="oOrig"></option><option value="3840">3840 px</option><option value="2560">2560 px</option><option value="1920" selected>1920 px</option><option value="1280">1280 px</option><option value="1024">1024 px</option><option value="800">800 px</option><option value="500">500 px</option></select></div><div><label for="fmt" data-i="lFmt"></label><select id="fmt"><option value="keep" data-i="oKeep"></option><option value="jpeg">JPG</option><option value="webp">WEBP</option></select></div></div>
+<div class="tot" id="tot"></div>
+<div id="list"></div>
+<div class="btns"><button type="button" class="b" id="zip" disabled></button><button type="button" class="b sec" id="clr" disabled></button></div>
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var MODE="compress";
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var T={"en": {"dir": "ltr", "btn": "العربية", "foot": "<p><a href=\"/about.html\">About</a><a href=\"/faq.html\">FAQ</a><a href=\"/privacy.html\">Privacy</a><a href=\"/terms.html\">Terms</a><a href=\"/contact.html\">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>", "priv": "Your images never leave your device. Everything happens in your browser, so nothing is uploaded.", "drop": "📷 Tap here to choose images, or drop them here (JPG, PNG, WEBP…)", "zip": "Download all (ZIP)", "clr": "Clear all", "dl": "Download", "working": "Working…", "waiting": "Waiting…", "already": "already small", "eRead": "Could not read this image.", "eBig": "This image is too large for the browser.", "noWebp": "WEBP is not supported here, saved as JPG", "back": "Back to the tools", "title": "Compress Images Online Free: Reduce JPG, PNG and WEBP Size | Sayvoi", "h1": "Compress Images Online: Make Photos Smaller", "lead": "Choose your photos and get smaller files in seconds. Compress many JPG, PNG and WEBP images at once, resize them, and download them one by one or as a ZIP. Free, with no sign-up.", "lQ": "Quality", "lMax": "Longest side", "oOrig": "Keep original size", "lFmt": "Output format", "oKeep": "Keep the same format", "saved": "Total saved: ", "h2b": "Tips", "n1": "Quality 70–80 usually looks the same as the original, with a much smaller file. Go lower only if you need a very small file.", "n2": "Resizing saves the most. A phone photo of 4000 px is far bigger than any screen needs. 1920 px is enough for the web and WhatsApp.", "n3": "PNG is lossless, so it does not shrink much. Choose JPG or WEBP in “Output format” for photos. Keep PNG for logos and screenshots with sharp text.", "n4": "Compressed images lose their hidden data, such as the camera model and GPS location. That is good for privacy."}, "ar": {"dir": "rtl", "btn": "English", "foot": "<p><a href=\"/about.html\">عن الموقع</a><a href=\"/faq.html\">الأسئلة الشائعة</a><a href=\"/privacy.html\">الخصوصية</a><a href=\"/terms.html\">الشروط</a><a href=\"/contact.html\">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>", "priv": "صورك لا تغادر جهازك. كل شيء يحدث داخل متصفحك، فلا يتم رفع أي شيء.", "drop": "📷 اضغط هنا لاختيار الصور، أو اسحبها إلى هنا (JPG وPNG وWEBP…)", "zip": "نزّل الكل (ZIP)", "clr": "مسح الكل", "dl": "تحميل", "working": "جارٍ العمل…", "waiting": "في الانتظار…", "already": "صغيرة أصلًا", "eRead": "تعذّرت قراءة هذه الصورة.", "eBig": "هذه الصورة أكبر من أن يعالجها المتصفح.", "noWebp": "WEBP غير مدعوم هنا، تم الحفظ JPG", "back": "العودة إلى الأدوات", "title": "ضغط الصور أونلاين مجانًا: تصغير حجم JPG وPNG وWEBP | Sayvoi", "h1": "ضغط الصور أونلاين: صغّر حجم صورك", "lead": "اختر صورك واحصل على ملفات أصغر في ثوانٍ. اضغط عدة صور JPG وPNG وWEBP معًا، وغيّر مقاسها، ونزّلها واحدة واحدة أو في ملف ZIP. مجانًا وبدون تسجيل.", "lQ": "الجودة", "lMax": "أطول ضلع", "oOrig": "المقاس الأصلي", "lFmt": "صيغة الناتج", "oKeep": "نفس الصيغة", "saved": "إجمالي التوفير: ", "h2b": "نصائح", "n1": "الجودة من 70 إلى 80 تبدو غالبًا مثل الأصل مع ملف أصغر بكثير. انزل أقل فقط لو تريد ملفًا صغيرًا جدًا.", "n2": "تغيير المقاس يوفّر أكثر. صورة الهاتف بعرض 4000 بكسل أكبر بكثير مما تحتاجه أي شاشة. 1920 بكسل تكفي للويب وللواتساب.", "n3": "صيغة PNG بلا فقد، فلا تصغر كثيرًا. اختر JPG أو WEBP من «صيغة الناتج» للصور الفوتوغرافية. وأبقِ PNG للشعارات ولقطات الشاشة ذات النص الحاد.", "n4": "الصور المضغوطة تفقد بياناتها المخفية، مثل نوع الكاميرا وموقع GPS. وهذا مفيد للخصوصية."}};
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
+var items=[],seq=0,run=0,timer=null;
+var FMT={jpeg:{m:"image/jpeg",e:"jpg"},webp:{m:"image/webp",e:"webp"},png:{m:"image/png",e:"png"}};
+function fmtSize(n){return n>=1048576?(n/1048576).toFixed(2)+" MB":(n>=1024?Math.round(n/1024)+" KB":n+" B");}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+function opt(){
+ var o={q:parseInt($("q").value,10)/100,max:parseInt($("max").value,10)||0};
+ if(MODE==="compress"){o.fmt=$("fmt").value;o.bg="#ffffff";}
+ else{o.fmt=$("fmtSeg").getAttribute("data-v");o.bg=$("bg").value||"#ffffff";}
+ return o;}
+function loadImg(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),i=new Image();i.onload=function(){res({img:i,url:u});};i.onerror=function(){URL.revokeObjectURL(u);rej();};i.src=u;});}
+function toBlob(c,type,q){return new Promise(function(res){try{c.toBlob(function(b){res(b);},type,q);}catch(e){res(null);}});}
+function baseName(n){return n.replace(/\.[^.]+$/,"")||"image";}
+function pickType(f,o){
+ if(o.fmt&&o.fmt!=="keep")return o.fmt;
+ var t=(f.type||"").toLowerCase();
+ if(t==="image/jpeg")return"jpeg";if(t==="image/png")return"png";if(t==="image/webp")return"webp";
+ if(t==="image/gif")return"png";return"jpeg";}
+async function proc(it,tok){
+ var o=opt();it.status="work";it.err="";render();
+ try{
+  var r=await loadImg(it.file);var im=r.img,w=im.naturalWidth,h=im.naturalHeight;
+  if(!w||!h)throw 0;
+  it.w=w;it.h=h;var sc=1;
+  if(o.max&&Math.max(w,h)>o.max)sc=o.max/Math.max(w,h);
+  var cw=Math.max(1,Math.round(w*sc)),ch=Math.max(1,Math.round(h*sc));
+  if(cw*ch>100000000)throw 1;
+  var c=document.createElement("canvas");c.width=cw;c.height=ch;var x=c.getContext("2d");
+  var tp=pickType(it.file,o);
+  if(tp==="jpeg"){x.fillStyle=o.bg;x.fillRect(0,0,cw,ch);}
+  x.imageSmoothingQuality="high";x.drawImage(im,0,0,cw,ch);URL.revokeObjectURL(r.url);
+  var F=FMT[tp],b=await toBlob(c,F.m,tp==="png"?undefined:o.q);
+  if(!b)throw 2;
+  if(b.type&&b.type!==F.m){tp="jpeg";F=FMT.jpeg;if(o.fmt==="webp"||true){x.globalCompositeOperation="destination-over";x.fillStyle=o.bg;x.fillRect(0,0,cw,ch);}b=await toBlob(c,F.m,o.q);if(!b)throw 2;it.note=T[L].noWebp;}
+  if(tok!==run)return;
+  var same=(it.file.type||"").toLowerCase()===F.m&&sc===1;
+  if(MODE==="compress"&&same&&b.size>=it.file.size){it.out=it.file;it.outName=it.file.name;it.small=true;}
+  else{it.out=b;it.small=false;it.outName=baseName(it.file.name)+(MODE==="compress"?"-compressed":"")+"."+F.e;}
+  it.ow=cw;it.oh=ch;it.status="done";
+ }catch(e){if(tok!==run)return;it.status="err";it.err=e===1?T[L].eBig:T[L].eRead;}
+ render();}
+async function runAll(){var tok=++run;for(var i=0;i<items.length;i++){if(tok!==run)return;await proc(items[i],tok);}}
+function schedule(){clearTimeout(timer);timer=setTimeout(runAll,350);}
+function render(){
+ var t=T[L],box=$("list");box.innerHTML="";var so=0,sn=0,done=0;
+ items.forEach(function(it){
+  var d=document.createElement("div");d.className="fr";
+  var st="";
+  if(it.status==="work")st=t.working;
+  else if(it.status==="err")st='<span class="bad">'+esc(it.err)+'</span>';
+  else if(it.status==="done"){
+   so+=it.file.size;sn+=it.out.size;done++;
+   var pc=Math.round((1-it.out.size/it.file.size)*100);
+   st=fmtSize(it.file.size)+" → <b>"+fmtSize(it.out.size)+"</b> "+(it.small?'<span class="s">'+t.already+'</span>':(pc>0?'<span class="g">−'+pc+'%</span>':'<span class="s">+'+(-pc)+'%</span>'))+(it.ow!==it.w?' · '+it.w+"×"+it.h+" → "+it.ow+"×"+it.oh:(it.w?' · '+it.w+"×"+it.h:""))+(it.note?" · "+esc(it.note):"");}
+  else st=t.waiting;
+  d.innerHTML='<img alt="">'+'<div class="m"><div class="n">'+esc(it.file.name)+'</div><div class="s">'+st+'</div></div>';
+  d.firstChild.src=it.url;
+  if(it.status==="done"){var a=document.createElement("a");a.className="b";a.textContent=t.dl;a.href=URL.createObjectURL(it.out);a.setAttribute("download",it.outName);d.appendChild(a);}
+  box.appendChild(d);});
+ var any=done>0;$("zip").disabled=!any;$("clr").disabled=!items.length;
+ $("tot").textContent=done&&MODE==="compress"&&so>0?t.saved+fmtSize(Math.max(0,so-sn))+" ("+Math.round((1-sn/so)*100)+"%)":"";}
+function add(list){
+ var n=0;[].forEach.call(list,function(f){if(/^image\//.test(f.type)||/\.(jpe?g|png|webp|gif|bmp|avif)$/i.test(f.name)){if(items.length<100){items.push({id:++seq,file:f,url:URL.createObjectURL(f),status:"wait"});n++;}}});
+ if(n){render();runAll();}}
+$("drop").addEventListener("click",function(e){if(e.target.id!=="file")$("file").click();});
+$("file").addEventListener("change",function(){add(this.files);this.value="";});
+["dragover","dragenter"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();this.classList.add("over");});});
+["dragleave","drop"].forEach(function(ev){$("drop").addEventListener(ev,function(e){e.preventDefault();this.classList.remove("over");});});
+$("drop").addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files)add(e.dataTransfer.files);});
+$("clr").addEventListener("click",function(){run++;items.forEach(function(it){try{URL.revokeObjectURL(it.url);}catch(e){}});items=[];render();});
+$("zip").addEventListener("click",async function(){
+ if(!window.JSZip)return;var z=new JSZip(),used={};
+ items.forEach(function(it){if(it.status!=="done")return;var n=it.outName,c=1;while(used[n.toLowerCase()]){c++;n=n.replace(/(\.[^.]+)$/,"_"+c+"$1");}used[n.toLowerCase()]=1;z.file(n,it.out);});
+ var b=await z.generateAsync({type:"blob",compression:"STORE"});var a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=(MODE==="compress"?"compressed-images":"converted-images")+".zip";document.body.appendChild(a);a.click();setTimeout(function(){a.remove();},500);});
+["q","max","fmt","bg"].forEach(function(id){var e=$(id);if(e)e.addEventListener("input",function(){if(id==="q")$("qv").textContent=this.value+"%";lsSet("im_"+MODE+"_"+id,this.value);schedule();});});
+if($("fmtSeg")){$("fmtSeg").addEventListener("click",function(e){var v=e.target.getAttribute("data-v");if(!v)return;this.setAttribute("data-v",v);lsSet("im_"+MODE+"_fmt",v);mark();schedule();});}
+function mark(){var s=$("fmtSeg");if(!s)return;var v=s.getAttribute("data-v");[].forEach.call(s.children,function(b){b.classList.toggle("on",b.getAttribute("data-v")===v);});var nq=(v==="png");$("qWrap").style.opacity=nq?".4":"1";$("q").disabled=nq;$("bgWrap").style.display=(v==="jpeg")?"block":"none";}
+["q","max","fmt","bg"].forEach(function(id){var e=$(id);if(!e)return;var v=lsGet("im_"+MODE+"_"+id,null);if(v!==null)e.value=v;});
+if($("fmtSeg")){var fv=lsGet("im_"+MODE+"_fmt",null);if(fv==="jpeg"||fv==="png"||fv==="webp")$("fmtSeg").setAttribute("data-v",fv);}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(t[k]!==undefined)a[i].textContent=t[k];}
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ $("zip").textContent=t.zip;$("clr").textContent=t.clr;$("qv").textContent=$("q").value+"%";
+ document.title=t.title;var md=document.querySelector('meta[name="description"]');
+ render();}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";lsSet("sayvoi_lang",L);applyLang();});
+$("qv").textContent=$("q").value+"%";mark();applyLang();
+})();
+</script>
+</body>
+</html>
