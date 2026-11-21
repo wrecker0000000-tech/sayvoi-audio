@@ -133,6 +133,7 @@ select option{color:#111;background:#fff}
 
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi pronunciation trainer guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
 </article>
 
@@ -148,7 +149,7 @@ en:{dir:"ltr",btn:"العربية",
  h1:"English Pronunciation Practice: Listen, Record and Get a Score",
  lead:"Type any English sentence, hear it in British or American English at a slow, normal or fast speed, then record yourself and see which words were clear. Free, with no sign-up.",
  priv:"Your recording stays on your device. The score uses your browser’s speech recognition, which in Chrome sends your voice to Google to turn it into text.",
- h1s:"1. Your sentences",h2s:"2. Practice",
+ vidH:"Watch: how to use the pronunciation trainer",vidP:"A short video guide that explains every button.",h1s:"1. Your sentences",h2s:"2. Practice",
  hint:"One sentence per line. You can paste text or upload a .txt file. Your sentences are saved on this device.",
  use:"Use these sentences",upl:"Upload a .txt file",demo:"Try example sentences",
  lAcc:"Accent",lSpd:"Speed",lVoice:"Voice",aUs:"American (US)",aUk:"British (UK)",sSlow:"Slow",sNormal:"Normal",sFast:"Fast",
@@ -178,7 +179,7 @@ ar:{dir:"rtl",btn:"English",
  h1:"تدريب النطق الإنجليزي: اسمع وسجّل واحصل على تقييم",
  lead:"اكتب أي جملة إنجليزية، واسمعها بلكنة بريطانية أو أمريكية بسرعة بطيئة أو عادية أو سريعة، ثم سجّل صوتك وشاهد أي الكلمات كانت واضحة. مجانًا وبدون تسجيل.",
  priv:"تسجيلك يبقى على جهازك. التقييم يستخدم التعرف على الكلام في متصفحك، وفي كروم يرسل صوتك إلى جوجل لتحويله إلى نص.",
- h1s:"1. جُملك",h2s:"2. تدرّب",
+ vidH:"شاهد: طريقة استخدام مدرّب النطق",vidP:"شرح مصوّر قصير يوضّح كل زر.",h1s:"1. جُملك",h2s:"2. تدرّب",
  hint:"جملة في كل سطر. تقدر تلصق النص أو ترفع ملف .txt. جُملك تُحفظ على هذا الجهاز.",
  use:"استخدم هذه الجمل",upl:"ارفع ملف .txt",demo:"جرّب جمل جاهزة",
  lAcc:"اللكنة",lSpd:"السرعة",lVoice:"الصوت",aUs:"أمريكي (US)",aUk:"بريطاني (UK)",sSlow:"بطيء",sNormal:"عادي",sFast:"سريع",
@@ -204,6 +205,7 @@ ar:{dir:"rtl",btn:"English",
  n4:"التقييم يعمل أفضل في كروم. الاستماع والتسجيل يعملان في أغلب المتصفحات.",
  back:"العودة إلى الأدوات",demoList:"I would like a cup of coffee, please.\nCould you tell me how to get to the station?\nThe weather is beautiful this morning.\nShe sells seashells by the seashore.\nI have been learning English for two years."}
 };
+var VID={en:"eqQRHli7Nhc",ar:"koV-0qw2_hA"};
 function lsGet(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 var sents=[],idx=0,scores={},recUrl={},ACC=lsGet("pt_acc","us"),SPD=lsGet("pt_spd","normal");
@@ -323,7 +325,7 @@ function saveBlob(){}
 if(TTS){try{speechSynthesis.onvoiceschanged=fillVoices;}catch(e){}}
 try{var ss=JSON.parse(lsGet("pt_sents","[]"));if(Array.isArray(ss)&&ss.length){sents=ss;idx=Math.min(parseInt(lsGet("pt_idx","0"),10)||0,ss.length-1);$("txt").value=ss.join("\n");}}catch(e){}
 function applyLang(){
- var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ var t=T[L];var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
