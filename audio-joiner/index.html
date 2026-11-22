@@ -87,6 +87,8 @@
   <div class="btns"><button type="button" class="b" id="dl" data-i="dl"></button></div>
 </div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi audio speed changer guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/audio-cutter/" data-i="rec"></a> · <a href="/" data-i="back"></a></p>
@@ -120,6 +122,7 @@ en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
  errZip:"Could not read the ZIP file.",errDec:"Could not read this file as audio: ",errAny:"Something went wrong: ",
  done:"Done. Listen to the result, then download it.",
  up:"Move up",down:"Move down",del:"Remove",
+ vidH:"Watch: how to join audio files",vidP:"A short video guide (under one minute). The steps are written on the screen.",
  h2b:"Notes",
  n1:"Your original files are never changed. The joined file is new.",
  n2:"Files with different sample rates or channels are matched automatically. A mono file next to a stereo file becomes stereo.",
@@ -143,6 +146,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
  errZip:"تعذّرت قراءة ملف ZIP.",errDec:"تعذّرت قراءة هذا الملف كصوت: ",errAny:"حدث خطأ: ",
  done:"تم. استمع إلى النتيجة ثم نزّلها.",
  up:"أعلى",down:"أسفل",del:"حذف",
+ vidH:"شاهد: كيف تدمج الملفات الصوتية",vidP:"شرح مصوّر قصير (أقل من دقيقة). الخطوات مكتوبة على الشاشة.",
  h2b:"ملاحظات",
  n1:"ملفاتك الأصلية لا تتغير أبدًا. الملف المدموج ملف جديد.",
  n2:"الملفات ذات معدلات العيّنة أو القنوات المختلفة تُوفَّق تلقائيًا. والملف الأحادي بجوار ملف ستيريو يصير ستيريو.",
@@ -150,7 +154,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
  n4:"الملفات الطويلة تحتاج ذاكرة في جهازك. وللدمج الكبير جدًا اعمل على مجموعات أصغر ثم ادمج النتائج.",
  rec:"قص الصوت بأداة قص الصوت",back:"العودة إلى الأدوات"}
 };
-var items=[],skipped=0,busy=false,outBlob=null,outUrl=null,uid=0;
+var VID={en:"B5e-SRKuQ4g",ar:"xf18XFWbrL4"};var items=[],skipped=0,busy=false,outBlob=null,outUrl=null,uid=0;
 var AUDIO=/\.(wav|mp3|m4a|aac|ogg|oga|opus|flac|webm|mp4|amr|wma|aif|aiff|3gp|caf)$/i;
 function tick(){return new Promise(function(r){setTimeout(r,0);});}
 function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
@@ -326,7 +330,7 @@ function dlOut(){
  var a=document.createElement("a");a.href=outUrl;a.download=cleanName()+(outBlob._ext||".wav");document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 function applyLang(){
- var t=T[L];
+ var t=T[L];var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
