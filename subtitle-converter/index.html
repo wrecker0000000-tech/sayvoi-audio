@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Convert text to SRT or VTT subtitles, SRT to text, or SRT to VTT in your browser. Shift the timing, Arabic supported. Free, and nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/subtitle-converter/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Subtitle Converter: Text, SRT and VTT (Free)">
+<meta property="og:description" content="Turn text into SRT or VTT subtitles and back. Free, in your browser, nothing is uploaded.">
+<meta property="og:url" content="https://convert.sayvoi.com/subtitle-converter/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Subtitle Converter: Text, SRT and VTT | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:10px 0 14px}
+.st{border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:10px 12px;text-align:center}
+.st b{display:block;font-size:22px}.st small{opacity:.75}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.lg{padding:3px 10px;border-radius:99px;font-size:13px}
+.lg.del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through}
+.lg.ins{background:rgba(34,197,94,.2);color:#166534}
+.lg.eq{background:rgba(128,128,128,.15)}
+.diffout{white-space:pre-wrap;line-height:2;font-size:18px;border:1px solid rgba(128,128,128,.35);border-radius:14px;padding:14px;word-break:break-word}
+.diffout del{background:rgba(239,68,68,.18);color:#b91c1c;text-decoration:line-through;border-radius:4px;padding:0 2px}
+.diffout ins{background:rgba(34,197,94,.22);color:#166534;text-decoration:none;border-radius:4px;padding:0 2px}
+@media (prefers-color-scheme:dark){.lg.del,.diffout del{color:#fca5a5}.lg.ins,.diffout ins{color:#86efac}}</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<h2 data-i="hIn"></h2>
+<label for="ta" data-i="lA"></label>
+<textarea id="ta" rows="10" dir="auto" spellcheck="false" data-p="phA"></textarea>
+<div class="btns"><button type="button" class="b sec" id="fa" data-i="load"></button><input type="file" id="fileA" accept=".srt,.vtt,.txt,text/plain,text/vtt" hidden><button type="button" class="b sec" id="ex" data-i="ex"></button><button type="button" class="b sec" id="clr" data-i="clr"></button></div>
+
+<h2 data-i="hOpt"></h2>
+<div class="row">
+ <div class="col"><label for="from" data-i="oFrom"></label><select id="from"><option value="auto" data-k="fAuto" selected></option><option value="txt" data-k="fTxt"></option><option value="srt" data-k="fSrt"></option><option value="vtt" data-k="fVtt"></option></select></div>
+ <div class="col"><label for="to" data-i="oTo"></label><select id="to"><option value="srt" data-k="tSrt" selected></option><option value="vtt" data-k="tVtt"></option><option value="txt" data-k="tTxt"></option></select></div>
+</div>
+<div class="row">
+ <div class="col"><label for="shift" data-i="oShift"></label><input type="number" id="shift" value="0" step="0.1" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box"><span class="small" data-i="oShiftH"></span></div>
+</div>
+<div id="tOpts">
+<h3 data-i="hTxt" style="margin-bottom:4px"></h3>
+<div class="row">
+ <div class="col"><label for="mode" data-i="oMode"></label><select id="mode"><option value="fix" data-k="mFix" selected></option><option value="words" data-k="mWords"></option></select></div>
+ <div class="col"><label for="sec" data-i="oSec"></label><input type="number" id="sec" value="3" min="0.5" step="0.5" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box"></div>
+ <div class="col"><label for="wps" data-i="oWps"></label><input type="number" id="wps" value="2.5" min="0.5" step="0.5" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box"></div>
+ <div class="col"><label for="gap" data-i="oGap"></label><input type="number" id="gap" value="0" min="0" step="0.1" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box"></div>
+</div>
+</div>
+<label style="font-weight:400;display:block;margin-top:8px"><input type="checkbox" id="oTags" checked> <span data-i="oTagsT"></span></label>
+<label style="font-weight:400;display:block"><input type="checkbox" id="oBom" checked> <span data-i="oBomT"></span></label>
+
+<div class="btns"><button type="button" class="b" id="go" data-i="go"></button></div>
+<div class="scan" id="msg" role="status"></div>
+
+<div class="pv" id="res" style="display:none">
+ <h3 style="margin-top:0" data-i="rH"></h3>
+ <div id="stats" class="stats"></div>
+ <textarea id="out" rows="14" dir="auto" spellcheck="false" readonly></textarea>
+ <div class="btns"><button type="button" class="b sec" id="copy" data-i="copy"></button><button type="button" class="b" id="dl" data-i="dl"></button></div>
+</div>
+
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var FOOT_EN='<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+var FOOT_AR='<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+var T={
+en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
+ h1:"Subtitle Converter: Text, SRT and VTT",
+ lead:"Turn plain text into SRT or VTT subtitles, turn subtitles back into plain text, or switch between SRT and VTT. You can also shift all the times earlier or later. Arabic and any other language work fine. Everything runs on your device and nothing is uploaded.",
+ hIn:"1. Your text or subtitles",lA:"Text, SRT or VTT",phA:"Paste your text here (one line = one subtitle), or paste an SRT or VTT file",
+ load:"Load a file",ex:"Load an example",clr:"Clear",
+ hOpt:"2. Options",oFrom:"Convert from",fAuto:"Detect automatically",fTxt:"Plain text",fSrt:"SRT",fVtt:"VTT",
+ oTo:"Convert to",tSrt:"SRT subtitles",tVtt:"VTT subtitles",tTxt:"Plain text (no times)",
+ oShift:"Shift all times (seconds)",oShiftH:"Use a negative number to make them earlier, for example -2.",
+ hTxt:"Timing for plain text",oMode:"How to time each line",mFix:"Same time for every line",mWords:"By the number of words",
+ oSec:"Seconds per line",oWps:"Words per second",oGap:"Gap between lines (seconds)",
+ oTagsT:"Remove formatting tags such as <i> and <b>",oBomT:"Add a UTF-8 mark to the downloaded file (helps Arabic in some players)",
+ go:"Convert",copy:"Copy",dl:"Download file",
+ rH:"Result",sCues:"Subtitles",sLen:"Total length",sFrom:"From",
+ errEmpty:"Paste or load your text or subtitles first.",errNone:"No subtitles were found. Check the file.",errFile:"Could not read this file.",
+ copied:"Copied.",
+ names:{txt:"Plain text",srt:"SRT",vtt:"VTT"},
+ h2b:"Notes",
+ n1:"SRT and VTT are almost the same. SRT writes the seconds with a comma (00:00:01,000) and VTT uses a dot and starts with the word WEBVTT.",
+ n2:"For plain text, each line becomes one subtitle. The times are an estimate, so check them against your video. For exact times, use a subtitle editor after converting.",
+ n3:"A negative shift cannot go below zero. A time that would be negative is set to 00:00:00.",
+ n4:"Your text stays on your device and is not uploaded.",
+ back:"Back to the tools",
+ ex1:"Welcome to the video.\nToday we will talk about sound.\nFirst, let us check the microphone.\nThen we start recording."},
+ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
+ h1:"محوّل الترجمة: نص وSRT وVTT",
+ lead:"حوّل النص العادي إلى ترجمة SRT أو VTT، أو حوّل الترجمة إلى نص عادي، أو انتقل بين SRT وVTT. ويمكنك أيضًا تقديم كل التوقيتات أو تأخيرها. تعمل الأداة مع العربية وأي لغة أخرى. كل شيء يتم على جهازك ولا يُرفع أي شيء.",
+ hIn:"1. النص أو الترجمة",lA:"نص أو SRT أو VTT",phA:"الصق النص هنا (كل سطر = ترجمة واحدة)، أو الصق ملف SRT أو VTT",
+ load:"حمّل ملفًا",ex:"حمّل مثالًا",clr:"مسح",
+ hOpt:"2. الخيارات",oFrom:"التحويل من",fAuto:"اكتشاف تلقائي",fTxt:"نص عادي",fSrt:"SRT",fVtt:"VTT",
+ oTo:"التحويل إلى",tSrt:"ترجمة SRT",tVtt:"ترجمة VTT",tTxt:"نص عادي (بدون توقيت)",
+ oShift:"تقديم أو تأخير كل التوقيتات (بالثواني)",oShiftH:"استخدم رقمًا سالبًا لتقديمها، مثل -2.",
+ hTxt:"توقيت النص العادي",oMode:"كيف يُحسب وقت كل سطر",mFix:"نفس الوقت لكل سطر",mWords:"حسب عدد الكلمات",
+ oSec:"ثواني لكل سطر",oWps:"كلمات في الثانية",oGap:"الفاصل بين الأسطر (ثواني)",
+ oTagsT:"احذف وسوم التنسيق مثل <i> و<b>",oBomT:"أضف علامة UTF-8 للملف المنزَّل (تفيد العربية في بعض المشغلات)",
+ go:"حوّل",copy:"انسخ",dl:"نزّل الملف",
+ rH:"النتيجة",sCues:"عدد الترجمات",sLen:"الطول الكلي",sFrom:"من",
+ errEmpty:"الصق النص أو الترجمة أو حمّلها أولًا.",errNone:"لم يتم العثور على ترجمات. راجع الملف.",errFile:"تعذّرت قراءة هذا الملف.",
+ copied:"تم النسخ.",
+ names:{txt:"نص عادي",srt:"SRT",vtt:"VTT"},
+ h2b:"ملاحظات",
+ n1:"SRT وVTT متشابهان تقريبًا. SRT يكتب الثواني بفاصلة (00:00:01,000) أما VTT فيستخدم نقطة ويبدأ بكلمة WEBVTT.",
+ n2:"في النص العادي يصبح كل سطر ترجمة واحدة. والتوقيتات تقديرية، فراجعها مع الفيديو. وللتوقيت الدقيق استخدم محرر ترجمة بعد التحويل.",
+ n3:"التأخير بالسالب لا ينزل تحت الصفر. وأي وقت سيصبح سالبًا يُضبط على 00:00:00.",
+ n4:"نصك يبقى على جهازك ولا يُرفع.",
+ back:"العودة إلى الأدوات",
+ ex1:"أهلًا بكم في هذا الفيديو.\nاليوم سنتحدث عن الصوت.\nأولًا، لنتأكد من الميكروفون.\nثم نبدأ التسجيل."}
+};
+var fname="subtitles",lastFrom="txt";
+function show(txt,bad){var m=$("msg");m.className="scan "+(bad?"bad":"ok");m.style.display="block";m.style.direction=T[L].dir;m.textContent=txt;}
+function norm(s){return s.replace(/^\uFEFF/,"").replace(/\r\n?/g,"\n");}
+function detect(s){
+ if(/-->/.test(s))return /^\s*WEBVTT/.test(s)?"vtt":"srt";
+ return "txt";
+}
+function tms(str){
+ var m=/^(?:(\d+):)?(\d{1,2}):(\d{1,2})(?:[.,](\d{1,3}))?$/.exec(str.trim());
+ if(!m)return null;
+ var ms=m[4]?parseInt((m[4]+"00").slice(0,3),10):0;
+ return ((m[1]?parseInt(m[1],10):0)*3600+parseInt(m[2],10)*60+parseInt(m[3],10))*1000+ms;
+}
+function pad(n,w){n=String(n);while(n.length<w)n="0"+n;return n;}
+function fmt(ms,sep){
+ if(ms<0)ms=0;ms=Math.round(ms);
+ var h=Math.floor(ms/3600000);ms-=h*3600000;
+ var m=Math.floor(ms/60000);ms-=m*60000;
+ var s=Math.floor(ms/1000);ms-=s*1000;
+ return pad(h,2)+":"+pad(m,2)+":"+pad(s,2)+sep+pad(ms,3);
+}
+function parseCues(s){
+ var blocks=s.split(/\n{2,}/),cues=[],i,j;
+ var ts=/^\s*((?:\d+:)?\d{1,2}:\d{1,2}(?:[.,]\d{1,3})?)\s*-->\s*((?:\d+:)?\d{1,2}:\d{1,2}(?:[.,]\d{1,3})?)/;
+ for(i=0;i<blocks.length;i++){
+  var lines=blocks[i].split("\n"),k=-1;
+  for(j=0;j<lines.length;j++){if(lines[j].indexOf("-->")>-1&&ts.test(lines[j])){k=j;break;}}
+  if(k<0)continue;
+  var m=ts.exec(lines[k]),a=tms(m[1]),b=tms(m[2]);
+  if(a===null||b===null)continue;
+  var text=lines.slice(k+1).join("\n").replace(/^\s+|\s+$/g,"");
+  cues.push({a:a,b:b,t:text});
+ }
+ return cues;
+}
+function textCues(s){
+ var lines=s.split("\n").map(function(x){return x.trim();}).filter(function(x){return x!=="";});
+ var mode=$("mode").value,sec=parseFloat($("sec").value)||3,wps=parseFloat($("wps").value)||2.5,gap=parseFloat($("gap").value)||0;
+ var t=0,cues=[];
+ lines.forEach(function(l){
+  var d;
+  if(mode==="words"){var w=l.split(/\s+/).length;d=Math.max(1.2,w/wps);}else d=sec;
+  cues.push({a:Math.round(t*1000),b:Math.round((t+d)*1000),t:l});
+  t+=d+gap;
+ });
+ return cues;
+}
+function strip(t){return t.replace(/<\/?[a-zA-Z][^>]*>/g,"").replace(/\{\\an?\d+\}/g,"");}
+function build(cues,to){
+ var out=[],i;
+ if(to==="txt"){return cues.map(function(c){return c.t;}).join("\n");}
+ if(to==="vtt")out.push("WEBVTT\n");
+ for(i=0;i<cues.length;i++){
+  var c=cues[i];
+  if(to==="srt")out.push((i+1)+"\n"+fmt(c.a,",")+" --> "+fmt(c.b,",")+"\n"+c.t+"\n");
+  else out.push(fmt(c.a,".")+" --> "+fmt(c.b,".")+"\n"+c.t+"\n");
+ }
+ return out.join("\n");
+}
+function lenTxt(ms){var s=Math.round(ms/1000),m=Math.floor(s/60);return m+":"+pad(s%60,2);}
+function run(){
+ var t=T[L],raw=$("ta").value;
+ if(!raw.trim()){show(t.errEmpty,true);return;}
+ var s=norm(raw),from=$("from").value;
+ if(from==="auto")from=detect(s);
+ lastFrom=from;
+ var cues=from==="txt"?textCues(s):parseCues(s);
+ if(!cues.length){show(t.errNone,true);return;}
+ var shift=Math.round((parseFloat($("shift").value)||0)*1000);
+ if(shift)cues.forEach(function(c){c.a=Math.max(0,c.a+shift);c.b=Math.max(0,c.b+shift);});
+ if($("oTags").checked)cues.forEach(function(c){c.t=strip(c.t);});
+ var to=$("to").value;
+ $("out").value=build(cues,to);
+ $("msg").style.display="none";
+ var end=0;cues.forEach(function(c){if(c.b>end)end=c.b;});
+ var st=[[t.sCues,cues.length],[t.sLen,lenTxt(end)],[t.sFrom,t.names[from]]];
+ var box=$("stats");box.textContent="";
+ st.forEach(function(x){var c=document.createElement("div");c.className="st";var b=document.createElement("b");b.textContent=x[1];var sm=document.createElement("small");sm.textContent=x[0];c.appendChild(b);c.appendChild(sm);box.appendChild(c);});
+ $("res").style.display="block";
+ $("res").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function readFile(f){
+ var fr=new FileReader();
+ fr.onload=function(){$("ta").value=String(fr.result||"");fname=f.name.replace(/\.[^.]*$/,"")||"subtitles";};
+ fr.onerror=function(){show(T[L].errFile,true);};
+ fr.readAsText(f,"UTF-8");
+}
+function modeUi(){var w=$("mode").value==="words";$("sec").disabled=w;$("wps").disabled=!w;}
+function applyLang(){
+ var t=T[L];
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"محوّل الترجمة: نص وSRT وVTT | Sayvoi":"Subtitle Converter: Text, SRT and VTT | Sayvoi";
+}
+$("fa").addEventListener("click",function(){$("fileA").click();});
+$("fileA").addEventListener("change",function(){if(this.files[0]){var n=this.files[0].name;readFile(this.files[0]);var e=n.split(".").pop().toLowerCase();if(e==="vtt")$("to").value="srt";else if(e==="srt")$("to").value="vtt";}this.value="";});
+$("go").addEventListener("click",run);
+$("ex").addEventListener("click",function(){$("ta").value=T[L].ex1.replace(/\\n/g,"\n");$("from").value="auto";$("to").value="srt";run();});
+$("clr").addEventListener("click",function(){$("ta").value="";$("res").style.display="none";$("msg").style.display="none";});
+$("copy").addEventListener("click",function(){
+ var v=$("out").value;if(!v)return;
+ var done=function(){show(T[L].copied,false);};
+ try{navigator.clipboard.writeText(v).then(done,function(){});}catch(e){$("out").select();try{document.execCommand("copy");done();}catch(e2){}}
+});
+$("dl").addEventListener("click",function(){
+ var v=$("out").value;if(!v)return;
+ var to=$("to").value,ext=to==="txt"?"txt":to;
+ var parts=[];if($("oBom").checked)parts.push("\uFEFF");parts.push(v);
+ var u=URL.createObjectURL(new Blob(parts,{type:"text/plain;charset=utf-8"})),a=document.createElement("a");
+ a.href=u;a.download=fname+"."+ext;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},1000);
+});
+$("mode").addEventListener("change",modeUi);
+["from","to","shift","mode","sec","wps","gap","oTags"].forEach(function(id){$(id).addEventListener("change",function(){if($("res").style.display==="block")run();});});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();if($("res").style.display==="block")run();});
+applyLang();modeUi();
+})();
+</script>
+</body>
+</html>
