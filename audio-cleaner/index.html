@@ -117,7 +117,7 @@
 <footer id="foot"></footer>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="/vendor/jszip.min.js"></script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i);};
@@ -400,7 +400,7 @@ function encWav(ch,sr){
 function loadLame(){
  return new Promise(function(res,rej){
   if(window.lamejs)return res();
-  var s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";
+  var s=document.createElement("script");s.src="/vendor/lame.min.js";
   s.onload=function(){window.lamejs?res():rej();};s.onerror=rej;document.head.appendChild(s);
  });
 }

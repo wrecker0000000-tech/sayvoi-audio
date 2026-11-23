@@ -289,7 +289,7 @@ function i16(a){ var o=new Int16Array(a.length); for(var i=0;i<a.length;i++){ va
 function loadLame(){
  if(window.lamejs) return Promise.resolve();
  if(lameLoading) return lameLoading;
- lameLoading=new Promise(function(res,rej){ var s=document.createElement("script"); s.src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"; s.onload=function(){ window.lamejs?res():rej(); }; s.onerror=function(){ lameLoading=null; rej(); }; document.head.appendChild(s); });
+ lameLoading=new Promise(function(res,rej){ var s=document.createElement("script"); s.src="/vendor/lame.min.js"; s.onload=function(){ window.lamejs?res():rej(); }; s.onerror=function(){ lameLoading=null; rej(); }; document.head.appendChild(s); });
  return lameLoading;
 }
 function toMp3(r,kbps){
