@@ -468,11 +468,13 @@ function statLine(t){
  if(s.peak!==undefined)x.push(T[L].peak+": "+dB(s.peak).toFixed(1)+" dBFS · "+T[L].avg+": "+dB(s.rms).toFixed(1)+" dBFS");
  if(t.sid!==null&&t.sid!==undefined&&script[t.sid])x.push("“"+script[t.sid].t.slice(0,50)+(script[t.sid].t.length>50?"…":"")+"”");
  return x.join(" · ");}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".pbplay");if(!b)return;[].forEach.call(document.querySelectorAll("#takes audio"),function(x){x.pause();var u=x.getAttribute("data-u")||"";x.removeAttribute("src");x.load();var nb=document.createElement("button");nb.type="button";nb.className="b sec pbplay";nb.textContent="▶";nb.style.minWidth="52px";nb.setAttribute("data-u",u);x.parentNode.replaceChild(nb,x);});
+ var a=document.createElement("audio");a.controls=true;a.setAttribute("data-u",b.getAttribute("data-u"));a.src=b.getAttribute("data-u");b.parentNode.replaceChild(a,b);var pr=a.play();if(pr&&pr.catch)pr.catch(function(){});});
 function renderTakes(){
  var box=$("takes");box.innerHTML="";
  takes.forEach(function(t,i){
   var d=document.createElement("div");d.className="take";
-  var a=document.createElement("audio");a.controls=true;a.src=t.url;d.appendChild(a);
+  var a=document.createElement("button");a.type="button";a.className="b sec pbplay";a.textContent="\u25B6";a.setAttribute("aria-label","Play");a.style.minWidth="52px";a.setAttribute("data-u",t.url);d.appendChild(a);
   var bg=document.createElement("span");bg.className="badge";bg.textContent=String(t.base).slice(-6);d.insertBefore(bg,d.firstChild);
   var inp=document.createElement("input");inp.type="text";inp.value=t.base;inp.setAttribute("dir","ltr");inp.setAttribute("data-r",i);d.appendChild(inp);
   var ex=document.createElement("span");ex.textContent="."+t.ext;ex.style.direction="ltr";d.appendChild(ex);
