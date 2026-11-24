@@ -474,7 +474,7 @@ $("zip").addEventListener("click",async function(){
  takes.forEach(function(t){var n=cleanBase(t.base),f=n+"."+t.ext,c=1;while(used[f.toLowerCase()]){c++;f=n+"_"+c+"."+t.ext;}used[f.toLowerCase()]=1;z.file(f,t.blob);});
  var ann=[];takes.forEach(function(t){if(t.sid!==null&&t.sid!==undefined&&script[t.sid]&&script[t.sid].f){ann.push(cleanBase(t.base)+"."+t.ext+"\t"+script[t.sid].t);}});
  
- var blob=await z.generateAsync({type:"blob",compression:"STORE"});saveBlob(blob,"recordings.zip");});
+ var blob=await z.generateAsync({type:"blob",compression:"STORE"});saveBlob(blob,(vzClean($("vzS").value)||"recordings")+".zip");});
 $("clr").addEventListener("click",async function(){if(!confirm(T[L].confirmDel))return;takes.forEach(function(t){URL.revokeObjectURL(t.url);});takes=[];counter=0;lsSet("vz_counter","0");await dbClear();renderTakes();showStore();});
 $("mic").addEventListener("click",ensureMic);
 $("noise").addEventListener("click",testNoise);
