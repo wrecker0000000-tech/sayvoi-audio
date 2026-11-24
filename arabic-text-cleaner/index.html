@@ -105,6 +105,8 @@
 </div>
 <div class="scan" id="msg" role="status"></div>
 
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi CSV to JSON guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
+
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -132,6 +134,7 @@ en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
  rH:"Result",copy:"Copy",dl:"Download .txt",
  sBefore:"Letters before",sAfter:"Letters after",sTash:"Diacritics removed",sWords:"Words",sLines:"Lines",
  copied:"Copied.",
+ vidH:"Watch: how to clean Arabic text",vidP:"A short video guide (under one minute). The steps are written on the screen.",
  h2b:"Notes",
  n1:"Removing diacritics does not change the meaning for search and comparison, but it can change how a word is read. Keep a copy of the original.",
  n2:"Unifying alef, ya and ta marbuta is useful for searching and matching text. Do not use it on text that must stay spelled correctly.",
@@ -152,6 +155,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
  rH:"النتيجة",copy:"انسخ",dl:"نزّل .txt",
  sBefore:"الحروف قبل",sAfter:"الحروف بعد",sTash:"تشكيل محذوف",sWords:"الكلمات",sLines:"الأسطر",
  copied:"تم النسخ.",
+ vidH:"شاهد: كيف تنظّف النص العربي",vidP:"شرح مصوّر قصير (أقل من دقيقة). الخطوات مكتوبة على الشاشة.",
  h2b:"ملاحظات",
  n1:"حذف التشكيل لا يغيّر المعنى في البحث والمقارنة، لكنه قد يغيّر طريقة قراءة الكلمة. احتفظ بنسخة من الأصل.",
  n2:"توحيد الألف والياء والتاء المربوطة مفيد للبحث ومطابقة النصوص. لا تستخدمه في نص يجب أن يبقى إملاؤه صحيحًا.",
@@ -160,7 +164,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
  back:"العودة إلى الأدوات",
  ex1:"إِنَّ الْعِلْمَ نُورٌ، وَالجَهْلَ ظَلَامٌ.\nأَكَلَ الْوَلَدُ ثَلَاثَ تُفَّاحَاتٍ ٣ مَرَّاتٍ.\nمــــرحبـــا بِكُمْ فِي مَوْقِعِنَا https://sayvoi.com   !!\nإِنَّ الْعِلْمَ نُورٌ، وَالجَهْلَ ظَلَامٌ."}
 };
-var fname="cleaned";
+var VID={en:"gvupbDyKUNM",ar:"FmSZXTVx1FY"};var fname="cleaned";
 var RX={};
 function mk(k,p,f){try{RX[k]=new RegExp(p,f);}catch(e){RX[k]=null;}}
 mk("tash","[\\u064B-\\u065F\\u0670\\u06D6-\\u06DC\\u06DF-\\u06E8\\u06EA-\\u06ED]","g");
@@ -207,7 +211,7 @@ function readFile(f){
  fr.readAsText(f,"UTF-8");
 }
 function applyLang(){
- var t=T[L];
+ var t=T[L];var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
