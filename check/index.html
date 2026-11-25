@@ -89,7 +89,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
 
 <div class="drop" id="drop" tabindex="0" role="button">
   <b data-t="drop1"></b><small data-t="drop2"></small>
-  <input type="file" id="file" multiple accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.webm" hidden>
+  <input type="file" id="file" multiple accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.webm,.zip,application/zip" hidden>
 </div>
 
 <details open>
@@ -155,7 +155,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
     ar: {
       nav_conv:"المحوّل", nav_spd:"تغيير السرعة", nav_check:"فاحص الجودة", nav_art:"المقالات", nav_vid:"فيديو إلى صوت", nav_about:"عن الموقع", nav_cut:"قص الصوت", nav_stt:"الصوت إلى نص", nav_num:"الأرقام بالحروف", nav_dur:"مدة الملفات", nav_split:"مقسّم الجمل", nav_rec:"مسجّل الصوت", nav_ren:"إعادة التسمية", nav_cln:"منظّف الصوت", nav_svc:"الخدمات", f_priv:"الخصوصية", f_contact:"اتصل بنا",
       h1:"فاحص جودة التسجيلات الصوتية", sub:"افحص عشرات التسجيلات دفعة واحدة: معدل العينة، القنوات، التشويه (clipping)، الضوضاء، الصمت، والتكرار. كل شيء داخل متصفحك.",
-      drop1:"اسحب الملفات هنا أو اضغط للاختيار", drop2:"WAV · MP3 · FLAC · OGG · M4A — حتى 200 ميجابايت للملف",
+      drop1:"اسحب الملفات هنا أو اضغط للاختيار", drop2:"WAV · MP3 · FLAC · OGG · M4A أو ملف ZIP — حتى 200 ميجابايت للملف",
       specs:"مواصفات المشروع (اختياري)", specsHint:"اترك الحقل على «أي» أو فارغًا لتجاهله. أي ملف يخالف مواصفة تحددها يُعتبر «مرفوضًا».",
       any:"أي", mono:"مونو (1)", stereo:"ستيريو (2)",
       s_sr:"معدل العينة المطلوب (Hz)", s_ch:"القنوات", s_fmt:"الصيغة", s_bit:"عمق البت (WAV/FLAC فقط)", s_min:"أقل مدة (ثانية)", s_max:"أطول مدة (ثانية)", s_lead:"أقل صمت في البداية (ثانية)", s_trail:"أقل صمت في النهاية (ثانية)",
@@ -166,7 +166,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
       c_status:"الحالة", c_name:"الملف", c_fmt:"الصيغة", c_sr:"معدل العينة", c_ch:"القنوات", c_dur:"المدة", c_peak:"الذروة dBFS", c_rms:"RMS dBFS", c_clip:"تشويه %", c_noise:"ضوضاء dBFS", c_snr:"SNR dB", c_lead:"صمت البداية", c_trail:"صمت النهاية", c_issues:"الملاحظات",
       echoL:'💡 تسجيلاتك فيها صدى أو ضوضاء؟ <a href="/articles/ar/reduce-echo-and-noise-in-recordings.html">اقرأ المقال واتفرج على الفيديو</a>',vidH:"شاهد: طريقة استخدام الفاحص", vidP:"شرح مصوّر قصير (نحو 55 ثانية). الخطوات مكتوبة على الشاشة.",
       privacy:"لا تُرفع ملفاتك إلى أي خادم. الفحص يجري على جهازك. النتائج تقديرية وتساعد على الفرز السريع، ولا تغني عن الاستماع للتسجيلات الحساسة.",
-      none:"لا ملاحظات", decodefail:"تعذّر قراءة الملف (صيغة غير مدعومة أو ملف تالف)", toobig:"الملف أكبر من 200 ميجابايت",
+      none:"لا ملاحظات", decodefail:"تعذّر قراءة الملف (صيغة غير مدعومة أو ملف تالف)", toobig:"الملف أكبر من 200 ميجابايت", zipempty:"لم أجد ملفات صوت داخل الـ ZIP (أو تعذّر فتحه)",
       i_sr:"معدل العينة %a بدل %b", i_ch:"القنوات %a بدل %b", i_fmt:"الصيغة %a بدل %b", i_bit:"عمق البت %a بدل %b", i_min:"أقصر من %a ث", i_max:"أطول من %a ث",
       i_lead:"صمت البداية %a ث (المطلوب %b ث)", i_trail:"صمت النهاية %a ث (المطلوب %b ث)",
       i_clip:"تشويه (clipping) %a%%", i_peak:"مستوى منخفض (ذروة %a dBFS)", i_noise:"ضوضاء خلفية عالية (%a dBFS)", i_snr:"نسبة إشارة/ضوضاء ضعيفة (%a dB)",
@@ -175,7 +175,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
     en: {
       nav_conv:"Converter", nav_spd:"Speed changer", nav_check:"Quality checker", nav_art:"Articles", nav_vid:"Video to audio", nav_about:"About", nav_cut:"Audio cutter", nav_stt:"Speech to text", nav_num:"Numbers to words", nav_dur:"Audio duration", nav_split:"Sentence splitter", nav_rec:"Voice recorder", nav_ren:"Batch renamer", nav_cln:"Audio cleaner", nav_svc:"Services", f_priv:"Privacy", f_contact:"Contact",
       h1:"Recording Quality Checker", sub:"Check dozens of recordings at once: sample rate, channels, clipping, noise, silence and duplicates. Everything runs in your browser.",
-      drop1:"Drop files here or click to choose", drop2:"WAV · MP3 · FLAC · OGG · M4A — up to 200 MB per file",
+      drop1:"Drop files here or click to choose", drop2:"WAV · MP3 · FLAC · OGG · M4A or a ZIP file — up to 200 MB per file",
       specs:"Project specs (optional)", specsHint:"Leave a field on “Any” or empty to ignore it. A file that breaks a spec you set is marked as failed.",
       any:"Any", mono:"Mono (1)", stereo:"Stereo (2)",
       s_sr:"Required sample rate (Hz)", s_ch:"Channels", s_fmt:"Format", s_bit:"Bit depth (WAV/FLAC only)", s_min:"Minimum length (s)", s_max:"Maximum length (s)", s_lead:"Minimum leading silence (s)", s_trail:"Minimum trailing silence (s)",
@@ -186,7 +186,7 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
       c_status:"Status", c_name:"File", c_fmt:"Format", c_sr:"Sample rate", c_ch:"Channels", c_dur:"Length", c_peak:"Peak dBFS", c_rms:"RMS dBFS", c_clip:"Clipped %", c_noise:"Noise dBFS", c_snr:"SNR dB", c_lead:"Lead silence", c_trail:"Trail silence", c_issues:"Notes",
       echoL:'💡 Echo or noise in your recordings? <a href="/articles/en/reduce-echo-and-noise-in-recordings.html">Read the article and watch the video</a>',vidH:"Watch: how to use the checker", vidP:"A short video guide (about 55 seconds). The steps are written on the screen.",
       privacy:"Your files are never uploaded. The check runs on your device. Results are estimates for fast triage; they do not replace listening to sensitive recordings.",
-      none:"No issues", decodefail:"Could not read the file (unsupported format or corrupted)", toobig:"File is larger than 200 MB",
+      none:"No issues", decodefail:"Could not read the file (unsupported format or corrupted)", toobig:"File is larger than 200 MB", zipempty:"No audio files were found in the ZIP (or it could not be opened)",
       i_sr:"Sample rate %a instead of %b", i_ch:"Channels %a instead of %b", i_fmt:"Format %a instead of %b", i_bit:"Bit depth %a instead of %b", i_min:"Shorter than %a s", i_max:"Longer than %a s",
       i_lead:"Leading silence %a s (required %b s)", i_trail:"Trailing silence %a s (required %b s)",
       i_clip:"Clipping %a%%", i_peak:"Low level (peak %a dBFS)", i_noise:"High background noise (%a dBFS)", i_snr:"Poor signal-to-noise ratio (%a dB)",
@@ -459,9 +459,32 @@ nav.top a.on:hover,.top a.nl.on:hover{color:#fff}
     $("clear").disabled = !jobs.length || running;
   }
 
-  function addFiles(list){
-    Array.prototype.forEach.call(list, function(f){ jobs.push({file: f, res: null}); });
+  var AUD = /\.(wav|mp3|flac|ogg|m4a|aac|opus|webm)$/i;
+  function loadZipLib(){
+    if (window.JSZip) return Promise.resolve();
+    return new Promise(function(ok, no){ var s = document.createElement("script"); s.src = "/vendor/jszip.min.js"; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+  }
+  async function addFiles(list){
+    var arr = Array.prototype.slice.call(list), zipMsg = false;
+    for (var i = 0; i < arr.length; i++){
+      var f = arr[i];
+      if (/\.zip$/i.test(f.name) || f.type === "application/zip" || f.type === "application/x-zip-compressed"){
+        try{
+          $("count").textContent = t("busy");
+          await loadZipLib();
+          var z = await JSZip.loadAsync(f), names = Object.keys(z.files).filter(function(n){
+            var e = z.files[n]; return !e.dir && AUD.test(n) && n.indexOf("__MACOSX/") !== 0 && n.split("/").pop().charAt(0) !== ".";
+          }).sort();
+          for (var k = 0; k < names.length; k++){
+            var b = await z.files[names[k]].async("blob");
+            jobs.push({file: new File([b], names[k].split("/").pop(), {type: b.type || ""}), res: null});
+          }
+          if (!names.length) zipMsg = true;
+        } catch(e){ zipMsg = true; }
+      } else jobs.push({file: f, res: null});
+    }
     renderAll();
+    if (zipMsg) $("count").textContent = t("zipempty");
   }
   async function runAll(){
     if (running) return;
