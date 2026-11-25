@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Check a ZIP of voice recordings before delivery: find missing, extra, duplicate and misnamed files and wrong WAV settings. Free, in your browser, nothing is uploaded.">
+<link rel="canonical" href="https://convert.sayvoi.com/delivery-checker/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Delivery Checker for Voice Recordings (Free)">
+<meta property="og:description" content="Find missing, extra, duplicate and misnamed recordings and wrong WAV settings in a ZIP before you deliver it.">
+<meta property="og:url" content="https://convert.sayvoi.com/delivery-checker/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Delivery Checker for Voice Recordings | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>
+.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.6}
+.sp input[type=text],.sp input[type=number]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp .msg{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid #e0a030;background:rgba(224,160,48,.12);display:none}
+.sp .pills{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.sp .pill{padding:6px 14px;border-radius:99px;border:1px solid rgba(128,128,128,.45);font-weight:800}
+.sp .pill.ok{border-color:rgba(60,170,90,.8);color:#2f9d57}
+.sp .pill.bad{border-color:#e0a030;color:#d38a00}
+.sp .pill.err{border-color:#e05a5a;color:#d64545}
+.sp .big{padding:14px;border-radius:14px;font-weight:800;margin:12px 0;border:2px solid}
+.sp .big.ok{border-color:rgba(60,170,90,.8);background:rgba(60,170,90,.1)}
+.sp .big.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.sp details.g{border:1px solid rgba(128,128,128,.4);border-radius:12px;padding:8px 12px;margin:8px 0}
+.sp details.g summary{cursor:pointer;font-weight:800}
+.sp details.g ul{margin:8px 0 0;padding-inline-start:20px;max-height:260px;overflow:auto}
+.sp details.g li{direction:ltr;text-align:start;word-break:break-all;margin:2px 0}
+.sp details.g li small{opacity:.8}
+.sp .cnt{display:none}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<h2 data-i="h1s"></h2>
+<div class="drop" id="drop" tabindex="0" role="button"><b data-i="drop1"></b><span class="small" data-i="drop2"></span>
+<input type="file" id="file" multiple accept=".zip,application/zip,audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.webm" style="display:none"></div>
+<div class="info" id="loaded"></div>
+
+<h2 data-i="h2s"></h2>
+<div class="row"><div class="col" style="flex-basis:100%"><label for="pat" data-i="lPat"></label><input type="text" id="pat" dir="ltr" data-p="phPat" autocomplete="off"><span class="small" data-i="hPat"></span></div></div>
+<div class="row"><div class="col" style="flex-basis:100%"><label for="allow" data-i="lAllow"></label><textarea id="allow" rows="3" dir="ltr" data-p="phAllow"></textarea><span class="small" data-i="hAllow"></span></div></div>
+<div class="row"><div class="col" style="flex-basis:100%"><label for="exp" data-i="lExp"></label><textarea id="exp" rows="5" dir="ltr" data-p="phExp"></textarea><span class="small" data-i="hExp"></span></div></div>
+<div class="btns"><button class="b sec" id="expFile" type="button" data-i="expLoad"></button><input type="file" id="expIn" accept=".txt,.csv,text/plain,text/csv" style="display:none"></div>
+
+<h2 data-i="h3s"></h2>
+<div class="row">
+<div class="col"><label for="sFmt" data-i="lFmt"></label><select id="sFmt"><option value="" data-k="any"></option><option value="wav">WAV</option><option value="mp3">MP3</option><option value="flac">FLAC</option><option value="ogg">OGG</option><option value="m4a">M4A</option></select></div>
+<div class="col"><label for="sSr" data-i="lSr"></label><select id="sSr"><option value="0" data-k="any"></option><option>8000</option><option>16000</option><option>22050</option><option>24000</option><option>32000</option><option>44100</option><option>48000</option></select></div>
+<div class="col"><label for="sCh" data-i="lCh"></label><select id="sCh"><option value="0" data-k="any"></option><option value="1" data-k="mono"></option><option value="2" data-k="stereo"></option></select></div>
+<div class="col"><label for="sBit" data-i="lBit"></label><select id="sBit"><option value="0" data-k="any"></option><option>16</option><option>24</option><option>32</option></select></div>
+<div class="col"><label for="sMin" data-i="lMin"></label><input type="number" id="sMin" min="0" step="0.1" inputmode="decimal"></div>
+<div class="col"><label for="sMax" data-i="lMax"></label><input type="number" id="sMax" min="0" step="0.1" inputmode="decimal"></div>
+</div>
+<span class="small" data-i="hSpec"></span>
+
+<div class="btns"><button class="b" id="go" type="button" data-i="go"></button><button class="b sec" id="clr" type="button" data-i="clr"></button></div>
+<div class="bar" id="bar"><i></i></div>
+<div class="msg" id="msg"></div>
+
+<div id="res" style="display:none">
+<h2 data-i="rH"></h2>
+<div id="verdict"></div>
+<div class="pills" id="pills"></div>
+<div id="groups"></div>
+<div class="btns"><button class="b sec" id="csvI" type="button" data-i="csvI"></button><button class="b sec" id="csvM" type="button" data-i="csvM"></button><button class="b sec" id="cpy" type="button" data-i="cpy"></button></div>
+</div>
+
+<section class="vd" style="display:none"></section>
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var FOOT_EN='<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+var FOOT_AR='<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+var T={
+en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
+ h1:"Delivery Checker for Voice Recordings",
+ lead:"Check a ZIP of recordings before you send it to the client. The page finds missing files, extra files, duplicates, wrong names and wrong WAV settings, and gives you a report. Everything runs on your device and nothing is uploaded.",
+ h1s:"1. Your recordings",drop1:"Drop a ZIP or audio files here, or click to choose",drop2:"ZIP with WAV, MP3, FLAC, OGG or M4A files. Folders inside the ZIP are fine.",
+ h2s:"2. What is expected (all optional)",
+ lPat:"File name pattern",phPat:"{speaker}_{country}_{gender}_{age}_{code}_{speed}_{take}",
+ hPat:"Words in braces are parts of the name. Each part can use letters, numbers, dot and dash. Parts are joined with the characters you write, such as an underscore.",
+ lAllow:"Allowed values for parts",phAllow:"gender: male,female\nage: 18-70\nspeed: f,n,m",
+ hAllow:"One line for each part. Write the allowed values with commas, or a number range such as 18-70.",
+ lExp:"Expected file names (one per line)",phExp:"N0012_USA_male_22_en0001_f_01\nN0012_USA_male_22_en0001_f_02",
+ hExp:"Paste the names you must receive. The extension is optional. You can copy them from Project Builder.",
+ expLoad:"Load the list from a file",
+ h3s:"3. Audio settings",lFmt:"Format",lSr:"Sample rate (Hz)",lCh:"Channels",lBit:"Bits (WAV)",lMin:"Shortest allowed (seconds)",lMax:"Longest allowed (seconds)",
+ any:"Any",mono:"Mono",stereo:"Stereo",
+ hSpec:"Sample rate, channels, bits and length are read from WAV files. For other formats only the format is checked.",
+ go:"Check",clr:"Clear",rH:"Report",
+ csvI:"Download the problems (CSV)",csvM:"Download the file list (CSV)",cpy:"Copy the summary",
+ dropped:"Loaded %a audio files.",zipEmpty:"No audio files were found in the ZIP (or it could not be opened).",ign:"%a other files were ignored.",
+ errNone:"Add a ZIP or audio files first.",busy:"Checking…",
+ allgood:"All checks passed.",hasprob:"Problems found: %a",
+ pFiles:"Files",pExp:"Expected",pMiss:"Missing",pExtra:"Extra",pName:"Wrong name",pDup:"Duplicates",pSpec:"Wrong settings",pEmpty:"Empty or broken",
+ gMiss:"Missing files",gExtra:"Extra files (not in the expected list)",gName:"Names that do not match the pattern",gDup:"Duplicate files",gSpec:"Files with wrong audio settings",gEmpty:"Empty or broken files",
+ dName:"does not match the pattern",dVal:"%a: “%b” is not allowed",dSameName:"same name as another file",dSameData:"same audio as %a",
+ dFmt:"format is %a, expected %b",dSr:"sample rate %a, expected %b",dCh:"%a channels, expected %b",dBit:"%a bits, expected %b",dMin:"%a s is shorter than %b s",dMax:"%a s is longer than %b s",
+ dEmpty:"file is empty or too small",dBad:"not a valid WAV file",dCase:"matches only when the letters case is ignored",
+ sumHead:"Delivery check",
+ h2b:"Notes",
+ n1:"The check reads the WAV header and the file size, so it is fast, even for many files.",
+ n2:"Duplicates are found by comparing the audio data, so the same recording saved under two names is caught.",
+ n3:"Without an expected list the page cannot tell what is missing. It still checks names, duplicates and settings.",
+ n4:"Your files stay on your device and are not uploaded.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
+ h1:"فاحص تسليم التسجيلات الصوتية",
+ lead:"افحص ملف ZIP للتسجيلات قبل إرساله للعميل. تجد الصفحة الملفات الناقصة والزائدة والمكررة والأسماء الخاطئة وإعدادات WAV الخاطئة، وتعطيك تقريرًا. كل شيء يتم على جهازك ولا يُرفع أي ملف.",
+ h1s:"1. تسجيلاتك",drop1:"اسحب ملف ZIP أو ملفات صوت هنا، أو اضغط للاختيار",drop2:"ZIP فيه ملفات WAV أو MP3 أو FLAC أو OGG أو M4A. المجلدات داخل الـ ZIP مقبولة.",
+ h2s:"2. المطلوب (كله اختياري)",
+ lPat:"نمط اسم الملف",phPat:"{speaker}_{country}_{gender}_{age}_{code}_{speed}_{take}",
+ hPat:"الكلمات بين الأقواس هي أجزاء الاسم. يمكن أن يحتوي كل جزء على حروف وأرقام ونقطة وشرطة. وتُربط الأجزاء بالحروف التي تكتبها مثل الشرطة السفلية.",
+ lAllow:"القيم المسموحة للأجزاء",phAllow:"gender: male,female\nage: 18-70\nspeed: f,n,m",
+ hAllow:"سطر لكل جزء. اكتب القيم المسموحة بينها فاصلة، أو نطاق أرقام مثل 18-70.",
+ lExp:"أسماء الملفات المطلوبة (اسم في كل سطر)",phExp:"N0012_USA_male_22_en0001_f_01\nN0012_USA_male_22_en0001_f_02",
+ hExp:"الصق الأسماء التي يجب أن تصلك. الامتداد اختياري. يمكنك نسخها من Project Builder.",
+ expLoad:"حمّل القائمة من ملف",
+ h3s:"3. إعدادات الصوت",lFmt:"الصيغة",lSr:"معدل العينة (هرتز)",lCh:"القنوات",lBit:"البت (WAV)",lMin:"أقصر مدة مسموحة (ثانية)",lMax:"أطول مدة مسموحة (ثانية)",
+ any:"أي قيمة",mono:"أحادي",stereo:"ستيريو",
+ hSpec:"يُقرأ معدل العينة والقنوات والبت والمدة من ملفات WAV. أما الصيغ الأخرى فتُفحص صيغتها فقط.",
+ go:"افحص",clr:"مسح",rH:"التقرير",
+ csvI:"نزّل المشكلات (CSV)",csvM:"نزّل قائمة الملفات (CSV)",cpy:"انسخ الملخص",
+ dropped:"تم تحميل %a ملف صوت.",zipEmpty:"لم أجد ملفات صوت داخل الـ ZIP (أو تعذّر فتحه).",ign:"تم تجاهل %a ملف آخر.",
+ errNone:"أضف ملف ZIP أو ملفات صوت أولًا.",busy:"جارٍ الفحص…",
+ allgood:"نجحت كل الفحوص.",hasprob:"عدد المشكلات: %a",
+ pFiles:"الملفات",pExp:"المطلوب",pMiss:"ناقص",pExtra:"زائد",pName:"اسم خاطئ",pDup:"مكرر",pSpec:"إعدادات خاطئة",pEmpty:"فارغ أو تالف",
+ gMiss:"ملفات ناقصة",gExtra:"ملفات زائدة (ليست في القائمة المطلوبة)",gName:"أسماء لا تطابق النمط",gDup:"ملفات مكررة",gSpec:"ملفات بإعدادات صوت خاطئة",gEmpty:"ملفات فارغة أو تالفة",
+ dName:"لا يطابق النمط",dVal:"%a: القيمة «%b» غير مسموحة",dSameName:"نفس اسم ملف آخر",dSameData:"نفس الصوت في %a",
+ dFmt:"الصيغة %a والمطلوب %b",dSr:"معدل العينة %a والمطلوب %b",dCh:"%a قناة والمطلوب %b",dBit:"%a بت والمطلوب %b",dMin:"%a ث أقصر من %b ث",dMax:"%a ث أطول من %b ث",
+ dEmpty:"الملف فارغ أو صغير جدًا",dBad:"ليس ملف WAV صالحًا",dCase:"يطابق فقط إذا تجاهلنا حالة الحروف",
+ sumHead:"فحص التسليم",
+ h2b:"ملاحظات",
+ n1:"يقرأ الفحص رأس ملف WAV وحجم الملف، فهو سريع حتى مع ملفات كثيرة.",
+ n2:"تُكتشف المكررات بمقارنة بيانات الصوت، فيُكشف التسجيل نفسه المحفوظ باسمين.",
+ n3:"بدون قائمة مطلوبة لا تستطيع الصفحة معرفة الناقص. وتفحص مع ذلك الأسماء والمكررات والإعدادات.",
+ n4:"ملفاتك تبقى على جهازك ولا تُرفع.",
+ back:"العودة إلى الأدوات"}};
+function tf(k,a,b){return T[L][k].replace("%a",a).replace("%b",b);}
+function applyLang(){
+ var t=T[L];
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"فاحص تسليم التسجيلات الصوتية | Sayvoi":"Delivery Checker for Voice Recordings | Sayvoi";
+ showLoaded();if(REP)render();
+}
+var AUD=/\.(wav|mp3|flac|ogg|m4a|aac|opus|webm)$/i;
+var entries=[],ignored=0,REP=null,running=false;
+function msg(txt){var m=$("msg");m.textContent=txt;m.style.display=txt?"block":"none";}
+function showLoaded(){var e=$("loaded");if(!entries.length){e.textContent="";return;}var s=tf("dropped",entries.length,"");if(ignored)s+=" "+tf("ign",ignored,"");e.textContent=s;}
+function loadZipLib(){if(window.JSZip)return Promise.resolve();return new Promise(function(ok,no){var s=document.createElement("script");s.src="/vendor/jszip.min.js";s.onload=ok;s.onerror=no;document.head.appendChild(s);});}
+function base(p){return p.split("/").pop();}
+async function addFiles(list){
+ msg("");var arr=Array.prototype.slice.call(list),bad=false;
+ for(var i=0;i<arr.length;i++){var f=arr[i];
+  if(/\.zip$/i.test(f.name)||f.type==="application/zip"||f.type==="application/x-zip-compressed"){
+   try{await loadZipLib();var z=await JSZip.loadAsync(f);
+    Object.keys(z.files).sort().forEach(function(n){var e=z.files[n];if(e.dir)return;var b=base(n);
+     if(n.indexOf("__MACOSX/")===0||b.charAt(0)==="."||!AUD.test(b)){ignored++;return;}
+     entries.push({name:b,path:n,get:function(){return e.async("blob");}});});
+    if(!entries.length)bad=true;
+   }catch(e){bad=true;}
+  }else if(AUD.test(f.name)){entries.push({name:f.name,path:f.webkitRelativePath||f.name,get:function(ff){return function(){return Promise.resolve(ff);};}(f)});}
+  else ignored++;
+ }
+ REP=null;$("res").style.display="none";showLoaded();if(bad&&!entries.length)msg(T[L].zipEmpty);
+}
+function noExt(n){return n.replace(/\.[A-Za-z0-9]{1,5}$/,"");}
+function extOf(n){var m=/\.([A-Za-z0-9]{1,5})$/.exec(n);return m?m[1].toLowerCase():"";}
+function esc(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+function parsePattern(p){
+ p=(p||"").trim();if(!p)return null;
+ var names=[],re="^",last=0,m,rx=/\{(\w+)\}/g;
+ while((m=rx.exec(p))){re+=esc(p.slice(last,m.index))+"([A-Za-z0-9.\\-]+)";names.push(m[1]);last=m.index+m[0].length;}
+ re+=esc(p.slice(last))+"$";
+ if(!names.length)return null;
+ try{return{names:names,re:new RegExp(re)};}catch(e){return null;}
+}
+function parseAllow(txt){
+ var out={};(txt||"").split(/\r\n|\n|\r/).forEach(function(l){var i=l.indexOf(":");if(i<1)return;var k=l.slice(0,i).trim().replace(/[{}]/g,""),v=l.slice(i+1).trim();if(!k||!v)return;
+  var r=/^(\d+)\s*-\s*(\d+)$/.exec(v);if(r)out[k]={lo:+r[1],hi:+r[2]};else out[k]={list:v.split(",").map(function(x){return x.trim();}).filter(Boolean)};});
+ return out;
+}
+function allowed(rule,val){if(rule.list)return rule.list.indexOf(val)>=0;if(/^\d+$/.test(val)){var n=+val;return n>=rule.lo&&n<=rule.hi;}return false;}
+function probeWav(ab,size){
+ var u=new Uint8Array(ab),n=u.length;function s4(o){return String.fromCharCode(u[o],u[o+1],u[o+2],u[o+3]);}
+ if(n<12||s4(0)!=="RIFF"||s4(8)!=="WAVE")return null;
+ var v=new DataView(ab),p=12,sr=0,ch=0,bits=0,tag=0,dataStart=0,dataSize=0;
+ while(p+8<=n){var id=s4(p),sz=v.getUint32(p+4,true);
+  if(id==="fmt "&&p+24<=n){tag=v.getUint16(p+8,true);ch=v.getUint16(p+10,true);sr=v.getUint32(p+12,true);bits=v.getUint16(p+22,true);}
+  else if(id==="data"){dataStart=p+8;dataSize=sz;break;}
+  p+=8+sz+(sz&1);}
+ if(!sr||!ch||!bits)return null;
+ if(!dataStart){dataStart=44;}
+ var avail=Math.max(0,size-dataStart);if(!dataSize||dataSize===0xFFFFFFFF||dataSize>avail)dataSize=avail;
+ return{sr:sr,ch:ch,bits:bits,tag:tag,dur:dataSize/(sr*ch*(bits/8)),dataSize:dataSize};
+}
+function hex(buf){var u=new Uint8Array(buf),s="";for(var i=0;i<u.length;i++)s+=(u[i]<16?"0":"")+u[i].toString(16);return s;}
+async function run(){
+ if(running)return;msg("");
+ if(!entries.length){msg(T[L].errNone);return;}
+ running=true;$("go").disabled=true;var bar=$("bar"),fill=bar.firstElementChild;bar.style.display="block";fill.style.width="0";
+ var pat=parsePattern($("pat").value),allow=parseAllow($("allow").value);
+ var expRaw=$("exp").value.split(/\r\n|\n|\r/).map(function(x){return x.trim();}).filter(Boolean);
+ var sFmt=$("sFmt").value,sSr=+$("sSr").value,sCh=+$("sCh").value,sBit=+$("sBit").value,sMin=parseFloat($("sMin").value),sMax=parseFloat($("sMax").value);
+ var files=[],issues=[],hashes={};
+ for(var i=0;i<entries.length;i++){
+  var en=entries[i],f={name:en.name,path:en.path,ext:extOf(en.name),stem:noExt(en.name),size:0,fmt:extOf(en.name),sr:"",ch:"",bits:"",dur:"",hash:"",tokens:null};
+  try{
+   var blob=await en.get();f.size=blob.size;
+   var head=await blob.slice(0,65536).arrayBuffer();
+   if(f.ext==="wav"){var w=probeWav(head,f.size);if(w){f.sr=w.sr;f.ch=w.ch;f.bits=w.bits;f.dur=+w.dur.toFixed(3);}else f.bad=true;}
+   if(f.size<1024&&f.ext==="wav")f.empty=true;else if(f.size===0)f.empty=true;
+   if(crypto&&crypto.subtle&&f.size<400*1048576){f.hash=hex(await crypto.subtle.digest("SHA-256",await blob.arrayBuffer()));}
+  }catch(e){f.bad=true;}
+  files.push(f);
+  fill.style.width=Math.round((i+1)/entries.length*100)+"%";
+  if(i%10===0)await new Promise(function(r){setTimeout(r,0);});
+ }
+ // names
+ files.forEach(function(f){
+  if(pat){var m=pat.re.exec(f.stem);if(!m){issues.push({t:"name",file:f.name,d:["dName"]});}
+   else{f.tokens={};pat.names.forEach(function(k,ix){f.tokens[k]=m[ix+1];});
+    pat.names.forEach(function(k){var r=allow[k];if(r&&!allowed(r,f.tokens[k]))issues.push({t:"name",file:f.name,d:["dVal",k,f.tokens[k]]});});}}
+  if(f.empty)issues.push({t:"empty",file:f.name,d:["dEmpty"]});
+  else if(f.bad)issues.push({t:"empty",file:f.name,d:["dBad"]});
+  if(sFmt&&f.ext!==sFmt)issues.push({t:"spec",file:f.name,d:["dFmt",f.ext,sFmt]});
+  if(f.ext==="wav"&&!f.bad&&!f.empty){
+   if(sSr&&f.sr!==sSr)issues.push({t:"spec",file:f.name,d:["dSr",f.sr,sSr]});
+   if(sCh&&f.ch!==sCh)issues.push({t:"spec",file:f.name,d:["dCh",f.ch,sCh]});
+   if(sBit&&f.bits!==sBit)issues.push({t:"spec",file:f.name,d:["dBit",f.bits,sBit]});
+   if(!isNaN(sMin)&&f.dur<sMin)issues.push({t:"spec",file:f.name,d:["dMin",f.dur.toFixed(2),sMin]});
+   if(!isNaN(sMax)&&f.dur>sMax)issues.push({t:"spec",file:f.name,d:["dMax",f.dur.toFixed(2),sMax]});}
+ });
+ // duplicates by name and by content
+ var byName={};files.forEach(function(f){var k=f.stem.toLowerCase();(byName[k]=byName[k]||[]).push(f);});
+ Object.keys(byName).forEach(function(k){var g=byName[k];if(g.length>1)g.forEach(function(f){issues.push({t:"dup",file:f.path,d:["dSameName"]});});});
+ var byHash={};files.forEach(function(f){if(f.hash&&!f.empty)(byHash[f.hash]=byHash[f.hash]||[]).push(f);});
+ Object.keys(byHash).forEach(function(h){var g=byHash[h];if(g.length>1)g.forEach(function(f,ix){var other=g[ix===0?1:0];issues.push({t:"dup",file:f.name,d:["dSameData",other.name]});});});
+ // expected list
+ var missing=0,extra=0;
+ if(expRaw.length){
+  var have={},haveLow={};files.forEach(function(f){have[f.stem]=1;haveLow[f.stem.toLowerCase()]=f;});
+  var expStems={},expLow={};
+  expRaw.forEach(function(x){var s=noExt(x);expStems[s]=1;expLow[s.toLowerCase()]=1;});
+  Object.keys(expStems).forEach(function(s){if(!have[s]){var ci=haveLow[s.toLowerCase()];issues.push({t:"miss",file:s,d:ci?["dCase"]:[]});missing++;}});
+  files.forEach(function(f){if(!expLow[f.stem.toLowerCase()]){issues.push({t:"extra",file:f.name,d:[]});extra++;}});
+  REP={files:files,issues:issues,exp:Object.keys(expStems).length,pat:pat};
+ }else REP={files:files,issues:issues,exp:0,pat:pat};
+ running=false;$("go").disabled=false;bar.style.display="none";
+ render();
+}
+var GROUPS=[["miss","gMiss","pMiss"],["extra","gExtra","pExtra"],["name","gName","pName"],["dup","gDup","pDup"],["spec","gSpec","pSpec"],["empty","gEmpty","pEmpty"]];
+function det(d){if(!d||!d.length)return "";return tf(d[0],d[1]===undefined?"":d[1],d[2]===undefined?"":d[2]);}
+function summaryText(){
+ var t=T[L],c={};REP.issues.forEach(function(i){c[i.t]=(c[i.t]||0)+1;});
+ var s=[t.sumHead+": "+REP.files.length+" "+t.pFiles];
+ if(REP.exp)s.push(t.pExp+": "+REP.exp);
+ GROUPS.forEach(function(g){if(c[g[0]])s.push(t[g[2]]+": "+c[g[0]]);});
+ s.push(REP.issues.length?tf("hasprob",REP.issues.length,""):t.allgood);
+ return s.join("\n");
+}
+function render(){
+ var t=T[L],c={};REP.issues.forEach(function(i){c[i.t]=(c[i.t]||0)+1;});
+ var total=REP.issues.length;
+ $("res").style.display="block";
+ var v=$("verdict");v.className="big "+(total?"bad":"ok");v.textContent=total?tf("hasprob",total,""):t.allgood;
+ var ph="";ph+='<span class="pill">'+esc2(t.pFiles)+": "+REP.files.length+"</span>";
+ if(REP.exp)ph+='<span class="pill">'+esc2(t.pExp)+": "+REP.exp+"</span>";
+ GROUPS.forEach(function(g){var n=c[g[0]]||0;if(g[0]==="miss"||g[0]==="extra"){if(!REP.exp)return;}ph+='<span class="pill '+(n?"err":"ok")+'">'+esc2(t[g[2]])+": "+n+"</span>";});
+ $("pills").innerHTML=ph;
+ var gh="";
+ GROUPS.forEach(function(g){var list=REP.issues.filter(function(i){return i.t===g[0];});if(!list.length)return;
+  gh+='<details class="g" open><summary>'+esc2(t[g[1]])+" ("+list.length+")</summary><ul>"+list.slice(0,500).map(function(i){var d=det(i.d);return "<li>"+esc2(i.file)+(d?" — <small>"+esc2(d)+"</small>":"")+"</li>";}).join("")+(list.length>500?"<li>…</li>":"")+"</ul></details>";});
+ $("groups").innerHTML=gh;
+}
+function esc2(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function cell(s){s=String(s==null?"":s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function dl(name,text){var u=URL.createObjectURL(new Blob(["﻿"+text],{type:"text/csv;charset=utf-8"})),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},1000);}
+$("csvI").addEventListener("click",function(){if(!REP)return;var out=["type,file,details"];REP.issues.forEach(function(i){out.push([i.t,i.file,det(i.d)].map(cell).join(","));});dl("delivery-problems.csv",out.join("\r\n"));});
+$("csvM").addEventListener("click",function(){if(!REP)return;var names=REP.pat?REP.pat.names:[];var out=[["file","path","format","sample_rate","channels","bits","duration_s","size_bytes","sha256"].concat(names).join(",")];
+ REP.files.forEach(function(f){var row=[f.name,f.path,f.fmt,f.sr,f.ch,f.bits,f.dur,f.size,f.hash];names.forEach(function(k){row.push(f.tokens?f.tokens[k]:"");});out.push(row.map(cell).join(","));});dl("delivery-files.csv",out.join("\r\n"));});
+$("cpy").addEventListener("click",function(){if(!REP)return;var v=summaryText();try{navigator.clipboard.writeText(v);}catch(e){}});
+var drop=$("drop"),inp=$("file");
+drop.addEventListener("click",function(){inp.click();});
+drop.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();inp.click();}});
+["dragenter","dragover"].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add("hov");});});
+["dragleave","drop"].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove("hov");});});
+drop.addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files.length)addFiles(e.dataTransfer.files);});
+inp.addEventListener("change",function(){if(inp.files.length)addFiles(inp.files);inp.value="";});
+$("expFile").addEventListener("click",function(){$("expIn").click();});
+$("expIn").addEventListener("change",function(){var f=this.files[0];this.value="";if(!f)return;var rd=new FileReader();rd.onload=function(){var l=String(rd.result||"").replace(/^﻿/,"").split(/\r\n|\n|\r/).map(function(x){return x.split(/[,\t;]/)[0].trim().replace(/^"|"$/g,"");}).filter(Boolean);$("exp").value=l.join("\n");};rd.readAsText(f,"UTF-8");});
+$("go").addEventListener("click",run);
+$("clr").addEventListener("click",function(){entries=[];ignored=0;REP=null;$("res").style.display="none";msg("");showLoaded();});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+applyLang();
+})();
+</script>
+</body>
+</html>
