@@ -486,7 +486,23 @@ function renderTakes(){
   box.appendChild(d);});
  if(!takes.length){var em=document.createElement("div");em.className="empty";em.textContent=T[L].empty;box.appendChild(em);}
  $("zip").disabled=$("clr").disabled=!takes.length;}
-function saveBlob(blob,name){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(a.href);},4000);}
+var _sbUrl=null;
+function saveBlob(blob,name){
+ var ar=(typeof L!=="undefined"&&L==="ar");
+ var ios=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+ if(_sbUrl){try{URL.revokeObjectURL(_sbUrl);}catch(e){}}
+ _sbUrl=URL.createObjectURL(blob);
+ var box=document.getElementById("saveBox");
+ if(!box){box=document.createElement("div");box.id="saveBox";box.style.cssText="margin:12px 0;padding:12px;border:2px solid #7c5cff;border-radius:14px;background:#f4f1ff;text-align:center";var z=document.getElementById("zip");var host=(z&&z.parentNode)||document.body;host.insertAdjacentElement?host.insertAdjacentElement("afterend",box):document.body.appendChild(box);}
+ box.textContent="";
+ var p=document.createElement("div");p.style.cssText="font-weight:700;margin-bottom:8px";p.textContent=ar?"الملف جاهز: "+name:"File ready: "+name;box.appendChild(p);
+ var a=document.createElement("a");a.href=_sbUrl;a.download=name;a.className="b";a.style.cssText="display:inline-block;margin:4px;text-decoration:none";a.textContent=ar?"اضغط هنا للحفظ":"Tap here to save";box.appendChild(a);
+ try{var f=new File([blob],name,{type:blob.type||"application/octet-stream"});
+  if(navigator.canShare&&navigator.share&&navigator.canShare({files:[f]})){var s=document.createElement("button");s.type="button";s.className="b sec";s.style.margin="4px";s.textContent=ar?"مشاركة / حفظ في الملفات":"Share / Save to Files";s.addEventListener("click",function(){navigator.share({files:[f]}).catch(function(){});});box.appendChild(s);}
+ }catch(e){}
+ if(ios){var h=document.createElement("div");h.style.cssText="font-size:.85em;margin-top:6px;opacity:.8";h.textContent=ar?"على الآيفون: اضغط الزر ثم اختر «حفظ في الملفات».":"On iPhone: tap the button, then choose “Save to Files”.";box.appendChild(h);try{box.scrollIntoView({block:"center"});}catch(e){}}
+ else{var c=document.createElement("a");c.href=_sbUrl;c.download=name;document.body.appendChild(c);c.click();document.body.removeChild(c);}
+}
 function cleanBase(b){return (b||"take").trim().replace(/[\\\/:*?"<>|]+/g,"_")||"take";}
 $("takes").addEventListener("click",function(e){
  var d=e.target.getAttribute("data-d"),x=e.target.getAttribute("data-x");
