@@ -107,7 +107,7 @@
 <div class="btns"><button class="b sec" id="csvI" type="button" data-i="csvI"></button><button class="b sec" id="csvM" type="button" data-i="csvM"></button><button class="b sec" id="cpy" type="button" data-i="cpy"></button></div>
 </div>
 
-<section class="vd" style="display:none"></section>
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi delivery checker guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -120,6 +120,7 @@ var $=function(i){return document.getElementById(i);};
 var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
 var FOOT_EN='<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
 var FOOT_AR='<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+var VID={en:"9gtjl5T2b1M",ar:"QmOwvx1VrJc"};
 var T={
 en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
  h1:"Delivery Checker for Voice Recordings",
@@ -147,6 +148,7 @@ en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
  dFmt:"format is %a, expected %b",dSr:"sample rate %a, expected %b",dCh:"%a channels, expected %b",dBit:"%a bits, expected %b",dMin:"%a s is shorter than %b s",dMax:"%a s is longer than %b s",
  dEmpty:"file is empty or too small",dBad:"not a valid WAV file",dCase:"matches only when the letters case is ignored",
  sumHead:"Delivery check",
+ vidH:"Watch: how to use the delivery checker",vidP:"A short video guide (under one minute). The steps are written on the screen.",
  h2b:"Notes",
  n1:"The check reads the WAV header and the file size, so it is fast, even for many files.",
  n2:"Duplicates are found by comparing the audio data, so the same recording saved under two names is caught.",
@@ -179,6 +181,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
  dFmt:"الصيغة %a والمطلوب %b",dSr:"معدل العينة %a والمطلوب %b",dCh:"%a قناة والمطلوب %b",dBit:"%a بت والمطلوب %b",dMin:"%a ث أقصر من %b ث",dMax:"%a ث أطول من %b ث",
  dEmpty:"الملف فارغ أو صغير جدًا",dBad:"ليس ملف WAV صالحًا",dCase:"يطابق فقط إذا تجاهلنا حالة الحروف",
  sumHead:"فحص التسليم",
+ vidH:"شاهد: كيف تستخدم فاحص التسليم",vidP:"فيديو قصير (أقل من دقيقة). الخطوات مكتوبة على الشاشة.",
  h2b:"ملاحظات",
  n1:"يقرأ الفحص رأس ملف WAV وحجم الملف، فهو سريع حتى مع ملفات كثيرة.",
  n2:"تُكتشف المكررات بمقارنة بيانات الصوت، فيُكشف التسجيل نفسه المحفوظ باسمين.",
@@ -188,6 +191,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
 function tf(k,a,b){return T[L][k].replace("%a",a).replace("%b",b);}
 function applyLang(){
  var t=T[L];
+ var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
  document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
