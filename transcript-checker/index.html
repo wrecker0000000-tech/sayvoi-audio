@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Check transcripts line by line: numbers, symbols, spacing, repeated words and common Arabic and English spelling mistakes. Fix them in one click. Free, in your browser.">
+<link rel="canonical" href="https://convert.sayvoi.com/transcript-checker/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="Transcript Checker: Arabic and English (Free)">
+<meta property="og:description" content="Check transcripts for rule breaks and common spelling mistakes, and fix them in one click.">
+<meta property="og:url" content="https://convert.sayvoi.com/transcript-checker/">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Transcript Checker: Arabic and English | Sayvoi</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.sp .row{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.sp .col{flex:1 1 200px;min-width:0}
+.sp label{display:block;font-weight:700;margin-bottom:6px}
+.sp select{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp select option{color:#111;background:#fff}
+.sp .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.sp .b:disabled{opacity:.5;cursor:not-allowed}
+.sp .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.sp .info{margin-top:10px;font-size:.95em}
+.sp .note{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(124,77,255,.5);background:rgba(124,77,255,.08)}
+.sp .scan{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(128,128,128,.4);display:none;word-break:break-word}
+.sp .scan.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.sp .scan.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+.sp .drop{border:2px dashed rgba(128,128,128,.55);border-radius:16px;padding:22px;text-align:center;cursor:pointer;margin:14px 0}
+.sp .drop.hov{border-color:#7c4dff;background:rgba(124,77,255,.08)}
+.sp .tbl{max-height:340px;overflow:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px;margin:10px 0}
+.sp .tbl table{width:100%;border-collapse:collapse;font-size:.92em}
+.sp .tbl td,.sp .tbl th{padding:6px 8px;border-bottom:1px solid rgba(128,128,128,.25);text-align:start;word-break:break-all}
+.sp .tbl td.n{direction:ltr;white-space:nowrap;text-align:start}
+.sp .bar{height:10px;border-radius:99px;background:rgba(128,128,128,.25);overflow:hidden;display:none;margin:8px 0}
+.sp .bar i{display:block;height:100%;width:0;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.sp .pv{margin-top:12px;padding:12px;border:1px solid rgba(128,128,128,.4);border-radius:12px;display:none}
+.sp .pv audio{width:100%;margin:4px 0 12px}
+.sp .small{font-size:.9em;opacity:.85;margin-top:4px;display:block}
+</style>
+<style>
+.sp textarea{width:100%;padding:12px;border:1px solid rgba(128,128,128,.45);border-radius:12px;font:inherit;background:transparent;color:inherit;box-sizing:border-box;line-height:1.6}
+.sp input[type=text],.sp input[type=number]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.sp .msg{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid #e0a030;background:rgba(224,160,48,.12);display:none}
+.sp .pills{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.sp .pill{padding:6px 14px;border-radius:99px;border:1px solid rgba(128,128,128,.45);font-weight:800}
+.sp .pill.ok{border-color:rgba(60,170,90,.8);color:#2f9d57}
+.sp .pill.bad{border-color:#e0a030;color:#d38a00}
+.sp .pill.err{border-color:#e05a5a;color:#d64545}
+.sp .big{padding:14px;border-radius:14px;font-weight:800;margin:12px 0;border:2px solid}
+.sp .big.ok{border-color:rgba(60,170,90,.8);background:rgba(60,170,90,.1)}
+.sp .big.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.sp details.g{border:1px solid rgba(128,128,128,.4);border-radius:12px;padding:8px 12px;margin:8px 0}
+.sp details.g summary{cursor:pointer;font-weight:800}
+.sp details.g ul{margin:8px 0 0;padding-inline-start:20px;max-height:260px;overflow:auto}
+.sp details.g li{direction:ltr;text-align:start;word-break:break-all;margin:2px 0}
+.sp details.g li small{opacity:.8}
+.sp .cnt{display:none}
+</style>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="sp">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<h1 data-i="h1"></h1>
+<p data-i="lead"></p>
+
+<h2 data-i="h1s"></h2>
+<textarea id="ta" rows="9" dir="auto" data-p="phTa"></textarea>
+<div class="btns"><button class="b sec" id="load" type="button" data-i="load"></button><button class="b sec" id="ex" type="button" data-i="ex"></button><button class="b sec" id="clr" type="button" data-i="clr"></button><input type="file" id="fileIn" accept=".txt,.csv,text/plain,text/csv" style="display:none"></div>
+
+<h2 data-i="h2s"></h2>
+<div id="opts"></div>
+<div class="row">
+<div class="col"><label for="minW" data-i="lMin"></label><input type="number" id="minW" min="0" inputmode="numeric"></div>
+<div class="col"><label for="maxW" data-i="lMax"></label><input type="number" id="maxW" min="0" inputmode="numeric"></div>
+<div class="col" style="flex-basis:100%"><label for="tags" data-i="lTags"></label><input type="text" id="tags" dir="ltr" value="[noise],[music],[laugh],[cough],[breath]"><span class="small" data-i="hTags"></span></div>
+</div>
+
+<div class="btns"><button class="b" id="go" type="button" data-i="go"></button></div>
+<div class="msg" id="msg"></div>
+
+<div id="res" style="display:none">
+<h2 data-i="rH"></h2>
+<div id="verdict"></div>
+<div class="pills" id="pills"></div>
+<div id="groups"></div>
+<div class="btns"><button class="b" id="fix" type="button" data-i="fix"></button><button class="b sec" id="csv" type="button" data-i="csv"></button></div>
+<div id="fixbox" style="display:none">
+<h2 data-i="fH"></h2>
+<span class="small" id="fixInfo"></span>
+<textarea id="out" rows="9" dir="auto" readonly></textarea>
+<div class="btns"><button class="b sec" id="copy" type="button" data-i="copy"></button><button class="b sec" id="dl" type="button" data-i="dl"></button></div>
+</div>
+</div>
+
+<section class="vd" style="display:none"></section>
+<h2 data-i="h2b"></h2>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
+<p style="margin-top:22px"><a href="/" data-i="back"></a></p>
+</article>
+<footer id="foot"></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var FOOT_EN='<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+var FOOT_AR='<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
+/* rules: id, on-by-default, fixable */
+var RULES=[["nums",1,0],["symbols",1,1],["tags",1,0],["mixed",1,0],["diac",1,1],["punct",0,1],["spaces",1,1],["hidden",1,1],["repeat",1,0],["elong",1,0],["pspace",1,1],["arspell",1,1],["enspell",1,1]];
+var T={
+en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
+ h1:"Transcript Checker: Arabic and English",
+ lead:"Paste your transcripts, one line for each recording. The page checks every line for rule breaks and common spelling mistakes, shows the line number, and fixes the safe ones in one click. Everything runs on your device and nothing is uploaded.",
+ h1s:"1. Your transcripts",phTa:"Paste the transcripts here, one line for each recording",load:"Load a file",ex:"Load an example",clr:"Clear",
+ h2s:"2. What to check",
+ o_nums:"Numbers written as digits (0-9 or ٠-٩)",o_symbols:"Unknown symbols (emoji, @, #, *, …)",o_tags:"Tags that are not in the allowed list",o_mixed:"Latin letters inside Arabic lines",o_diac:"Diacritics (tashkeel)",o_punct:"Punctuation marks (flag them all)",o_spaces:"Extra spaces and empty lines",o_hidden:"Hidden characters and tatweel",o_repeat:"Repeated words (the the)",o_elong:"Stretched letters (hellooo)",o_pspace:"Spaces around punctuation",o_arspell:"Common Arabic spelling mistakes",o_enspell:"Common English spelling mistakes",
+ lMin:"Fewest words in a line",lMax:"Most words in a line",lTags:"Allowed tags",hTags:"Separate the tags with commas. Any other tag in square or angle brackets is reported.",
+ go:"Check",rH:"Report",csv:"Download the report (CSV)",fix:"Fix the safe problems",fH:"Fixed text",fixInfo:"Fixed %a problems. Check the text, then copy it.",copy:"Copy",dl:"Download .txt",copied:"Copied.",
+ errEmpty:"Paste or load your transcripts first.",allgood:"No problems found in %a lines.",hasprob:"%a problems in %b lines (out of %c).",
+ g_nums:"Numbers",g_symbols:"Unknown symbols",g_tags:"Unknown tags",g_mixed:"Mixed scripts",g_diac:"Diacritics",g_punct:"Punctuation",g_spaces:"Spaces and empty lines",g_hidden:"Hidden characters",g_repeat:"Repeated words",g_elong:"Stretched letters",g_pspace:"Punctuation spacing",g_arspell:"Arabic spelling",g_enspell:"English spelling",g_len:"Line length",
+ m_nums:"digits: %a",m_symbols:"symbol: %a",m_tags:"tag not allowed: %a",m_mixed:"Latin letters: %a",m_diac:"has diacritics",m_punct:"punctuation: %a",m_spaces:"extra spaces",m_empty:"empty line",m_hidden:"hidden character or tatweel",m_repeat:"repeated: %a",m_elong:"stretched: %a",m_pspace:"punctuation spacing: %a",m_spell:"%a → %b",m_short:"%a words, fewer than %b",m_long:"%a words, more than %b",
+ line:"Line",
+ ex1:"I dont know wich one is better\nمدرسه الحي القديمه كانت بعيده عن البيت\nاحنا رايحين الى السوق الساعه 5 ان شاء الله\nهو هو راجع بكره [noise] الصبح\nمرحباً بكم 😀 في البرنامج , شكراً\nthe the meeting is at 3pm i think",
+ h2b:"Notes",
+ n1:"Each line is one transcript. Empty lines are reported, so keep one line for each recording.",
+ n2:"Only the safe problems are fixed automatically: spaces, hidden characters, diacritics, unknown symbols, punctuation spacing and the common spelling list. Repeated words, numbers and tags are only reported, because they need your decision.",
+ n3:"The spelling check uses a short list of very common mistakes. It is not a full spell checker, so read the result before you send it.",
+ n4:"Your text stays on your device and is not uploaded.",
+ back:"Back to the tools"},
+ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
+ h1:"مدقق التفريغ النصي: عربي وإنجليزي",
+ lead:"الصق تفريغاتك، سطرًا لكل تسجيل. تفحص الصفحة كل سطر بحثًا عن مخالفات القواعد وأخطاء الإملاء الشائعة، وتعرض رقم السطر، وتصلح الآمن منها بضغطة واحدة. كل شيء يتم على جهازك ولا يُرفع أي شيء.",
+ h1s:"1. تفريغاتك",phTa:"الصق التفريغات هنا، سطرًا لكل تسجيل",load:"حمّل ملفًا",ex:"حمّل مثالًا",clr:"مسح",
+ h2s:"2. ماذا تفحص",
+ o_nums:"أرقام مكتوبة بالأرقام (0-9 أو ٠-٩)",o_symbols:"رموز غير معروفة (إيموجي، @، #، *، …)",o_tags:"علامات ليست في القائمة المسموحة",o_mixed:"حروف لاتينية داخل سطر عربي",o_diac:"التشكيل",o_punct:"علامات الترقيم (أبلغ عنها كلها)",o_spaces:"مسافات زائدة وسطور فارغة",o_hidden:"أحرف مخفية وتطويل",o_repeat:"كلمات مكررة (في في)",o_elong:"حروف ممدودة (هااااي)",o_pspace:"المسافات حول علامات الترقيم",o_arspell:"أخطاء إملاء عربية شائعة",o_enspell:"أخطاء إملاء إنجليزية شائعة",
+ lMin:"أقل عدد كلمات في السطر",lMax:"أكثر عدد كلمات في السطر",lTags:"العلامات المسموحة",hTags:"افصل بين العلامات بفاصلة. أي علامة أخرى بين أقواس مربعة أو زاوية يُبلَّغ عنها.",
+ go:"افحص",rH:"التقرير",csv:"نزّل التقرير (CSV)",fix:"أصلح المشكلات الآمنة",fH:"النص بعد الإصلاح",fixInfo:"تم إصلاح %a مشكلة. راجع النص ثم انسخه.",copy:"انسخ",dl:"نزّل .txt",copied:"تم النسخ.",
+ errEmpty:"الصق التفريغات أو حمّلها أولًا.",allgood:"لا توجد مشكلات في %a سطر.",hasprob:"%a مشكلة في %b سطر (من %c).",
+ g_nums:"أرقام",g_symbols:"رموز غير معروفة",g_tags:"علامات غير معروفة",g_mixed:"خلط الحروف",g_diac:"تشكيل",g_punct:"علامات ترقيم",g_spaces:"مسافات وسطور فارغة",g_hidden:"أحرف مخفية",g_repeat:"كلمات مكررة",g_elong:"حروف ممدودة",g_pspace:"مسافات الترقيم",g_arspell:"إملاء عربي",g_enspell:"إملاء إنجليزي",g_len:"طول السطر",
+ m_nums:"أرقام: %a",m_symbols:"رمز: %a",m_tags:"علامة غير مسموحة: %a",m_mixed:"حروف لاتينية: %a",m_diac:"فيه تشكيل",m_punct:"ترقيم: %a",m_spaces:"مسافات زائدة",m_empty:"سطر فارغ",m_hidden:"حرف مخفي أو تطويل",m_repeat:"مكرر: %a",m_elong:"ممدود: %a",m_pspace:"مسافات الترقيم: %a",m_spell:"%a ← %b",m_short:"%a كلمة، أقل من %b",m_long:"%a كلمة، أكثر من %b",
+ line:"السطر",
+ ex1:"I dont know wich one is better\nمدرسه الحي القديمه كانت بعيده عن البيت\nاحنا رايحين الى السوق الساعه 5 ان شاء الله\nهو هو راجع بكره [noise] الصبح\nمرحباً بكم 😀 في البرنامج , شكراً\nthe the meeting is at 3pm i think",
+ h2b:"ملاحظات",
+ n1:"كل سطر هو تفريغ واحد. تُعرض السطور الفارغة، فاترك سطرًا واحدًا لكل تسجيل.",
+ n2:"يُصلَح تلقائيًا الآمن فقط: المسافات والأحرف المخفية والتشكيل والرموز غير المعروفة ومسافات الترقيم وقائمة الإملاء الشائعة. أما الكلمات المكررة والأرقام والعلامات فتُعرض فقط لأنها تحتاج قرارك.",
+ n3:"يعتمد فحص الإملاء على قائمة قصيرة من الأخطاء الشائعة جدًا. وهو ليس مدققًا إملائيًا كاملًا، فاقرأ النتيجة قبل أن ترسلها.",
+ n4:"نصك يبقى على جهازك ولا يُرفع.",
+ back:"العودة إلى الأدوات"}};
+function tf(k,a,b,c){var s=T[L][k]||k;return s.replace("%a",a===undefined?"":a).replace("%b",b===undefined?"":b).replace("%c",c===undefined?"":c);}
+var optsBuilt=false;
+function buildOpts(){var h="";RULES.forEach(function(r){h+='<label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:6px 0"><input type="checkbox" id="r_'+r[0]+'"'+(r[1]?" checked":"")+' style="width:auto"><span data-o="'+r[0]+'"></span></label>';});$("opts").innerHTML=h;optsBuilt=true;}
+function applyLang(){
+ var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
+ var o=document.querySelectorAll("[data-o]");for(var m=0;m<o.length;m++)o[m].textContent=t["o_"+o[m].getAttribute("data-o")];
+ var p=document.querySelectorAll("[data-p]");for(var q=0;q<p.length;q++)p[q].setAttribute("placeholder",t[p[q].getAttribute("data-p")]);
+ document.title=L==="ar"?"مدقق التفريغ النصي: عربي وإنجليزي | Sayvoi":"Transcript Checker: Arabic and English | Sayvoi";
+ if(REP)render();
+}
+/* ---------- spelling lists ---------- */
+var AR_MAP={"الى":"إلى","انا":"أنا","انت":"أنت","انتم":"أنتم","اذا":"إذا","او":"أو","هاذا":"هذا","هاذه":"هذه","ذالك":"ذلك","لاكن":"لكن","لاكني":"لكنني","اكثر":"أكثر","اكبر":"أكبر","اقل":"أقل","اصبح":"أصبح","احد":"أحد","احسن":"أحسن","ابدا":"أبدا","الان":"الآن","القران":"القرآن","الاسلام":"الإسلام","الانسان":"الإنسان","الاخرين":"الآخرين","اخرى":"أخرى","اخري":"أخرى","حتي":"حتى","مستشفي":"مستشفى","معني":"معنى","الاولى":"الأولى","الاولي":"الأولى","مدرسه":"مدرسة","جامعه":"جامعة","شركه":"شركة","مشكله":"مشكلة","حكومه":"حكومة","مكتبه":"مكتبة","سياره":"سيارة","قصه":"قصة","فكره":"فكرة","طريقه":"طريقة","سنه":"سنة","ساعه":"ساعة","دقيقه":"دقيقة","ثانيه":"ثانية","كلمه":"كلمة","جمله":"جملة","لغه":"لغة","القديمه":"القديمة","بعيده":"بعيدة","كبيره":"كبيرة","صغيره":"صغيرة","جميله":"جميلة","حياه":"حياة","الحياه":"الحياة","مره":"مرة","مرات":"مرات","نتيجه":"نتيجة","صفحه":"صفحة","رساله":"رسالة","مسؤوليه":"مسؤولية","مهمه":"مهمة","خاصه":"خاصة","عامه":"عامة"};
+var EN_MAP={"dont":"don't","cant":"can't","wont":"won't","im":"I'm","ive":"I've","isnt":"isn't","doesnt":"doesn't","didnt":"didn't","wasnt":"wasn't","couldnt":"couldn't","shouldnt":"shouldn't","wouldnt":"wouldn't","arent":"aren't","havent":"haven't","thats":"that's","whats":"what's","teh":"the","recieve":"receive","definately":"definitely","seperate":"separate","occured":"occurred","untill":"until","wich":"which","becuase":"because","beacuse":"because","alot":"a lot","thier":"their","wierd":"weird","freind":"friend","tommorow":"tomorrow","goverment":"government","enviroment":"environment"};
+var AR_PUNCT=/[،؛؟]/,PUNCT_ALL=/[.,;:!?،؛؟…"'()\-–—]/g;
+function stripDiac(s){return s.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,"");}
+function hasAr(s){return /[\u0600-\u06FF]/.test(s);}
+function arFix(tok){
+ var k=stripDiac(tok);if(AR_MAP.hasOwnProperty(k)&&AR_MAP[k]!==k)return AR_MAP[k];
+ if(k.length>2&&(k.charAt(0)==="و"||k.charAt(0)==="ف"||k.charAt(0)==="ب"||k.charAt(0)==="ل")){var r=k.slice(1);if(AR_MAP.hasOwnProperty(r)&&AR_MAP[r]!==r&&r.length>2)return k.charAt(0)+AR_MAP[r];}
+ if(k.length>4&&k.indexOf("ال")===0){var r2=k.slice(2);if(AR_MAP.hasOwnProperty(r2)&&AR_MAP[r2]!==r2&&r2.length>2)return "ال"+AR_MAP[r2];}
+ return null;
+}
+function enFix(tok){var l=tok.toLowerCase();if(EN_MAP.hasOwnProperty(l)){var f=EN_MAP[l];return tok.charAt(0)===tok.charAt(0).toUpperCase()&&tok.charAt(0)!==tok.charAt(0).toLowerCase()?f.charAt(0).toUpperCase()+f.slice(1):f;}return null;}
+function allowedTags(){return $("tags").value.split(",").map(function(x){return x.trim().toLowerCase();}).filter(Boolean);}
+var SYMBOL_OK=/[\p{L}\p{N}\p{M}\s.,;:!?'"()\-–—…،؛؟\[\]<>\/%&+=_]/u;
+function on(id){return $("r_"+id).checked;}
+/* check one line: returns {issues:[{r,k,a,b}], fixed:string, nfix:number} */
+function checkLine(line,idx,minW,maxW,tagsOK){
+ var iss=[],fixed=line,nfix=0,ar=hasAr(line);
+ function add(r,k,a,b,fx){iss.push({r:r,k:k,a:a,b:b,fx:!!fx});}
+ if(!line.trim()){if(on("spaces"))add("spaces","m_empty","","",1);return{issues:iss,fixed:fixed,nfix:0,empty:true};}
+ var m;
+ if(on("hidden")){var hid=line.match(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF\u00AD\u0640]/g);if(hid){add("hidden","m_hidden","","",1);fixed=fixed.replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF\u00AD\u0640]/g,"");}}
+ if(on("spaces")){if(/^\s|\s$|\s{2,}|\t/.test(line)){add("spaces","m_spaces","","",1);fixed=fixed.replace(/\s+/g," ").trim();}}
+ if(on("diac")&&/[\u064B-\u065F\u0670]/.test(line)){add("diac","m_diac","","",1);fixed=fixed.replace(/[\u064B-\u065F\u0670]/g,"");}
+ if(on("nums")){m=line.match(/[0-9\u0660-\u0669\u06F0-\u06F9]+/g);if(m)add("nums","m_nums",m.slice(0,4).join(" "),"",0);}
+ // tags
+ var tagRx=/\[[^\]\n]*\]|<[^>\n]*>/g,tgs=line.match(tagRx)||[];
+ if(on("tags")){tgs.forEach(function(g){if(tagsOK.indexOf(g.toLowerCase())<0)add("tags","m_tags",g,"",0);});}
+ var noTags=line.replace(tagRx," ");
+ if(on("symbols")){var bad=[],seen={};Array.from(noTags).forEach(function(ch){if(!SYMBOL_OK.test(ch)&&!seen[ch]){seen[ch]=1;bad.push(ch);}});
+  if(bad.length){add("symbols","m_symbols",bad.slice(0,5).join(" "),"",1);var rx2=new RegExp("["+bad.map(function(c){return c.replace(/[\]\\^-]/g,"\\$&");}).join("")+"]","gu");fixed=fixed.replace(rx2,"").replace(/ {2,}/g," ").trim();}
+  var sy=noTags.match(/[@#*~^|\\{}$]/g);if(sy&&bad.indexOf(sy[0])<0){add("symbols","m_symbols",sy.slice(0,4).join(" "),"",1);fixed=fixed.replace(/[@#*~^|\\{}$]/g,"").replace(/ {2,}/g," ").trim();}}
+ if(on("mixed")&&ar){m=noTags.match(/[A-Za-z]+/g);if(m)add("mixed","m_mixed",m.slice(0,4).join(" "),"",0);}
+ if(on("punct")){m=noTags.match(PUNCT_ALL);if(m){add("punct","m_punct",m.slice(0,4).join(" "),"",1);fixed=fixed.replace(PUNCT_ALL,"").replace(/ {2,}/g," ").trim();}}
+ if(on("pspace")){
+  var ps=noTags.match(/\s[,.;:!?،؛؟]|[,;:!?،؛؟](?=[^\s\d"')\]\-.,;:!?،؛؟]|$)(?!$)/g);
+  var sp1=/\s[,.;:!?،؛؟](?=\s|$)/.test(noTags),sp2=/[,;:!?،؛؟](?=[^\s\d"')\]\-.,;:!?،؛؟])/.test(noTags);
+  if(sp1||sp2){add("pspace","m_pspace",sp1?"␣,":"",sp2?",x":"",1);
+   fixed=fixed.replace(/\s+([,.;:!?،؛؟])/g,"$1").replace(/([,;:!?،؛؟])(?=[^\s\d"')\]\-.,;:!?،؛؟])/g,"$1 ");}}
+ // words (on the fixed-of-space version for stability)
+ var words=noTags.split(/[^\p{L}\p{M}\p{N}']+/u).filter(Boolean);
+ if(on("repeat")){for(var i=1;i<words.length;i++){if(words[i].toLowerCase()===words[i-1].toLowerCase()&&words[i].length>1&&!/^\d+$/.test(words[i])){add("repeat","m_repeat",words[i]+" "+words[i],"",0);break;}}}
+ if(on("elong")){m=noTags.match(/(\p{L})\1{2,}/gu);if(m)add("elong","m_elong",m[0],"",0);}
+ if(!isNaN(minW)&&words.length<minW)add("len","m_short",words.length,minW,0);
+ if(!isNaN(maxW)&&words.length>maxW)add("len","m_long",words.length,maxW,0);
+ // spelling
+ if(on("arspell")&&ar){var seenA={};
+  fixed=fixed.replace(/(^|\s)(ان شاء الله|انشاء الله|إنشاء الله|ان شا الله)(?=\s|$|[.,،!؟?])/g,function(m0,pre,ph){add("arspell","m_spell",ph,"إن شاء الله",1);return pre+"إن شاء الله";});fixed=fixed.replace(/[\u0600-\u06FF]+/g,function(tok){var f=arFix(tok);if(f&&f!==tok){var key=tok;if(!seenA[key]){seenA[key]=1;add("arspell","m_spell",tok,f,1);}return f;}return tok;});}
+ if(on("enspell")){var seenE={};fixed=fixed.replace(/[A-Za-z']+/g,function(tok){var f=enFix(tok);if(f&&f!==tok){if(!seenE[tok]){seenE[tok]=1;add("enspell","m_spell",tok,f,1);}return f;}return tok;});
+  if(/(^|[\s"(])i(?=[\s,.!?'")]|$)/.test(noTags)&&/[A-Za-z]{2,}/.test(noTags)){add("enspell","m_spell","i","I",1);fixed=fixed.replace(/(^|[\s"(])i(?=[\s,.!?'")]|$)/g,"$1I");}}
+ nfix=iss.filter(function(x){return x.fx;}).length;
+ return{issues:iss,fixed:fixed,nfix:nfix};
+}
+var REP=null;
+function msg(txt){var m=$("msg");m.textContent=txt;m.style.display=txt?"block":"none";}
+function run(){
+ msg("");var txt=$("ta").value;if(!txt.trim()){msg(T[L].errEmpty);return;}
+ var lines=txt.replace(/\r\n?/g,"\n").split("\n");if(lines.length&&lines[lines.length-1]==="")lines.pop();
+ var minW=parseInt($("minW").value,10),maxW=parseInt($("maxW").value,10),tagsOK=allowedTags();
+ var rows=lines.map(function(l,i){var r=checkLine(l,i,minW,maxW,tagsOK);r.line=l;r.n=i+1;return r;});
+ REP={rows:rows};render();
+}
+var ORDER=["nums","symbols","tags","mixed","diac","punct","spaces","hidden","repeat","elong","pspace","arspell","enspell","len"];
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function render(){
+ var t=T[L],rows=REP.rows,total=0,badLines=0,cnt={};
+ rows.forEach(function(r){if(r.issues.length){badLines++;total+=r.issues.length;}r.issues.forEach(function(i){cnt[i.r]=(cnt[i.r]||0)+1;});});
+ $("res").style.display="block";var v=$("verdict");v.className="big "+(total?"bad":"ok");
+ v.textContent=total?tf("hasprob",total,badLines,rows.length):tf("allgood",rows.length);
+ var ph="";ORDER.forEach(function(k){if(cnt[k])ph+='<span class="pill err">'+esc(t["g_"+k])+": "+cnt[k]+"</span>";});$("pills").innerHTML=ph;
+ var gh="";ORDER.forEach(function(k){var list=[];rows.forEach(function(r){r.issues.forEach(function(i){if(i.r===k)list.push({r:r,i:i});});});if(!list.length)return;
+  gh+='<details class="g"'+(list.length<=30?" open":"")+'><summary>'+esc(t["g_"+k])+" ("+list.length+")</summary><ul>"+list.slice(0,300).map(function(x){return "<li><b>"+esc(t.line)+" "+x.r.n+"</b> — <small>"+esc(tf(x.i.k,x.i.a,x.i.b))+"</small></li>";}).join("")+(list.length>300?"<li>…</li>":"")+"</ul></details>";});
+ $("groups").innerHTML=gh;
+ var nf=rows.reduce(function(a,r){return a+r.nfix;},0);$("fix").disabled=!nf;
+ if($("fixbox").style.display==="block")showFixed();
+}
+function showFixed(){var rows=REP.rows,nf=rows.reduce(function(a,r){return a+r.nfix;},0);$("out").value=rows.map(function(r){return r.fixed;}).join("\n");$("fixInfo").textContent=tf("fixInfo",nf);$("fixbox").style.display="block";}
+$("fix").addEventListener("click",function(){if(REP)showFixed();try{$("fixbox").scrollIntoView({behavior:"smooth"});}catch(e){}});
+$("go").addEventListener("click",run);
+function cell(s){s=String(s==null?"":s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function dlf(name,text,type){var u=URL.createObjectURL(new Blob(["\uFEFF"+text],{type:type})),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(u);},1000);}
+$("csv").addEventListener("click",function(){if(!REP)return;var out=["line,type,details,text"];REP.rows.forEach(function(r){r.issues.forEach(function(i){out.push([r.n,i.r,tf(i.k,i.a,i.b),r.line].map(cell).join(","));});});dlf("transcript-report.csv",out.join("\r\n"),"text/csv;charset=utf-8");});
+$("copy").addEventListener("click",function(){var v=$("out").value;if(!v)return;try{navigator.clipboard.writeText(v);}catch(e){$("out").select();try{document.execCommand("copy");}catch(e2){}}msg(T[L].copied);setTimeout(function(){msg("");},1200);});
+$("dl").addEventListener("click",function(){var v=$("out").value;if(v)dlf("transcripts-fixed.txt",v,"text/plain;charset=utf-8");});
+$("load").addEventListener("click",function(){$("fileIn").click();});
+$("fileIn").addEventListener("change",function(){var f=this.files[0];this.value="";if(!f)return;var rd=new FileReader();rd.onload=function(){$("ta").value=String(rd.result||"").replace(/^\uFEFF/,"");};rd.readAsText(f,"UTF-8");});
+$("ex").addEventListener("click",function(){$("ta").value=T[L].ex1.replace(/\\n/g,"\n");run();});
+$("clr").addEventListener("click",function(){$("ta").value="";REP=null;$("res").style.display="none";$("fixbox").style.display="none";msg("");});
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+buildOpts();applyLang();
+})();
+</script>
+</body>
+</html>
