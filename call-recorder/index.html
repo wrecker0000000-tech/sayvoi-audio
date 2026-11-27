@@ -116,8 +116,9 @@
 <div class="row"><div class="col"><label for="sess" data-i="sess"></label><input type="text" id="sess" value="call01"></div>
 <div class="col"><label for="nA" data-i="nA"></label><input type="text" id="nA" value="A"></div>
 <div class="col"><label for="nB" data-i="nB"></label><input type="text" id="nB" value="B"></div>
-<div class="col"><label for="rate" data-i="rate"></label><select id="rate"><option value="16000">16 kHz</option><option value="24000">24 kHz</option><option value="44100">44.1 kHz</option><option value="48000">48 kHz</option></select></div></div>
-<p class="note" data-i="rateN"></p></section>
+<div class="col"><label for="rate" data-i="rate"></label><select id="rate"><option value="16000">16 kHz</option><option value="44100">44.1 kHz</option><option value="48000">48 kHz</option></select></div>
+<div class="col"><label for="chn" data-i="chn"></label><select id="chn"><option value="1" data-k="mono"></option><option value="2" data-k="stereo"></option></select></div></div>
+<p class="note" data-i="rateN"></p><p class="note" id="estN"></p></section>
 
 <section class="card hide" id="connCard">
 <h2 data-i="hMic"></h2>
@@ -128,16 +129,16 @@
 <h2 data-i="hH1"></h2>
 <div class="btns"><button class="b" id="mkOffer" type="button" disabled></button></div>
 <div id="offerWrap" class="hide"><label data-i="codeMine"></label><textarea class="code" id="offerOut" readonly></textarea>
-<div class="btns"><button class="b sec" id="copyOffer" type="button"></button></div>
+<div class="btns"><button class="b" id="shareOffer" type="button"></button><button class="b sec" id="copyOfferLink" type="button"></button><button class="b sec" id="copyOffer" type="button"></button></div>
 <h2 data-i="hH2"></h2><label for="ansIn" data-i="codeReply"></label><textarea class="code" id="ansIn"></textarea>
-<div class="btns"><button class="b" id="connect" type="button"></button></div></div>
+<div class="btns"><button class="b sec" id="pasteAns" type="button"></button><button class="b" id="connect" type="button"></button></div></div>
 </div>
 
 <div id="guestFlow" class="hide">
 <h2 data-i="hG1"></h2><label for="offerIn" data-i="codeHost"></label><textarea class="code" id="offerIn"></textarea>
-<div class="btns"><button class="b" id="mkAns" type="button" disabled></button></div>
+<div class="btns"><button class="b sec" id="pasteOffer" type="button"></button><button class="b" id="mkAns" type="button" disabled></button></div>
 <div id="ansWrap" class="hide"><h2 data-i="hG2"></h2><textarea class="code" id="ansOut" readonly></textarea>
-<div class="btns"><button class="b sec" id="copyAns" type="button"></button></div></div>
+<div class="btns"><button class="b" id="shareAns" type="button"></button><button class="b sec" id="copyAnsLink" type="button"></button><button class="b sec" id="copyAns" type="button"></button></div></div>
 </div>
 <div class="box" id="st"></div>
 </section>
@@ -157,6 +158,8 @@
 <div id="outs"></div>
 <p class="note hide" id="infoN"></p></section>
 
+<section class="card" id="saveCard"><h2 data-i="hSave"></h2><p class="note" data-i="saveN"></p><div id="saved"></div><div class="btns"><button class="b sec" id="delAll" type="button"></button></div></section>
+
 <section class="card"><h2 data-i="h2n"></h2>
 <ul class="steps"><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li></ul>
 <p style="margin-top:14px"><a href="/" data-i="back"></a></p></section>
@@ -172,7 +175,7 @@ var T={en:{dir:"ltr",btn:"العربية",
  chip:"Free · in your browser",h1:"Call Recorder",lead:"Record a conversation between two people in different places. Each person is recorded on their own device, so the sound is clean. You get three WAV files: speaker A, speaker B, and both together.",
  h0:"Before you start",n0a:"<strong>Both people wear headphones.</strong> Without headphones the other voice leaks into the microphone.",n0b:"<strong>Both people keep this page open</strong> until the files are ready. Do not close it, refresh it, or let the screen sleep.",n0c:"Use Chrome (Android, Windows, Mac) or Safari (iPhone). Both need internet, and a quiet place.",n0d:"Everything stays between the two devices. Nothing is uploaded to any server.",
  h1s:"Who are you?",rHost:"I start the call",rHostS:"I will send a code to my partner and press Record.",rGuest:"I am joining",rGuestS:"My partner sent me a code.",
- hSet:"Settings (the person who starts)",sess:"Session name",sessH:"for example: call01",nA:"Name for speaker A (you)",nB:"Name for speaker B (partner)",rate:"Sample rate",rateN:"16 kHz is enough for speech and keeps files small.",
+ hSet:"Settings (the person who starts)",sess:"Session name",sessH:"for example: call01",nA:"Name for speaker A (you)",nB:"Name for speaker B (partner)",rate:"Sample rate",chn:"Channels",mono:"Mono",stereo:"Stereo",rateN:"16 kHz mono is enough for speech and keeps files small. Stereo writes the same voice on both channels.",est:"Size for 30 minutes: about %s MB per file.",estBig:" This is large. Start the call from a computer, and expect the partner file to take a long time to send.",share:"Share",copyLink:"Copy link",paste:"Paste from clipboard",lMsgO:"Join my recording call. Open this link, allow the microphone, then send me the reply: ",lMsgA:"Here is my reply for the call: ",gotLink:"The code came from the link. Now enable the microphone.",relayDone:"The reply was sent to your first tab. You can close this tab.",relayNone:"If nothing happened, go back to the first tab and paste the code there.",zipB:"Prepare ZIP",
  hMic:"1. Allow the microphone",mic:"Enable microphone",micOk:"Microphone ready.",
  hH1:"2. Make the code and send it to your partner",mkOffer:"Make my code",codeMine:"Your code (copy it and send it by WhatsApp):",copy:"Copy",copied:"Copied",
  hH2:"3. Paste your partner's reply code",codeReply:"Reply code from your partner:",connect:"Connect",
@@ -183,14 +186,15 @@ var T={en:{dir:"ltr",btn:"العربية",
  mine:"Your own recording is ready. Download it as a backup.",sentOk:"Your recording was sent to your partner.",noGuest:"The partner's recording did not arrive. Your own file is ready.",
  info:"The files have the same length and start together, so they can be used as separate tracks. The partner is delayed by the measured connection delay (%s ms). If the mix is too loud, it is lowered automatically.",
  errMic:"Could not access the microphone. Allow it in the browser and try again.",errHttps:"This page needs https and a modern browser.",
- h2n:"Notes",n1:"<strong>Quality:</strong> each voice is recorded at its owner's microphone, not through the call, so internet quality does not affect the files.",n2:"<strong>If the connection does not work:</strong> some company or mobile networks block direct calls. Try another network (Wi-Fi) for one of you.",n3:"<strong>Long calls:</strong> keep each recording under about 30 minutes.",back:"Back to the converter"},
+ hSave:"Saved copies on this device",saveN:"While you record, the page keeps a copy of your own voice on this device, so a refresh or a crash does not lose it. Only the last 5 sessions are kept. Browsers may delete saved data after some days (Safari after about 7), so download your files soon.",sPrep:"Prepare files",sDel:"Delete",sNone:"No saved copies.",sOwn:"Your voice",sPart:"Partner (as received)",sHost:"host",sGuest:"guest",sDelAll:"Delete all saved copies",
+ h2n:"Notes",n1:"<strong>Quality:</strong> each voice is recorded at its owner's microphone, not through the call, so internet quality does not affect the files.",n2:"<strong>If the connection does not work:</strong> some company or mobile networks block direct calls. Try another network (Wi-Fi) for one of you.",n3:"<strong>Long calls:</strong> half an hour or more is possible at 16 kHz mono. Higher settings use much more memory, and the partner file takes longer to send, so start the call from a computer. For a very long call, stop and start a new recording without closing the page.",back:"Back to the converter"},
 ar:{dir:"rtl",btn:"English",
  nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
  chip:"مجاني · داخل متصفحك",h1:"مسجّل المكالمات",lead:"سجّل محادثة بين شخصين في مكانين مختلفين. يُسجَّل كل شخص على جهازه فيكون الصوت نظيفًا. وتحصل على ثلاثة ملفات WAV: المتحدث أ والمتحدث ب والاثنان معًا.",
  h0:"قبل أن تبدأ",n0a:"<strong>يرتدي الاثنان سماعات.</strong> بدون سماعات يتسرب صوت الآخر إلى الميكروفون.",n0b:"<strong>يُبقي الاثنان هذه الصفحة مفتوحة</strong> حتى تجهز الملفات. لا تغلقها ولا تحدّثها ولا تترك الشاشة تنطفئ.",n0c:"استخدم Chrome (أندرويد وويندوز وماك) أو Safari (آيفون). يحتاج الاثنان إلى إنترنت ومكان هادئ.",n0d:"كل شيء يبقى بين الجهازين. لا يُرفع أي شيء إلى أي خادم.",
  h1s:"من أنت؟",rHost:"أنا أبدأ المكالمة",rHostS:"سأرسل كودًا لشريكي وأضغط تسجيل.",rGuest:"أنا أنضم",rGuestS:"أرسل لي شريكي كودًا.",
- hSet:"الإعدادات (لمن يبدأ المكالمة)",sess:"اسم الجلسة",sessH:"مثال: call01",nA:"اسم المتحدث أ (أنت)",nB:"اسم المتحدث ب (شريكك)",rate:"معدل العينات",rateN:"16 kHz يكفي للكلام ويُبقي الملفات صغيرة.",
+ hSet:"الإعدادات (لمن يبدأ المكالمة)",sess:"اسم الجلسة",sessH:"مثال: call01",nA:"اسم المتحدث أ (أنت)",nB:"اسم المتحدث ب (شريكك)",rate:"معدل العينات",chn:"القنوات",mono:"مونو",stereo:"ستيريو",rateN:"16 kHz مونو يكفي للكلام ويُبقي الملفات صغيرة. والستيريو يكتب نفس الصوت على القناتين.",est:"الحجم لمدة 30 دقيقة: نحو %s ميجا لكل ملف.",estBig:" هذا كبير. ابدأ المكالمة من كمبيوتر، وتوقّع أن يستغرق إرسال ملف الشريك وقتًا طويلًا.",share:"مشاركة",copyLink:"انسخ الرابط",paste:"الصق من الحافظة",lMsgO:"انضم إلى مكالمة التسجيل. افتح هذا الرابط وافتح الميكروفون ثم أرسل لي الرد: ",lMsgA:"هذا ردي على المكالمة: ",gotLink:"وصل الكود من الرابط. فعّل الميكروفون الآن.",relayDone:"أُرسل الرد إلى تبويبك الأول. يمكنك إغلاق هذا التبويب.",relayNone:"إذا لم يحدث شيء فارجع إلى التبويب الأول والصق الكود هناك.",zipB:"جهّز ZIP",
  hMic:"١. اسمح بالميكروفون",mic:"فعّل الميكروفون",micOk:"الميكروفون جاهز.",
  hH1:"٢. اصنع الكود وأرسله لشريكك",mkOffer:"اصنع الكود",codeMine:"الكود الخاص بك (انسخه وأرسله على واتساب):",copy:"انسخ",copied:"تم النسخ",
  hH2:"٣. الصق كود الرد من شريكك",codeReply:"كود الرد من شريكك:",connect:"اتصل",
@@ -201,27 +205,46 @@ ar:{dir:"rtl",btn:"English",
  mine:"تسجيلك الخاص جاهز. نزّله كنسخة احتياطية.",sentOk:"أُرسل تسجيلك إلى شريكك.",noGuest:"لم يصل تسجيل الشريك. ملفك الخاص جاهز.",
  info:"للملفات نفس الطول وتبدأ معًا، فيمكن استخدامها كمسارات منفصلة. يُؤخَّر الشريك بمقدار تأخير الاتصال المقاس (%s ملي ثانية). وإذا كان المزج عاليًا يُخفَّض تلقائيًا.",
  errMic:"تعذّر الوصول للميكروفون. اسمح به من المتصفح وحاول مجددًا.",errHttps:"هذه الصفحة تحتاج https ومتصفحًا حديثًا.",
- h2n:"ملاحظات",n1:"<strong>الجودة:</strong> يُسجَّل كل صوت عند ميكروفون صاحبه لا عبر المكالمة، فلا تتأثر الملفات بجودة الإنترنت.",n2:"<strong>إذا لم يعمل الاتصال:</strong> بعض شبكات الشركات والموبايل تمنع الاتصال المباشر. جرّب شبكة أخرى (واي فاي) لأحدكما.",n3:"<strong>المكالمات الطويلة:</strong> أبقِ كل تسجيل أقل من نحو 30 دقيقة.",back:"العودة إلى المحوّل"}};
+ hSave:"نسخ محفوظة على هذا الجهاز",saveN:"أثناء التسجيل تحتفظ الصفحة بنسخة من صوتك على هذا الجهاز، فلا يضيع إذا حدّثت الصفحة أو تعطلت. تُحفظ آخر 5 جلسات فقط. وقد تحذف المتصفحات البيانات المحفوظة بعد أيام (سفاري بعد نحو 7)، فنزّل ملفاتك سريعًا.",sPrep:"جهّز الملفات",sDel:"احذف",sNone:"لا توجد نسخ محفوظة.",sOwn:"صوتك",sPart:"الشريك (كما وصل)",sHost:"مضيف",sGuest:"منضم",sDelAll:"احذف كل النسخ المحفوظة",
+ h2n:"ملاحظات",n1:"<strong>الجودة:</strong> يُسجَّل كل صوت عند ميكروفون صاحبه لا عبر المكالمة، فلا تتأثر الملفات بجودة الإنترنت.",n2:"<strong>إذا لم يعمل الاتصال:</strong> بعض شبكات الشركات والموبايل تمنع الاتصال المباشر. جرّب شبكة أخرى (واي فاي) لأحدكما.",n3:"<strong>المكالمات الطويلة:</strong> نصف ساعة أو أكثر ممكن على 16 kHz مونو. الإعدادات الأعلى تستهلك ذاكرة أكبر بكثير ويطول إرسال ملف الشريك، فابدأ المكالمة من كمبيوتر. وللمكالمة الطويلة جدًا أوقف التسجيل وابدأ تسجيلًا جديدًا دون إغلاق الصفحة.",back:"العودة إلى المحوّل"}};
 
 var $=function(i){return document.getElementById(i);};
 var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
 var role=null,stream=null,pc=null,dc=null,remote=null,actx=null,proc=null,srcN=null,anMe=null,anThem=null,rate=16000;
-var cfgGot=false,recording=false,chunks=[],recStart=0,tickT=null,rtts=[],pingT=null,oneWay=0,names={a:"A",b:"B",s:"call01"},gotRemote=null,myRate=16000,peak=0,wl=null;
+var chn=1,cfgGot=false,recording=false,chunks=[],recStart=0,tickT=null,rtts=[],pingT=null,oneWay=0,names={a:"A",b:"B",s:"call01"},gotRemote=null,myRate=16000,peak=0,wl=null;
 function t(){return T[L];}
+if(location.hash.indexOf("#a=")===0){var rc=location.hash.slice(3);try{var bc0=new BroadcastChannel("svcall");bc0.postMessage({a:rc});}catch(e){}try{localStorage.setItem("svcall_a",rc+"|"+Date.now());}catch(e){}
+ document.documentElement.lang=L;document.documentElement.dir=T[L].dir;document.querySelector(".wrap").innerHTML='<article class="vr"><div class="card"><h2>'+T[L].relayDone+'</h2><p>'+T[L].relayNone+'</p></div></article>';try{window.close();}catch(e){}return;}
 function show(id,on){$(id).classList[on?"remove":"add"]("hide");}
 function clean(s,d){s=String(s||"").replace(/[^A-Za-z0-9_\-؀-ۿ]/g,"_").replace(/^_+|_+$/g,"");return s||d;}
 function b64e(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
 function b64d(s){s=s.replace(/\s+/g,"").replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return decodeURIComponent(escape(atob(s)));}
-function pack(desc){return "SVC1."+b64e(JSON.stringify({s:desc.sdp,y:desc.type}));}
-function unpack(code){code=String(code||"").replace(/\s+/g,"");if(code.indexOf("SVC1.")!==0)throw new Error("bad");var o=JSON.parse(b64d(code.slice(5)));if(!o.s||!o.y)throw new Error("bad");return {type:o.y,sdp:o.s};}
+function u8b64(u){var s="";for(var i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function b64u8(s){s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+function streamBytes(kind,bytes){var S=kind==="c"?new CompressionStream("deflate"):new DecompressionStream("deflate");var w=S.writable.getWriter();w.write(bytes);w.close();return new Response(S.readable).arrayBuffer().then(function(b){return new Uint8Array(b);});}
+function pack(desc){var json=JSON.stringify({s:desc.sdp,y:desc.type});
+ if(window.CompressionStream&&window.Response){return streamBytes("c",new TextEncoder().encode(json)).then(function(u){return "SVC2."+u8b64(u);}).catch(function(){return "SVC1."+b64e(json);});}
+ return Promise.resolve("SVC1."+b64e(json));}
+function unpack(code){code=String(code||"").replace(/\s+/g,"");var m=code.match(/SVC[12]\.[A-Za-z0-9_\-]+/);if(!m)return Promise.reject(new Error("bad"));code=m[0];
+ function fin(json){var o=JSON.parse(json);if(!o.s||!o.y)throw new Error("bad");return {type:o.y,sdp:o.s};}
+ if(code.indexOf("SVC2.")===0){if(!window.DecompressionStream)return Promise.reject(new Error("bad"));return streamBytes("d",b64u8(code.slice(5))).then(function(u){return fin(new TextDecoder().decode(u));});}
+ try{return Promise.resolve(fin(b64d(code.slice(5))));}catch(e){return Promise.reject(e);}}
+function linkFor(kind,code){return location.origin+location.pathname+"#"+kind+"="+code;}
+function shareText(text,url,btn){var full=text+url;
+ if(navigator.share){navigator.share({text:full}).catch(function(){});return;}
+ window.open("https://wa.me/?text="+encodeURIComponent(full),"_blank");}
+function copyText(v,btn){var ok=function(){var o=btn.textContent;btn.textContent=t().copied;setTimeout(function(){btn.textContent=o;},1200);};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,function(){});else{var ta=document.createElement("textarea");ta.value=v;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");ok();}catch(e){}document.body.removeChild(ta);}}
+function pasteInto(id){if(navigator.clipboard&&navigator.clipboard.readText)navigator.clipboard.readText().then(function(v){$(id).value=v;},function(){$(id).focus();});else $(id).focus();}
 function setSt(msg,cls){var b=$("st");b.textContent=msg;b.className="box"+(cls?" "+cls:"");}
 function mmss(s){s=Math.floor(s);var m=Math.floor(s/60),r=s%60;return (m<10?"0":"")+m+":"+(r<10?"0":"")+r;}
 function applyLang(){var x=t();document.documentElement.lang=L;document.documentElement.dir=x.dir;
  $("nav").innerHTML=x.nav;$("foot").innerHTML=x.foot;$("langBtn").textContent=x.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=x[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=x[h[j].getAttribute("data-h")];
- $("mic").textContent=x.mic;$("mkOffer").textContent=x.mkOffer;$("copyOffer").textContent=x.copy;$("connect").textContent=x.connect;$("mkAns").textContent=x.mkAns;$("copyAns").textContent=x.copy;
- $("recBtn").textContent=recording?x.stopB:x.rec;$("gNote").textContent=x.guestWait;
+ var op=document.querySelectorAll("option[data-k]");for(var q=0;q<op.length;q++)op[q].textContent=x[op[q].getAttribute("data-k")];
+ $("mic").textContent=x.mic;$("mkOffer").textContent=x.mkOffer;$("copyOffer").textContent=x.copy;$("shareOffer").textContent=x.share;$("copyOfferLink").textContent=x.copyLink;$("pasteAns").textContent=x.paste;$("pasteOffer").textContent=x.paste;$("shareAns").textContent=x.share;$("copyAnsLink").textContent=x.copyLink;updEst();$("connect").textContent=x.connect;$("mkAns").textContent=x.mkAns;$("copyAns").textContent=x.copy;
+ $("recBtn").textContent=recording?x.stopB:x.rec;$("gNote").textContent=x.guestWait;$("delAll").textContent=x.sDelAll;renderSaved();
  document.title="Call Recorder | Sayvoi";
  if(!pc)setSt(x.st0);}
 $("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
@@ -238,6 +261,7 @@ $("mic").addEventListener("click",function(){
  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1}}).then(function(s){
   stream=s;$("mic").disabled=true;var b=$("micBox");b.textContent=t().micOk;b.className="box ok";show("micBox",true);
   $("mkOffer").disabled=false;$("mkAns").disabled=false;
+  if(role==="guest"&&$("offerIn").value&&!pc)$("mkAns").click();
  }).catch(function(){setSt(t().errMic,"bad");});});
 
 /* webrtc */
@@ -259,23 +283,31 @@ function wireDC(ch){dc=ch;dc.binaryType="arraybuffer";dc.bufferedAmountLowThresh
 $("mkOffer").addEventListener("click",function(){
  $("mkOffer").disabled=true;setupPC();wireDC(pc.createDataChannel("ctl"));
  pc.createOffer().then(function(o){return pc.setLocalDescription(o);}).then(function(){return waitGather(pc);}).then(function(){
-  $("offerOut").value=pack(pc.localDescription);show("offerWrap",true);setSt(t().stWait);}).catch(function(){setSt(t().stFail,"bad");});});
-$("connect").addEventListener("click",function(){var d;try{d=unpack($("ansIn").value);}catch(e){setSt(t().stBad,"bad");return;}
- pc.setRemoteDescription(d).then(function(){setSt(t().stWait);}).catch(function(){setSt(t().stBad,"bad");});});
-$("mkAns").addEventListener("click",function(){var d;try{d=unpack($("offerIn").value);}catch(e){setSt(t().stBad,"bad");return;}
- $("mkAns").disabled=true;setupPC();pc.ondatachannel=function(e){wireDC(e.channel);};
- pc.setRemoteDescription(d).then(function(){return pc.createAnswer();}).then(function(a){return pc.setLocalDescription(a);}).then(function(){return waitGather(pc);}).then(function(){
-  $("ansOut").value=pack(pc.localDescription);show("ansWrap",true);setSt(t().stWait);}).catch(function(){setSt(t().stBad,"bad");$("mkAns").disabled=false;});});
+  return pack(pc.localDescription);}).then(function(code){$("offerOut").value=code;show("offerWrap",true);setSt(t().stWait);}).catch(function(){setSt(t().stFail,"bad");});});
+$("connect").addEventListener("click",function(){if(!pc)return;unpack($("ansIn").value).then(function(d){return pc.setRemoteDescription(d);}).then(function(){setSt(t().stWait);}).catch(function(){setSt(t().stBad,"bad");});});
+$("mkAns").addEventListener("click",function(){
+ unpack($("offerIn").value).then(function(d){$("mkAns").disabled=true;setupPC();pc.ondatachannel=function(e){wireDC(e.channel);};return pc.setRemoteDescription(d);}).then(function(){return pc.createAnswer();}).then(function(a){return pc.setLocalDescription(a);}).then(function(){return waitGather(pc);}).then(function(){
+  return pack(pc.localDescription);}).then(function(code){$("ansOut").value=code;show("ansWrap",true);setSt(t().stWait);}).catch(function(){setSt(t().stBad,"bad");$("mkAns").disabled=false;});});
 function copyFrom(id,btn){var el=$(id);el.focus();el.select();var ok=function(){var o=btn.textContent;btn.textContent=t().copied;setTimeout(function(){btn.textContent=t().copy;},1200);};
  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(el.value).then(ok,function(){try{document.execCommand("copy");ok();}catch(e){}});else{try{document.execCommand("copy");ok();}catch(e){}}}
 $("copyOffer").addEventListener("click",function(){copyFrom("offerOut",this);});
 $("copyAns").addEventListener("click",function(){copyFrom("ansOut",this);});
 
+$("shareOffer").addEventListener("click",function(){shareText(t().lMsgO,linkFor("o",$("offerOut").value));});
+$("copyOfferLink").addEventListener("click",function(){copyText(linkFor("o",$("offerOut").value),this);});
+$("shareAns").addEventListener("click",function(){shareText(t().lMsgA,linkFor("a",$("ansOut").value));});
+$("copyAnsLink").addEventListener("click",function(){copyText(linkFor("a",$("ansOut").value),this);});
+$("pasteAns").addEventListener("click",function(){pasteInto("ansIn");});
+$("pasteOffer").addEventListener("click",function(){pasteInto("offerIn");});
+function gotAnswer(code){if(role==="host"&&pc&&pc.signalingState==="have-local-offer"){$("ansIn").value=code;$("connect").click();}}
+try{var bc=new BroadcastChannel("svcall");bc.onmessage=function(m){if(m&&m.data&&m.data.a)gotAnswer(m.data.a);};}catch(e){}
+window.addEventListener("storage",function(e){if(e.key==="svcall_a"&&e.newValue)gotAnswer(String(e.newValue).split("|")[0]);});
+if(location.hash.indexOf("#o=")===0){pickRole("guest");$("offerIn").value=location.hash.slice(3);setTimeout(function(){setSt(t().gotLink,"ok");},0);}
 /* audio capture */
 function meterOf(an){var d=new Uint8Array(an.fftSize);an.getByteTimeDomainData(d);var m=0;for(var i=0;i<d.length;i++){var v=Math.abs(d[i]-128)/128;if(v>m)m=v;}return m;}
-function cfgObj(){return {t:"cfg",rate:parseInt($("rate").value,10)||16000,names:{a:clean($("nA").value,"A"),b:clean($("nB").value,"B"),s:clean($("sess").value,"call01")}};}
+function cfgObj(){return {t:"cfg",ch:parseInt($("chn").value,10)||1,rate:parseInt($("rate").value,10)||16000,names:{a:clean($("nA").value,"A"),b:clean($("nB").value,"B"),s:clean($("sess").value,"call01")}};}
 function startLive(){
- if(role==="host"){var c=cfgObj();rate=c.rate;names=c.names;}
+ if(role==="host"){var c=cfgObj();rate=c.rate;chn=c.ch;names=c.names;}
  show("liveCard",true);
  if(!actx){var C=window.AudioContext||window.webkitAudioContext;
   try{actx=new C({sampleRate:rate});}catch(e){actx=new C();}
@@ -284,7 +316,7 @@ function startLive(){
   srcN=actx.createMediaStreamSource(stream);anMe=actx.createAnalyser();anMe.fftSize=1024;srcN.connect(anMe);
   proc=actx.createScriptProcessor(4096,1,1);var mute=actx.createGain();mute.gain.value=0;
   proc.onaudioprocess=function(e){if(!recording)return;var inp=e.inputBuffer.getChannelData(0),o=new Int16Array(inp.length);
-   for(var i=0;i<inp.length;i++){var s=Math.max(-1,Math.min(1,inp[i]));o[i]=s<0?s*32768:s*32767;}chunks.push(o);};
+   for(var i=0;i<inp.length;i++){var s=Math.max(-1,Math.min(1,inp[i]));o[i]=s<0?s*32768:s*32767;}chunks.push(o);pend.push(o);};
   srcN.connect(proc);proc.connect(mute);mute.connect(actx.destination);
   if(remote){try{var rs=actx.createMediaStreamSource(remote);anThem=actx.createAnalyser();anThem.fftSize=1024;rs.connect(anThem);}catch(e){}}
   setInterval(function(){if(anMe)$("mMe").style.width=Math.min(100,meterOf(anMe)*140)+"%";if(anThem)$("mThem").style.width=Math.min(100,meterOf(anThem)*140)+"%";},120);
@@ -293,23 +325,54 @@ function startLive(){
  try{if(navigator.wakeLock)navigator.wakeLock.request("screen").then(function(w){wl=w;},function(){});}catch(e){}
 }
 function median(a){if(!a.length)return 0;var b=a.slice().sort(function(x,y){return x-y;});return b[Math.floor(b.length/2)];}
-function beginRec(){chunks=[];recording=true;recStart=performance.now();show("resCard",false);$("outs").innerHTML="";
+function beginRec(){chunks=[];recording=true;startSave();recStart=performance.now();show("resCard",false);$("outs").innerHTML="";
  clearInterval(tickT);tickT=setInterval(function(){$("timer").textContent=mmss((performance.now()-recStart)/1000);},250);$("recBtn").textContent=t().stopB;$("recBtn").classList.add("on");
  if(role==="guest"){$("gNote").textContent=t().recNow;}}
 function endRec(){recording=false;clearInterval(tickT);$("recBtn").classList.remove("on");var n=0,i;for(i=0;i<chunks.length;i++)n+=chunks[i].length;var out=new Int16Array(n),p=0;
- for(i=0;i<chunks.length;i++){out.set(chunks[i],p);p+=chunks[i].length;}chunks=[];return out;}
+ for(i=0;i<chunks.length;i++){out.set(chunks[i],p);p+=chunks[i].length;}chunks=[];stopSave(out.length);return out;}
+
+/* saved copies (IndexedDB) */
+var db=null,sid=0,pend=[],seq=0,flushT=null;
+function openDb(){return new Promise(function(res){try{var r=indexedDB.open("sayvoi-call",1);r.onupgradeneeded=function(){var d=r.result;d.createObjectStore("meta",{keyPath:"sid"});var c=d.createObjectStore("chunks",{keyPath:"id",autoIncrement:true});c.createIndex("sid","sid",{unique:false});};r.onsuccess=function(){db=r.result;res(db);};r.onerror=function(){res(null);};r.onblocked=function(){res(null);};}catch(e){res(null);}});}
+function idbPut(store,val){return new Promise(function(res){if(!db)return res();try{var tx=db.transaction(store,"readwrite");tx.objectStore(store).put(val);tx.oncomplete=function(){res();};tx.onerror=function(){res();};tx.onabort=function(){res();};}catch(e){res();}});}
+function flushChunks(){if(!pend.length||!db)return Promise.resolve();var n=0,i;for(i=0;i<pend.length;i++)n+=pend[i].length;var all=new Int16Array(n),p=0;for(i=0;i<pend.length;i++){all.set(pend[i],p);p+=pend[i].length;}pend=[];return idbPut("chunks",{sid:sid,kind:"own",seq:seq++,buf:all.buffer});}
+function startSave(){sid=Date.now();seq=0;pend=[];idbPut("meta",{sid:sid,role:role,rate:myRate,ch:chn,names:names,done:false,samples:0});clearInterval(flushT);flushT=setInterval(flushChunks,3000);}
+function stopSave(samples){clearInterval(flushT);return flushChunks().then(function(){return idbPut("meta",{sid:sid,role:role,rate:myRate,ch:chn,names:names,done:true,samples:samples,delay:Math.round(oneWay)});}).then(pruneOld);}
+function saveRemote(pcm,sr){return idbPut("chunks",{sid:sid,kind:"remote",seq:0,rate:sr,buf:pcm.buffer.slice(pcm.byteOffset,pcm.byteOffset+pcm.byteLength)});}
+function allMeta(){return new Promise(function(res){if(!db)return res([]);try{var r=db.transaction("meta").objectStore("meta").getAll();r.onsuccess=function(){res((r.result||[]).sort(function(a,b){return b.sid-a.sid;}));};r.onerror=function(){res([]);};}catch(e){res([]);}});}
+function chunksOf(id){return new Promise(function(res){if(!db)return res([]);try{var r=db.transaction("chunks").objectStore("chunks").index("sid").getAll(id);r.onsuccess=function(){res(r.result||[]);};r.onerror=function(){res([]);};}catch(e){res([]);}});}
+function delSession(id){return new Promise(function(res){if(!db)return res();try{var tx=db.transaction(["meta","chunks"],"readwrite");tx.objectStore("meta").delete(id);var c=tx.objectStore("chunks").index("sid").openKeyCursor(IDBKeyRange.only(id));c.onsuccess=function(){var cur=c.result;if(cur){tx.objectStore("chunks").delete(cur.primaryKey);cur.continue();}};tx.oncomplete=function(){res();};tx.onerror=function(){res();};tx.onabort=function(){res();};}catch(e){res();}});}
+function pruneOld(){return allMeta().then(function(m){var p=Promise.resolve();m.slice(5).forEach(function(x){p=p.then(function(){return delSession(x.sid);});});return p;}).then(renderSaved);}
+function joinOf(list,kind){var parts=list.filter(function(c){return c.kind===kind;}).sort(function(a,b){return a.seq-b.seq;}),n=0,i;for(i=0;i<parts.length;i++)n+=parts[i].buf.byteLength/2;var out=new Int16Array(n),p=0;for(i=0;i<parts.length;i++){var a=new Int16Array(parts[i].buf);out.set(a,p);p+=a.length;}return {pcm:out,rate:(parts[0]&&parts[0].rate)||0};}
+function renderSaved(){var box=$("saved");if(!box)return;allMeta().then(function(m){box.innerHTML="";show("delAll",m.length>0);
+ if(!m.length){var e=document.createElement("p");e.className="note";e.textContent=t().sNone;box.appendChild(e);return;}
+ m.forEach(function(x){var d=document.createElement("div");d.className="out";var secs=Math.round((x.samples||0)/(x.rate||16000));var dt=new Date(x.sid);
+  var b=document.createElement("b");b.textContent=dt.toLocaleString()+" · "+(x.names&&x.names.s||"")+" · "+(x.role==="host"?t().sHost:t().sGuest)+" · "+mmss(secs)+(x.done?"":" ⚠");d.appendChild(b);
+  var hold=document.createElement("span");var bp=document.createElement("button");bp.type="button";bp.className="b sec";bp.textContent=t().sPrep;
+  bp.addEventListener("click",function(){bp.disabled=true;chunksOf(x.sid).then(function(list){hold.innerHTML="";var o=joinOf(list,"own");
+   function link(txt,blob,name){var a=document.createElement("a");a.className="b";a.href=URL.createObjectURL(blob);a.download=name;a.textContent=txt;a.style.marginInlineEnd="8px";hold.appendChild(a);}
+   var nm=(x.names&&x.names.s||"call"),who=x.role==="host"?(x.names&&x.names.a||"A"):(x.names&&x.names.b||"B");
+   if(o.pcm.length)link(t().sOwn,wavBlob(o.pcm,x.rate,x.ch||1),nm+"_"+who+"_saved.wav");
+   var r=joinOf(list,"remote");if(r.pcm.length)link(t().sPart,wavBlob(r.pcm,r.rate,x.ch||1),nm+"_"+(x.role==="host"?(x.names&&x.names.b||"B"):(x.names&&x.names.a||"A"))+"_saved.wav");});});
+  var bd=document.createElement("button");bd.type="button";bd.className="b sec";bd.textContent=t().sDel;bd.addEventListener("click",function(){delSession(x.sid).then(renderSaved);});
+  d.appendChild(bp);d.appendChild(bd);d.appendChild(hold);box.appendChild(d);});});}
+$("delAll").addEventListener("click",function(){allMeta().then(function(m){var p=Promise.resolve();m.forEach(function(x){p=p.then(function(){return delSession(x.sid);});});return p;}).then(renderSaved);});
 
 /* wav */
-function wavBlob(pcm,sr){var n=pcm.length,b=new ArrayBuffer(44+n*2),v=new DataView(b);
- function w(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
- w(0,"RIFF");v.setUint32(4,36+n*2,true);w(8,"WAVE");w(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,n*2,true);
- new Int16Array(b,44,n).set(pcm);return new Blob([b],{type:"audio/wav"});}
+function wavBlob(pcm,sr,ch){ch=ch||1;var n=pcm.length,h=new ArrayBuffer(44),v=new DataView(h),bytes=n*ch*2;
+ function w(o,x){for(var i=0;i<x.length;i++)v.setUint8(o+i,x.charCodeAt(i));}
+ w(0,"RIFF");v.setUint32(4,36+bytes,true);w(8,"WAVE");w(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,ch,true);v.setUint32(24,sr,true);v.setUint32(28,sr*ch*2,true);v.setUint16(32,ch*2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,bytes,true);
+ if(ch===1)return new Blob([h,pcm],{type:"audio/wav"});
+ var parts=[h],STEP=1048576;for(var o=0;o<n;o+=STEP){var len=Math.min(STEP,n-o),st=new Int16Array(len*2);for(var i=0;i<len;i++){st[2*i]=pcm[o+i];st[2*i+1]=pcm[o+i];}parts.push(st);}
+ return new Blob(parts,{type:"audio/wav"});}
 function resample(pcm,from,to){if(from===to)return Promise.resolve(pcm);
  var C=window.OfflineAudioContext||window.webkitOfflineAudioContext,len=Math.ceil(pcm.length*to/from),oc=new C(1,len,to),buf=oc.createBuffer(1,pcm.length,from),ch=buf.getChannelData(0);
  for(var i=0;i<pcm.length;i++)ch[i]=pcm[i]/32768;var s=oc.createBufferSource();s.buffer=buf;s.connect(oc.destination);s.start();
  return new Promise(function(res,rej){var p=oc.startRendering(function(r){});if(p&&p.then)p.then(done,rej);else oc.oncomplete=function(e){done(e.renderedBuffer);};
   function done(rb){var d=rb.getChannelData(0),o=new Int16Array(d.length);for(var i=0;i<d.length;i++){var x=Math.max(-1,Math.min(1,d[i]));o[i]=x<0?x*32768:x*32767;}res(o);}});}
 
+function updEst(){var r=parseInt($("rate").value,10)||16000,c=parseInt($("chn").value,10)||1,mb=Math.round(r*c*2*1800/1048576);var e=$("estN");e.textContent=t().est.replace("%s",mb)+(mb>150?t().estBig:"");}
+$("rate").addEventListener("change",updEst);$("chn").addEventListener("change",updEst);
 /* messages */
 var rx=null;
 function onMsg(e){
@@ -317,11 +380,11 @@ function onMsg(e){
  var m;try{m=JSON.parse(e.data);}catch(x){return;}
  if(m.t==="ping"){try{dc.send(JSON.stringify({t:"pong",ts:m.ts}));}catch(x){}}
  else if(m.t==="pong"){var r=performance.now()-m.ts;rtts.push(r);if(rtts.length>10)rtts.shift();oneWay=median(rtts)/2;$("rttV").textContent=Math.round(median(rtts))+" ms";}
- else if(m.t==="cfg"){rate=m.rate;names=m.names;cfgGot=true;if(pc&&pc.connectionState==="connected")startLive();}
+ else if(m.t==="cfg"){rate=m.rate;chn=m.ch||1;names=m.names;cfgGot=true;if(pc&&pc.connectionState==="connected")startLive();}
  else if(m.t==="start"){names=m.names;beginRec();}
  else if(m.t==="stop"){guestFinish();}
  else if(m.t==="file"){rx={len:m.len,rate:m.rate,got:0,parts:[]};}
- else if(m.t==="filedone"){var all=new Int16Array(rx.got),p=0;for(var i=0;i<rx.parts.length;i++){all.set(rx.parts[i],p);p+=rx.parts[i].length;}gotRemote={pcm:all,rate:rx.rate};rx=null;show("prog",false);if(hostPending)hostBuild();}
+ else if(m.t==="filedone"){var all=new Int16Array(rx.got),p=0;for(var i=0;i<rx.parts.length;i++){all.set(rx.parts[i],p);p+=rx.parts[i].length;}gotRemote={pcm:all,rate:rx.rate};saveRemote(all,rx.rate).then(renderSaved);rx=null;show("prog",false);if(hostPending)hostBuild();}
  else if(m.t==="nofile"){gotRemote={pcm:new Int16Array(0),rate:rate,none:true};if(hostPending)hostBuild();}
 }
 function sendFile(pcm,sr){return new Promise(function(res){
@@ -345,32 +408,37 @@ $("recBtn").addEventListener("click",function(){
   setTimeout(function(){if(hostPending&&!gotRemote){/* wait more */}},1000);}});
 function hostBuild(){
  hostPending=false;$("recBtn").disabled=false;$("recBtn").textContent=t().rec;show("prog",false);
- var g=gotRemote,delay=Math.round(oneWay);
+ var g=gotRemote,delay=Math.round(oneWay),ch=chn;
  resample(hostPcm,hostRate,rate).then(function(A){
   return resample(g.pcm,g.rate,rate).then(function(B0){return {A:A,B0:B0};});
  }).then(function(r){
-  var A=r.A,B0=r.B0,pad=g.none?0:Math.round(delay/1000*rate),B=new Int16Array(pad+B0.length);B.set(B0,pad);
-  var N=Math.max(A.length,B.length),A2=new Int16Array(N),B2=new Int16Array(N);A2.set(A);B2.set(B);
-  var mx=0,i;for(i=0;i<N;i++){var s=Math.abs(A2[i]+B2[i]);if(s>mx)mx=s;}var k=mx>32000?32000/mx:1,M=new Int16Array(N);
-  for(i=0;i<N;i++)M[i]=Math.round((A2[i]+B2[i])*k);
-  var files=[{n:names.s+"_"+names.a+".wav",l:t().fA,b:wavBlob(A2,rate)}];
-  if(!g.none){files.push({n:names.s+"_"+names.b+".wav",l:t().fB,b:wavBlob(B2,rate)});files.push({n:names.s+"_mix.wav",l:t().fMix,b:wavBlob(M,rate)});}
+  var A=r.A,B0=r.B0,pad=g.none?0:Math.round(delay/1000*rate),N=Math.max(A.length,pad+B0.length),i;
+  var A2=A;if(A.length<N){A2=new Int16Array(N);A2.set(A);}
+  var files=[{n:names.s+"_"+names.a+".wav",l:t().fA,b:wavBlob(A2,rate,ch)}];
+  if(!g.none){
+   var B2=new Int16Array(N);B2.set(B0,pad);r.B0=null;g.pcm=null;
+   files.push({n:names.s+"_"+names.b+".wav",l:t().fB,b:wavBlob(B2,rate,ch)});
+   var mx=0;for(i=0;i<N;i++){var s=Math.abs(A2[i]+B2[i]);if(s>mx)mx=s;}var k=mx>32000?32000/mx:1,M=new Int16Array(N);
+   for(i=0;i<N;i++)M[i]=Math.round((A2[i]+B2[i])*k);B2=null;
+   files.push({n:names.s+"_mix.wav",l:t().fMix,b:wavBlob(M,rate,ch)});M=null;}
+  hostPcm=null;A2=null;
   showOuts(files);
   var im=$("infoN");im.textContent=g.none?t().noGuest:t().info.replace("%s",delay);show("infoN",true);
  }).catch(function(){setSt(t().stFail,"bad");});}
 function showOuts(files){var box=$("outs");box.innerHTML="";show("resCard",true);
  files.forEach(function(f){var d=document.createElement("div");d.className="out";var u=URL.createObjectURL(f.b);f.u=u;
   d.innerHTML='<b></b><audio controls preload="none"></audio><a class="b" download></a>';d.querySelector("b").textContent=f.l+" — "+f.n;d.querySelector("audio").src=u;var a=d.querySelector("a");a.href=u;a.download=f.n;a.textContent=t().dl;box.appendChild(d);});
- if(files.length>1&&window.JSZip){var z=new JSZip();files.forEach(function(f){z.file(f.n,f.b);});var holder=document.createElement("div");holder.className="out";holder.innerHTML='<b></b>';holder.querySelector("b").textContent=t().zipMk;box.appendChild(holder);
-  z.generateAsync({type:"blob",compression:"STORE"}).then(function(zb){var u=URL.createObjectURL(zb);holder.innerHTML='<b></b><a class="b"></a>';holder.querySelector("b").textContent=names.s+".zip";var a=holder.querySelector("a");a.href=u;a.download=names.s+".zip";a.textContent=t().zip;});}}
+ if(files.length>1&&window.JSZip){var holder=document.createElement("div");holder.className="out";holder.innerHTML='<b></b><button type="button" class="b sec"></button>';holder.querySelector("b").textContent=names.s+".zip";var zb=holder.querySelector("button");zb.textContent=t().zipB;box.appendChild(holder);
+  zb.addEventListener("click",function(){zb.disabled=true;holder.querySelector("b").textContent=t().zipMk;var z=new JSZip();files.forEach(function(f){z.file(f.n,f.b);});
+   z.generateAsync({type:"blob",compression:"STORE"}).then(function(zbl){var u=URL.createObjectURL(zbl);holder.innerHTML='<b></b><a class="b"></a>';holder.querySelector("b").textContent=names.s+".zip";var a=holder.querySelector("a");a.href=u;a.download=names.s+".zip";a.textContent=t().zip;});});}}
 
 /* guest */
 function guestFinish(){var pcm=endRec();var x=t();$("prog").textContent=x.prep;show("prog",true);
- var mine=wavBlob(pcm,myRate);var mb=$("mineBox");mb.innerHTML="";var p=document.createElement("p");p.textContent=x.mine;mb.appendChild(p);var a=document.createElement("a");a.className="b";a.href=URL.createObjectURL(mine);a.download=(names.s||"call")+"_"+(names.b||"B")+".wav";a.textContent=x.dl;mb.appendChild(a);show("mineBox",true);show("resCard",true);
+ var mine=wavBlob(pcm,myRate,chn);var mb=$("mineBox");mb.innerHTML="";var p=document.createElement("p");p.textContent=x.mine;mb.appendChild(p);var a=document.createElement("a");a.className="b";a.href=URL.createObjectURL(mine);a.download=(names.s||"call")+"_"+(names.b||"B")+".wav";a.textContent=x.dl;mb.appendChild(a);show("mineBox",true);show("resCard",true);
  $("gNote").textContent=t().guestWait;
  sendFile(pcm,myRate).then(function(){show("prog",false);var s=document.createElement("p");s.textContent=t().sentOk;mb.appendChild(s);});}
 
-applyLang();
+openDb().then(function(){renderSaved();});applyLang();updEst();
 })();
 </script>
 </body>
