@@ -353,7 +353,7 @@ async function testNoise(){
  $("noiseRes").innerHTML='<div class="box '+cls+'"><strong>'+t.nTitle+db.toFixed(1)+' dBFS</strong>'+t.nPeak+pk.toFixed(1)+' dBFS<br>'+t[k]+(spike?'<br>'+t.nSpike:'')+'</div>';
  noiseAcc=null;}
 
-async function startRec(){
+async function startRec(){vzAlertHide();
  if(mode!=="idle"||enc)return;
  var f=$("fmt").value;
  if((f==="m4a"||f==="opus")&&!pickMime(f)){setStatus("errFmt",true);return;}
@@ -376,7 +376,7 @@ async function stopRec(){
    var blob=new Blob(mrChunks,{type:mrType.split(";")[0]});
    await addTake(blob,mrType.indexOf("mp4")>-1?"m4a":(mrType.indexOf("ogg")>-1?"ogg":"webm"),{dur:ms/1000},recSid);
   }else{
-   var r=await encodeTake(fmt);if(r)await addTake(r.blob,fmt,r.stats,recSid);}
+   var r=await encodeTake(fmt);if(r){await addTake(r.blob,fmt,r.stats,recSid);vzAlert(recSid,r.stats);}}
  }catch(e){setStatus("errFmt",true);}
  enc=false;$("rec").disabled=false;$("noise").disabled=false;if(stream)setStatus("stReady");chunks=[];
  if(recSid!==null&&$("autoNext").checked&&sidx===recSid&&sidx<script.length-1){sidx++;saveIdx();showSentence();}recSid=null;}
@@ -402,8 +402,37 @@ async function encodeTake(fmt){
  for(i=0;i<rendered.numberOfChannels;i++){var o=new Float32Array(tot);o.set(rendered.getChannelData(i),nb);data.push(o);}
  var pk=0,sum=0,clip=0,d0=data[0];
  for(i=nb;i<nb+n;i++){var v=d0[i]<0?-d0[i]:d0[i];if(v>pk)pk=v;if(v>=0.999)clip++;sum+=v*v;}
+ var sp=vzSpeech(d0,nb,nb+n,rate);
  var blob=fmt==="wav"?wavBlob(data,rate,bits):mp3Blob(data,rate,kbps);
- return {blob:blob,stats:{dur:tot/rate,peak:pk,rms:Math.sqrt(sum/Math.max(1,n)),clipped:clip,rate:rate,ch:data.length,bits:fmt==="wav"?bits:16}};}
+ return {blob:blob,stats:{dur:tot/rate,peak:pk,rms:Math.sqrt(sum/Math.max(1,n)),clipped:clip,rate:rate,ch:data.length,bits:fmt==="wav"?bits:16,speech:sp.sp,lead:sp.lead,trail:sp.trail}};}
+function vzSpeech(d,from,to,rate){
+ var n=to-from,w=Math.max(1,Math.round(rate*0.01)),m=Math.floor(n/w),fr=new Float32Array(m),i,k;
+ for(i=0;i<m;i++){var sm=0,o=from+i*w;for(k=0;k<w;k++){var x=d[o+k];sm+=x*x;}var ms=sm/w;fr[i]=ms>1e-12?10*Math.log(ms)/Math.LN10:-120;}
+ if(!m)return {sp:0,lead:0,trail:0};
+ var cp=Array.prototype.slice.call(fr).sort(function(a,b){return a-b;}),p10=cp[Math.floor(m*0.10)],p95=cp[Math.min(m-1,Math.floor(m*0.95))];
+ var th=Math.min(-30,Math.max(-65,Math.max(p95-30,p10+8))),v=new Array(m);
+ for(i=0;i<m;i++)v[i]=fr[i]>th?1:0;
+ i=0;while(i<m){if(v[i]){var j=i;while(j<m&&v[j])j++;if(j-i<3)for(var q=i;q<j;q++)v[q]=0;i=j;}else i++;}
+ var first=-1,last=-1;for(i=0;i<m;i++)if(v[i]){if(first<0)first=i;last=i;}
+ if(first<0)return {sp:0,lead:m/100,trail:0};
+ i=first;while(i<=last){if(!v[i]){var e=i;while(e<=last&&!v[e])e++;if(e-i<=30)for(var z=i;z<e;z++)v[z]=1;i=e;}else i++;}
+ var c=0;for(i=first;i<=last;i++)if(v[i])c++;
+ return {sp:c/100,lead:first/100,trail:Math.max(0,(m-1-last)/100)};}
+var VZR={f:[0,1],n:[1,1.5],m:[1.5,2]};
+function vzSpeedOf(sid){if(sid===null||sid===undefined||!script[sid])return null;var m=/_([fnm])_\d+$/.exec(String(script[sid].f||scriptName(sid)));return m?m[1]:null;}
+function vzSpd(sid,speech){var sp=vzSpeedOf(sid);if(!sp||speech===undefined)return null;var r=VZR[sp],x=Math.round(speech*100)/100,nm=VZT[L].n[sp];
+ if(x>r[1])return {bad:true,msg:VZT[L].lng.replace("%x",x.toFixed(2)).replace("%n",nm).replace("%r",r[1].toFixed(1))};
+ if(r[0]>0&&x<r[0])return {bad:true,msg:VZT[L].sht.replace("%x",x.toFixed(2)).replace("%n",nm).replace("%r",r[0].toFixed(1))};
+ return {bad:false,msg:VZT[L].ok.replace("%x",x.toFixed(2)).replace("%n",nm)};}
+var VZT={en:{n:{f:"Fast",n:"Normal",m:"Slow"},lng:"Speech time %x s is too long for %n (maximum %r s). Record it again, a little faster.",sht:"Speech time %x s is too short for %n (minimum %r s). Record it again, a little slower.",ok:"Speech time %x s. Good for %n.",spk:"Speech"},
+ ar:{n:{f:"السريع",n:"العادي",m:"البطيء"},lng:"مدة التحدث %x ث أطول من المسموح في %n (الحد الأقصى %r ث). سجّلها مرة أخرى بسرعة أكبر قليلًا.",sht:"مدة التحدث %x ث أقصر من المطلوب في %n (الحد الأدنى %r ث). سجّلها مرة أخرى ببطء أكبر قليلًا.",ok:"مدة التحدث %x ث. مناسبة لـ %n.",spk:"التحدث"}};
+function vzBeep(){try{var C=window.AudioContext||window.webkitAudioContext,c=ctx||new C(),t0=c.currentTime;[0,0.22].forEach(function(d){var o=c.createOscillator(),g=c.createGain();o.frequency.value=880;g.gain.setValueAtTime(0.0001,t0+d);g.gain.exponentialRampToValueAtTime(0.25,t0+d+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t0+d+0.16);o.connect(g);g.connect(c.destination);o.start(t0+d);o.stop(t0+d+0.18);});}catch(e){}}
+function vzAlert(sid,stats){var box=$("spdAlert");if(!box){box=document.createElement("div");box.id="spdAlert";box.setAttribute("role","alert");box.style.cssText="margin:10px 0;padding:12px 14px;border-radius:14px;font-weight:700;text-align:center";$("status").parentNode.insertBefore(box,$("status").nextSibling);}
+ var r=vzSpd(sid,stats&&stats.speech);if(!r){box.style.display="none";return;}
+ box.style.display="block";box.textContent=(r.bad?"⚠ ":"✓ ")+r.msg;
+ if(r.bad){box.style.background="rgba(217,48,37,.14)";box.style.border="2px solid #d93025";box.style.color="#b3261e";vzBeep();}
+ else{box.style.background="rgba(60,170,90,.14)";box.style.border="2px solid rgba(60,170,90,.7)";box.style.color="inherit";}}
+function vzAlertHide(){var b=$("spdAlert");if(b)b.style.display="none";}
 function ws(v,o,str){for(var i=0;i<str.length;i++)v.setUint8(o+i,str.charCodeAt(i));}
 function wavBlob(data,rate,bits){
  var ch=data.length,n=data[0].length,bps=bits/8,ba=ch*bps,size=n*ba,buf=new ArrayBuffer(44+size),v=new DataView(buf);
@@ -441,6 +470,7 @@ async function addTake(blob,ext,stats,sid){
 function statLine(t){
  var s=t.stats,x=[T[L].dur+": "+fmtT(s.dur*1000)];
  if(s.rate)x.push((s.rate/1000)+" kHz · "+(s.ch===1?T[L].mono:T[L].stereo)+" · "+s.bits+"-bit");
+ if(s.speech!==undefined)x.push(VZT[L].spk+": "+s.speech.toFixed(2)+" s");
  if(s.peak!==undefined)x.push(T[L].peak+": "+dB(s.peak).toFixed(1)+" dBFS · "+T[L].avg+": "+dB(s.rms).toFixed(1)+" dBFS");
  if(t.sid!==null&&t.sid!==undefined&&script[t.sid])x.push("“"+script[t.sid].t.slice(0,50)+(script[t.sid].t.length>50?"…":"")+"”");
  return x.join(" · ");}
@@ -458,6 +488,7 @@ function renderTakes(){
   var b2=document.createElement("button");b2.type="button";b2.className="b sec";b2.textContent=T[L].del;b2.setAttribute("data-x",i);d.appendChild(b2);
   var sm=document.createElement("small");sm.textContent=statLine(t);d.appendChild(sm);
   var warn=[];if(t.stats.clipped>0)warn.push(T[L].clip);else if(t.stats.peak!==undefined&&dB(t.stats.peak)<-30)warn.push(T[L].low);
+  var sw=vzSpd(t.sid,t.stats.speech);if(sw&&sw.bad)warn.push("⚠ "+sw.msg);
   if(warn.length){var w=document.createElement("small");w.className="flag";w.textContent=warn.join(" ");d.appendChild(w);}
   box.appendChild(d);});
  if(!takes.length){var em=document.createElement("div");em.className="empty";em.textContent=T[L].empty;box.appendChild(em);}
