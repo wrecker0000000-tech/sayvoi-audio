@@ -71,6 +71,20 @@
 </div>
 <p class="note" data-i="spNote"></p>
 
+<h2 data-i="spdH"></h2>
+<div class="chk"><input type="checkbox" id="spdOn"><label for="spdOn" data-i="spdOn"></label></div>
+<div class="row">
+  <div class="col"><label for="fastMax" data-i="fastMax"></label><input type="number" id="fastMax" value="1" min="0" step="0.05" inputmode="decimal"></div>
+  <div class="col"><label for="normMax" data-i="normMax"></label><input type="number" id="normMax" value="1.5" min="0" step="0.05" inputmode="decimal"></div>
+  <div class="col"><label for="slowMax" data-i="slowMax"></label><input type="number" id="slowMax" value="2" min="0" step="0.05" inputmode="decimal"></div>
+</div>
+<div class="row">
+  <div class="col"><label for="tkF" data-i="tkF"></label><input type="text" id="tkF" value="f" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;background:transparent;color:inherit;box-sizing:border-box;direction:ltr"></div>
+  <div class="col"><label for="tkN" data-i="tkN"></label><input type="text" id="tkN" value="n" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;background:transparent;color:inherit;box-sizing:border-box;direction:ltr"></div>
+  <div class="col"><label for="tkS" data-i="tkS"></label><input type="text" id="tkS" value="m" style="width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;background:transparent;color:inherit;box-sizing:border-box;direction:ltr"></div>
+</div>
+<p class="note" data-i="spdNote"></p>
+
 <h2 data-i="h2c"></h2>
 <div class="row">
   <div class="col"><label for="tmin" data-i="fMin"></label><input type="number" id="tmin" min="0" step="0.1" inputmode="decimal"></div>
@@ -93,7 +107,7 @@
   <button type="button" class="b sec" id="clr" disabled></button>
 </div>
 <div class="tw"><table><thead><tr>
- <th data-s="name">File</th><th data-s="ext">Type</th><th data-s="dur">Duration</th><th data-s="sp" id="thSp">Speech</th><th data-s="lead" id="thLead">Lead</th><th data-s="trail" id="thTrail">Trail</th><th data-s="rate">Hz</th><th data-s="ch">Ch</th><th data-s="bits">Bits</th><th data-s="flag">Check</th>
+ <th data-s="name">File</th><th data-s="ext">Type</th><th data-s="dur">Duration</th><th data-s="sp" id="thSp">Speech</th><th data-s="lead" id="thLead">Lead</th><th data-s="trail" id="thTrail">Trail</th><th data-s="spd" id="thSpd">Speed</th><th data-s="rate">Hz</th><th data-s="ch">Ch</th><th data-s="bits">Bits</th><th data-s="flag">Check</th>
 </tr></thead><tbody id="tb"></tbody></table></div>
 
 <section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi audio duration calculator guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
@@ -126,6 +140,10 @@ en:{dir:"ltr",btn:"العربية",
  fShort:"too short",fLong:"too long",fRateW:"rate",fChW:"channels",ok:"OK",
  n1:"<strong>Private:</strong> files never leave your device.",n2:"<strong>Duration:</strong> WAV is calculated from its header. Other formats use the browser’s own reading, which can be slightly off for some VBR MP3 files.",n3:"<strong>M4A / AAC / other:</strong> the duration works, but sample rate and channels are shown as “–”. If you set a rate or channel rule, those files are marked as “unknown”.",vidH:"Watch: how to use the calculator",vidP:"A short video guide (about 60 seconds). The steps are written on the screen.",back:"Back to home",
  unk:"unknown",
+ spdH:"Speed classes (fast / normal / slow)",spdOn:"Sort each recording into a speed class by its speech time, and flag files that do not match their name",
+ fastMax:"Fast: up to (seconds)",normMax:"Normal: up to (seconds)",slowMax:"Slow: up to (seconds)",tkF:"Fast code in file name",tkN:"Normal code in file name",tkS:"Slow code in file name",
+ spdNote:"Fast = up to the first number. Normal = above fast, up to the second. Slow = above normal, up to the third. Longer than that is flagged. If the file name contains a code between underscores (for example _f_ or _n_ or _m_), the page also checks that the measured class matches it.",
+ thSpd:"Speed",cFast:"Fast",cNorm:"Normal",cSlow:"Slow",cOver:"Too long",fExp:"expected",fGot:"got",
  spList:"Each recording and its speech time (seconds)",spCopy:"Copy the list",
  spH:"Speech-only time",spOn:"Measure speech time only (silence removed). Works while loading files.",spTh:"Silence threshold (dBFS, leave empty for auto)",spPause:"Pauses shorter than this count as speech (ms)",
  spNote:"For each file the page finds the parts where someone is speaking and adds them up. Silence at the start, at the end and long pauses are not counted. Auto mode adapts to each file. If a file looks wrong, type a threshold such as -45 and the table updates.",
@@ -148,6 +166,10 @@ ar:{dir:"rtl",btn:"English",
  fShort:"قصير",fLong:"طويل",fRateW:"المعدل",fChW:"القنوات",ok:"سليم",
  n1:"<strong>خصوصية:</strong> الملفات لا تغادر جهازك.",n2:"<strong>المدة:</strong> في WAV تُحسب من رأس الملف. الصيغ الأخرى يقرؤها المتصفح نفسه، وقد يختلف قليلًا في بعض ملفات MP3 متغيرة المعدل.",n3:"<strong>M4A / AAC وغيرها:</strong> المدة تعمل لكن المعدل والقنوات تظهر «–». لو حددت شرطًا للمعدل أو القنوات تُعلَّم هذه الملفات «غير معروف».",vidH:"شاهد: طريقة استخدام الحاسبة",vidP:"شرح مصوّر قصير (نحو 60 ثانية). الخطوات مكتوبة على الشاشة.",back:"العودة للرئيسية",
  unk:"غير معروف",
+ spdH:"فئات السرعة (سريع / عادي / بطيء)",spdOn:"صنّف كل تسجيل حسب مدة التحدث إلى فئة سرعة، ونبّه على الملفات التي لا تطابق اسمها",
+ fastMax:"سريع: حتى (ثانية)",normMax:"عادي: حتى (ثانية)",slowMax:"بطيء: حتى (ثانية)",tkF:"رمز السريع في اسم الملف",tkN:"رمز العادي في اسم الملف",tkS:"رمز البطيء في اسم الملف",
+ spdNote:"سريع = حتى الرقم الأول. عادي = أكثر من السريع وحتى الرقم الثاني. بطيء = أكثر من العادي وحتى الرقم الثالث. الأطول من ذلك يُعلَّم. إذا كان اسم الملف يحتوي رمزًا بين شرطتين سفليتين (مثل _f_ أو _n_ أو _m_) تتأكد الصفحة أيضًا أن الفئة المقاسة تطابقه.",
+ thSpd:"السرعة",cFast:"سريع",cNorm:"عادي",cSlow:"بطيء",cOver:"أطول من المطلوب",fExp:"المتوقع",fGot:"الفعلي",
  spList:"كل تسجيل ومدة التحدث فيه (بالثواني)",spCopy:"انسخ القائمة",
  spH:"مدة التحدث فقط",spOn:"احسب مدة التحدث فقط (بدون الصمت). تعمل أثناء تحميل الملفات.",spTh:"حد الصمت (dBFS، اتركه فارغًا للتلقائي)",spPause:"التوقفات الأقصر من هذا تُحسب كلامًا (مللي ثانية)",
  spNote:"لكل ملف تجد الصفحة الأجزاء التي يُسمع فيها كلام وتجمعها. الصمت في البداية والنهاية والتوقفات الطويلة لا تُحسب. الوضع التلقائي يتكيّف مع كل ملف. إذا بدا ملف غير صحيح اكتب حدًا مثل -45 وسيتحدث الجدول.",
@@ -287,12 +309,25 @@ function hms(s){s=Math.round(s);var h=Math.floor(s/3600),m=Math.floor((s%3600)/6
 function dur2(s){return s>=60?hms(s):(Math.round(s*100)/100)+" s";}
 function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
 function rules(){return {min:parseFloat($("tmin").value)||0,max:parseFloat($("tmax").value)||0,rate:parseInt($("trate").value,10)||0,ch:parseInt($("tch").value,10)||0};}
+function spdClass(sp){
+ var a=parseFloat($("fastMax").value)||0,b=parseFloat($("normMax").value)||0,c=parseFloat($("slowMax").value)||0,x=Math.round(sp*100)/100;
+ return x<=a?"f":(x<=b?"n":(x<=c?"s":"o"));}
+function spdName(k){var t=T[L];return k==="f"?t.cFast:k==="n"?t.cNorm:k==="s"?t.cSlow:t.cOver;}
+function spdExpected(name){
+ var base=name.replace(/\.[A-Za-z0-9]+$/,"").toLowerCase().split("_"),tk={f:$("tkF").value.trim().toLowerCase(),n:$("tkN").value.trim().toLowerCase(),s:$("tkS").value.trim().toLowerCase()},res=null;
+ for(var i=0;i<base.length;i++){["f","n","s"].forEach(function(k){if(tk[k]&&base[i]===tk[k])res=k;});}
+ return res;}
 function flags(r){
  var R=rules(),f=[],t=T[L];if(r.err)return [t.unk];
  if(R.min&&r.dur<R.min)f.push(t.fShort);
  if(R.max&&r.dur>R.max)f.push(t.fLong);
  if(R.rate){if(!r.rate)f.push(t.fRateW+" ?");else if(r.rate!==R.rate)f.push(t.fRateW+" "+r.rate);}
  if(R.ch){if(!r.ch)f.push(t.fChW+" ?");else if(r.ch!==R.ch)f.push(t.fChW+" "+r.ch);}
+ if($("spdOn").checked&&r.fr){
+  r._c=spdClass(r.sp);r._e=spdExpected(r.name);
+  if(r._c==="o")f.push(t.cOver);
+  else if(r._e&&r._e!==r._c)f.push(t.fExp+" "+spdName(r._e)+" / "+t.fGot+" "+spdName(r._c));
+ }else{r._c=null;r._e=null;}
  return f;}
 function sizeStr(b){return b>=1073741824?(b/1073741824).toFixed(2)+" GB":(b/1048576).toFixed(1)+" MB";}
 
@@ -308,12 +343,12 @@ function render(){
  else $("needBox").innerHTML="";
  var sl=rows.filter(function(r){return r.fr;});
  $("spBox").style.display=sl.length?"block":"none";
- $("spTxt").value=sl.map(function(r){return r.name+"\t"+r.sp.toFixed(2);}).join("\n");
+ $("spTxt").value=sl.map(function(r){return r.name+"\t"+r.sp.toFixed(2)+(r._c?"\t"+spdName(r._c):"");}).join("\n");
  var list=rows.slice();
  if($("only").checked)list=list.filter(function(r){return r._f.length;});
  if(sortKey){list.sort(function(a,b){var x=sortKey==="flag"?a._f.length:a[sortKey],y=sortKey==="flag"?b._f.length:b[sortKey];if(typeof x==="string")return x.localeCompare(y)*sortDir;return ((x||0)-(y||0))*sortDir;});}
  $("tb").innerHTML=list.map(function(r){
-  return '<tr'+(r._f.length?' class="bad"':'')+'><td class="nm">'+esc(r.name)+'</td><td>'+esc(r.ext)+'</td><td>'+(r.err?"–":dur2(r.dur))+'</td><td><b>'+(r.fr?r.sp.toFixed(2):"–")+'</b></td><td>'+(r.fr?r.lead.toFixed(2):"–")+'</td><td>'+(r.fr?r.trail.toFixed(2):"–")+'</td><td>'+(r.rate||"–")+'</td><td>'+(r.ch||"–")+'</td><td>'+(r.bits||"–")+'</td><td>'+(r._f.length?'<span class="flag">'+esc(r._f.join(", "))+'</span>':t.ok)+'</td></tr>';}).join("");
+  return '<tr'+(r._f.length?' class="bad"':'')+'><td class="nm">'+esc(r.name)+'</td><td>'+esc(r.ext)+'</td><td>'+(r.err?"–":dur2(r.dur))+'</td><td><b>'+(r.fr?r.sp.toFixed(2):"–")+'</b></td><td>'+(r.fr?r.lead.toFixed(2):"–")+'</td><td>'+(r.fr?r.trail.toFixed(2):"–")+'</td><td>'+(r._c?spdName(r._c):"–")+'</td><td>'+(r.rate||"–")+'</td><td>'+(r.ch||"–")+'</td><td>'+(r.bits||"–")+'</td><td>'+(r._f.length?'<span class="flag">'+esc(r._f.join(", "))+'</span>':t.ok)+'</td></tr>';}).join("");
  ["csv","copy","clr"].forEach(function(i){$(i).disabled=!rows.length;});
 }
 
@@ -347,8 +382,8 @@ function addFiles(files){
 }
 
 function csvText(sep){
- var out=[["File","Type","Duration_seconds","Duration_hms","Speech_seconds","Lead_silence_seconds","End_silence_seconds","Threshold_dBFS","Sample_rate","Channels","Bits","Check"]];
- rows.forEach(function(r){out.push([r.name,r.ext,r.err?"":r.dur.toFixed(3),r.err?"":hms(r.dur),r.fr?r.sp.toFixed(2):"",r.fr?r.lead.toFixed(2):"",r.fr?r.trail.toFixed(2):"",r.fr?r.thr.toFixed(1):"",r.rate||"",r.ch||"",r.bits||"",r._f.join("; ")]);});
+ var out=[["File","Type","Duration_seconds","Duration_hms","Speech_seconds","Lead_silence_seconds","End_silence_seconds","Speed_class","Threshold_dBFS","Sample_rate","Channels","Bits","Check"]];
+ rows.forEach(function(r){out.push([r.name,r.ext,r.err?"":r.dur.toFixed(3),r.err?"":hms(r.dur),r.fr?r.sp.toFixed(2):"",r.fr?r.lead.toFixed(2):"",r.fr?r.trail.toFixed(2):"",r._c?spdName(r._c):"",r.fr?r.thr.toFixed(1):"",r.rate||"",r.ch||"",r.bits||"",r._f.join("; ")]);});
  return out.map(function(a){return a.map(function(v){v=String(v);return sep===","?('"'+v.replace(/"/g,'""')+'"'):v.replace(/[\t\r\n]/g," ");}).join(sep);}).join("\r\n");}
 
 function applyLang(){
@@ -358,7 +393,7 @@ function applyLang(){
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
  var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
- $("thSp").textContent=t.thSp;$("thLead").textContent=t.thLead;$("thTrail").textContent=t.thTrail;
+ $("thSpd").textContent=t.thSpd;$("thSp").textContent=t.thSp;$("thLead").textContent=t.thLead;$("thTrail").textContent=t.thTrail;
  $("spCopy").textContent=t.spCopy;
  $("csv").textContent=t.csv;$("copy").textContent=t.copy;$("clr").textContent=t.clr;
  document.title=L==="ar"?"حاسبة مدة الملفات الصوتية | Sayvoi":"Audio Duration Calculator: Total Length of Many Files | Sayvoi";
@@ -370,7 +405,7 @@ $("fi").addEventListener("change",function(){addFiles(this.files);this.value="";
 ["dragenter","dragover"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.add("over");});});
 ["dragleave","drop"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.remove("over");});});
 $("drop").addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
-["tmin","tmax","trate","tch","need","only","sth","spause"].forEach(function(i){$(i).addEventListener("input",render);$(i).addEventListener("change",render);});
+["tmin","tmax","trate","tch","need","only","sth","spause","spdOn","fastMax","normMax","slowMax","tkF","tkN","tkS"].forEach(function(i){$(i).addEventListener("input",render);$(i).addEventListener("change",render);});
 $("spCopy").addEventListener("click",function(){var v=$("spTxt").value,b=this,ok=function(){b.textContent="✓";setTimeout(function(){b.textContent=T[L].spCopy;},1200);};
  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,function(){$("spTxt").select();});else{$("spTxt").select();try{document.execCommand("copy");ok();}catch(e){}}});
 $("clr").addEventListener("click",function(){gen++;rows=[];$("status").textContent="";$("prog").style.display="none";render();});
