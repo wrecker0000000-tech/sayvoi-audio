@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Record a conversation between two people in different places. Each person is recorded on their own device, and you get three WAV files: speaker A, speaker B and both together. Free, in your browser.">
+<meta name="twitter:card" content="summary_large_image">
+<title>Call Recorder | Sayvoi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.vr{--p:#7c4dff;--o:#ff8a3d;--line:rgba(128,128,128,.32)}
+.vr .hero{padding:22px 20px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#7c4dff 0%,#b347d9 55%,#ff8a3d 100%);margin:6px 0 18px;box-shadow:0 10px 30px rgba(124,77,255,.28)}
+.vr .hero h1{color:#fff;margin:0 0 8px;font-size:1.7em;line-height:1.25}
+.vr .hero p{margin:0;opacity:.95}
+.vr .chip{display:inline-block;padding:3px 12px;border-radius:99px;background:rgba(255,255,255,.22);font-size:.82em;font-weight:700;margin-bottom:10px}
+.vr .card{border:1px solid var(--line);border-radius:20px;padding:18px;margin:16px 0;background:rgba(124,77,255,.04);box-shadow:0 4px 16px rgba(0,0,0,.05)}
+.vr .card h2{margin:0 0 14px;font-size:1.2em;display:flex;align-items:center;gap:10px}
+.vr .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;color:#fff;font-weight:800;background:linear-gradient(135deg,var(--p),var(--o));flex:0 0 auto}
+.vr .presets{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.vr .preset{flex:1 1 170px;text-align:start;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:transparent;color:inherit;font:inherit;cursor:pointer}
+.vr .preset strong{display:block}
+.vr .preset small{opacity:.75}
+.vr .preset.on{border-color:var(--p);background:rgba(124,77,255,.1)}
+.vr details{border:1px solid var(--line);border-radius:14px;margin:10px 0;padding:0 14px}
+.vr summary{cursor:pointer;font-weight:800;padding:12px 0}
+.vr .row{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 14px}
+.vr .col{flex:1 1 150px;min-width:0}
+.vr label{display:block;font-weight:700;margin-bottom:6px;font-size:.93em}
+.vr select,.vr input[type=number],.vr input[type=text]{width:100%;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;font:inherit;background:transparent;color:inherit;box-sizing:border-box}
+.vr select option{color:#111;background:#fff}
+.vr select:disabled,.vr input:disabled{opacity:.45}
+.vr .b{padding:11px 20px;border:0;border-radius:12px;font:inherit;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#7c4dff,#ff8a3d)}
+.vr .b.sec{background:transparent;color:inherit;border:2px solid rgba(128,128,128,.5)}
+.vr .b:disabled{opacity:.5;cursor:not-allowed}
+.vr .btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.vr .box{margin:12px 0;padding:12px 14px;border-radius:14px;border:1px solid var(--line)}
+.vr .box.bad{border-color:#e0a030;background:rgba(224,160,48,.12)}
+.vr .box.ok{border-color:rgba(60,170,90,.7);background:rgba(60,170,90,.1)}
+.vr .stage{text-align:center;padding:10px 0 4px}
+.vr .timer{font-size:2.6em;font-weight:800;direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.vr .meter{height:18px;border-radius:12px;background:rgba(128,128,128,.22);overflow:hidden;direction:ltr;margin:10px auto;max-width:520px}
+.vr .meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3caa5a,#e0c030 75%,#d93025)}
+.vr .recbtn{display:inline-flex;align-items:center;gap:12px;padding:16px 38px;border:0;border-radius:99px;font:inherit;font-size:1.15em;font-weight:800;color:#fff;cursor:pointer;background:#d93025;box-shadow:0 8px 22px rgba(217,48,37,.35)}
+.vr .recbtn::before{content:"\25CF";font-size:1.2em}
+.vr .recbtn.on{background:#222;animation:pulse 1.2s infinite}
+.vr .recbtn.on::before{content:"\25A0"}
+.vr .recbtn:disabled{opacity:.5;cursor:not-allowed;animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,48,37,.55)}70%{box-shadow:0 0 0 18px rgba(217,48,37,0)}100%{box-shadow:0 0 0 0 rgba(217,48,37,0)}}
+.vr .tools{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0 6px}
+.vr .take{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.5)}
+.vr .take .badge{flex:0 0 auto;min-width:40px;height:40px;padding:0 6px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--p),var(--o));direction:ltr}
+.vr .take audio{flex:1 1 220px;min-width:0;max-width:100%}
+.vr .take input{flex:1 1 130px;max-width:190px}
+.vr .take small{flex:1 1 100%;opacity:.85;direction:ltr;text-align:start}
+.vr .take .flag{color:#b35c00;font-weight:700}
+.vr .take button{padding:8px 14px}
+.vr .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.92);box-shadow:0 6px 20px rgba(0,0,0,.12);margin-top:14px}
+.vr .bar .grow{flex:1 1 160px;font-size:.88em;opacity:.8}
+.vr .sprog{height:8px;border-radius:8px;background:rgba(128,128,128,.25);overflow:hidden;margin:6px 0;direction:ltr}
+.vr .sprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--o))}
+.vr .recbox{border:2px solid rgba(124,77,255,.35);border-radius:22px;padding:14px;background:rgba(255,255,255,.7);margin:10px 0}
+.vr .sent{margin:6px 0;padding:14px 8px;font-size:1.7em;line-height:1.8;text-align:center;font-weight:700;word-break:break-word;min-height:3em}
+.vr .sbadge{display:inline-block;padding:4px 14px;border-radius:99px;background:rgba(124,77,255,.15);font-weight:700}
+.vr .sbadge.ok{background:rgba(60,170,90,.2)}
+.vr .ritem{display:flex;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:10px}
+.vr .ritem:hover{background:rgba(124,77,255,.08)}
+.vr .ritem.cur{background:rgba(124,77,255,.15);font-weight:700}
+.vr .ritem .st{flex:0 0 22px;text-align:center}
+.vr .ritem .id{flex:0 0 auto;direction:ltr;opacity:.7}
+.vr .ritem .tx{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vr .ritem button{padding:4px 10px;flex:0 0 auto}
+.vr #sList{max-height:360px;overflow-y:auto}
+.vr .ctrl{display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0;direction:ltr}
+.vr .nav{min-width:58px;padding:16px 0;font-size:1.3em;border-radius:99px}
+.vr .empty{text-align:center;opacity:.65;padding:18px 0}
+.vr .steps li{margin:6px 0}
+.langsw{float:right;margin:0 0 8px}
+[dir=rtl] .langsw{float:left}
+@media(max-width:560px){.vr .hero h1{font-size:1.35em}.vr .timer{font-size:2.1em}.vr .recbtn{padding:14px 30px}}
+#sCount{overflow-wrap:anywhere;word-break:break-all;font-size:13px;line-height:1.5;padding:0 6px}
+
+.vr .code{width:100%;box-sizing:border-box;direction:ltr;font-family:monospace;font-size:12px;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;background:transparent;color:inherit;min-height:84px;word-break:break-all}
+.vr .roles{display:flex;gap:12px;flex-wrap:wrap}
+.vr .role{flex:1 1 220px;text-align:start;padding:16px;border-radius:16px;border:2px solid var(--line);background:transparent;color:inherit;font:inherit;cursor:pointer}
+.vr .role strong{display:block;font-size:1.1em;margin-bottom:4px}
+.vr .role small{opacity:.8}
+.vr .role.on{border-color:var(--p);background:rgba(124,77,255,.1)}
+.vr .lv{display:flex;gap:10px;align-items:center;margin:8px 0;direction:ltr}
+.vr .lv span{flex:0 0 90px;font-size:.88em;opacity:.8}
+.vr .lv .meter{flex:1 1 auto;margin:0;max-width:none}
+.vr .out{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0;padding:12px;border:1px solid var(--line);border-radius:16px}
+.vr .out b{flex:1 1 100%;direction:ltr;text-align:start;overflow-wrap:anywhere}
+.vr .out audio{flex:1 1 240px;min-width:0;max-width:100%}
+.vr a.b{text-decoration:none;display:inline-block}
+.vr .hide{display:none}
+.vr .warn{border-color:#e0a030;background:rgba(224,160,48,.12)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" id="nav"></nav>
+<article class="vr">
+<button class="b sec langsw" id="langBtn" type="button" style="padding:6px 14px">العربية</button>
+<div class="hero"><span class="chip" data-i="chip"></span><h1 data-i="h1"></h1><p data-i="lead"></p></div>
+
+<section class="card"><h2 data-i="h0"></h2>
+<ul class="steps"><li data-h="n0a"></li><li data-h="n0b"></li><li data-h="n0c"></li><li data-h="n0d"></li></ul></section>
+
+<section class="card"><h2><span class="num">1</span><span data-i="h1s"></span></h2>
+<div class="roles"><button class="role" id="rHost" type="button"><strong data-i="rHost"></strong><small data-i="rHostS"></small></button>
+<button class="role" id="rGuest" type="button"><strong data-i="rGuest"></strong><small data-i="rGuestS"></small></button></div></section>
+
+<section class="card hide" id="setCard"><h2 data-i="hSet"></h2>
+<div class="row"><div class="col"><label for="sess" data-i="sess"></label><input type="text" id="sess" value="call01"></div>
+<div class="col"><label for="nA" data-i="nA"></label><input type="text" id="nA" value="A"></div>
+<div class="col"><label for="nB" data-i="nB"></label><input type="text" id="nB" value="B"></div>
+<div class="col"><label for="rate" data-i="rate"></label><select id="rate"><option value="16000">16 kHz</option><option value="24000">24 kHz</option><option value="44100">44.1 kHz</option><option value="48000">48 kHz</option></select></div></div>
+<p class="note" data-i="rateN"></p></section>
+
+<section class="card hide" id="connCard">
+<h2 data-i="hMic"></h2>
+<div class="btns"><button class="b" id="mic" type="button"></button></div>
+<div class="box hide" id="micBox"></div>
+
+<div id="hostFlow" class="hide">
+<h2 data-i="hH1"></h2>
+<div class="btns"><button class="b" id="mkOffer" type="button" disabled></button></div>
+<div id="offerWrap" class="hide"><label data-i="codeMine"></label><textarea class="code" id="offerOut" readonly></textarea>
+<div class="btns"><button class="b sec" id="copyOffer" type="button"></button></div>
+<h2 data-i="hH2"></h2><label for="ansIn" data-i="codeReply"></label><textarea class="code" id="ansIn"></textarea>
+<div class="btns"><button class="b" id="connect" type="button"></button></div></div>
+</div>
+
+<div id="guestFlow" class="hide">
+<h2 data-i="hG1"></h2><label for="offerIn" data-i="codeHost"></label><textarea class="code" id="offerIn"></textarea>
+<div class="btns"><button class="b" id="mkAns" type="button" disabled></button></div>
+<div id="ansWrap" class="hide"><h2 data-i="hG2"></h2><textarea class="code" id="ansOut" readonly></textarea>
+<div class="btns"><button class="b sec" id="copyAns" type="button"></button></div></div>
+</div>
+<div class="box" id="st"></div>
+</section>
+
+<section class="card hide" id="liveCard"><h2 data-i="hLive"></h2>
+<div class="lv"><span data-i="lvMe"></span><div class="meter"><i id="mMe"></i></div></div>
+<div class="lv"><span data-i="lvThem"></span><div class="meter"><i id="mThem"></i></div></div>
+<p class="note"><span data-i="rtt"></span>: <b id="rttV" dir="ltr">–</b></p>
+<div class="stage"><div class="timer" id="timer">00:00</div>
+<button class="recbtn hide" id="recBtn" type="button"></button>
+<p class="note hide" id="gNote"></p></div>
+<div class="box hide" id="prog"></div>
+</section>
+
+<section class="card hide" id="resCard"><h2 data-i="hRes"></h2>
+<div class="box ok hide" id="mineBox"></div>
+<div id="outs"></div>
+<p class="note hide" id="infoN"></p></section>
+
+<section class="card"><h2 data-i="h2n"></h2>
+<ul class="steps"><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li></ul>
+<p style="margin-top:14px"><a href="/" data-i="back"></a></p></section>
+</article>
+<footer id="foot"></footer>
+</div>
+<script src="/vendor/jszip.min.js"></script>
+<script>
+(function(){
+var T={en:{dir:"ltr",btn:"العربية",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/">Articles</a><a href="/about.html">About</a>',
+ foot:'<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ chip:"Free · in your browser",h1:"Call Recorder",lead:"Record a conversation between two people in different places. Each person is recorded on their own device, so the sound is clean. You get three WAV files: speaker A, speaker B, and both together.",
+ h0:"Before you start",n0a:"<strong>Both people wear headphones.</strong> Without headphones the other voice leaks into the microphone.",n0b:"<strong>Both people keep this page open</strong> until the files are ready. Do not close it, refresh it, or let the screen sleep.",n0c:"Use Chrome (Android, Windows, Mac) or Safari (iPhone). Both need internet, and a quiet place.",n0d:"Everything stays between the two devices. Nothing is uploaded to any server.",
+ h1s:"Who are you?",rHost:"I start the call",rHostS:"I will send a code to my partner and press Record.",rGuest:"I am joining",rGuestS:"My partner sent me a code.",
+ hSet:"Settings (the person who starts)",sess:"Session name",sessH:"for example: call01",nA:"Name for speaker A (you)",nB:"Name for speaker B (partner)",rate:"Sample rate",rateN:"16 kHz is enough for speech and keeps files small.",
+ hMic:"1. Allow the microphone",mic:"Enable microphone",micOk:"Microphone ready.",
+ hH1:"2. Make the code and send it to your partner",mkOffer:"Make my code",codeMine:"Your code (copy it and send it by WhatsApp):",copy:"Copy",copied:"Copied",
+ hH2:"3. Paste your partner's reply code",codeReply:"Reply code from your partner:",connect:"Connect",
+ hG1:"2. Paste the code your partner sent",codeHost:"Code from your partner:",mkAns:"Make my reply code",hG2:"3. Send this reply code back to your partner",
+ st0:"Not connected yet.",stWait:"Waiting for the connection…",stOk:"Connected. You can talk now.",stFail:"The connection failed. Refresh both pages and try again.",stBad:"This code is not valid. Copy it again, the whole code.",
+ hLive:"The call",lvMe:"Your voice",lvThem:"Partner voice",rtt:"Delay",rec:"Start recording",stopB:"Stop and make the files",guestWait:"Your partner controls the recording. Just talk.",recNow:"Recording…",
+ prep:"Preparing…",recv:"Receiving your partner's recording: ",hRes:"Your files",fA:"Speaker A",fB:"Speaker B",fMix:"Both together",zip:"Download all (ZIP)",zipMk:"Preparing the ZIP…",dl:"Download",
+ mine:"Your own recording is ready. Download it as a backup.",sentOk:"Your recording was sent to your partner.",noGuest:"The partner's recording did not arrive. Your own file is ready.",
+ info:"The files have the same length and start together, so they can be used as separate tracks. The partner is delayed by the measured connection delay (%s ms). If the mix is too loud, it is lowered automatically.",
+ errMic:"Could not access the microphone. Allow it in the browser and try again.",errHttps:"This page needs https and a modern browser.",
+ h2n:"Notes",n1:"<strong>Quality:</strong> each voice is recorded at its owner's microphone, not through the call, so internet quality does not affect the files.",n2:"<strong>If the connection does not work:</strong> some company or mobile networks block direct calls. Try another network (Wi-Fi) for one of you.",n3:"<strong>Long calls:</strong> keep each recording under about 30 minutes.",back:"Back to the converter"},
+ar:{dir:"rtl",btn:"English",
+ nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
+ foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
+ chip:"مجاني · داخل متصفحك",h1:"مسجّل المكالمات",lead:"سجّل محادثة بين شخصين في مكانين مختلفين. يُسجَّل كل شخص على جهازه فيكون الصوت نظيفًا. وتحصل على ثلاثة ملفات WAV: المتحدث أ والمتحدث ب والاثنان معًا.",
+ h0:"قبل أن تبدأ",n0a:"<strong>يرتدي الاثنان سماعات.</strong> بدون سماعات يتسرب صوت الآخر إلى الميكروفون.",n0b:"<strong>يُبقي الاثنان هذه الصفحة مفتوحة</strong> حتى تجهز الملفات. لا تغلقها ولا تحدّثها ولا تترك الشاشة تنطفئ.",n0c:"استخدم Chrome (أندرويد وويندوز وماك) أو Safari (آيفون). يحتاج الاثنان إلى إنترنت ومكان هادئ.",n0d:"كل شيء يبقى بين الجهازين. لا يُرفع أي شيء إلى أي خادم.",
+ h1s:"من أنت؟",rHost:"أنا أبدأ المكالمة",rHostS:"سأرسل كودًا لشريكي وأضغط تسجيل.",rGuest:"أنا أنضم",rGuestS:"أرسل لي شريكي كودًا.",
+ hSet:"الإعدادات (لمن يبدأ المكالمة)",sess:"اسم الجلسة",sessH:"مثال: call01",nA:"اسم المتحدث أ (أنت)",nB:"اسم المتحدث ب (شريكك)",rate:"معدل العينات",rateN:"16 kHz يكفي للكلام ويُبقي الملفات صغيرة.",
+ hMic:"١. اسمح بالميكروفون",mic:"فعّل الميكروفون",micOk:"الميكروفون جاهز.",
+ hH1:"٢. اصنع الكود وأرسله لشريكك",mkOffer:"اصنع الكود",codeMine:"الكود الخاص بك (انسخه وأرسله على واتساب):",copy:"انسخ",copied:"تم النسخ",
+ hH2:"٣. الصق كود الرد من شريكك",codeReply:"كود الرد من شريكك:",connect:"اتصل",
+ hG1:"٢. الصق الكود الذي أرسله لك شريكك",codeHost:"الكود من شريكك:",mkAns:"اصنع كود الرد",hG2:"٣. أرسل كود الرد هذا إلى شريكك",
+ st0:"لم يتم الاتصال بعد.",stWait:"بانتظار الاتصال…",stOk:"تم الاتصال. يمكنكما التحدث الآن.",stFail:"فشل الاتصال. حدّث الصفحتين وحاول مجددًا.",stBad:"هذا الكود غير صالح. انسخه من جديد كاملًا.",
+ hLive:"المكالمة",lvMe:"صوتك",lvThem:"صوت شريكك",rtt:"التأخير",rec:"ابدأ التسجيل",stopB:"أوقف واصنع الملفات",guestWait:"شريكك هو من يتحكم في التسجيل. تحدّث فقط.",recNow:"جارٍ التسجيل…",
+ prep:"جارٍ التجهيز…",recv:"جارٍ استلام تسجيل شريكك: ",hRes:"ملفاتك",fA:"المتحدث أ",fB:"المتحدث ب",fMix:"الاثنان معًا",zip:"نزّل الكل (ZIP)",zipMk:"جارٍ تجهيز الـ ZIP…",dl:"نزّل",
+ mine:"تسجيلك الخاص جاهز. نزّله كنسخة احتياطية.",sentOk:"أُرسل تسجيلك إلى شريكك.",noGuest:"لم يصل تسجيل الشريك. ملفك الخاص جاهز.",
+ info:"للملفات نفس الطول وتبدأ معًا، فيمكن استخدامها كمسارات منفصلة. يُؤخَّر الشريك بمقدار تأخير الاتصال المقاس (%s ملي ثانية). وإذا كان المزج عاليًا يُخفَّض تلقائيًا.",
+ errMic:"تعذّر الوصول للميكروفون. اسمح به من المتصفح وحاول مجددًا.",errHttps:"هذه الصفحة تحتاج https ومتصفحًا حديثًا.",
+ h2n:"ملاحظات",n1:"<strong>الجودة:</strong> يُسجَّل كل صوت عند ميكروفون صاحبه لا عبر المكالمة، فلا تتأثر الملفات بجودة الإنترنت.",n2:"<strong>إذا لم يعمل الاتصال:</strong> بعض شبكات الشركات والموبايل تمنع الاتصال المباشر. جرّب شبكة أخرى (واي فاي) لأحدكما.",n3:"<strong>المكالمات الطويلة:</strong> أبقِ كل تسجيل أقل من نحو 30 دقيقة.",back:"العودة إلى المحوّل"}};
+
+var $=function(i){return document.getElementById(i);};
+var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
+var role=null,stream=null,pc=null,dc=null,remote=null,actx=null,proc=null,srcN=null,anMe=null,anThem=null,rate=16000;
+var cfgGot=false,recording=false,chunks=[],recStart=0,tickT=null,rtts=[],pingT=null,oneWay=0,names={a:"A",b:"B",s:"call01"},gotRemote=null,myRate=16000,peak=0,wl=null;
+function t(){return T[L];}
+function show(id,on){$(id).classList[on?"remove":"add"]("hide");}
+function clean(s,d){s=String(s||"").replace(/[^A-Za-z0-9_\-؀-ۿ]/g,"_").replace(/^_+|_+$/g,"");return s||d;}
+function b64e(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function b64d(s){s=s.replace(/\s+/g,"").replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return decodeURIComponent(escape(atob(s)));}
+function pack(desc){return "SVC1."+b64e(JSON.stringify({s:desc.sdp,y:desc.type}));}
+function unpack(code){code=String(code||"").replace(/\s+/g,"");if(code.indexOf("SVC1.")!==0)throw new Error("bad");var o=JSON.parse(b64d(code.slice(5)));if(!o.s||!o.y)throw new Error("bad");return {type:o.y,sdp:o.s};}
+function setSt(msg,cls){var b=$("st");b.textContent=msg;b.className="box"+(cls?" "+cls:"");}
+function mmss(s){s=Math.floor(s);var m=Math.floor(s/60),r=s%60;return (m<10?"0":"")+m+":"+(r<10?"0":"")+r;}
+function applyLang(){var x=t();document.documentElement.lang=L;document.documentElement.dir=x.dir;
+ $("nav").innerHTML=x.nav;$("foot").innerHTML=x.foot;$("langBtn").textContent=x.btn;
+ var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=x[a[i].getAttribute("data-i")];
+ var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=x[h[j].getAttribute("data-h")];
+ $("mic").textContent=x.mic;$("mkOffer").textContent=x.mkOffer;$("copyOffer").textContent=x.copy;$("connect").textContent=x.connect;$("mkAns").textContent=x.mkAns;$("copyAns").textContent=x.copy;
+ $("recBtn").textContent=recording?x.stopB:x.rec;$("gNote").textContent=x.guestWait;
+ document.title="Call Recorder | Sayvoi";
+ if(!pc)setSt(x.st0);}
+$("langBtn").addEventListener("click",function(){L=L==="en"?"ar":"en";try{localStorage.setItem("sayvoi_lang",L);}catch(e){}applyLang();});
+
+/* role */
+function pickRole(r){role=r;$("rHost").classList.toggle("on",r==="host");$("rGuest").classList.toggle("on",r==="guest");
+ show("setCard",r==="host");show("connCard",true);show("hostFlow",r==="host");show("guestFlow",r==="guest");}
+$("rHost").addEventListener("click",function(){pickRole("host");});
+$("rGuest").addEventListener("click",function(){pickRole("guest");});
+
+/* microphone */
+$("mic").addEventListener("click",function(){
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||(location.protocol!=="https:"&&location.hostname!=="localhost")){setSt(t().errHttps,"bad");return;}
+ navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false,channelCount:1}}).then(function(s){
+  stream=s;$("mic").disabled=true;var b=$("micBox");b.textContent=t().micOk;b.className="box ok";show("micBox",true);
+  $("mkOffer").disabled=false;$("mkAns").disabled=false;
+ }).catch(function(){setSt(t().errMic,"bad");});});
+
+/* webrtc */
+var CFG={iceServers:[{urls:"stun:stun.l.google.com:19302"}]};
+function waitGather(p){return new Promise(function(res){if(p.iceGatheringState==="complete")return res();var d=false;function fin(){if(!d){d=true;res();}}
+ p.addEventListener("icegatheringstatechange",function(){if(p.iceGatheringState==="complete")fin();});setTimeout(fin,4000);});}
+function setupPC(){
+ pc=new RTCPeerConnection(CFG);
+ stream.getTracks().forEach(function(tr){pc.addTrack(tr,stream);});
+ pc.ontrack=function(e){remote=e.streams[0];var au=$("rau");if(!au){au=document.createElement("audio");au.id="rau";au.autoplay=true;au.setAttribute("playsinline","");document.body.appendChild(au);}au.srcObject=remote;var p=au.play();if(p&&p.catch)p.catch(function(){});};
+ pc.onconnectionstatechange=function(){var s=pc.connectionState;
+  if(s==="connected"){setSt(t().stOk,"ok");if(role==="host"||cfgGot)startLive();}
+  else if(s==="failed"){setSt(t().stFail,"bad");}
+  else if(s==="connecting")setSt(t().stWait);};
+ pc.oniceconnectionstatechange=function(){if(pc.iceConnectionState==="failed")setSt(t().stFail,"bad");};
+}
+function wireDC(ch){dc=ch;dc.binaryType="arraybuffer";dc.bufferedAmountLowThreshold=262144;
+ dc.onmessage=onMsg;dc.onopen=function(){if(role==="host"){try{dc.send(JSON.stringify(cfgObj()));}catch(e){}pingT=setInterval(function(){try{dc.send(JSON.stringify({t:"ping",ts:performance.now()}));}catch(e){}},1000);}};}
+$("mkOffer").addEventListener("click",function(){
+ $("mkOffer").disabled=true;setupPC();wireDC(pc.createDataChannel("ctl"));
+ pc.createOffer().then(function(o){return pc.setLocalDescription(o);}).then(function(){return waitGather(pc);}).then(function(){
+  $("offerOut").value=pack(pc.localDescription);show("offerWrap",true);setSt(t().stWait);}).catch(function(){setSt(t().stFail,"bad");});});
+$("connect").addEventListener("click",function(){var d;try{d=unpack($("ansIn").value);}catch(e){setSt(t().stBad,"bad");return;}
+ pc.setRemoteDescription(d).then(function(){setSt(t().stWait);}).catch(function(){setSt(t().stBad,"bad");});});
+$("mkAns").addEventListener("click",function(){var d;try{d=unpack($("offerIn").value);}catch(e){setSt(t().stBad,"bad");return;}
+ $("mkAns").disabled=true;setupPC();pc.ondatachannel=function(e){wireDC(e.channel);};
+ pc.setRemoteDescription(d).then(function(){return pc.createAnswer();}).then(function(a){return pc.setLocalDescription(a);}).then(function(){return waitGather(pc);}).then(function(){
+  $("ansOut").value=pack(pc.localDescription);show("ansWrap",true);setSt(t().stWait);}).catch(function(){setSt(t().stBad,"bad");$("mkAns").disabled=false;});});
+function copyFrom(id,btn){var el=$(id);el.focus();el.select();var ok=function(){var o=btn.textContent;btn.textContent=t().copied;setTimeout(function(){btn.textContent=t().copy;},1200);};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(el.value).then(ok,function(){try{document.execCommand("copy");ok();}catch(e){}});else{try{document.execCommand("copy");ok();}catch(e){}}}
+$("copyOffer").addEventListener("click",function(){copyFrom("offerOut",this);});
+$("copyAns").addEventListener("click",function(){copyFrom("ansOut",this);});
+
+/* audio capture */
+function meterOf(an){var d=new Uint8Array(an.fftSize);an.getByteTimeDomainData(d);var m=0;for(var i=0;i<d.length;i++){var v=Math.abs(d[i]-128)/128;if(v>m)m=v;}return m;}
+function cfgObj(){return {t:"cfg",rate:parseInt($("rate").value,10)||16000,names:{a:clean($("nA").value,"A"),b:clean($("nB").value,"B"),s:clean($("sess").value,"call01")}};}
+function startLive(){
+ if(role==="host"){var c=cfgObj();rate=c.rate;names=c.names;}
+ show("liveCard",true);
+ if(!actx){var C=window.AudioContext||window.webkitAudioContext;
+  try{actx=new C({sampleRate:rate});}catch(e){actx=new C();}
+  if(actx.state==="suspended")actx.resume();
+  myRate=actx.sampleRate;
+  srcN=actx.createMediaStreamSource(stream);anMe=actx.createAnalyser();anMe.fftSize=1024;srcN.connect(anMe);
+  proc=actx.createScriptProcessor(4096,1,1);var mute=actx.createGain();mute.gain.value=0;
+  proc.onaudioprocess=function(e){if(!recording)return;var inp=e.inputBuffer.getChannelData(0),o=new Int16Array(inp.length);
+   for(var i=0;i<inp.length;i++){var s=Math.max(-1,Math.min(1,inp[i]));o[i]=s<0?s*32768:s*32767;}chunks.push(o);};
+  srcN.connect(proc);proc.connect(mute);mute.connect(actx.destination);
+  if(remote){try{var rs=actx.createMediaStreamSource(remote);anThem=actx.createAnalyser();anThem.fftSize=1024;rs.connect(anThem);}catch(e){}}
+  setInterval(function(){if(anMe)$("mMe").style.width=Math.min(100,meterOf(anMe)*140)+"%";if(anThem)$("mThem").style.width=Math.min(100,meterOf(anThem)*140)+"%";},120);
+ }
+ if(role==="host"){show("recBtn",true);$("recBtn").textContent=t().rec;}else{show("gNote",true);$("gNote").textContent=t().guestWait;}
+ try{if(navigator.wakeLock)navigator.wakeLock.request("screen").then(function(w){wl=w;},function(){});}catch(e){}
+}
+function median(a){if(!a.length)return 0;var b=a.slice().sort(function(x,y){return x-y;});return b[Math.floor(b.length/2)];}
+function beginRec(){chunks=[];recording=true;recStart=performance.now();show("resCard",false);$("outs").innerHTML="";
+ clearInterval(tickT);tickT=setInterval(function(){$("timer").textContent=mmss((performance.now()-recStart)/1000);},250);$("recBtn").textContent=t().stopB;$("recBtn").classList.add("on");
+ if(role==="guest"){$("gNote").textContent=t().recNow;}}
+function endRec(){recording=false;clearInterval(tickT);$("recBtn").classList.remove("on");var n=0,i;for(i=0;i<chunks.length;i++)n+=chunks[i].length;var out=new Int16Array(n),p=0;
+ for(i=0;i<chunks.length;i++){out.set(chunks[i],p);p+=chunks[i].length;}chunks=[];return out;}
+
+/* wav */
+function wavBlob(pcm,sr){var n=pcm.length,b=new ArrayBuffer(44+n*2),v=new DataView(b);
+ function w(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
+ w(0,"RIFF");v.setUint32(4,36+n*2,true);w(8,"WAVE");w(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,n*2,true);
+ new Int16Array(b,44,n).set(pcm);return new Blob([b],{type:"audio/wav"});}
+function resample(pcm,from,to){if(from===to)return Promise.resolve(pcm);
+ var C=window.OfflineAudioContext||window.webkitOfflineAudioContext,len=Math.ceil(pcm.length*to/from),oc=new C(1,len,to),buf=oc.createBuffer(1,pcm.length,from),ch=buf.getChannelData(0);
+ for(var i=0;i<pcm.length;i++)ch[i]=pcm[i]/32768;var s=oc.createBufferSource();s.buffer=buf;s.connect(oc.destination);s.start();
+ return new Promise(function(res,rej){var p=oc.startRendering(function(r){});if(p&&p.then)p.then(done,rej);else oc.oncomplete=function(e){done(e.renderedBuffer);};
+  function done(rb){var d=rb.getChannelData(0),o=new Int16Array(d.length);for(var i=0;i<d.length;i++){var x=Math.max(-1,Math.min(1,d[i]));o[i]=x<0?x*32768:x*32767;}res(o);}});}
+
+/* messages */
+var rx=null;
+function onMsg(e){
+ if(typeof e.data!=="string"){ if(rx){rx.parts.push(new Int16Array(e.data));rx.got+=e.data.byteLength/2;var pct=Math.round(rx.got/rx.len*100);$("prog").textContent=t().recv+pct+"%";show("prog",true);}return;}
+ var m;try{m=JSON.parse(e.data);}catch(x){return;}
+ if(m.t==="ping"){try{dc.send(JSON.stringify({t:"pong",ts:m.ts}));}catch(x){}}
+ else if(m.t==="pong"){var r=performance.now()-m.ts;rtts.push(r);if(rtts.length>10)rtts.shift();oneWay=median(rtts)/2;$("rttV").textContent=Math.round(median(rtts))+" ms";}
+ else if(m.t==="cfg"){rate=m.rate;names=m.names;cfgGot=true;if(pc&&pc.connectionState==="connected")startLive();}
+ else if(m.t==="start"){names=m.names;beginRec();}
+ else if(m.t==="stop"){guestFinish();}
+ else if(m.t==="file"){rx={len:m.len,rate:m.rate,got:0,parts:[]};}
+ else if(m.t==="filedone"){var all=new Int16Array(rx.got),p=0;for(var i=0;i<rx.parts.length;i++){all.set(rx.parts[i],p);p+=rx.parts[i].length;}gotRemote={pcm:all,rate:rx.rate};rx=null;show("prog",false);if(hostPending)hostBuild();}
+ else if(m.t==="nofile"){gotRemote={pcm:new Int16Array(0),rate:rate,none:true};if(hostPending)hostBuild();}
+}
+function sendFile(pcm,sr){return new Promise(function(res){
+ dc.send(JSON.stringify({t:"file",len:pcm.length,rate:sr}));var off=0,STEP=8192;
+ function pump(){while(off<pcm.length){if(dc.bufferedAmount>1048576){dc.onbufferedamountlow=function(){dc.onbufferedamountlow=null;pump();};return;}
+  var part=pcm.subarray(off,Math.min(pcm.length,off+STEP));dc.send(part.buffer.slice(part.byteOffset,part.byteOffset+part.byteLength));off+=STEP;
+  var pct=Math.round(Math.min(off,pcm.length)/pcm.length*100);$("prog").textContent=t().prep+" "+pct+"%";}
+  dc.send(JSON.stringify({t:"filedone"}));res();}
+ pump();});}
+
+/* host */
+var hostPending=false,hostPcm=null,hostRate=16000;
+$("recBtn").addEventListener("click",function(){
+ if(role!=="host")return;
+ if(!recording){names=cfgObj().names;
+  try{dc.send(JSON.stringify({t:"start",rate:rate,names:names}));}catch(e){return;}
+  beginRec();}
+ else{try{dc.send(JSON.stringify({t:"stop"}));}catch(e){}
+  hostPcm=endRec();hostRate=myRate;hostPending=true;gotRemote=null;$("recBtn").disabled=true;
+  $("prog").textContent=t().prep;show("prog",true);
+  setTimeout(function(){if(hostPending&&!gotRemote){/* wait more */}},1000);}});
+function hostBuild(){
+ hostPending=false;$("recBtn").disabled=false;$("recBtn").textContent=t().rec;show("prog",false);
+ var g=gotRemote,delay=Math.round(oneWay);
+ resample(hostPcm,hostRate,rate).then(function(A){
+  return resample(g.pcm,g.rate,rate).then(function(B0){return {A:A,B0:B0};});
+ }).then(function(r){
+  var A=r.A,B0=r.B0,pad=g.none?0:Math.round(delay/1000*rate),B=new Int16Array(pad+B0.length);B.set(B0,pad);
+  var N=Math.max(A.length,B.length),A2=new Int16Array(N),B2=new Int16Array(N);A2.set(A);B2.set(B);
+  var mx=0,i;for(i=0;i<N;i++){var s=Math.abs(A2[i]+B2[i]);if(s>mx)mx=s;}var k=mx>32000?32000/mx:1,M=new Int16Array(N);
+  for(i=0;i<N;i++)M[i]=Math.round((A2[i]+B2[i])*k);
+  var files=[{n:names.s+"_"+names.a+".wav",l:t().fA,b:wavBlob(A2,rate)}];
+  if(!g.none){files.push({n:names.s+"_"+names.b+".wav",l:t().fB,b:wavBlob(B2,rate)});files.push({n:names.s+"_mix.wav",l:t().fMix,b:wavBlob(M,rate)});}
+  showOuts(files);
+  var im=$("infoN");im.textContent=g.none?t().noGuest:t().info.replace("%s",delay);show("infoN",true);
+ }).catch(function(){setSt(t().stFail,"bad");});}
+function showOuts(files){var box=$("outs");box.innerHTML="";show("resCard",true);
+ files.forEach(function(f){var d=document.createElement("div");d.className="out";var u=URL.createObjectURL(f.b);f.u=u;
+  d.innerHTML='<b></b><audio controls preload="none"></audio><a class="b" download></a>';d.querySelector("b").textContent=f.l+" — "+f.n;d.querySelector("audio").src=u;var a=d.querySelector("a");a.href=u;a.download=f.n;a.textContent=t().dl;box.appendChild(d);});
+ if(files.length>1&&window.JSZip){var z=new JSZip();files.forEach(function(f){z.file(f.n,f.b);});var holder=document.createElement("div");holder.className="out";holder.innerHTML='<b></b>';holder.querySelector("b").textContent=t().zipMk;box.appendChild(holder);
+  z.generateAsync({type:"blob",compression:"STORE"}).then(function(zb){var u=URL.createObjectURL(zb);holder.innerHTML='<b></b><a class="b"></a>';holder.querySelector("b").textContent=names.s+".zip";var a=holder.querySelector("a");a.href=u;a.download=names.s+".zip";a.textContent=t().zip;});}}
+
+/* guest */
+function guestFinish(){var pcm=endRec();var x=t();$("prog").textContent=x.prep;show("prog",true);
+ var mine=wavBlob(pcm,myRate);var mb=$("mineBox");mb.innerHTML="";var p=document.createElement("p");p.textContent=x.mine;mb.appendChild(p);var a=document.createElement("a");a.className="b";a.href=URL.createObjectURL(mine);a.download=(names.s||"call")+"_"+(names.b||"B")+".wav";a.textContent=x.dl;mb.appendChild(a);show("mineBox",true);show("resCard",true);
+ $("gNote").textContent=t().guestWait;
+ sendFile(pcm,myRate).then(function(){show("prog",false);var s=document.createElement("p");s.textContent=t().sentOk;mb.appendChild(s);});}
+
+applyLang();
+})();
+</script>
+</body>
+</html>
