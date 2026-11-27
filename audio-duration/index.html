@@ -147,7 +147,7 @@ en:{dir:"ltr",btn:"العربية",
  spList:"Each recording and its speech time (seconds)",spCopy:"Copy the list",
  spH:"Speech-only time",spOn:"Measure speech time only (silence removed). Works while loading files.",spTh:"Silence threshold (dBFS, leave empty for auto)",spPause:"Pauses shorter than this count as speech (ms)",
  spNote:"For each file the page finds the parts where someone is speaking and adds them up. Silence at the start, at the end and long pauses are not counted. Auto mode adapts to each file. If a file looks wrong, type a threshold such as -45 and the table updates.",
- cSpeech:"Speech total",cSpAvg:"Speech average",thSp:"Speech (s)",thLead:"Lead silence (s)",thTrail:"End silence (s)",
+ cSpMax:"Longest speech",cSpMin:"Shortest speech",cSpeech:"Speech total",cSpAvg:"Speech average",thSp:"Speech (s)",thLead:"Lead silence (s)",thTrail:"End silence (s)",
  n4:"<strong>Speech time:</strong> the file is decoded in your browser and measured in 10 ms steps. It is an estimate based on loudness, so very quiet speech or loud background noise can change it. Reading a ZIP needs enough free memory for the whole ZIP.",
  zipempty:"No audio files were found inside: ",spErr:"Speech time not measured: "},
 ar:{dir:"rtl",btn:"English",
@@ -173,7 +173,7 @@ ar:{dir:"rtl",btn:"English",
  spList:"كل تسجيل ومدة التحدث فيه (بالثواني)",spCopy:"انسخ القائمة",
  spH:"مدة التحدث فقط",spOn:"احسب مدة التحدث فقط (بدون الصمت). تعمل أثناء تحميل الملفات.",spTh:"حد الصمت (dBFS، اتركه فارغًا للتلقائي)",spPause:"التوقفات الأقصر من هذا تُحسب كلامًا (مللي ثانية)",
  spNote:"لكل ملف تجد الصفحة الأجزاء التي يُسمع فيها كلام وتجمعها. الصمت في البداية والنهاية والتوقفات الطويلة لا تُحسب. الوضع التلقائي يتكيّف مع كل ملف. إذا بدا ملف غير صحيح اكتب حدًا مثل -45 وسيتحدث الجدول.",
- cSpeech:"إجمالي التحدث",cSpAvg:"متوسط التحدث",thSp:"التحدث (ث)",thLead:"صمت البداية (ث)",thTrail:"صمت النهاية (ث)",
+ cSpMax:"أطول تحدث",cSpMin:"أقصر تحدث",cSpeech:"إجمالي التحدث",cSpAvg:"متوسط التحدث",thSp:"التحدث (ث)",thLead:"صمت البداية (ث)",thTrail:"صمت النهاية (ث)",
  n4:"<strong>مدة التحدث:</strong> يُفك ترميز الملف داخل متصفحك ويُقاس كل 10 مللي ثانية. هي تقدير مبني على ارتفاع الصوت، فالكلام الخافت جدًا أو ضوضاء الخلفية العالية قد تغيّر الرقم. قراءة ملف ZIP تحتاج ذاكرة فارغة تكفي ملف ZIP كاملًا.",
  zipempty:"لا توجد ملفات صوتية داخل: ",spErr:"تعذّر قياس التحدث: "}
 };
@@ -336,7 +336,11 @@ function render(){
  ok.forEach(function(r){tot+=r.dur;if(!mx||r.dur>mx.dur)mx=r;if(!mn||r.dur<mn.dur)mn=r;});
  var bad=0,sz=0,spT=0,spN=0;rows.forEach(function(r){if(r.fr)analyze(r);if(r.fr){spT+=r.sp;spN++;}r._f=flags(r);if(r._f.length)bad++;sz+=r.size;});
  var c=[[t.cTotal,hms(tot)],[t.cCount,rows.length],[t.cAvg,ok.length?dur2(tot/ok.length):"–"],[t.cMax,mx?dur2(mx.dur):"–"],[t.cMin,mn?dur2(mn.dur):"–"],[t.cBad,bad],[t.cSize,sizeStr(sz)]];
- if(spN){c.splice(1,0,[t.cSpeech,hms(spT)],[t.cSpAvg,(spT/spN).toFixed(2)+" s"]);}
+ if(spN){
+  var sm=rows.filter(function(r){return r.fr;}),smx=sm[0],smn=sm[0];
+  sm.forEach(function(r){if(r.sp>smx.sp)smx=r;if(r.sp<smn.sp)smn=r;});
+  c=[[t.cTotal,hms(tot)],[t.cSpeech,hms(spT)],[t.cCount,rows.length],[t.cSpAvg,(spT/spN).toFixed(2)+" s"],[t.cSpMax,smx.sp.toFixed(2)+" s"],[t.cSpMin,smn.sp.toFixed(2)+" s"],[t.cBad,bad],[t.cSize,sizeStr(sz)]];
+ }
  $("cards").innerHTML=rows.length?c.map(function(x){return '<div class="card"><small>'+x[0]+'</small><strong>'+x[1]+'</strong></div>';}).join(""):"";
  var need=parseFloat($("need").value);
  if(need>0&&rows.length){var diff=need*3600-tot;$("needBox").innerHTML='<div class="note">'+(Math.abs(diff)<1?t.reached:(diff>0?t.left:t.over)+hms(Math.abs(diff))+" ("+(Math.abs(diff)/3600).toFixed(2)+" h)")+'</div>';}
