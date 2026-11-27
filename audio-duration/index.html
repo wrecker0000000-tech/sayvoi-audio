@@ -35,7 +35,7 @@
 .dc .prog{height:8px;border-radius:8px;background:rgba(128,128,128,.25);overflow:hidden;margin:8px 0;display:none}
 .dc .prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c4dff,#ff8a3d)}
 .dc .tw{overflow-x:auto;max-height:520px;overflow-y:auto;border:1px solid rgba(128,128,128,.35);border-radius:12px}
-.dc table{border-collapse:collapse;width:100%;direction:ltr;text-align:left;min-width:560px}
+.dc table{border-collapse:collapse;width:100%;direction:ltr;text-align:left;min-width:760px}
 .dc th,.dc td{padding:7px 9px;border-bottom:1px solid rgba(128,128,128,.25);white-space:nowrap}
 .dc th{position:sticky;top:0;background:#7c4dff;color:#fff;cursor:pointer;user-select:none}
 .dc td.nm{white-space:normal;word-break:break-all;max-width:260px}
@@ -59,9 +59,17 @@
 <div class="note" data-i="beta"></div>
 
 <div class="drop" id="drop" tabindex="0" role="button"><strong data-i="drop"></strong><br><small data-i="dropSub"></small></div>
-<input type="file" id="fi" multiple accept="audio/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.wma,.amr" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
+<input type="file" id="fi" multiple accept="audio/*,.zip,application/zip,.wav,.mp3,.flac,.ogg,.m4a,.aac,.opus,.wma,.amr" style="position:absolute;opacity:0;width:1px;height:1px;pointer-events:none">
 <div class="prog" id="prog"><i id="progBar"></i></div>
 <div id="status" aria-live="polite"></div>
+
+<h2 data-i="spH"></h2>
+<div class="chk"><input type="checkbox" id="spOn" checked><label for="spOn" data-i="spOn"></label></div>
+<div class="row">
+  <div class="col"><label for="sth" data-i="spTh"></label><input type="number" id="sth" step="1" max="0" inputmode="decimal" placeholder="auto"></div>
+  <div class="col"><label for="spause" data-i="spPause"></label><input type="number" id="spause" min="0" step="50" value="300" inputmode="numeric"></div>
+</div>
+<p class="note" data-i="spNote"></p>
 
 <h2 data-i="h2c"></h2>
 <div class="row">
@@ -74,6 +82,9 @@
 
 <div class="cards" id="cards"></div>
 <div id="needBox"></div>
+<div id="spBox" style="display:none"><h2 data-i="spList"></h2>
+<textarea id="spTxt" readonly rows="8" style="width:100%;box-sizing:border-box;direction:ltr;font-family:monospace;padding:10px;border:1px solid rgba(128,128,128,.45);border-radius:10px;background:transparent;color:inherit"></textarea>
+<div class="btns"><button type="button" class="b" id="spCopy"></button></div></div>
 
 <div class="chk"><input type="checkbox" id="only"><label for="only" data-i="onlyBad"></label></div>
 <div class="btns">
@@ -82,12 +93,12 @@
   <button type="button" class="b sec" id="clr" disabled></button>
 </div>
 <div class="tw"><table><thead><tr>
- <th data-s="name">File</th><th data-s="ext">Type</th><th data-s="dur">Duration</th><th data-s="rate">Hz</th><th data-s="ch">Ch</th><th data-s="bits">Bits</th><th data-s="flag">Check</th>
+ <th data-s="name">File</th><th data-s="ext">Type</th><th data-s="dur">Duration</th><th data-s="sp" id="thSp">Speech</th><th data-s="lead" id="thLead">Lead</th><th data-s="trail" id="thTrail">Trail</th><th data-s="rate">Hz</th><th data-s="ch">Ch</th><th data-s="bits">Bits</th><th data-s="flag">Check</th>
 </tr></thead><tbody id="tb"></tbody></table></div>
 
 <section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi audio duration calculator guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <h2 data-i="h2b"></h2>
-<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li></ul>
+<ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
 </article>
 <style>.rel{max-width:860px;margin:28px auto;padding:0 16px}.rel h2{font-size:1.1rem;margin:0 0 10px}.rel ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}.rel a{display:block;padding:10px 14px;border:1px solid rgba(127,127,127,.3);border-radius:10px;text-decoration:none;color:inherit}.rel a:hover{border-color:#6366f1}html[lang="ar"] .rel-en,html[lang="en"] .rel-ar{display:none}</style>
@@ -105,7 +116,7 @@ en:{dir:"ltr",btn:"العربية",
  h1:"Audio Duration Calculator",
  lead:"Add many audio files at once and get the total hours, average length, longest and shortest file, plus a table you can export. Optional checks flag files that break your project rules.",
  beta:"Everything runs in your browser and your files are not uploaded. Sample rate, channels and bit depth are read from the file header for WAV, FLAC, MP3 and OGG. Other formats show duration only.",
- drop:"Drop audio files here, or tap to choose",dropSub:"You can select hundreds of files at once",
+ drop:"Drop audio files or a ZIP here, or tap to choose",dropSub:"You can select hundreds of files, or a ZIP with all of them",
  h2c:"Project rules (optional)",fMin:"Minimum length (seconds)",fMax:"Maximum length (seconds)",fRate:"Required sample rate (Hz)",fCh:"Required channels",fNeed:"Hours required by client",any:"Any",mono:"Mono (1)",stereo:"Stereo (2)",
  onlyBad:"Show only files that break the rules",
  csv:"Download CSV",copy:"Copy table",clr:"Clear all",
@@ -114,14 +125,20 @@ en:{dir:"ltr",btn:"العربية",
  left:"Still needed: ",over:"Over the target by: ",reached:"Target reached.",
  fShort:"too short",fLong:"too long",fRateW:"rate",fChW:"channels",ok:"OK",
  n1:"<strong>Private:</strong> files never leave your device.",n2:"<strong>Duration:</strong> WAV is calculated from its header. Other formats use the browser’s own reading, which can be slightly off for some VBR MP3 files.",n3:"<strong>M4A / AAC / other:</strong> the duration works, but sample rate and channels are shown as “–”. If you set a rate or channel rule, those files are marked as “unknown”.",vidH:"Watch: how to use the calculator",vidP:"A short video guide (about 60 seconds). The steps are written on the screen.",back:"Back to home",
- unk:"unknown"},
+ unk:"unknown",
+ spList:"Each recording and its speech time (seconds)",spCopy:"Copy the list",
+ spH:"Speech-only time",spOn:"Measure speech time only (silence removed). Works while loading files.",spTh:"Silence threshold (dBFS, leave empty for auto)",spPause:"Pauses shorter than this count as speech (ms)",
+ spNote:"For each file the page finds the parts where someone is speaking and adds them up. Silence at the start, at the end and long pauses are not counted. Auto mode adapts to each file. If a file looks wrong, type a threshold such as -45 and the table updates.",
+ cSpeech:"Speech total",cSpAvg:"Speech average",thSp:"Speech (s)",thLead:"Lead silence (s)",thTrail:"End silence (s)",
+ n4:"<strong>Speech time:</strong> the file is decoded in your browser and measured in 10 ms steps. It is an estimate based on loudness, so very quiet speech or loud background noise can change it. Reading a ZIP needs enough free memory for the whole ZIP.",
+ zipempty:"No audio files were found inside: ",spErr:"Speech time not measured: "},
 ar:{dir:"rtl",btn:"English",
  nav:'<a class="brand" href="/">Sayvoi</a><a href="/">المحوّل</a><a href="/check/">فاحص الجودة</a><a href="/video-to-audio/">فيديو إلى صوت</a><a href="/audio-cutter/">قص الصوت</a><a href="/speech-to-text/">الصوت إلى نص</a><a href="/numbers-to-words/">الأرقام بالحروف</a><a href="/audio-duration/">مدة الملفات</a><a href="/sentence-splitter/">مقسّم الجمل</a><a href="/audio-renamer/">إعادة التسمية</a><a href="/audio-cleaner/">منظّف الصوت</a><a href="/audio-speed/">تغيير السرعة</a><a href="/voice-recorder/">مسجّل الصوت</a><a href="https://sayvoi.com/services/">الخدمات</a><a href="/articles/">المقالات</a><a href="/about.html">عن الموقع</a>',
  foot:'<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>',
  h1:"حاسبة مدة الملفات الصوتية",
  lead:"أضف ملفات صوتية كثيرة دفعة واحدة واحصل على إجمالي الساعات والمتوسط وأطول وأقصر ملف، مع جدول يمكن تصديره. فحوصات اختيارية تعلّم الملفات المخالفة لشروط مشروعك.",
  beta:"كل شيء يعمل داخل متصفحك ولا تُرفع ملفاتك. معدل العينات والقنوات وعمق البت تُقرأ من رأس الملف في WAV وFLAC وMP3 وOGG. الصيغ الأخرى تظهر لها المدة فقط.",
- drop:"أسقط الملفات الصوتية هنا أو اضغط للاختيار",dropSub:"يمكنك اختيار مئات الملفات مرة واحدة",
+ drop:"أسقط الملفات الصوتية أو ملف ZIP هنا أو اضغط للاختيار",dropSub:"يمكنك اختيار مئات الملفات أو ملف ZIP يضمها كلها",
  h2c:"شروط المشروع (اختياري)",fMin:"الحد الأدنى للمدة (ثانية)",fMax:"الحد الأقصى للمدة (ثانية)",fRate:"معدل العينات المطلوب (Hz)",fCh:"القنوات المطلوبة",fNeed:"الساعات المطلوبة من العميل",any:"أي",mono:"مونو (1)",stereo:"ستيريو (2)",
  onlyBad:"أظهر الملفات المخالفة فقط",
  csv:"نزّل CSV",copy:"انسخ الجدول",clr:"امسح الكل",
@@ -130,7 +147,13 @@ ar:{dir:"rtl",btn:"English",
  left:"المتبقي: ",over:"زيادة عن المطلوب: ",reached:"تم الوصول للمطلوب.",
  fShort:"قصير",fLong:"طويل",fRateW:"المعدل",fChW:"القنوات",ok:"سليم",
  n1:"<strong>خصوصية:</strong> الملفات لا تغادر جهازك.",n2:"<strong>المدة:</strong> في WAV تُحسب من رأس الملف. الصيغ الأخرى يقرؤها المتصفح نفسه، وقد يختلف قليلًا في بعض ملفات MP3 متغيرة المعدل.",n3:"<strong>M4A / AAC وغيرها:</strong> المدة تعمل لكن المعدل والقنوات تظهر «–». لو حددت شرطًا للمعدل أو القنوات تُعلَّم هذه الملفات «غير معروف».",vidH:"شاهد: طريقة استخدام الحاسبة",vidP:"شرح مصوّر قصير (نحو 60 ثانية). الخطوات مكتوبة على الشاشة.",back:"العودة للرئيسية",
- unk:"غير معروف"}
+ unk:"غير معروف",
+ spList:"كل تسجيل ومدة التحدث فيه (بالثواني)",spCopy:"انسخ القائمة",
+ spH:"مدة التحدث فقط",spOn:"احسب مدة التحدث فقط (بدون الصمت). تعمل أثناء تحميل الملفات.",spTh:"حد الصمت (dBFS، اتركه فارغًا للتلقائي)",spPause:"التوقفات الأقصر من هذا تُحسب كلامًا (مللي ثانية)",
+ spNote:"لكل ملف تجد الصفحة الأجزاء التي يُسمع فيها كلام وتجمعها. الصمت في البداية والنهاية والتوقفات الطويلة لا تُحسب. الوضع التلقائي يتكيّف مع كل ملف. إذا بدا ملف غير صحيح اكتب حدًا مثل -45 وسيتحدث الجدول.",
+ cSpeech:"إجمالي التحدث",cSpAvg:"متوسط التحدث",thSp:"التحدث (ث)",thLead:"صمت البداية (ث)",thTrail:"صمت النهاية (ث)",
+ n4:"<strong>مدة التحدث:</strong> يُفك ترميز الملف داخل متصفحك ويُقاس كل 10 مللي ثانية. هي تقدير مبني على ارتفاع الصوت، فالكلام الخافت جدًا أو ضوضاء الخلفية العالية قد تغيّر الرقم. قراءة ملف ZIP تحتاج ذاكرة فارغة تكفي ملف ZIP كاملًا.",
+ zipempty:"لا توجد ملفات صوتية داخل: ",spErr:"تعذّر قياس التحدث: "}
 };
 var $=function(i){return document.getElementById(i);};
 var L="en";try{if(localStorage.getItem("sayvoi_lang")==="ar")L="ar";}catch(e){}
@@ -184,13 +207,80 @@ function mediaDur(file){
   a.src=url;});
 }
 function extOf(n){var m=/\.([A-Za-z0-9]+)$/.exec(n);return m?m[1].toUpperCase():"";}
-function readOne(file){
- return file.slice(0,65536).arrayBuffer().then(function(ab){
-  var h={};try{h=parseHeader(new Uint8Array(ab),file.size);}catch(e){}
-  var row={name:file.name,size:file.size,ext:h.fmt||extOf(file.name),dur:h.dur,rate:h.rate||0,ch:h.ch||0,bits:h.bits||0,err:false};
-  if(row.dur>0)return row;
-  return mediaDur(file).then(function(d){if(d>0)row.dur=d;else row.err=true;return row;});
- }).catch(function(){return {name:file.name,size:file.size,ext:extOf(file.name),dur:0,rate:0,ch:0,bits:0,err:true};});
+var actx=null;
+function getCtx(){if(!actx){var C=window.AudioContext||window.webkitAudioContext;if(C)actx=new C();}return actx;}
+function decodeBuf(ab){
+ var c=getCtx();if(!c)return Promise.reject(new Error("noctx"));
+ return new Promise(function(res,rej){var p=c.decodeAudioData(ab,res,rej);if(p&&p.then)p.then(res,rej);});
+}
+function frames(buf){
+ var sr=buf.sampleRate,w=Math.max(1,Math.round(sr*0.01)),n=Math.floor(buf.length/w),nc=buf.numberOfChannels,ch=[],i,k,c;
+ for(c=0;c<nc;c++)ch.push(buf.getChannelData(c));
+ var out=new Float32Array(n);
+ for(i=0;i<n;i++){var sum=0,o=i*w;
+  for(k=0;k<w;k++){var v=0;for(c=0;c<nc;c++)v+=ch[c][o+k];v/=nc;sum+=v*v;}
+  var ms=sum/w;out[i]=ms>1e-12?10*Math.log(ms)/Math.LN10:-120;}
+ return out;
+}
+function autoThr(fr){
+ if(!fr.length)return -50;
+ var cp=Array.prototype.slice.call(fr).sort(function(a,b){return a-b;});
+ var p10=cp[Math.floor(cp.length*0.10)],p95=cp[Math.min(cp.length-1,Math.floor(cp.length*0.95))];
+ var th=Math.max(p95-30,p10+8);
+ return Math.min(-30,Math.max(-65,th));
+}
+function analyze(r){
+ if(!r.fr){return;}
+ var fr=r.fr,n=fr.length,m=parseFloat($("sth").value),th=isFinite(m)&&$("sth").value!==""?m:r.auto;
+ var pause=Math.max(0,parseFloat($("spause").value)||0),gap=Math.round(pause/10);
+ var v=new Array(n),i;for(i=0;i<n;i++)v[i]=fr[i]>th?1:0;
+ // drop tiny blips (< 30 ms)
+ i=0;while(i<n){if(v[i]){var j=i;while(j<n&&v[j])j++;if(j-i<3)for(var q=i;q<j;q++)v[q]=0;i=j;}else i++;}
+ // bridge short pauses between speech
+ var first=-1,last=-1;for(i=0;i<n;i++)if(v[i]){if(first<0)first=i;last=i;}
+ if(first<0){r.sp=0;r.lead=n/100;r.trail=0;r.thr=th;return;}
+ i=first;while(i<=last){if(!v[i]){var e=i;while(e<=last&&!v[e])e++;if(e-i<=gap)for(var z=i;z<e;z++)v[z]=1;i=e;}else i++;}
+ var cnt=0;for(i=first;i<=last;i++)if(v[i])cnt++;
+ r.sp=cnt/100;r.lead=first/100;r.trail=Math.max(0,(n-1-last)/100);r.thr=th;
+}
+function speechRead(file,row){
+ if(!$("spOn").checked)return Promise.resolve(row);
+ return file.arrayBuffer().then(decodeBuf).then(function(buf){
+  if(!(row.dur>0))row.dur=buf.duration;
+  if(!row.rate)row.rate=buf.sampleRate;if(!row.ch)row.ch=buf.numberOfChannels;
+  row.fr=frames(buf);row.auto=autoThr(row.fr);analyze(row);return row;
+ }).catch(function(){row.spErr=true;return row;});
+}
+function readOne(item){
+ return Promise.resolve(item.get()).then(function(file){
+  return file.slice(0,65536).arrayBuffer().then(function(ab){
+   var h={};try{h=parseHeader(new Uint8Array(ab),file.size);}catch(e){}
+   var row={name:item.name,size:file.size,ext:h.fmt||extOf(item.name),dur:h.dur,rate:h.rate||0,ch:h.ch||0,bits:h.bits||0,err:false};
+   var p=row.dur>0?Promise.resolve(row):mediaDur(file).then(function(d){if(d>0)row.dur=d;return row;});
+   return p.then(function(){return speechRead(file,row);}).then(function(r){if(!(r.dur>0))r.err=true;return r;});
+  });
+ }).catch(function(){return {name:item.name,size:0,ext:extOf(item.name),dur:0,rate:0,ch:0,bits:0,err:true};});
+}
+var AUDRE=/\.(wav|mp3|flac|ogg|m4a|aac|opus|wma|amr|webm|mp4)$/i;
+function loadZipLib(){
+ if(window.JSZip)return Promise.resolve();
+ return new Promise(function(ok,no){var s=document.createElement("script");s.src="/vendor/jszip.min.js";s.onload=ok;s.onerror=no;document.head.appendChild(s);});
+}
+function expand(files){
+ var items=[],empty=[],chain=Promise.resolve();
+ files.forEach(function(f){
+  chain=chain.then(function(){
+   if(/\.zip$/i.test(f.name)||f.type==="application/zip"||f.type==="application/x-zip-compressed"){
+    return loadZipLib().then(function(){return JSZip.loadAsync(f);}).then(function(z){
+     var names=Object.keys(z.files).filter(function(n){var e=z.files[n];return !e.dir&&AUDRE.test(n)&&n.indexOf("__MACOSX/")!==0&&n.split("/").pop().charAt(0)!==".";}).sort();
+     if(!names.length)empty.push(f.name);
+     names.forEach(function(n){items.push({name:n.split("/").pop(),get:function(){return z.files[n].async("blob");}});});
+    }).catch(function(){empty.push(f.name);});
+   }
+   items.push({name:f.name,get:function(){return f;}});
+  });
+ });
+ return chain.then(function(){return {items:items,empty:empty};});
 }
 
 function hms(s){s=Math.round(s);var h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return h+":"+(m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
@@ -209,45 +299,56 @@ function sizeStr(b){return b>=1073741824?(b/1073741824).toFixed(2)+" GB":(b/1048
 function render(){
  var t=T[L],ok=rows.filter(function(r){return !r.err;}),tot=0,mx=null,mn=null;
  ok.forEach(function(r){tot+=r.dur;if(!mx||r.dur>mx.dur)mx=r;if(!mn||r.dur<mn.dur)mn=r;});
- var bad=0,sz=0;rows.forEach(function(r){r._f=flags(r);if(r._f.length)bad++;sz+=r.size;});
+ var bad=0,sz=0,spT=0,spN=0;rows.forEach(function(r){if(r.fr)analyze(r);if(r.fr){spT+=r.sp;spN++;}r._f=flags(r);if(r._f.length)bad++;sz+=r.size;});
  var c=[[t.cTotal,hms(tot)],[t.cCount,rows.length],[t.cAvg,ok.length?dur2(tot/ok.length):"–"],[t.cMax,mx?dur2(mx.dur):"–"],[t.cMin,mn?dur2(mn.dur):"–"],[t.cBad,bad],[t.cSize,sizeStr(sz)]];
+ if(spN){c.splice(1,0,[t.cSpeech,hms(spT)],[t.cSpAvg,(spT/spN).toFixed(2)+" s"]);}
  $("cards").innerHTML=rows.length?c.map(function(x){return '<div class="card"><small>'+x[0]+'</small><strong>'+x[1]+'</strong></div>';}).join(""):"";
  var need=parseFloat($("need").value);
  if(need>0&&rows.length){var diff=need*3600-tot;$("needBox").innerHTML='<div class="note">'+(Math.abs(diff)<1?t.reached:(diff>0?t.left:t.over)+hms(Math.abs(diff))+" ("+(Math.abs(diff)/3600).toFixed(2)+" h)")+'</div>';}
  else $("needBox").innerHTML="";
+ var sl=rows.filter(function(r){return r.fr;});
+ $("spBox").style.display=sl.length?"block":"none";
+ $("spTxt").value=sl.map(function(r){return r.name+"\t"+r.sp.toFixed(2);}).join("\n");
  var list=rows.slice();
  if($("only").checked)list=list.filter(function(r){return r._f.length;});
  if(sortKey){list.sort(function(a,b){var x=sortKey==="flag"?a._f.length:a[sortKey],y=sortKey==="flag"?b._f.length:b[sortKey];if(typeof x==="string")return x.localeCompare(y)*sortDir;return ((x||0)-(y||0))*sortDir;});}
  $("tb").innerHTML=list.map(function(r){
-  return '<tr'+(r._f.length?' class="bad"':'')+'><td class="nm">'+esc(r.name)+'</td><td>'+esc(r.ext)+'</td><td>'+(r.err?"–":dur2(r.dur))+'</td><td>'+(r.rate||"–")+'</td><td>'+(r.ch||"–")+'</td><td>'+(r.bits||"–")+'</td><td>'+(r._f.length?'<span class="flag">'+esc(r._f.join(", "))+'</span>':t.ok)+'</td></tr>';}).join("");
+  return '<tr'+(r._f.length?' class="bad"':'')+'><td class="nm">'+esc(r.name)+'</td><td>'+esc(r.ext)+'</td><td>'+(r.err?"–":dur2(r.dur))+'</td><td><b>'+(r.fr?r.sp.toFixed(2):"–")+'</b></td><td>'+(r.fr?r.lead.toFixed(2):"–")+'</td><td>'+(r.fr?r.trail.toFixed(2):"–")+'</td><td>'+(r.rate||"–")+'</td><td>'+(r.ch||"–")+'</td><td>'+(r.bits||"–")+'</td><td>'+(r._f.length?'<span class="flag">'+esc(r._f.join(", "))+'</span>':t.ok)+'</td></tr>';}).join("");
  ["csv","copy","clr"].forEach(function(i){$(i).disabled=!rows.length;});
 }
 
 function addFiles(files){
  files=Array.prototype.slice.call(files);if(!files.length)return;
- var my=++gen,total=files.length,done=0,idx=0,fails=0,t=T[L];
+ var my=++gen,t=T[L];
  $("prog").style.display="block";$("progBar").style.width="0";
- function step(){
-  if(my!==gen)return Promise.resolve();
-  if(idx>=files.length)return Promise.resolve();
-  var f=files[idx++];
-  return readOne(f).then(function(r){
-   if(my!==gen)return;
-   rows.push(r);if(r.err)fails++;done++;
-   $("progBar").style.width=Math.round(done/total*100)+"%";
-   $("status").textContent=t.proc+done+" / "+total;
-   if(done%25===0)render();
-   return step();});}
- var workers=[];for(var w=0;w<4;w++)workers.push(step());
- Promise.all(workers).then(function(){
+ $("status").textContent=t.proc+"…";
+ expand(files).then(function(ex){
   if(my!==gen)return;
-  $("prog").style.display="none";render();
-  $("status").textContent=T[L].done+(done-fails)+(fails?" · "+T[L].failed+fails:"");});
+  var items=ex.items,total=items.length,done=0,idx=0,fails=0;
+  if(!total){$("prog").style.display="none";$("status").textContent=ex.empty.length?t.zipempty+ex.empty.join(", "):"";return;}
+  function step(){
+   if(my!==gen)return Promise.resolve();
+   if(idx>=items.length)return Promise.resolve();
+   var it=items[idx++];
+   return readOne(it).then(function(r){
+    if(my!==gen)return;
+    rows.push(r);if(r.err)fails++;done++;
+    $("progBar").style.width=Math.round(done/total*100)+"%";
+    $("status").textContent=t.proc+done+" / "+total;
+    if(done%25===0)render();
+    return step();});}
+  var workers=[],nw=$("spOn").checked?2:4;for(var w=0;w<nw;w++)workers.push(step());
+  return Promise.all(workers).then(function(){
+   if(my!==gen)return;
+   $("prog").style.display="none";render();
+   var spf=rows.filter(function(r){return r.spErr;}).length;
+   $("status").textContent=T[L].done+(done-fails)+(fails?" · "+T[L].failed+fails:"")+(spf?" · "+T[L].spErr+spf:"")+(ex.empty.length?" · "+T[L].zipempty+ex.empty.join(", "):"");});
+ });
 }
 
 function csvText(sep){
- var out=[["File","Type","Duration_seconds","Duration_hms","Sample_rate","Channels","Bits","Check"]];
- rows.forEach(function(r){out.push([r.name,r.ext,r.err?"":r.dur.toFixed(3),r.err?"":hms(r.dur),r.rate||"",r.ch||"",r.bits||"",r._f.join("; ")]);});
+ var out=[["File","Type","Duration_seconds","Duration_hms","Speech_seconds","Lead_silence_seconds","End_silence_seconds","Threshold_dBFS","Sample_rate","Channels","Bits","Check"]];
+ rows.forEach(function(r){out.push([r.name,r.ext,r.err?"":r.dur.toFixed(3),r.err?"":hms(r.dur),r.fr?r.sp.toFixed(2):"",r.fr?r.lead.toFixed(2):"",r.fr?r.trail.toFixed(2):"",r.fr?r.thr.toFixed(1):"",r.rate||"",r.ch||"",r.bits||"",r._f.join("; ")]);});
  return out.map(function(a){return a.map(function(v){v=String(v);return sep===","?('"'+v.replace(/"/g,'""')+'"'):v.replace(/[\t\r\n]/g," ");}).join(sep);}).join("\r\n");}
 
 function applyLang(){
@@ -257,6 +358,8 @@ function applyLang(){
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++){var k=a[i].getAttribute("data-i");if(k==="beta")a[i].innerHTML=t[k];else a[i].textContent=t[k];}
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].innerHTML=t[h[j].getAttribute("data-h")];
  var o=document.querySelectorAll("option[data-k]");for(var m=0;m<o.length;m++)o[m].textContent=t[o[m].getAttribute("data-k")];
+ $("thSp").textContent=t.thSp;$("thLead").textContent=t.thLead;$("thTrail").textContent=t.thTrail;
+ $("spCopy").textContent=t.spCopy;
  $("csv").textContent=t.csv;$("copy").textContent=t.copy;$("clr").textContent=t.clr;
  document.title=L==="ar"?"حاسبة مدة الملفات الصوتية | Sayvoi":"Audio Duration Calculator: Total Length of Many Files | Sayvoi";
  render();}
@@ -267,7 +370,9 @@ $("fi").addEventListener("change",function(){addFiles(this.files);this.value="";
 ["dragenter","dragover"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.add("over");});});
 ["dragleave","drop"].forEach(function(n){$("drop").addEventListener(n,function(e){e.preventDefault();this.classList.remove("over");});});
 $("drop").addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files)addFiles(e.dataTransfer.files);});
-["tmin","tmax","trate","tch","need","only"].forEach(function(i){$(i).addEventListener("input",render);$(i).addEventListener("change",render);});
+["tmin","tmax","trate","tch","need","only","sth","spause"].forEach(function(i){$(i).addEventListener("input",render);$(i).addEventListener("change",render);});
+$("spCopy").addEventListener("click",function(){var v=$("spTxt").value,b=this,ok=function(){b.textContent="✓";setTimeout(function(){b.textContent=T[L].spCopy;},1200);};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(v).then(ok,function(){$("spTxt").select();});else{$("spTxt").select();try{document.execCommand("copy");ok();}catch(e){}}});
 $("clr").addEventListener("click",function(){gen++;rows=[];$("status").textContent="";$("prog").style.display="none";render();});
 $("csv").addEventListener("click",function(){var b=new Blob(["﻿"+csvText(",")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="durations.csv";document.body.appendChild(a);a.click();document.body.removeChild(a);});
 $("copy").addEventListener("click",function(){var v=csvText("\t"),b=this,ok=function(){b.textContent="✓";setTimeout(function(){b.textContent=T[L].copy;},1200);};
