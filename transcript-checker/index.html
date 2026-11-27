@@ -102,7 +102,7 @@
 </div>
 </div>
 
-<section class="vd" style="display:none"></section>
+<section class="vd" style="margin:26px 0 8px;padding:18px;border:1px solid #e3e6f3;border-radius:18px;background:#fff;color:#1a1f36"><h2 data-i="vidH" style="margin:0 0 6px;font-size:20px"></h2><p data-i="vidP" style="margin:0 0 12px;color:#4a5170"></p><div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000"><iframe id="vidFrame" title="Sayvoi transcript checker guide" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div></section>
 <h2 data-i="h2b"></h2>
 <ul><li data-h="n1"></li><li data-h="n2"></li><li data-h="n3"></li><li data-h="n4"></li></ul>
 <p style="margin-top:22px"><a href="/" data-i="back"></a></p>
@@ -117,6 +117,7 @@ var FOOT_EN='<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a hre
 var FOOT_AR='<p><a href="/about.html">عن الموقع</a><a href="/faq.html">الأسئلة الشائعة</a><a href="/privacy.html">الخصوصية</a><a href="/terms.html">الشروط</a><a href="/contact.html">اتصل بنا</a></p><p>support@sayvoi.com · hafezseo@gmail.com</p><p>© 2026 Sayvoi</p>';
 /* rules: id, on-by-default, fixable */
 var RULES=[["nums",1,0],["symbols",1,1],["tags",1,0],["mixed",1,0],["diac",1,1],["punct",0,1],["spaces",1,1],["hidden",1,1],["repeat",1,0],["elong",1,0],["pspace",1,1],["arspell",1,1],["enspell",1,1]];
+var VID={en:"5Ud_oPRmvdE",ar:"ETRakRUx4xk"};
 var T={
 en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
  h1:"Transcript Checker: Arabic and English",
@@ -131,6 +132,7 @@ en:{dir:"ltr",btn:"العربية",foot:FOOT_EN,
  m_nums:"digits: %a",m_symbols:"symbol: %a",m_tags:"tag not allowed: %a",m_mixed:"Latin letters: %a",m_diac:"has diacritics",m_punct:"punctuation: %a",m_spaces:"extra spaces",m_empty:"empty line",m_hidden:"hidden character or tatweel",m_repeat:"repeated: %a",m_elong:"stretched: %a",m_pspace:"punctuation spacing: %a",m_spell:"%a → %b",m_short:"%a words, fewer than %b",m_long:"%a words, more than %b",
  line:"Line",
  ex1:"I dont know wich one is better\nمدرسه الحي القديمه كانت بعيده عن البيت\nاحنا رايحين الى السوق الساعه 5 ان شاء الله\nهو هو راجع بكره [noise] الصبح\nمرحباً بكم 😀 في البرنامج , شكراً\nthe the meeting is at 3pm i think",
+ vidH:"Watch: how to use the transcript checker",vidP:"A short video guide (under one minute). The steps are written on the screen.",
  h2b:"Notes",
  n1:"Each line is one transcript. Empty lines are reported, so keep one line for each recording.",
  n2:"Only the safe problems are fixed automatically: spaces, hidden characters, diacritics, unknown symbols, punctuation spacing and the common spelling list. Repeated words, numbers and tags are only reported, because they need your decision.",
@@ -150,6 +152,7 @@ ar:{dir:"rtl",btn:"English",foot:FOOT_AR,
  m_nums:"أرقام: %a",m_symbols:"رمز: %a",m_tags:"علامة غير مسموحة: %a",m_mixed:"حروف لاتينية: %a",m_diac:"فيه تشكيل",m_punct:"ترقيم: %a",m_spaces:"مسافات زائدة",m_empty:"سطر فارغ",m_hidden:"حرف مخفي أو تطويل",m_repeat:"مكرر: %a",m_elong:"ممدود: %a",m_pspace:"مسافات الترقيم: %a",m_spell:"%a ← %b",m_short:"%a كلمة، أقل من %b",m_long:"%a كلمة، أكثر من %b",
  line:"السطر",
  ex1:"I dont know wich one is better\nمدرسه الحي القديمه كانت بعيده عن البيت\nاحنا رايحين الى السوق الساعه 5 ان شاء الله\nهو هو راجع بكره [noise] الصبح\nمرحباً بكم 😀 في البرنامج , شكراً\nthe the meeting is at 3pm i think",
+ vidH:"شاهد: كيف تستخدم مدقق التفريغ",vidP:"فيديو قصير (أقل من دقيقة). الخطوات مكتوبة على الشاشة.",
  h2b:"ملاحظات",
  n1:"كل سطر هو تفريغ واحد. تُعرض السطور الفارغة، فاترك سطرًا واحدًا لكل تسجيل.",
  n2:"يُصلَح تلقائيًا الآمن فقط: المسافات والأحرف المخفية والتشكيل والرموز غير المعروفة ومسافات الترقيم وقائمة الإملاء الشائعة. أما الكلمات المكررة والأرقام والعلامات فتُعرض فقط لأنها تحتاج قرارك.",
@@ -160,7 +163,8 @@ function tf(k,a,b,c){var s=T[L][k]||k;return s.replace("%a",a===undefined?"":a).
 var optsBuilt=false;
 function buildOpts(){var h="";RULES.forEach(function(r){h+='<label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:6px 0"><input type="checkbox" id="r_'+r[0]+'"'+(r[1]?" checked":"")+' style="width:auto"><span data-o="'+r[0]+'"></span></label>';});$("opts").innerHTML=h;optsBuilt=true;}
 function applyLang(){
- var t=T[L];document.documentElement.lang=L;document.documentElement.dir=t.dir;
+ var t=T[L];var vf=$("vidFrame");if(vf){var vs="https://www.youtube-nocookie.com/embed/"+(L==="ar"?VID.ar:VID.en)+"?rel=0";if(vf.getAttribute("src")!==vs)vf.setAttribute("src",vs);}
+ document.documentElement.lang=L;document.documentElement.dir=t.dir;
  $("foot").innerHTML=t.foot;$("langBtn").textContent=t.btn;
  var a=document.querySelectorAll("[data-i]");for(var i=0;i<a.length;i++)a[i].textContent=t[a[i].getAttribute("data-i")];
  var h=document.querySelectorAll("[data-h]");for(var j=0;j<h.length;j++)h[j].textContent=t[h[j].getAttribute("data-h")];
