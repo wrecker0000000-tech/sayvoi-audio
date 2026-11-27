@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Do Peak, RMS and dBFS Mean in an Audio Quality Report? | Sayvoi</title>
+<meta name="description" content="A simple guide to the numbers in an audio report: dBFS, Peak, RMS and noise floor. What each one means, which values are good for speech, and how to read your own report.">
+<link rel="canonical" href="https://convert.sayvoi.com/articles/en/what-do-peak-rms-dbfs-mean-in-audio-report.html">
+<link rel="alternate" hreflang="ar" href="https://convert.sayvoi.com/articles/ar/what-do-peak-rms-dbfs-mean-in-audio-report.html">
+<link rel="alternate" hreflang="en" href="https://convert.sayvoi.com/articles/en/what-do-peak-rms-dbfs-mean-in-audio-report.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sayvoi">
+<meta property="og:title" content="What Do Peak, RMS and dBFS Mean in an Audio Quality Report?">
+<meta property="og:description" content="A simple guide to the numbers in an audio report: dBFS, Peak, RMS and noise floor. What each one means, which values are good for speech, and how to read your own report.">
+<meta property="og:url" content="https://convert.sayvoi.com/articles/en/what-do-peak-rms-dbfs-mean-in-audio-report.html">
+<meta property="og:image" content="https://convert.sayvoi.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop offset=%270%27 stop-color=%27%237c4dff%27/%3E%3Cstop offset=%271%27 stop-color=%27%23ff8a3d%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2742%27 font-family=%27Arial%27 font-weight=%27900%27 fill=%27white%27 text-anchor=%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "What Do Peak, RMS and dBFS Mean in an Audio Quality Report?", "description": "A simple guide to the numbers in an audio report: dBFS, Peak, RMS and noise floor. What each one means, which values are good for speech, and how to read your own report.", "datePublished": "2026-11-27", "dateModified": "2026-11-27", "inLanguage": "en", "author": {"@type": "Organization", "name": "Sayvoi"}, "publisher": {"@type": "Organization", "name": "Sayvoi"}, "mainEntityOfPage": "https://convert.sayvoi.com/articles/en/what-do-peak-rms-dbfs-mean-in-audio-report.html"}</script>
+<link rel="stylesheet" href="/assets/nav.css?v=1">
+<script src="/assets/nav.js?v=1" defer></script>
+</head>
+<body>
+<div class="wrap">
+<nav class="top"><a class="brand" href="/">Sayvoi</a><a href="/">Converter</a><a href="/check/">Quality checker</a><a href="/video-to-audio/">Video to audio</a><a href="/audio-cutter/">Audio cutter</a><a href="/speech-to-text/">Speech to text</a><a href="/numbers-to-words/">Numbers to words</a><a href="/audio-duration/">Audio duration</a><a href="/sentence-splitter/">Sentence splitter</a><a href="/audio-renamer/">Batch renamer</a><a href="/audio-cleaner/">Audio cleaner</a><a href="/audio-speed/">Speed changer</a><a href="/script-video/">Script to video</a><a href="/voice-recorder/">Voice recorder</a><a href="https://sayvoi.com/services/">Services</a><a href="/articles/" class="on">Articles</a><a href="/about.html">About</a></nav>
+<article>
+<h1>What Do Peak, RMS and dBFS Mean in an Audio Quality Report?</h1>
+<p class="meta">Last updated: November 27, 2026</p>
+<div style="position:relative;padding-top:56.25%;margin:18px 0;border-radius:12px;overflow:hidden"><iframe src="https://www.youtube-nocookie.com/embed/4DsDqZjV7YY?rel=0" title="Video guide" style="position:absolute;inset:0;width:100%;height:100%;border:0" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
+
+<p>An audio quality report shows numbers such as Peak, RMS and dBFS. They look technical, but each one answers a simple question about your recording. This guide explains them in plain words.</p>
+<h2>dBFS: the scale</h2>
+<p>dBFS means decibels relative to full scale. It is the scale used for digital audio. <b>0 dBFS is the loudest value a digital file can hold.</b> Every normal value is negative, and the closer a number is to 0, the louder the sound.</p>
+<h2>Peak: the loudest spike</h2>
+<p>Peak is the highest single point in the recording. It tells you how close the sound came to the limit. A peak around <b>-6 to -3 dBFS</b> is a safe, healthy level for speech. A peak at <b>0 dBFS</b> means the sound may be clipped, which is distortion you cannot fix later. A very low peak, such as -22 dBFS, means the voice is quiet.</p>
+<h2>RMS: the average volume</h2>
+<p>RMS is the average loudness over time. It is closer to what your ears hear than the peak. For speech, an RMS of about <b>-20 to -16 dBFS</b> is common. If the RMS is much lower, the voice sounds weak and the client may ask you to record again.</p>
+<h2>Noise floor: the quietest part</h2>
+<p>The noise floor is the level of the quietest part, usually the pauses between words. The lower it is, the cleaner the recording. A noise floor <b>below -50 dBFS</b> is good for most projects. A higher value means you can hear background noise.</p>
+<h2>How to read your report</h2>
+<ul>
+<li><b>Peak -5, RMS -18:</b> a good recording.</li>
+<li><b>Peak -22:</b> the voice is too quiet. Move closer to the microphone or raise the input level, then record again.</li>
+<li><b>Peak 0:</b> the sound is clipped. Lower the input level and record again.</li>
+<li><b>Noise floor -40:</b> there is audible noise. Record in a quieter room.</li>
+</ul>
+<h2>Try it on your own files</h2>
+<p>Open the <a href="/check/">quality checker</a>, add your recordings or a ZIP, and compare the numbers with the values above. Your client may ask for different limits, so always follow the project specification first.</p>
+<h2>Good to know</h2>
+<ul>
+<li>The values here are common for speech recordings, not strict rules.</li>
+<li>The checker runs in your browser and your files are not uploaded.</li>
+</ul>
+
+<div class="cta"><p>Check your recordings now. Free, and nothing is uploaded.</p><a class="btn" href="/check/">Open the quality checker</a></div>
+<div class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="noise-floor-snr.html"><b>Noise Floor and Signal-to-Noise Ratio: What They Mean for Your Recordings</b><span>What the noise floor and SNR are, how to measure them from a recording, what numbers are good for speech, and how to improve them.</span></a><a class="card" href="audio-clipping-distortion.html"><b>What Is Audio Clipping, and How to Avoid It in Your Recordings</b><span>Clipping flattens the loudest parts of a recording and cannot be properly repaired. Learn how to recognize it, why it happens, and the recording levels that prevent it.</span></a><a class="card" href="normalize-audio-volume-peak-vs-loudness.html"><b>Peak or Loudness: How to Normalize Audio Volume</b><span>What audio normalization does, the difference between peak and average loudness, and which one to choose for voice recordings.</span></a></div></div>
+<p style="margin-top:22px"><a href="/articles/">All articles</a></p>
+</article>
+<footer>
+<p><a href="/about.html">About</a><a href="/faq.html">FAQ</a><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a><a href="/contact.html">Contact</a></p>
+<p>support@sayvoi.com · hafezseo@gmail.com</p>
+<p>© 2026 Sayvoi</p>
+</footer>
+</div>
+</body>
+</html>
